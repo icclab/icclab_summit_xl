@@ -16,4 +16,23 @@ In the base directory, the file 10-local.rules makes sure that when the rplidar 
 USB it's given a consistent name through a symlink (/dev/rplidar) you should save the file in
 /etc/udev/rules.d/10-local.rules on your turtlebot
 
+# How to try things out
+
+## Simulation of SLAM using Gazebo + rviz
+
+On laptop:
+  
+  roslaunch icclab_turtlebot gmapping_icclab_simulation.launch GAZEBO_GUI:=true
+
+## SLAM with actual Turtlebot
+
+On Turtlebot launch:
+  
+  roslaunch icclab_turtlebot minimal_with_rplidar.launch
+  
+  roslaunch icclab_turtlebot amcl_icclab.launch map_file:=/home/turtlebot/catkin_ws/src/icclab_turtlebot/icclab_latest_map.yaml
+
+On laptop:
+
+  roslaunch turtlebot_rviz_launchers view_navigation.launch
 
