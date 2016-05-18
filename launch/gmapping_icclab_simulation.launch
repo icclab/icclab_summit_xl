@@ -18,5 +18,5 @@
   </include>
   <include file="$(find turtlebot_navigation)/launch/includes/amcl.launch.xml"/>
   <!-- Rviz -->
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find tof_learning_ros)/rviz/navigation_exploration.rviz" if="$(arg show_rviz)"/>
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find turtlebot_rviz_launchers)/rviz/navigation.rviz" if="$(arg show_rviz)"/>
 </launch>
