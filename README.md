@@ -31,6 +31,7 @@ On Turtlebot launch:
   roslaunch icclab_turtlebot minimal_with_rplidar.launch
   
   roslaunch icclab_turtlebot amcl_icclab.launch map_file:=/home/turtlebot/catkin_ws/src/icclab_turtlebot/icclab_latest_map.yaml
+  roslaunch icclab_turtlebot amcl_icclab.launch map_file:=/home/turtlebot/catkin_ws/src/icclab_turtlebot/icclab_latest_map.yaml initial_pose_x:=-6.2 initial_pose_y:=2 initial_pose_a:=3.50
 
 On laptop:
 

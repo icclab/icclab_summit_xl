@@ -12,8 +12,9 @@ RUN apt-get -yq install --no-install-recommends ros-indigo-joy \
     build-essential \
     ros-indigo-turtlebot-rviz-launchers
 
-RUN apt-get install -y mesa-utils
-RUN apt-get install -y xserver-xorg-video-all
+RUN apt-get install -y --no-install-recommends mesa-utils \
+    xserver-xorg-video-all \
+    wget
 
 # setup ros and catkin
 #RUN rosdep -yq init
