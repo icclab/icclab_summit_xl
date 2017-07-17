@@ -3,7 +3,7 @@
   <arg name="stacks"/>
   <arg name="3d_sensor"/>
   
-  <arg name="urdf_file" default="$(find xacro)/xacro.py '$(find icclab_turtlebot)/robots/kobuki_hexagons_kinect_rplidar.urdf.xacro'" />
+  <arg name="urdf_file" default="$(find xacro)/xacro.py '$(find icclab_turtlebot)/robots/turtlebot.urdf.xacro'" />
   <param name="robot_description" command="$(arg urdf_file)" />
 
    <!-- Gazebo model spawner -->
