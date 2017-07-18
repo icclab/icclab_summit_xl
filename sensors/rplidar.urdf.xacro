@@ -19,14 +19,14 @@
         <visual>
           <origin xyz="0 0 0" rpy="0 0 0" />
           <geometry>
-          <mesh filename="package://hector_sensors_description/meshes/hokuyo_utm30lx/hokuyo_utm_30lx$(optenv TEST_SELF_FILTER).dae"/>
+          <mesh filename="package://icclab_turtlebot/meshes/hokuyo_utm_30lx.dae"/>
         </geometry>
         </visual>
         <collision>
           <origin xyz="0 0 -0.0115" rpy="0 0 0" />
           <geometry>
           <box size="0.058 0.058 0.087" />
-          <!--<mesh filename="package://hector_sensors_description/meshes/hokuyo_utm30lx/hokuyo_utm_30lx.stl"/>-->
+          <mesh filename="package://icclab_turtlebot/meshes/hokuyo_utm_30lx.stl"/>
         </geometry>
         </collision>
       </link>

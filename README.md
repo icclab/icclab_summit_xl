@@ -2,7 +2,7 @@
 Base scripts for the turtlebots at ICCLab.
 
 NOTE DEPENDENCIES: 
-- the rplidar model uses a mesh from the "hector_sensors_description" package, so you should have that installed
+- the rplidar model uses a mesh from the "hector_sensors_description" package, so credits are due to the original authors
 - the actual rplidar ROS node we're using allows us to stop the rotation motor, and it's here: https://github.com/negre/rplidar_ros.git
 
 # TL;DR
