@@ -2,7 +2,7 @@
   Used for visualising the turtlebot while building a map or navigating with the ros navistack.
  -->
 <launch>
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find turtlebot_rviz_launchers)/rviz/navigation.rviz"/>
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find icclab_turtlebot)/rviz/navigation.rviz"/>
   <!--<include file="$(find turtlebot_bringup)/launch/includes/description.launch.xml">  
     <arg name="base" value="kobuki" />
     <arg name="stacks" value="hexagons" />
