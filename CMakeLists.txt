@@ -7,7 +7,7 @@ project(icclab_turtlebot)
 find_package(catkin REQUIRED COMPONENTS
   rospy
   std_msgs
-  hector_sensors_description
+#  hector_sensors_description
 )
 
 ## System dependencies are found with CMake's conventions
