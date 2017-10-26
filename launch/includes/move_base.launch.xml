@@ -16,7 +16,8 @@
     <rosparam file="$(find icclab_turtlebot)/param/costmap_common_params.yaml" command="load" ns="global_costmap" />
     <rosparam file="$(find icclab_turtlebot)/param/costmap_common_params.yaml" command="load" ns="local_costmap" />   
     <rosparam file="$(find icclab_turtlebot)/param/local_costmap_params.yaml" command="load" />   
-    <rosparam file="$(find turtlebot_navigation)/param/global_costmap_params.yaml" command="load" />
+    <!-- rosparam file="$(find turtlebot_navigation)/param/global_costmap_params.yaml" command="load" /-->
+    <rosparam file="$(find icclab_turtlebot)/param/global_costmap_params.yaml" command="load" />
     <rosparam file="$(find icclab_turtlebot)/param/dwa_local_planner_params.yaml" command="load" />
     <rosparam file="$(find icclab_turtlebot)/param/move_base_params.yaml" command="load" />
     <!-- rosparam file="$(find turtlebot_navigation)/param/global_planner_params.yaml" command="load" / -->

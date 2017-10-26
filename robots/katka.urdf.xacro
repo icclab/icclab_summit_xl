@@ -6,6 +6,7 @@
 -->    
 <robot name="turtlebot" xmlns:xacro="http://ros.org/wiki/xacro">
 
+  <!--<xacro:include filename="$(find turtlebot_description)/urdf/turtlebot_library.urdf.xacro" />-->
   <xacro:include filename="$(find turtlebot_description)/urdf/turtlebot_library.urdf.xacro" />
   <xacro:include filename="$(find icclab_turtlebot)/sensors/rplidar.urdf.xacro" />
   
@@ -13,6 +14,7 @@
   <stack_hexagons parent="base_link"/>
   <sensor_kinect  parent="base_link"/>
   <xacro:rplidar name="rplidar" parent="base_link" ros_topic="scan" update_rate="5" ray_count="1040" min_angle="0" max_angle="360">
-    <origin xyz="-0.1 0 0.420" rpy="3.1415 0 1.5707"/>
+    <!--<origin xyz="-0.1 0 0.420" rpy="3.1415 0 1.5707"/>-->
+    <origin xyz="0.1 0 0.420" rpy="3.1415 0 3.1415"/>
   </xacro:rplidar>
 </robot>
