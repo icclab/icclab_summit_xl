@@ -25,14 +25,14 @@ base_global_planner: "navfn/NavfnROS"
 recovery_behavior_enabled: true
 
 recovery_behaviors:
-  - name: 'super_conservative_reset1'
-    type: 'clear_costmap_recovery/ClearCostmapRecovery'
-  - name: 'conservative_reset1'
-    type: 'clear_costmap_recovery/ClearCostmapRecovery'
-  - name: 'aggressive_reset1'
-    type: 'clear_costmap_recovery/ClearCostmapRecovery'
-  - name: 'clearing_rotation1'
-    type: 'rotate_recovery/RotateRecovery'
+  - name: 'super_aggressive_reset'
+    type: 'clear_total_costmap_recovery/ClearTotalCostmapRecovery'
+#  - name: 'conservative_reset'
+#    type: 'clear_costmap_recovery/ClearCostmapRecovery'
+#  - name: 'aggressive_reset'
+#    type: 'clear_costmap_recovery/ClearCostmapRecovery'
+#  - name: 'clearing_rotation'
+#    type: 'rotate_recovery/RotateRecovery'
   #- name: 'super_conservative_reset2'
     #type: 'clear_costmap_recovery/ClearCostmapRecovery'
   #- name: 'conservative_reset2'
@@ -42,12 +42,12 @@ recovery_behaviors:
   #- name: 'clearing_rotation2'
     #type: 'rotate_recovery/RotateRecovery'
 
-super_conservative_reset1:
-  reset_distance: 3.0
-conservative_reset1:
-  reset_distance: 1.5
-aggressive_reset1:
-  reset_distance: 0.0
+#super_conservative_reset:
+#  reset_distance: 3.0
+#conservative_reset:
+#  reset_distance: 1.5
+#aggressive_reset:
+#  reset_distance: 0.0
 #super_conservative_reset2:
   #reset_distance: 3.0
 #conservative_reset2:
