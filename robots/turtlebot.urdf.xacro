@@ -5,7 +5,7 @@
     - 3d Sensor : kinect
 -->    
 <robot name="turtlebot" xmlns:xacro="http://ros.org/wiki/xacro">
-  <xacro:include filename="$(find icclab_turtlebot)/robots/turtlebot_library.urdf.xacro" />
+  <xacro:include filename="$(find turtlebot_description)/urdf/turtlebot_library.urdf.xacro" />
   <xacro:include filename="$(find icclab_turtlebot)/sensors/rplidar.urdf.xacro" />
   <kobuki/>
   <stack_hexagons parent="base_link"/>
