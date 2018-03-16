@@ -24,7 +24,8 @@
 
   <!-- AMCL -->
 
-  <arg name="custom_param_file" default="$(find turtlebot_navigation)/param/dummy.yaml"/>
+<!--  <arg name="custom_param_file" default="$(find turtlebot_navigation)/param/dummy.yaml"/>  -->
+  <arg name="custom_param_file" default="$(find icclab_turtlebot)/param/icclab_dwa_local_planner_params_override.yaml"/> 
 
   <!-- Map server -->
   <arg name="map_file" default="$(env TURTLEBOT_MAP_FILE)"/>
@@ -39,10 +40,13 @@
     <arg name="initial_pose_a" value="$(arg initial_pose_a)"/>
   </include>
 
-  <include file="$(find turtlebot_navigation)/launch/includes/move_base.launch.xml">
+  <include file="$(find icclab_turtlebot)/launch/includes/move_base.launch.xml">
     <arg name="custom_param_file" value="$(arg custom_param_file)"/>
   </include>
 
   <!-- start motor of rplidar -->
   <node pkg="rosservice" type="rosservice" name="startMotor" args="call --wait /start_motor"/>
+  
+  <!-- kinect -->
+  <include file="$(find icclab_turtlebot)/launch/3dsensor.launch" />
 </launch>
