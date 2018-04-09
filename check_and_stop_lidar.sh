@@ -1,6 +1,6 @@
 #!/bin/bash
 PROCESS="roslaunch.*minimal"
-PIDS=`ps -ef | grep -e $PROCESS | grep -v "grep" | cut -d \  -f 3`
+PIDS=`ps -ef | grep -e $PROCESS | grep -v "grep" | awk '{print $2}'`
 if [ -z "$PIDS" ]; then
   echo "Minimal not running." 1>&2
   if [ -f /tmp/minimal.pid ]; then 
