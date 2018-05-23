@@ -22,9 +22,14 @@
     <arg name="serialport" value="$(arg serialport)" />
   </include>
 
+
+  <!-- Filter -->
+  
+  <include file="$(find icclab_turtlebot)/launch/filter.launch"/>
+
   <!-- AMCL -->
 
-<!--  <arg name="custom_param_file" default="$(find turtlebot_navigation)/param/dummy.yaml"/>  -->
+  <!--  <arg name="custom_param_file" default="$(find turtlebot_navigation)/param/dummy.yaml"/>  -->
   <arg name="custom_param_file" default="$(find icclab_turtlebot)/param/icclab_dwa_local_planner_params_override.yaml"/> 
 
   <!-- Map server -->
