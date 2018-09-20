@@ -11,6 +11,9 @@
   <arg name="robot_type"       default="$(env TURTLEBOT_TYPE)"/>
 
   <param name="/use_sim_time" value="$(arg simulation)"/>
+  
+  <!-- Filter -->
+  <include file="$(find icclab_turtlebot)/launch/filter.launch"/> 
 
   <include file="$(find icclab_turtlebot)/launch/includes/robot.launch.xml">
     <arg name="base" value="$(arg base)" />
@@ -25,6 +28,7 @@
     <arg name="battery" value="$(arg battery)" />
   </include>
 
+  <!-- move_base -->
   <arg name="custom_param_file" default="$(find turtlebot_navigation)/param/dummy.yaml"/>
 
   <include file="$(find turtlebot_navigation)/launch/includes/move_base.launch.xml">
