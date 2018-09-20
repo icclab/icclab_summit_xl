@@ -45,6 +45,8 @@
   <run_depend>rospy</run_depend>
   <run_depend>std_msgs</run_depend>
   <run_depend>turtlebot</run_depend>
+  <run_depend>turtlebot_navigation</run_depend>
+  <run_depend>laser_filters</run_depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->
