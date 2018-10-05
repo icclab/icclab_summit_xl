@@ -24,12 +24,16 @@
 
 
   <!-- Filter -->
+  
   <include file="$(find icclab_turtlebot)/launch/filter.launch"/>
 
   <!-- AMCL -->
 
+  <!--  <arg name="custom_param_file" default="$(find turtlebot_navigation)/param/dummy.yaml"/>  -->
+  <arg name="custom_param_file" default="$(find icclab_turtlebot)/param/icclab_dwa_local_planner_params_override.yaml"/> 
+
   <!-- Map server -->
-  <arg name="map_file" default="$(env TURTLEBOT_MAP_FILE)"/>
+  <arg name="map_file" default="/home/rapyuta/catkin_ws/src/icclab_turtlebot/icclab_latest_map.yaml"/>
   <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
 
   <arg name="initial_pose_x" default="0.0"/> <!-- Use 17.0 for willow's map in simulation -->
@@ -40,10 +44,6 @@
     <arg name="initial_pose_y" value="$(arg initial_pose_y)"/>
     <arg name="initial_pose_a" value="$(arg initial_pose_a)"/>
   </include>
-
-  <!-- move_base -->
-  <!--  <arg name="custom_param_file" default="$(find turtlebot_navigation)/param/dummy.yaml"/>  -->
-  <arg name="custom_param_file" default="$(find icclab_turtlebot)/param/icclab_dwa_local_planner_params_override.yaml"/>
 
   <include file="$(find icclab_turtlebot)/launch/includes/move_base.launch.xml">
     <arg name="custom_param_file" value="$(arg custom_param_file)"/>
