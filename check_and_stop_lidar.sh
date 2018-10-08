@@ -10,7 +10,7 @@ if [ -z "$PIDS" ]; then
   else 
 #   if file is not there then we can shutdown the motor
     echo "Shutting down motor." 1>&2
-    source /home/turtlebot/catkin_ws/devel/setup.sh
+    source /home/${USER}/catkin_ws/devel/setup.sh
     rosservice call "/stop_motor"
   fi
   exit 1
