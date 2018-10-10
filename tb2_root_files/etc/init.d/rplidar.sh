@@ -2,6 +2,16 @@
 #
 # rplidar          Start/Stop rplidar script.
 #
+### BEGIN INIT INFO
+# Provides:          rplidar
+# Required-Start:    $all
+# Required-Stop:     $all
+# Default-Start:     2 3 4 5 
+# Default-Stop:      0 1 6
+# Short-Description: Start rplidar ros node
+# Description:       Stops motor of lidar and starts rplidar ros node.
+### END INIT INFO
+#
 # chkconfig: 2345 90 60
 # description: This is a simple service script that was made to demonstrate \
 # how to write SysVinit scripts to 'daemonize' programs.

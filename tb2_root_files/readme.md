@@ -5,4 +5,4 @@ I.e., udev scripts
 
 Register the init.d scripts with:
 
-	sudo update-rc.d rplidar defaults
+	sudo update-rc.d rplidar.sh defaults
