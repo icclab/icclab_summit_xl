@@ -13,18 +13,14 @@
   <param name="/use_sim_time" value="$(arg simulation)"/>
 
   <!-- Filter -->
-  <include file="$(find icclab_turtlebot)/launch/filter.launch"/>
+  <!--include file="$(find icclab_turtlebot)/launch/filter.launch"/-->
 
-  <!-- robot state publisher now running in the cloud -->
-  <!--include file="$(find icclab_turtlebot)/launch/includes/robot.launch.xml">
+  <!-- robot state publisher -->
+  <include file="$(find icclab_turtlebot)/launch/includes/robot.launch.xml">
     <arg name="base" value="$(arg base)" />
     <arg name="stacks" value="$(arg stacks)" />
     <arg name="3d_sensor" value="$(arg 3d_sensor)" />
-  </include-->
-
-  <node pkg="diagnostic_aggregator" type="aggregator_node" name="diagnostic_aggregator" >
-    <rosparam command="load" file="$(find turtlebot_bringup)/param/$(arg base)/diagnostics.yaml" />
-  </node>
+  </include>
 
   <include file="$(find turtlebot_bringup)/launch/includes/mobile_base.launch.xml">
     <arg name="base" value="$(arg base)" />
