@@ -1,7 +1,0 @@
-<launch>
-  <arg name="custom_param_file" default="$(find turtlebot_navigation)/param/dummy.yaml"/>
-
-  <include file="$(find icclab_turtlebot)/launch/includes/move_base.launch.xml">
-    <arg name="custom_param_file" value="$(arg custom_param_file)"/>
-  </include>
-</launch>
