@@ -1,74 +1,88 @@
-<?xml version="1.0"?>
+<?xml version=  "1.0"?>
+<robot name="scanse" xmlns:xacro="http://www.ros.org/wiki/xacro"> <!-- sensor_hokuyo_utm30lx -->
 
-<robot xmlns:xacro="http://ros.org/wiki/xacro">
-    <xacro:property name="M_PI" value="3.1415926535897931" />
 
-    <xacro:macro name="scanse_model" params="name parent *origin">
-      <joint name="${name}_joint" type="fixed">
-        <xacro:insert_block name="origin" />
-        <parent link="${parent}"/>
-        <child link="${name}_link"/>
-      </joint>
+  <xacro:macro name="scanse" params="prefix parent prefix_topic:='front_laser' *origin min_angle:=-2.35 max_angle:=2.35"> <!-- sensor_hokuyo_utm30lx -->
+     
+    <joint name="${prefix}_base_joint" type="fixed">
+      <!-- FRONT MOUNT  -->
+      <!-- origin xyz="0.29 0 0.1" -->
+      <!-- TOP MOUNT -->
+      <!-- origin xyz="0.0 0.0 0.325"-->
+      <xacro:insert_block name="origin" />
+      <parent link="${parent}"/>
+      <child link="${prefix}_base_link"/>
+    </joint>
 
-      <link name="${name}_link">
-        <inertial>
-          <mass value="0.270" />
-          <origin xyz="0 0 0" rpy="0 0 0" />
-          <inertia ixx="2.632e-4" ixy="0" ixz="0" iyy="2.632e-4" iyz="0" izz="1.62e-4" />
-        </inertial>
-        <visual>
-          <origin xyz="0 0 0" rpy="0 0 0" />
-          <geometry>
-          <mesh filename="package://icclab_turtlebot/meshes/hokuyo_utm_30lx.dae"/>
-        </geometry>
-        </visual>
-        <collision>
-          <origin xyz="0 0 -0.0115" rpy="0 0 0" />
-          <geometry>
-          <box size="0.058 0.058 0.087" />
-          <mesh filename="package://icclab_turtlebot/meshes/hokuyo_utm_30lx.stl"/>
-        </geometry>
-        </collision>
-      </link>
-    </xacro:macro>
-
-    <xacro:macro name="scanse" params="name parent *origin ros_topic update_rate ray_count min_angle max_angle">
-      <xacro:scanse_model name="${name}_model" parent="${parent}">
-        <xacro:insert_block name="origin" />
-      </xacro:scanse_model>
-
-      <gazebo reference="${name}_link">
-        <sensor type="ray" name="${name}_sensor">
-          <always_on>true</always_on>
-          <update_rate>${update_rate}</update_rate>
-          <pose>0 0 0 0 0 0</pose>
-          <visualize>false</visualize>
-          <ray>
-            <scan>
-              <horizontal>
-                <samples>${ray_count}</samples>
-                <resolution>1</resolution>
-                <min_angle>${min_angle * M_PI/180}</min_angle>
-                <max_angle>${max_angle * M_PI/180}</max_angle>
-              </horizontal>
-            </scan>
-            <range>
-              <min>0.2</min>
-              <max>40.0</max>
-              <resolution>0.01</resolution>
-            </range>
-            <noise>
-              <type>gaussian</type>
-              <mean>0.0</mean>
-              <stddev>0.004</stddev>
-            </noise>
-          </ray>
-          <plugin name="${name}_controller" filename="libgazebo_ros_laser.so"> <!--gazebo_ros_${name}-->
-            <topicName>${ros_topic}</topicName>
-            <frameName>${name}_link</frameName> <!-- frame -->
-          </plugin>
-        </sensor>
-      </gazebo>
-    </xacro:macro>
-</robot>
   
+    <link name="${prefix}_base_link">
+      <collision> <!-- added -->
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.02 0.02 0.02"/>
+        </geometry>
+      </collision>
+
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+            <mesh filename="package://icclab_turtlebot/meshes/hokuyo_utm_30lx.dae"/>
+        </geometry>
+      </visual>
+  
+      <inertial>
+        <mass value="1e-5" />
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+      </inertial>
+    </link>
+	
+	<link name="${prefix}_link">
+	</link>
+    <joint name="${prefix}_joint" type="fixed">
+      <parent link="${prefix}_base_link"/>
+      <child link="${prefix}_link"/>
+      <origin xyz="0.00 0 0.055" rpy="0 0 0"/>
+	</joint>
+
+    <!-- Hokuyo sensor for simulation -->		
+    <sensor_hokuyo_utm_gazebo/>
+		
+  </xacro:macro>
+  
+    
+  <xacro:macro name="sensor_hokuyo_utm_gazebo">
+    <gazebo reference="${prefix}_link">
+			<sensor type="ray" name="${prefix}_sensor">
+				<pose>0 0 0 0 0 0</pose>
+				<visualize>false</visualize>
+				<update_rate>30</update_rate> <!-- 30 -->
+				<ray>
+					<scan>
+						<horizontal>
+							<samples>1081</samples>
+							<resolution>1</resolution>
+							<min_angle>${min_angle}</min_angle>
+							<max_angle>${max_angle}</max_angle>
+						</horizontal>
+					</scan>
+					<range>
+						<min>0.10</min>
+						<max>30.0</max> <!-- 30.0 -->
+						<resolution>0.01</resolution>
+					</range>
+					<noise>
+						<type>gaussian</type>
+						<mean>0.0</mean>
+						<stddev>0.01</stddev>
+					</noise>
+				</ray>
+				<plugin name="${prefix}_controller" filename="libgazebo_ros_laser.so">
+					<topicName>${prefix_topic}/scan</topicName>
+					<frameName>/${prefix}_link</frameName>
+				</plugin>
+			</sensor>
+		</gazebo>
+  </xacro:macro>
+  
+</robot>

@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<launch>
+
+	<!-- SUMMIT XL STEEL-->
+	<!-- disables gazebo ros_control plugin -->
+	<arg name="ros_planar_move_plugin" default="true"/>
+
+	<arg name="launch_rviz" default="true"/>
+	<arg name="gazebo_world" default="$(find icclab_turtlebot)/worlds/summit_xl_office.world"/>
+	
+	<arg name="map_file_a" default="willow_garage/willow_garage.yaml"/>
+	<arg name="localization_robot_a" default="false"/>
+	<arg name="gmapping_robot_a" default="false"/>
+	<arg name="move_base_robot_a" default="true"/>
+	<arg name="amcl_and_mapserver_a" default="true"/>
+	<arg name="xacro_robot_a" default="irlab_summit_xls_std.urdf.xacro"/>
+
+	<include file="$(find icclab_turtlebot)/launch/sim/irlab_summit_xl_gazebo.launch">
+		<!-- general args -->
+		<arg name="launch_rviz" value="$(arg launch_rviz)"/>
+		<arg name="gazebo_world" value="$(arg gazebo_world)"/>
+		<arg name="ros_planar_move_plugin" value="$(arg ros_planar_move_plugin)"/>
+		<!-- robot args -->
+		<arg name="map_file_a" value="$(arg map_file_a)"/>
+		<arg name="localization_robot_a" value="$(arg localization_robot_a)"/>
+		<arg name="gmapping_robot_a" value="$(arg gmapping_robot_a)"/>
+		<arg name="move_base_robot_a" value="$(arg move_base_robot_a)"/>
+		<arg name="amcl_and_mapserver_a" value="$(arg amcl_and_mapserver_a)"/>
+		<arg name="xacro_robot_a" value="$(arg xacro_robot_a)"/>
+	</include>
+</launch>
