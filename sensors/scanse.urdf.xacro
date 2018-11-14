@@ -26,7 +26,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-            <mesh filename="package://icclab_turtlebot/meshes/hokuyo_utm_30lx.dae"/>
+            <mesh filename="package://icclab_turtlebot/meshes/sweep_lidar.stl"/>
         </geometry>
       </visual>
   
