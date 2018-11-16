@@ -15,6 +15,9 @@
 	<xacro:include filename="$(find summit_xl_description)/urdf/wheels/omni_wheel.urdf.xacro" />
 	<xacro:include filename="$(find summit_xl_description)/urdf/wheels/rubber_wheel.urdf.xacro" />
 	<xacro:include filename="$(find summit_xl_description)/urdf/structures/structure_hokuyo.urdf.xacro" />
+	
+	<!-- Import arm description -->
+	<xacro:include filename="$(find ur_description)/urdf/ur5.urdf.xacro" />
     
 	<!-- Import all available robotnik sensors -->
 	<xacro:include filename="$(find robotnik_sensors)/urdf/all_sensors.urdf.xacro" />
@@ -107,7 +110,38 @@
 		</xacro:scanse>
 
 		<!-- UR5 Arm -->
-		<!-- TODO -->
+		<xacro:ur5_robot prefix="arm_" joint_limited="true">		
+	</xacro:ur5_robot>
+
+	<joint name="arm_base_joint" type="fixed">
+          <origin xyz="0.175 0 0.303" rpy="0 0 0" />
+          <parent link="$(arg prefix)base_link" />
+          <child link="arm_base_link" />
+	</joint>
+
+<!--	<joint name="gripper_joint" type="fixed">-->
+<!--	  <origin xyz="0.0 0.0 0.0" rpy="0.0 -1.5708 0.0" />-->
+<!--	  <parent link="arm_tool0" />-->
+<!--	  <child link="robotiq_85_adapter_link" />-->
+<!--	</joint>-->
+
+<!--	<joint name="tcp_joint" type="fixed">-->
+<!--	  <origin xyz="0.150 0.0 0.0" rpy="0.0 0.0 0.0" />-->
+<!--	  <parent link="robotiq_85_adapter_link"/>-->
+<!--          <child link="tcp_link"/>-->
+<!--        </joint>-->
+
+<!--        <link name="tcp_link">-->
+<!--          <visual>-->
+<!--          <origin xyz="0 0 0" rpy="0 0 0" />-->
+<!--          <geometry>-->
+<!--             <sphere radius="0.010"/>-->
+<!--          </geometry>-->
+<!--          <material name="green">-->
+<!--            <color rgba="0 1 0 1"/>-->
+<!--          </material>-->
+<!--          </visual>-->
+<!--        </link>-->
 	
    </xacro:macro>
    
