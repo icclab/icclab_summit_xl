@@ -6,6 +6,7 @@
   <arg name="id_robot" default="$(optenv ROBOT_ID summit_xl)"/>
   <arg name="xacro_robot_a" default="$(optenv ROBOT_XACRO irlab_summit_xls_std.urdf.xacro)"/>
   <!-- 2D LASERS -->
+  <arg name="has_scanse_lasers" default="$(optenv ROBOT_HAS_SCANSE_LASERS true)"/>
   <arg name="has_front_laser" default="$(optenv ROBOT_HAS_FRONT_LASER false)"/>
   <arg name="front_laser_model" default="$(optenv ROBOT_FRONT_LASER_MODEL hokuyo_ust)"/>
   <arg name="front_laser_port" default="$(optenv ROBOT_FRONT_LASER_PORT /dev/ttyACM_FRONT_LASER)"/>
@@ -86,7 +87,7 @@
 		  <arg name="camera_model" value="$(arg front_camera_model)"/>
 	  </include>
 
-      <include if="$(arg has_rear_ptz_camera)" file="$(find summit_xl_bringup)/launch/axis.launch"> 
+          <include if="$(arg has_rear_ptz_camera)" file="$(find summit_xl_bringup)/launch/axis.launch"> 
 		  <arg name="prefix" value="$(arg prefix)"/>
 		  <arg name="node_name" value="$(arg rear_ptz_camera_node)"/>
 		  <arg name="id_robot" value="$(arg id_robot)"/>
@@ -104,8 +105,9 @@
 	  <include file="$(find summit_xl_web)/launch/summit_xl_web.launch"/>
 	  
 	  <!-- start laser node -->
-	  <!-- TODO: setup scanse lidars -->
-	  <include if="$(arg has_front_laser)" file="$(find summit_xl_bringup)/launch/$(arg front_laser_model).launch">
+          <include if="$(arg has_scanse_lasers)" file="$(find icclab_turtlebot)/launch/real/irlab_sweep2scan.launch"/>
+	  
+          <include if="$(arg has_front_laser)" file="$(find summit_xl_bringup)/launch/$(arg front_laser_model).launch">
 		<arg name="port" value="$(arg front_laser_port)"/> 
 		<arg name="ip_address" value="$(arg front_laser_ip)"/>
 		<arg name="node_name" value="$(arg front_laser_node)"/>
