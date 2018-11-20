@@ -27,8 +27,8 @@
             min_height: -1.0
             max_height: 1.0
 
-            angle_min: -2.355 # -M_PI/2
-            angle_max: 2.355 # M_PI/2
+            angle_min: -2.355 # -3*M_PI/4
+            angle_max: 2.355 # 3*M_PI/4
             angle_increment: 0.001 # M_PI/360.0
             scan_time: 0.1
             range_min: 0.0
@@ -55,8 +55,8 @@
             min_height: -1.0
             max_height: 1.0
 
-            angle_min: -2.355 # -M_PI/2
-            angle_max: 2.355 # M_PI/2
+            angle_min: -2.355 # -3*M_PI/4
+            angle_max: 2.355 # 3*M_PI/4
             angle_increment: 0.001 # M_PI/360.0
             scan_time: 0.1
             range_min: 0.0
