@@ -22,6 +22,9 @@
 	<!-- Import all available robotnik sensors -->
 	<xacro:include filename="$(find robotnik_sensors)/urdf/all_sensors.urdf.xacro" />
 	
+  <!-- Import gripper Schunk EGP40-->
+	<xacro:include filename="$(find summit_xl_description)/urdf/gripper/schunk_egp40.urdf.xacro" />
+
 	<!-- ICCLab sensors -->
 	<xacro:include filename="$(find icclab_turtlebot)/sensors/scanse.urdf.xacro" />
   
@@ -113,35 +116,16 @@
 		<xacro:ur5_robot prefix="arm_" joint_limited="true">		
 	</xacro:ur5_robot>
 
-	<joint name="arm_base_joint" type="fixed">
-          <origin xyz="0.175 0 0.303" rpy="0 0 0" />
+	<joint name="$(arg prefix)arm_base_joint" type="fixed">
+          <origin xyz="0.255 0 0.275" rpy="0 0 ${PI}" />
           <parent link="$(arg prefix)base_link" />
           <child link="arm_base_link" />
-	</joint>
+		</joint>
 
-<!--	<joint name="gripper_joint" type="fixed">-->
-<!--	  <origin xyz="0.0 0.0 0.0" rpy="0.0 -1.5708 0.0" />-->
-<!--	  <parent link="arm_tool0" />-->
-<!--	  <child link="robotiq_85_adapter_link" />-->
-<!--	</joint>-->
-
-<!--	<joint name="tcp_joint" type="fixed">-->
-<!--	  <origin xyz="0.150 0.0 0.0" rpy="0.0 0.0 0.0" />-->
-<!--	  <parent link="robotiq_85_adapter_link"/>-->
-<!--          <child link="tcp_link"/>-->
-<!--        </joint>-->
-
-<!--        <link name="tcp_link">-->
-<!--          <visual>-->
-<!--          <origin xyz="0 0 0" rpy="0 0 0" />-->
-<!--          <geometry>-->
-<!--             <sphere radius="0.010"/>-->
-<!--          </geometry>-->
-<!--          <material name="green">-->
-<!--            <color rgba="0 1 0 1"/>-->
-<!--          </material>-->
-<!--          </visual>-->
-<!--        </link>-->
+		<!-- GRIPPER -->
+		<xacro:schunk_egp_40 prefix="gripper_" parent="arm_tool0" >
+			 <origin xyz="0.0 0 0.0" rpy="0 0 0" />
+		</xacro:schunk_egp_40>
 	
    </xacro:macro>
    
