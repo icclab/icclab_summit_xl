@@ -1,7 +1,17 @@
 # icclab_turtlebot
 
-Base scripts for the turtlebots at ICCLab.
+Base scripts for robots at ICCLab/ICRLab
 
-These scripts enable mapping and navigation using a LIDAR device (rplidar) upon a turtlebot 2.
+## Summit XL with arm simulation
 
-For further documentation please [see here](https://github.com/icclab/icclab_turtlebot/tree/kinetic/docs), on the kinetic branch.
+Run:
+
+	roslaunch icclab_turtlebot irlab_sim_summit_xls_complete.launch	
+	
+This will enable navigation and gazebo simulation
+
+Run:
+
+	ROS_NAMESPACE=summit_xl roslaunch robotnik_ur5_moveit_config demo.launch
+	
+This will start the move_group and allow you to control the arm

@@ -10,7 +10,7 @@
 	<arg name="debug" default="false"/>
 	<arg name="ros_planar_move_plugin" default="false"/>
 	
-	<arg name="id_robot_a" default="summit_xl_a"/> <!-- TODO: change this id -->
+	<arg name="id_robot_a" default="summit_xl"/> <!-- TODO: change this id -->
 	<arg name="x_init_pose_robot_a" default="0" />
 	<arg name="y_init_pose_robot_a" default="0" />
 	<arg name="z_init_pose_robot_a" default="0" />
