@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <launch>
-    <!-- maps inside the folder icclab_turtlebot/maps -->
+	<!-- maps inside the folder icclab_turtlebot/maps -->
 	<arg name="map_file" default="empty/empty.yaml"/>
 	<arg name="prefix" default="summit_xl_"/>
 	<arg name="frame_id" default="$(arg prefix)map"/>
