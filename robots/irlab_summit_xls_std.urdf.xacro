@@ -123,9 +123,11 @@
 		</joint>
 
 		<!-- GRIPPER -->
-		<xacro:schunk_egp_40 prefix="gripper_" parent="arm_tool0" >
+		<!-- <xacro:schunk_egp_40 prefix="gripper_" parent="arm_tool0" >
 			 <origin xyz="0.0 0 0.0" rpy="0 0 0" />
-		</xacro:schunk_egp_40>
+		</xacro:schunk_egp_40> -->
+		
+		 <xacro:include filename="$(find icclab_turtlebot)/urdf/gripper/ur5_robotiq85_gripper.urdf.xacro"/>
 	
    </xacro:macro>
    

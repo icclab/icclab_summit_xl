@@ -24,7 +24,7 @@
 	  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
 		output="screen" args="
 		  robotnik_base_control
-		  joint_read_state_controller 
+		  joint_read_state_controller
 		  ">
 	  </node>
 	  
@@ -44,6 +44,10 @@
     <!-- joint_state_controller -->
     <rosparam file="$(find ur_gazebo)/controller/joint_state_controller.yaml" command="load"/>
     <node name="joint_state_controller_spawner" pkg="controller_manager" type="controller_manager" args="spawn joint_state_controller" respawn="false" output="screen"/>
+    <!-- gripper controller -->
+    <!-- spawn controller manager -->
+  <node name="$(arg prefix)gripper_controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+    output="screen" args="gripper_controller  --shutdown-timeout 1" />
     
 	  
 	  <!-- if robot_localization node is launched the controller must not publish the odom tf-->
