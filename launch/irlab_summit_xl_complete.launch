@@ -160,8 +160,7 @@
 		<include file="$(find icclab_turtlebot)/launch/move_base.launch">
 			<arg name="prefix" value="$(arg prefix)"/>
 			<arg name="omni" value="$(arg ros_planar_move_plugin)"/>
-			<!-- TODO: need to allow for multiple scan topics -->
-			<!-- TODO: externalise parameter? -->
+			<!-- TODO: need to allow for multiple scan topics -->			
 			<arg name="scan_topic" value="laser/scan"/>
 		</include>
 
