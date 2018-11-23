@@ -1,10 +1,11 @@
 <?xml version="1.0"?>
 <launch>
 
-	<!-- roslaunch arguments --> 
+	<!-- roslaunch arguments -->
 	<arg name="debug" default="false"/>
 	<arg name="launch_rviz" default="false"/>
-	<arg name="world" default="$(find icclab_turtlebot)/worlds/summit_xl.world"/> <!-- located in summit_xl_gazebo/worlds -->
+	<arg name="world" default="$(find icclab_turtlebot)/worlds/summit_xl.world"/>
+	<!-- located in summit_xl_gazebo/worlds -->
 
 	<!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
 	<include file="$(find gazebo_ros)/launch/empty_world.launch">
@@ -15,8 +16,8 @@
 		<arg name="headless" value="false"/>
 		<arg name="gui" value="true"/>
 	</include>
-	
+
 	<!-- launch rviz -->
 	<node if="$(arg launch_rviz)" name="rviz" pkg="rviz" type="rviz" required="true" args="-d $(find icclab_turtlebot)/rviz/irlab_summitxl.rviz"/>
-	
+
 </launch>

@@ -1,8 +1,0 @@
-scan_filter_chain:
-- name: outliers_filter
-  type: laser_filters/OutliersFilter
-  params:
-     min_neighbors: 4   # Number of neighbors within acceptable distance needed to preserve a reading. If not specified defaults to 2
-     max_neighbor_distance: 0.2 # Max distance in meters within two consecutive readings are considered "near"
-
-

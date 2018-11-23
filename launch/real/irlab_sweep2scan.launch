@@ -1,26 +1,26 @@
 <launch>
 
-  <node name="sweep_node_front" pkg="sweep_ros"  type="sweep_node" output="screen">
-        <param name="serial_port"         type="string" value="/dev/front_lidar"/>
-        <param name="serial_baudrate"     type="int"    value="115200"/>
-        <param name="frame_id"            type="string" value="summit_xl_front_laser_base_link"/>
-        <param name="rotation_speed"      type="int" value="5"/>
+    <node name="sweep_node_front" pkg="sweep_ros" type="sweep_node" output="screen">
+        <param name="serial_port" type="string" value="/dev/front_lidar"/>
+        <param name="serial_baudrate" type="int" value="115200"/>
+        <param name="frame_id" type="string" value="summit_xl_front_laser_base_link"/>
+        <param name="rotation_speed" type="int" value="5"/>
         <remap from="pc2" to="pc2_front"/>
-  </node>
-  <node name="sweep_node_rear"       pkg="sweep_ros"  type="sweep_node" output="screen">
-        <param name="serial_port"         type="string" value="/dev/rear_lidar"/>
-        <param name="serial_baudrate"     type="int"    value="115200"/>
-        <param name="frame_id"            type="string" value="summit_xl_rear_laser_base_link"/>
-        <param name="rotation_speed"      type="int" value="5"/>
+    </node>
+    <node name="sweep_node_rear" pkg="sweep_ros" type="sweep_node" output="screen">
+        <param name="serial_port" type="string" value="/dev/rear_lidar"/>
+        <param name="serial_baudrate" type="int" value="115200"/>
+        <param name="frame_id" type="string" value="summit_xl_rear_laser_base_link"/>
+        <param name="rotation_speed" type="int" value="5"/>
         <remap from="pc2" to="pc2_rear"/>
-  </node>
+    </node>
 
 
     <!-- run pointcloud_to_laserscan node -->
     <node pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node" name="pointcloud_to_laserscan_front">
 
         <remap from="cloud_in" to="pc2_front"/>
-	<remap from="scan" to="scan_front"/>
+        <remap from="scan" to="scan_front"/>
         <rosparam>
             target_frame: summit_xl_front_laser_base_link # Leave disabled to output scan in pointcloud frame
             transform_tolerance: 0.001

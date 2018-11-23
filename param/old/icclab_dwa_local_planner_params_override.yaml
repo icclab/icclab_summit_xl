@@ -1,4 +1,0 @@
-DWAPlannerROS:
-  max_rot_vel: 1.0
-  acc_lim_x: 20.0 # maximum is theoretically 2.0, but we override them as suggested here: http://answers.ros.org/question/210453/robot-rotates-instead-of-going-to-the-goal-dwa_local_planner/
-  acc_lim_theta: 20.0
