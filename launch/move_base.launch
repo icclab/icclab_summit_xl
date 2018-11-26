@@ -8,7 +8,8 @@
 	<arg name="global_frame" default="$(arg prefix)map"/>
 	<arg name="odom_frame" default="$(arg prefix)odom"/>
 	<arg name="base_frame" default="$(arg prefix)base_footprint"/>
-	<arg name="scan_topic" default="front_laser/scan"/>
+	<arg name="scan_topic_front" default="scan_front"/>
+	<arg name="scan_topic_rear" default="scan_rear"/>
 	<arg name="omni" default="false"/>
 
 	<!-- Run move_base -->
@@ -20,11 +21,19 @@
 		<rosparam file="$(find icclab_turtlebot)/config/global_costmap_params_map.yaml" command="load" />
 		<rosparam if="$(arg omni)" file="$(find icclab_turtlebot)/config/teb_local_planner_omni_params.yaml" command="load" />
 		<rosparam unless="$(arg omni)" file="$(find icclab_turtlebot)/config/teb_local_planner_diff_params.yaml" command="load" />
+
 		<!-- reset frame_id parameters using user input data -->
-		<param name="global_costmap/obstacle_layer/scan/sensor_frame" value="$(arg prefix)front_laser_link"/>
-		<param name="local_costmap/obstacle_layer/scan/sensor_frame" value="$(arg prefix)front_laser_link"/>
-		<param name="global_costmap/obstacle_layer/scan/topic" value="$(arg scan_topic)"/>
-		<param name="local_costmap/obstacle_layer/scan/topic" value="$(arg scan_topic)"/>
+		<!-- front laser -->
+		<param name="global_costmap/obstacle_layer/scan_front/sensor_frame" value="$(arg prefix)front_laser_link"/>
+		<param name="local_costmap/obstacle_layer/scan_front/sensor_frame" value="$(arg prefix)front_laser_link"/>
+		<param name="global_costmap/obstacle_layer/scan_front/topic" value="$(arg scan_topic_front)"/>
+		<param name="local_costmap/obstacle_layer/scan_front/topic" value="$(arg scan_topic_front)"/>
+		<!-- rear laser -->
+		<param name="global_costmap/obstacle_layer/scan_rear/sensor_frame" value="$(arg prefix)rear_laser_link"/>
+		<param name="local_costmap/obstacle_layer/scan_rear/sensor_frame" value="$(arg prefix)rear_laser_link"/>
+		<param name="global_costmap/obstacle_layer/scan_rear/topic" value="$(arg scan_topic_rear)"/>
+		<param name="local_costmap/obstacle_layer/scan_rear/topic" value="$(arg scan_topic_rear)"/>
+
 		<param name="local_costmap/global_frame" value="$(arg odom_frame)"/>
 		<param name="local_costmap/robot_base_frame" value="$(arg base_frame)"/>
 		<param name="global_costmap/global_frame" value="$(arg global_frame)"/>

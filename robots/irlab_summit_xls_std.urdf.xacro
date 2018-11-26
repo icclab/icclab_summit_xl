@@ -105,12 +105,12 @@
 		</xacro:sensor_orbbec_astra>
 
 		<!-- Scanse front lidar -->
-		<xacro:scanse prefix="$(arg prefix)front_laser" parent="$(arg prefix)base_link" prefix_topic="laser">
+		<xacro:scanse prefix="$(arg prefix)front_laser" parent="$(arg prefix)base_link" prefix_topic="scan_front">
 			<origin xyz="${front_laser_offset_x} ${front_laser_offset_y} ${front_laser_offset_z}" rpy="0 0 ${-PI/4.0}"/>
 		</xacro:scanse>
 
 		<!-- Scanse rear lidar -->
-		<xacro:scanse prefix="$(arg prefix)rear_laser" parent="$(arg prefix)base_link" prefix_topic="laser">
+		<xacro:scanse prefix="$(arg prefix)rear_laser" parent="$(arg prefix)base_link" prefix_topic="scan_rear">
 			<origin xyz="${rear_laser_offset_x} ${rear_laser_offset_y} ${rear_laser_offset_z}" rpy="0 0 ${3.0*PI/4.0}"/>
 		</xacro:scanse>
 
