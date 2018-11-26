@@ -8,7 +8,7 @@ inflation_layer:
 obstacle_layer:
   obstacle_range: 2.5
   raytrace_range: 3.0
-  observation_sources: scan_front scan_rear
+  observation_sources: scan_front scan_rear camera_front
   scan_front:
     data_type: LaserScan
     topic: /scan_front
@@ -23,3 +23,10 @@ obstacle_layer:
     clearing: true
     min_obstacle_height: 0.25
     max_obstacle_height: 0.50
+  camera_front:
+    data_type: PointCloud2
+    topic: /summit_xl/front_rgbd_camera/depth/points
+    marking: true
+    clearing: true
+    min_obstacle_height: 0.3
+    max_obstacle_height: 7.3
