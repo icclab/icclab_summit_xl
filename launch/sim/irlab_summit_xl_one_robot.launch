@@ -64,7 +64,8 @@
 		<include if="$(arg launch_move_base)" file="$(find icclab_turtlebot)/launch/move_base.launch">
 			<arg name="prefix" value="$(arg prefix)"/>
 			<arg name="omni" value="$(arg ros_planar_move_plugin)"/>
-			<arg name="scan_topic" value="laser/scan"/>
+			<arg name="scan_topic_front" value="scan_front"/>
+			<arg name="scan_topic_rear" value="scan_rear"/>
 		</include>
 
 

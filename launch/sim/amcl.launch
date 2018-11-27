@@ -13,6 +13,12 @@
   <arg name="odom_model_type" default="diff"/>
   <!-- omni -->
 
+  <!-- relay scan topics for amcl input -->
+  <arg name="intopic_front_laser" default="scan_front"/>
+  <arg name="intopic_rear_laser" default="scan_rear"/>
+  <node pkg="topic_tools" type="relay" name="relay_front_laser" args="$(arg intopic_front_laser) $(arg scan_topic)"/>
+  <node pkg="topic_tools" type="relay" name="relay_rear_laser" args="$(arg intopic_rear_laser) $(arg scan_topic)"/>
+
   <node pkg="amcl" type="amcl" name="amcl" output="screen">
     <remap from="scan" to="$(arg scan_topic)"/>
     <remap from="map" to="$(arg map_topic)"/>
