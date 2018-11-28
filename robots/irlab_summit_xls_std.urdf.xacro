@@ -130,14 +130,12 @@
 			 <origin xyz="0.0 0 0.0" rpy="0 0 0" />
 		</xacro:schunk_egp_40> 
 		
-		 <!--<xacro:include filename="$(find icclab_turtlebot)/urdf/gripper/ur5_robotiq85_gripper.urdf.xacro"/>-->
-		 
-		 <!-- <xacro:include filename="$(find icclab_turtlebot)/urdf/gripper/pg70.urdf.xacro"/>
-		 <xacro:schunk_pg70 name="gripper" parent="arm_tool0" has_podest="false">
-			 <origin xyz="0.0 0 0.0" rpy="0 0 0" />
-		</xacro:schunk_pg70> -->
-
-	
+		<!-- Camera on gripper --> 
+		
+		<sensor_r430 prefix="arm" prefix_topic="arm_camera" parent="arm_tool0">
+      <origin xyz="0 0.03 0.05" rpy="${-PI/2} ${-PI/2} 0"/>
+    </sensor_r430>
+		
    </xacro:macro>
    
    <xacro:ros_control/>
