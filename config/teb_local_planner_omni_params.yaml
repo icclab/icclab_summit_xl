@@ -36,14 +36,14 @@ TebLocalPlannerROS:
   footprint_model: # types: "point", "circular", "two_circles", "line", "polygon"
     #type: "circular"
     #radius: 0.5 # for type "circular"
-    type: "line"
-    line_start: [-0.2, 0.0] # for type "line"
-    line_end: [0.2, 0.0] # for type "line"
+    type: "polygon"
+    #line_start: [-0.2, 0.0] # for type "line"
+    #line_end: [0.2, 0.0] # for type "line"
     #front_offset: 0.2 # for type "two_circles"
     #front_radius: 0.2 # for type "two_circles"
     #rear_offset: 0.2 # for type "two_circles"
     #rear_radius: 0.2 # for type "two_circles"
-    #vertices: [ [0.25, -0.05], [0.18, -0.05], [0.18, -0.18], [-0.19, -0.18], [-0.25, 0], [-0.19, 0.18], [0.18, 0.18], [0.18, 0.05], [0.25, 0.05] ] # for type "polygon"
+    vertices: [ [0.40, -0.31], [0.40, 0.31], [-0.40, 0.31], [-0.40, -0.31] ] # for type "polygon"
 
   # GoalTolerance
 
@@ -53,14 +53,14 @@ TebLocalPlannerROS:
 
   # Obstacles
 
-  min_obstacle_dist: 0.28 # minimum distance to obstacle: it depends on the footprint_model
+  min_obstacle_dist: 0.10 # minimum distance to obstacle: it depends on the footprint_model
   include_costmap_obstacles: True # use the local costmap
-  costmap_obstacles_behind_robot_dist: 1.0 # distance at which obstacles behind the robot are taken into account
+  costmap_obstacles_behind_robot_dist: 2.0 # distance at which obstacles behind the robot are taken into account
   obstacle_poses_affected: 30 # unused if legacy_obstacle_association is false
   inflation_dist: 0.0 # greater than min_obstacle_dist to take effect
   legacy_obstacle_association: false
-  obstacle_association_force_inclusion_factor: 1.5 # the obstacles that will be taken into account are those closer than min_obstacle_dist*factor, if legacy is false
-  obstacle_association_cutoff_factor: 5.0 # the obstacles that are further than min_obstacle_dist * factor will not be taken into account, if legacy is false
+  obstacle_association_force_inclusion_factor: 6.5 # the obstacles that will be taken into account are those closer than min_obstacle_dist*factor, if legacy is false
+  obstacle_association_cutoff_factor: 20.0 # the obstacles that are further than min_obstacle_dist * factor will not be taken into account, if legacy is false
   costmap_converter_plugin: "costmap_converter::CostmapToPolygonsDBSMCCH"
   #costmap_converter_plugin: "costmap_converter::CostmapToLinesDBSRANSAC"
   #costmap_converter_plugin: "costmap_converter::CostmapToLinesDBSMCCH"
@@ -91,7 +91,7 @@ TebLocalPlannerROS:
   weight_obstacle: 50 # prefer trajectories that respect the min_obstacle_dist
   weight_inflation: 1 # prefer trajectories that respect the inflation of the obstacles
   #weight_dynamic_obstacle: 10 # not in use yet
-  weight_viapoint: 1 # prefer trajectories that respect the viapoints in the global path
+  weight_viapoint: 5 # prefer trajectories that respect the viapoints in the global path
   weight_adapt_factor: 2 # factor to multiply some weights (currently only weight_obstacle) at each iteration (gives better results than a huge value for the weight)
 
   # Homotopy Class Planner

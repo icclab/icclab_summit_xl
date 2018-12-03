@@ -28,5 +28,5 @@ obstacle_layer:
     topic: /summit_xl/front_rgbd_camera/depth/points
     marking: true
     clearing: true
-    min_obstacle_height: 0.3
-    max_obstacle_height: 7.3
+    min_obstacle_height: 0.02
+    max_obstacle_height: 3.0
