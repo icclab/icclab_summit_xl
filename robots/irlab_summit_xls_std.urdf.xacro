@@ -115,7 +115,7 @@
 		</xacro:scanse>
 
 		<!-- UR5 Arm -->
-		<xacro:ur5_robot prefix="arm_" joint_limited="true">
+		<xacro:ur5_robot prefix="arm_" joint_limited="false">
 		</xacro:ur5_robot>
 
 		<joint name="$(arg prefix)arm_base_joint" type="fixed">
@@ -133,7 +133,7 @@
 		<!-- Camera on gripper --> 
 		
 		<sensor_r430 prefix="arm" prefix_topic="arm_camera" parent="arm_tool0">
-      <origin xyz="0 0.03 0.05" rpy="${-PI/2} ${-PI/2} 0"/>
+      <origin xyz="0 0.045 -0.015" rpy="${-PI/2} ${-PI/2} 0"/>
     </sensor_r430>
 		
    </xacro:macro>

@@ -63,7 +63,7 @@
 
   # Gripper controller
   gripper_left_controller:
-    type: position_controllers/GripperActionController
+    type: effort_controllers/JointEffortController
     joint: gripper_left_finger_base_joint
     action_monitor_rate: 20
     goal_tolerance: 0.002
@@ -76,7 +76,7 @@
     
   # mimic tag in urdf does not seem to work in gazebo, I make another controller
   gripper_right_controller:
-    type: position_controllers/GripperActionController
+    type: effort_controllers/JointEffortController
     joint: gripper_right_finger_base_joint
     action_monitor_rate: 20
     goal_tolerance: 0.002
