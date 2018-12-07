@@ -118,7 +118,7 @@
 		</xacro:scanse>
 
 		<!-- UR5 Arm -->
-		<xacro:ur5_robot prefix="arm_" joint_limited="true">
+		<xacro:ur5_robot prefix="arm_" joint_limited="false">
 		</xacro:ur5_robot>
 
 		<joint name="$(arg prefix)arm_base_joint" type="fixed">
