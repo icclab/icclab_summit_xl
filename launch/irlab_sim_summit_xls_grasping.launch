@@ -17,13 +17,31 @@
   This corresponds to moving around the real robot without the use of MoveIt.
   -->
   <arg name="use_gui" default="false" />
+  <arg name="gazebo_world" default="$(find icclab_turtlebot)/worlds/summit_xl_grasping.world"/>
+  <arg name="localization_robot_a" default="false"/>
+	<arg name="gmapping_robot_a" default="false"/>
+	<arg name="move_base_robot_a" default="false"/>
+	<arg name="amcl_and_mapserver_a" default="false"/>
+	<arg name="xacro_robot_a" default="irlab_summit_xls_std.urdf.xacro"/>
+  
+  <include file="$(find icclab_turtlebot)/launch/sim/irlab_summit_xl_gazebo.launch">
+		<!-- general args -->
+		<arg name="launch_rviz" value="false"/>
+		<arg name="gazebo_world" value="$(arg gazebo_world)"/>
+		<!-- robot args -->
+		<arg name="localization_robot_a" value="$(arg localization_robot_a)"/>
+		<arg name="gmapping_robot_a" value="$(arg gmapping_robot_a)"/>
+		<arg name="move_base_robot_a" value="$(arg move_base_robot_a)"/>
+		<arg name="amcl_and_mapserver_a" value="$(arg amcl_and_mapserver_a)"/>
+		<arg name="xacro_robot_a" value="$(arg xacro_robot_a)"/>
+	</include>
   
   <arg name="id_robot" default="summit_xl"/>
 	<group ns="$(arg id_robot)">
 
     <!-- Load the URDF, SRDF and other .yaml configuration files on the param server -->
-    <include file="$(find robotnik_ur5_moveit_config)/launch/planning_context.launch">
-      <arg name="load_robot_description" value="true"/>
+    <include file="$(find icclab_turtlebot)/launch/sim/planning_context.launch">
+      <arg name="load_robot_description" value="false"/>
     </include>
 
     <!-- Run the main MoveIt executable without trajectory execution (we do not have controllers configured by default) -->
@@ -42,6 +60,9 @@
      <node name="rviz_grasping" pkg="rviz" type="rviz" args="$(arg command_args)" respawn="false" output="screen">
       <rosparam command="load" file="$(find robotnik_ur5_moveit_config)/config/kinematics.yaml"/>
     </node>
+    <!-- The semantic description that corresponds to the URDF -->
+    <arg name="robot_description" default="robot_description"/>
+    <param name="$(arg robot_description)_semantic" textfile="$(find icclab_turtlebot)/config/summit_xl.srdf" />
     
     <!-- run grasp detection -->
      <include file="$(find gpd)/launch/grasp_generation.launch" />

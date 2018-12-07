@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
-<robot name="summit_xl" 
-	xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot name="summit_xl" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
 
 	<!-- ***************** -->
@@ -62,6 +61,10 @@
 	<xacro:property name="front_rgbd_camera_offset_y" value="0.012"/>
 	<xacro:property name="front_rgbd_camera_offset_z" value="0.230"/>
 
+  <xacro:property name="base_arm_x" value="0.225"/>
+  <xacro:property name="base_arm_y" value="0.0"/>
+  <xacro:property name="base_arm_z" value="0.355"/>
+
 	<!-- Flag to select the high or low quality model -->
 	<xacro:property name="hq" value="true" />
 
@@ -115,7 +118,7 @@
 		</xacro:scanse>
 
 		<!-- UR5 Arm -->
-		<xacro:ur5_robot prefix="arm_" joint_limited="false">
+		<xacro:ur5_robot prefix="arm_" joint_limited="true">
 		</xacro:ur5_robot>
 
 		<joint name="$(arg prefix)arm_base_joint" type="fixed">
