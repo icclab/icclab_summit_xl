@@ -113,8 +113,9 @@
 			<arg name="camera_model" value="$(arg rear_camera_model)"/>
 		</include>
 
-		<!-- start complementary_filter and pixhawk node filter -->
-		<!-- what does this do? -->
+		<!-- start complementary_filter (imu filter) -->
+		<!-- start px4 an open source flight control software -->
+		<!-- start mavros node -->
 		<include file="$(find summit_xl_bringup)/launch/pixhawk.launch"/>
 
 		<include file="$(find summit_xl_localization)/launch/rl_utils.launch"/>
