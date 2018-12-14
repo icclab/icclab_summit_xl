@@ -36,6 +36,8 @@
     <disable_collisions link1="arm_base_link" link2="summit_xl_front_rgbd_camera_link" reason="Never" />
     <disable_collisions link1="arm_base_link" link2="summit_xl_front_right_wheel_link" reason="Never" />
     <disable_collisions link1="arm_base_link" link2="summit_xl_imu_link" reason="Never" />
+    <disable_collisions link1="arm_base_link" link2="summit_xl_front_laser_base_link" reason="Never" />
+    <disable_collisions link1="arm_base_link" link2="summit_xl_rear_laser_base_link" reason="Never" />
     <disable_collisions link1="arm_ee_link" link2="arm_wrist_1_link" reason="Never" />
     <disable_collisions link1="arm_ee_link" link2="arm_wrist_2_link" reason="Never" />
     <disable_collisions link1="arm_ee_link" link2="arm_wrist_3_link" reason="Adjacent" />
@@ -58,6 +60,8 @@
     <disable_collisions link1="arm_shoulder_link" link2="summit_xl_front_rgbd_camera_link" reason="Never" />
     <disable_collisions link1="arm_shoulder_link" link2="summit_xl_front_right_wheel_link" reason="Never" />
     <disable_collisions link1="arm_shoulder_link" link2="summit_xl_imu_link" reason="Never" />
+    <disable_collisions link1="arm_shoulder_link" link2="summit_xl_front_laser_base_link" reason="Never" />
+    <disable_collisions link1="arm_shoulder_link" link2="summit_xl_rear_laser_base_link" reason="Never" />
     <disable_collisions link1="arm_upper_arm_link" link2="summit_xl_base_footprint" reason="Never" />
     <disable_collisions link1="arm_wrist_1_link" link2="arm_wrist_2_link" reason="Adjacent" />
     <disable_collisions link1="arm_wrist_1_link" link2="arm_wrist_3_link" reason="Never" />
@@ -124,12 +128,16 @@
     <disable_collisions link1="summit_xl_back_left_wheel_link" link2="summit_xl_front_rgbd_camera_link" reason="Never" />
     <disable_collisions link1="summit_xl_back_left_wheel_link" link2="summit_xl_front_right_wheel_link" reason="Never" />
     <disable_collisions link1="summit_xl_back_left_wheel_link" link2="summit_xl_imu_link" reason="Never" />
+    <disable_collisions link1="summit_xl_back_left_wheel_link" link2="summit_xl_front_laser_base_link" reason="Never" />
+    <disable_collisions link1="summit_xl_back_left_wheel_link" link2="summit_xl_rear_laser_base_link" reason="Never" />
     <disable_collisions link1="summit_xl_back_right_wheel_link" link2="summit_xl_base_footprint" reason="Never" />
     <disable_collisions link1="summit_xl_back_right_wheel_link" link2="summit_xl_base_link" reason="Adjacent" />
     <disable_collisions link1="summit_xl_back_right_wheel_link" link2="summit_xl_front_left_wheel_link" reason="Never" />
     <disable_collisions link1="summit_xl_back_right_wheel_link" link2="summit_xl_front_rgbd_camera_link" reason="Never" />
     <disable_collisions link1="summit_xl_back_right_wheel_link" link2="summit_xl_front_right_wheel_link" reason="Never" />
     <disable_collisions link1="summit_xl_back_right_wheel_link" link2="summit_xl_imu_link" reason="Never" />
+    <disable_collisions link1="summit_xl_back_right_wheel_link" link2="summit_xl_front_laser_base_link" reason="Never" />
+    <disable_collisions link1="summit_xl_back_right_wheel_link" link2="summit_xl_rear_laser_base_link" reason="Never" />
     <disable_collisions link1="summit_xl_base_footprint" link2="summit_xl_base_link" reason="Adjacent" />
     <disable_collisions link1="summit_xl_base_footprint" link2="summit_xl_front_left_wheel_link" reason="Never" />
     <disable_collisions link1="summit_xl_base_footprint" link2="summit_xl_front_rgbd_camera_link" reason="Never" />
@@ -141,8 +149,12 @@
     <disable_collisions link1="summit_xl_base_link" link2="summit_xl_imu_link" reason="Adjacent" />
     <disable_collisions link1="summit_xl_front_left_wheel_link" link2="summit_xl_front_rgbd_camera_link" reason="Never" />
     <disable_collisions link1="summit_xl_front_left_wheel_link" link2="summit_xl_front_right_wheel_link" reason="Never" />
+    <disable_collisions link1="summit_xl_front_left_wheel_link" link2="summit_xl_front_laser_base_link" reason="Never" />
+    <disable_collisions link1="summit_xl_front_left_wheel_link" link2="summit_xl_rear_laser_base_link" reason="Never" />
     <disable_collisions link1="summit_xl_front_left_wheel_link" link2="summit_xl_imu_link" reason="Never" />
     <disable_collisions link1="summit_xl_front_rgbd_camera_link" link2="summit_xl_front_right_wheel_link" reason="Never" />
     <disable_collisions link1="summit_xl_front_rgbd_camera_link" link2="summit_xl_imu_link" reason="Never" />
     <disable_collisions link1="summit_xl_front_right_wheel_link" link2="summit_xl_imu_link" reason="Never" />
+    <disable_collisions link1="summit_xl_front_right_wheel_link" link2="summit_xl_front_laser_base_link" reason="Never" />
+    <disable_collisions link1="summit_xl_front_right_wheel_link" link2="summit_xl_rear_laser_base_link" reason="Never" />
 </robot>
