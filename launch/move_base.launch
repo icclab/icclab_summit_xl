@@ -13,7 +13,7 @@
 	<arg name="omni" default="false"/>
 
 	<!-- Run move_base -->
-	<node pkg="move_base" type="move_base" respawn="false" name="move_base">
+	<node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen"/>
 		<rosparam file="$(find icclab_turtlebot)/config/move_base_params.yaml" command="load" />
 		<rosparam file="$(find icclab_turtlebot)/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
 		<rosparam file="$(find icclab_turtlebot)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
@@ -40,6 +40,7 @@
 		<param name="global_costmap/robot_base_frame" value="$(arg base_frame)"/>
 		<param name="DWAPlannerROS/global_frame_id" value="$(arg odom_frame)"/>
 		<param name="TebLocalPlannerROS/map_frame" value="$(arg global_frame)"/>
+	        <param name="TebLocalPlannerROS/odom_topic" value="$(arg odom_topic)"/>
 		<param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" />
 		<param name="controller_frequency" value="5.0" />
 		<param name="controller_patience" value="15.0" />

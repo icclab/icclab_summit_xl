@@ -6,8 +6,6 @@
 	<arg name="map_frame" default="$(arg prefix)map"/> 
 	<arg name="odom_frame" default="$(arg prefix)odom"/> 
 	<arg name="base_frame" default="$(arg prefix)base_link"/> 
-
-	<!-- relay scan topics for amcl input -->
 	<arg name="intopic_front_laser" default="scan_front"/>
 	<arg name="intopic_rear_laser" default="scan_rear"/>
 
