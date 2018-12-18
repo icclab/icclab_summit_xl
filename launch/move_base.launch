@@ -11,6 +11,7 @@
 	<arg name="scan_topic_front" default="scan_front"/>
 	<arg name="scan_topic_rear" default="scan_rear"/>
 	<arg name="omni" default="false"/>
+	<arg name="sim" default="false"/>
 
 	<!-- Run move_base -->
 	<node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
@@ -46,6 +47,18 @@
 		<param name="controller_patience" value="15.0" />
 		<remap from="cmd_vel" to="$(arg cmd_vel_topic)" />
 		<remap from="odom" to="$(arg odom_topic)" />
+
 	</node>
+
+	<!-- params for sim -->
+	<group if="$(arg sim)">
+		<param name="move_base/TebLocalPlannerROS/max_vel_x" value="2.0"/>
+		<param name="move_base/TebLocalPlannerROS/max_vel_x_backwards" value="1.0"/>
+		<param name="move_base/TebLocalPlannerROS/max_vel_theta" value="3.0"/>
+		<param name="move_base/TebLocalPlannerROS/max_vel_y" value="2.0"/>
+		<param name="move_base/TebLocalPlannerROS/acc_lim_y" value="1.0"/>
+		<param name="move_base/TebLocalPlannerROS/acc_lim_x" value="1.0"/>
+		<param name="move_base/TebLocalPlannerROS/acc_lim_theta" value="2.0"/>
+	</group>
 
 </launch>
