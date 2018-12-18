@@ -7,7 +7,7 @@ TebLocalPlannerROS:
   # Trajectory
 
   teb_autosize: True
-  dt_ref: 0.3
+  dt_ref: 0.5
   dt_hysteresis: 0.1
   min_samples: 3
   global_plan_overwrite_orientation: True
@@ -53,13 +53,13 @@ TebLocalPlannerROS:
 
   # Obstacles
 
-  min_obstacle_dist: 0.10 # minimum distance to obstacle: it depends on the footprint_model
+  min_obstacle_dist: 0.05 # minimum distance to obstacle: it depends on the footprint_model
   include_costmap_obstacles: True # use the local costmap
   costmap_obstacles_behind_robot_dist: 1.0 # distance at which obstacles behind the robot are taken into account
   obstacle_poses_affected: 30 # unused if legacy_obstacle_association is false
-  inflation_dist: 0.7 # greater than min_obstacle_dist to take effect
+  inflation_dist: 0.2 # greater than min_obstacle_dist to take effect
   legacy_obstacle_association: false
-  obstacle_association_force_inclusion_factor: 6.5 # the obstacles that will be taken into account are those closer than min_obstacle_dist*factor, if legacy is false
+  obstacle_association_force_inclusion_factor: 13 # the obstacles that will be taken into account are those closer than min_obstacle_dist*factor, if legacy is false
   obstacle_association_cutoff_factor: 20.0 # the obstacles that are further than min_obstacle_dist * factor will not be taken into account, if legacy is false
   costmap_converter_plugin: "costmap_converter::CostmapToPolygonsDBSMCCH"
   #costmap_converter_plugin: "costmap_converter::CostmapToLinesDBSRANSAC"
@@ -67,7 +67,7 @@ TebLocalPlannerROS:
   #costmap_converter_plugin: "costmap_converter::CostmapToPolygonsDBSConcaveHull"
   #costmap_converter_plugin: "" # deactivate plugin
   costmap_converter_spin_thread: True
-  costmap_converter_rate: 5
+  costmap_converter_rate: 3
   # costmap_converter/CostmapToLinesDBSRANSAC:
   #    cluster_max_distance: 0.4
 
@@ -85,11 +85,11 @@ TebLocalPlannerROS:
   weight_acc_lim_y: 0
   weight_acc_lim_theta: 10000
   weight_kinematics_nh: 10000 # is a nonholonomic robot
-  weight_kinematics_forward_drive: 10 # prefer forward driving, for differential
+  weight_kinematics_forward_drive: 5 # prefer forward driving, for differential
   weight_kinematics_turning_radius: 1 # prefer turns that respect the min_turning_radius, not used if differential (min_turning_radius = 0)
-  weight_optimaltime: 10 # prefer trajectories with less transition time
+  weight_optimaltime: 5 # prefer trajectories with less transition time
   weight_obstacle: 50 # prefer trajectories that respect the min_obstacle_dist
-  weight_inflation: 1 # prefer trajectories that respect the inflation of the obstacles
+  weight_inflation: 10 # prefer trajectories that respect the inflation of the obstacles
   #weight_dynamic_obstacle: 10 # not in use yet
   weight_viapoint: 5 # prefer trajectories that respect the viapoints in the global path
   weight_adapt_factor: 2 # factor to multiply some weights (currently only weight_obstacle) at each iteration (gives better results than a huge value for the weight)
@@ -99,7 +99,7 @@ TebLocalPlannerROS:
   enable_homotopy_class_planning: False # currently not used
   simple_exploration: False
   enable_multithreading: True
-  max_number_classes: 4
+  max_number_classes: 3
   selection_cost_hysteresis: 1.0
   selection_obst_cost_scale: 4.0
   selection_viapoint_cost_scale: 1.0
