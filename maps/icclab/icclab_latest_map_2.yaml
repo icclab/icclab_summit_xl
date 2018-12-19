@@ -1,0 +1,6 @@
+image: icclab_latest_map_2.pgm
+resolution: 0.02600
+origin: [-17.582628, -7.727271, 0.0]
+negate: 0
+occupied_thresh: 0.65
+free_thresh: 0.196
