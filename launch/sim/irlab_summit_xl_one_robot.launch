@@ -66,6 +66,7 @@
 			<arg name="omni" value="$(arg ros_planar_move_plugin)"/>
 			<arg name="scan_topic_front" value="scan_front"/>
 			<arg name="scan_topic_rear" value="scan_rear"/>
+			<arg name="sim" value="true"/>
 		</include>
 
 
