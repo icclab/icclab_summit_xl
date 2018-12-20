@@ -41,11 +41,14 @@
 
     <!-- Load the URDF, SRDF and other .yaml configuration files on the param server -->
     <include file="$(find icclab_turtlebot)/launch/sim/planning_context.launch">
-      <arg name="load_robot_description" value="false"/>
+      <arg name="load_robot_description" value="true"/>
     </include>
+<!--    <include file="$(find robotnik_ur5_moveit_config)/launch/planning_context.launch">-->
+<!--      <arg name="load_robot_description" value="true"/>-->
+<!--    </include>-->
 
     <!-- Run the main MoveIt executable without trajectory execution (we do not have controllers configured by default) -->
-    <include file="$(find robotnik_ur5_moveit_config)/launch/move_group.launch">
+    <include file="$(find icclab_turtlebot)/launch/move_group.launch">
       <arg name="allow_trajectory_execution" value="true"/>
       <arg name="fake_execution" value="false"/>
       <arg name="info" value="true"/>
@@ -60,9 +63,10 @@
      <node name="rviz_grasping" pkg="rviz" type="rviz" args="$(arg command_args)" respawn="false" output="screen">
       <rosparam command="load" file="$(find robotnik_ur5_moveit_config)/config/kinematics.yaml"/>
     </node>
+    
     <!-- The semantic description that corresponds to the URDF -->
-    <arg name="robot_description" default="robot_description"/>
-    <param name="$(arg robot_description)_semantic" textfile="$(find icclab_turtlebot)/config/summit_xl.srdf" />
+<!--    <arg name="robot_description" default="robot_description"/>-->
+<!--    <param name="$(arg robot_description)_semantic" textfile="$(find icclab_turtlebot)/config/summit_xl.srdf" />-->
     
     <!-- run point cloud filtering--> 
     <node name="pointcloud_filtering" pkg="irlab_point_cloud_filtering" type="point_cloud_filtering_server" respawn="false" output="screen"/>
