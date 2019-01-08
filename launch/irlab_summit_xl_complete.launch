@@ -4,7 +4,7 @@
 	<!-- The environment variables should be set in a file or .bashrc -->
 
 	<arg name="id_robot" default="$(optenv ROBOT_ID summit_xl)"/>
-	<arg name="xacro_robot_a" default="$(optenv ROBOT_XACRO irlab_summit_xls_std.urdf.xacro)"/>
+	<arg name="xacro_robot_a" default="irlab_summit_xls_std.urdf.xacro"/>
 	<!-- 2D LASERS -->
 	<arg name="has_scanse_lasers" default="$(optenv ROBOT_HAS_SCANSE_LASERS true)"/>
 	

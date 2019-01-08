@@ -136,7 +136,7 @@
 		<!-- Camera on gripper --> 
 		
 		<sensor_r430 prefix="arm" prefix_topic="arm_camera" parent="arm_tool0">
-      <origin xyz="0 0.045 -0.015" rpy="${-PI/2} ${-PI/2} 0"/>
+      <origin xyz="0 -0.065 -0.015" rpy="${-PI/2} ${-PI/2} ${PI}"/>
     </sensor_r430>
 		
    </xacro:macro>
