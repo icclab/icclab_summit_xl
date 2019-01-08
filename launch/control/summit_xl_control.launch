@@ -30,7 +30,7 @@
   </group>
     <!-- Simulation - Load joint controller configurations from YAML file to parameter server -->
   <group if="$(arg sim)">	  	  
-	  <rosparam file="$(find icclab_turtlebot)/config/$(arg prefix)control.yaml" command="load"/>
+	  <rosparam file="$(find icclab_summit_xl)/config/$(arg prefix)control.yaml" command="load"/>
 	  
 	  <!-- Robot Arm Ros Controller -->
 	  <include file="$(find summit_xls_ur5_bringup)/launch/ur5_controllers.launch">

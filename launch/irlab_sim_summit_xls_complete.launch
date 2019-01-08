@@ -6,7 +6,7 @@
 	<arg name="ros_planar_move_plugin" default="true"/>
 
 	<arg name="launch_rviz" default="true"/>
-	<arg name="gazebo_world" default="$(find icclab_turtlebot)/worlds/summit_xl_office.world"/>
+	<arg name="gazebo_world" default="$(find icclab_summit_xl)/worlds/summit_xl_office.world"/>
 
 	<!-- <arg name="map_file_a" default="icclab/icclab_latest_map.yaml"/> -->
 	<arg name="map_file_a" default="willow_garage/willow_garage.yaml"/>
@@ -16,7 +16,7 @@
 	<arg name="amcl_and_mapserver_a" default="true"/>
 	<arg name="xacro_robot_a" default="irlab_summit_xls_std.urdf.xacro"/>
 
-	<include file="$(find icclab_turtlebot)/launch/sim/irlab_summit_xl_gazebo.launch">
+	<include file="$(find icclab_summit_xl)/launch/sim/irlab_summit_xl_gazebo.launch">
 		<!-- general args -->
 		<arg name="launch_rviz" value="$(arg launch_rviz)"/>
 		<arg name="gazebo_world" value="$(arg gazebo_world)"/>

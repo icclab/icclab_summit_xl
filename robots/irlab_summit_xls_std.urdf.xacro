@@ -23,10 +23,10 @@
 	<xacro:include filename="$(find robotnik_sensors)/urdf/all_sensors.urdf.xacro" />
 
 	<!-- Import gripper Schunk EGP40-->
-	<xacro:include filename="$(find icclab_turtlebot)/urdf/gripper/schunk_egp40.urdf.xacro" />
+	<xacro:include filename="$(find icclab_summit_xl)/urdf/gripper/schunk_egp40.urdf.xacro" />
 
 	<!-- ICCLab sensors -->
-	<xacro:include filename="$(find icclab_turtlebot)/urdf/sensors/scanse.urdf.xacro" />
+	<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/scanse.urdf.xacro" />
 
 	<xacro:property name="PI" value="3.1415926535897931"/>
 

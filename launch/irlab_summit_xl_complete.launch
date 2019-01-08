@@ -70,7 +70,7 @@
 		<arg name="prefix" value="$(arg id_robot)_"/>
 
 		<!-- start robot_state_publisher - publish fixed transforms, load robot model to param server -->
-		<include file="$(find icclab_turtlebot)/launch/real/irlab_summit_xl_state_robot.launch">
+		<include file="$(find icclab_summit_xl)/launch/real/irlab_summit_xl_state_robot.launch">
 			<arg name="prefix" value="$(arg prefix)"/>
 			<arg name ="robot_model" value ="$(arg xacro_robot_a)"/>
 		</include>
@@ -125,7 +125,7 @@
 		<include if="$(arg launch_web_server)" file="$(find summit_xl_web)/launch/summit_xl_web.launch"/>
 
 		<!-- start laser nodes -->
-		<include if="$(arg has_scanse_lasers)" file="$(find icclab_turtlebot)/launch/real/irlab_sweep2scan.launch"/>
+		<include if="$(arg has_scanse_lasers)" file="$(find icclab_summit_xl)/launch/real/irlab_sweep2scan.launch"/>
 
 		<include if="$(arg has_front_laser)" file="$(find summit_xl_bringup)/launch/$(arg front_laser_model).launch">
 			<arg name="port" value="$(arg front_laser_port)"/>
@@ -165,7 +165,7 @@
 		</include>
 
 		<!-- move base -->
-		<include file="$(find icclab_turtlebot)/launch/move_base.launch">
+		<include file="$(find icclab_summit_xl)/launch/move_base.launch">
 			<arg name="prefix" value="$(arg prefix)"/>
 			<arg name="omni" value="$(arg omni)"/>
 			<arg name="scan_topic_front" value="scan_front"/>
@@ -175,11 +175,11 @@
 		</include>
 
 		<!-- amcl and map server base-->
-		<include if="$(arg launch_amcl_and_mapserver)" file="$(find icclab_turtlebot)/launch/sim/map_server.launch">
+		<include if="$(arg launch_amcl_and_mapserver)" file="$(find icclab_summit_xl)/launch/sim/map_server.launch">
 			<arg name="prefix" value="$(arg prefix)"/>
 			<arg name="map_file" value="$(arg map_file)"/>
 		</include>
-		<include if="$(arg launch_amcl_and_mapserver)" file="$(find icclab_turtlebot)/launch/sim/amcl.launch">
+		<include if="$(arg launch_amcl_and_mapserver)" file="$(find icclab_summit_xl)/launch/sim/amcl.launch">
 			<arg name="prefix" value="$(arg prefix)"/>
 			<arg if="$(arg omni)" name="odom_model_type" value="omni"/>
 			<arg unless="$(arg omni)" name="odom_model_type" value="diff"/>
@@ -189,7 +189,7 @@
 		</include>
 
 		<!-- gmapping -->
-		<include if="$(arg launch_gmapping)" file="$(find icclab_turtlebot)/launch/slam_gmapping.launch">
+		<include if="$(arg launch_gmapping)" file="$(find icclab_summit_xl)/launch/slam_gmapping.launch">
 			<arg name="prefix" value="$(arg prefix)"/>
 		</include>
 

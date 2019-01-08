@@ -42,7 +42,7 @@
          <visual>
             <origin xyz="0.0 0 0" rpy="0 0 0" />
             <geometry>
-               <mesh filename="package://icclab_turtlebot/meshes/gripper/schunk_epg40/schunk_epg40_base.stl" scale="1 1 1"/>
+               <mesh filename="package://icclab_summit_xl/meshes/gripper/schunk_epg40/schunk_epg40_base.stl" scale="1 1 1"/>
             </geometry>
             <material name="grey">
                <color rgba="0.5 0.5 0.5 1"/>
@@ -52,7 +52,7 @@
          <collision>
             <origin xyz="0.0 0 0" rpy="0 0 0" />
             <geometry>
-               <mesh filename="package://icclab_turtlebot/meshes/gripper/schunk_epg40/schunk_epg40_base.stl" scale="1 1 1"/>
+               <mesh filename="package://icclab_summit_xl/meshes/gripper/schunk_epg40/schunk_epg40_base.stl" scale="1 1 1"/>
             </geometry>
          </collision>
       </link>
@@ -85,7 +85,7 @@
          <visual>
             <origin xyz="0.0 0 0" rpy="0 0 0" />
             <geometry>
-               <mesh filename="package://icclab_turtlebot/meshes/gripper/schunk_epg40/schunk_epg40_finger_base.stl" scale="1 1 1"/>
+               <mesh filename="package://icclab_summit_xl/meshes/gripper/schunk_epg40/schunk_epg40_finger_base.stl" scale="1 1 1"/>
             </geometry>
             <material name="grey">
                <color rgba="0.5 0.5 0.5 1"/>
@@ -95,7 +95,7 @@
          <collision>
             <origin xyz="0.0 0 0" rpy="0 0 0" />
             <geometry>
-               <mesh filename="package://icclab_turtlebot/meshes/gripper/schunk_epg40/schunk_epg40_finger_base.stl" scale="1 1 1"/>
+               <mesh filename="package://icclab_summit_xl/meshes/gripper/schunk_epg40/schunk_epg40_finger_base.stl" scale="1 1 1"/>
             </geometry>
          </collision>
       </link>
@@ -116,7 +116,7 @@
          <visual>
             <origin xyz="0.0 0 0" rpy="0 0 0" />
             <geometry>
-               <mesh filename="package://icclab_turtlebot/meshes/gripper/schunk_epg40/schunk_epg40_finger.stl" scale="1 1 1"/>
+               <mesh filename="package://icclab_summit_xl/meshes/gripper/schunk_epg40/schunk_epg40_finger.stl" scale="1 1 1"/>
             </geometry>
             <material name="grey">
                <color rgba="0.5 0.5 0.5 1"/>
@@ -126,7 +126,7 @@
          <collision>
             <origin xyz="0.0 0 0" rpy="0 0 0" />
             <geometry>
-               <mesh filename="package://icclab_turtlebot/meshes/gripper/schunk_epg40/schunk_epg40_finger.stl" scale="1 1 1"/>
+               <mesh filename="package://icclab_summit_xl/meshes/gripper/schunk_epg40/schunk_epg40_finger.stl" scale="1 1 1"/>
             </geometry>
          </collision>
       </link>
@@ -163,7 +163,7 @@
          <visual>
             <origin xyz="0.0 0 0" rpy="0 0 0" />
             <geometry>
-               <mesh filename="package://icclab_turtlebot/meshes/gripper/schunk_epg40/schunk_epg40_finger_base.stl" scale="1 1 1"/>
+               <mesh filename="package://icclab_summit_xl/meshes/gripper/schunk_epg40/schunk_epg40_finger_base.stl" scale="1 1 1"/>
             </geometry>
             <material name="grey">
                <color rgba="0.5 0.5 0.5 1"/>
@@ -173,7 +173,7 @@
          <collision>
             <origin xyz="0.0 0 0" rpy="0 0 0" />
             <geometry>
-               <mesh filename="package://icclab_turtlebot/meshes/gripper/schunk_epg40/schunk_epg40_finger_base.stl" scale="1 1 1"/>
+               <mesh filename="package://icclab_summit_xl/meshes/gripper/schunk_epg40/schunk_epg40_finger_base.stl" scale="1 1 1"/>
             </geometry>
          </collision>
       </link>
@@ -194,7 +194,7 @@
          <visual>
             <origin xyz="0.0 0 0" rpy="0 0 0" />
             <geometry>
-               <mesh filename="package://icclab_turtlebot/meshes/gripper/schunk_epg40/schunk_epg40_finger.stl" scale="1 1 1"/>
+               <mesh filename="package://icclab_summit_xl/meshes/gripper/schunk_epg40/schunk_epg40_finger.stl" scale="1 1 1"/>
             </geometry>
             <material name="grey">
                <color rgba="0.5 0.5 0.5 1"/>
@@ -204,7 +204,7 @@
          <collision>
             <origin xyz="0.0 0 0" rpy="0 0 0" />
             <geometry>
-               <mesh filename="package://icclab_turtlebot/meshes/gripper/schunk_epg40/schunk_epg40_finger.stl" scale="1 1 1"/>
+               <mesh filename="package://icclab_summit_xl/meshes/gripper/schunk_epg40/schunk_epg40_finger.stl" scale="1 1 1"/>
             </geometry>
          </collision>
       </link>

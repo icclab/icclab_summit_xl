@@ -15,13 +15,13 @@
 
 	<!-- Run move_base -->
 	<node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
-		<rosparam file="$(find icclab_turtlebot)/config/move_base_params.yaml" command="load" />
-		<rosparam file="$(find icclab_turtlebot)/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
-		<rosparam file="$(find icclab_turtlebot)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
-		<rosparam file="$(find icclab_turtlebot)/config/local_costmap_params.yaml" command="load" />
-		<rosparam file="$(find icclab_turtlebot)/config/global_costmap_params_map.yaml" command="load" />
-		<rosparam if="$(arg omni)" file="$(find icclab_turtlebot)/config/teb_local_planner_omni_params.yaml" command="load" />
-		<rosparam unless="$(arg omni)" file="$(find icclab_turtlebot)/config/teb_local_planner_diff_params.yaml" command="load" />
+		<rosparam file="$(find icclab_summit_xl)/config/move_base_params.yaml" command="load" />
+		<rosparam file="$(find icclab_summit_xl)/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
+		<rosparam file="$(find icclab_summit_xl)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
+		<rosparam file="$(find icclab_summit_xl)/config/local_costmap_params.yaml" command="load" />
+		<rosparam file="$(find icclab_summit_xl)/config/global_costmap_params_map.yaml" command="load" />
+		<rosparam if="$(arg omni)" file="$(find icclab_summit_xl)/config/teb_local_planner_omni_params.yaml" command="load" />
+		<rosparam unless="$(arg omni)" file="$(find icclab_summit_xl)/config/teb_local_planner_diff_params.yaml" command="load" />
 
 		<!-- reset frame_id parameters using user input data -->
 		<!-- front laser -->

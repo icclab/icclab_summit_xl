@@ -27,7 +27,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://icclab_turtlebot/meshes/sweep_lidar.stl"/>
+          <mesh filename="package://icclab_summit_xl/meshes/sweep_lidar.stl"/>
         </geometry>
       </visual>
 
