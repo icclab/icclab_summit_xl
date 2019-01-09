@@ -69,7 +69,7 @@
 <!--    <param name="$(arg robot_description)_semantic" textfile="$(find icclab_summit_xl)/config/summit_xl.srdf" />-->
     
     <!-- run point cloud filtering--> 
-    <node name="pointcloud_filtering" pkg="irlab_point_cloud_filtering" type="point_cloud_filtering_server" respawn="false" output="screen"/>
+    <node name="pointcloud_filtering" pkg="irlab_point_cloud_filtering" type="point_cloud_filtering_server" respawn="false" args="/summit_xl/arm_camera/depth/points" output="screen"/>
     
     <!-- run grasp detection -->
     <include file="$(find gpd)/launch/grasp_generation.launch"/>
