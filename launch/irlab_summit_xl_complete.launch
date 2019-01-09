@@ -113,6 +113,9 @@
 			<arg name="ip_address" value="$(arg rear_camera_ip)"/>
 			<arg name="camera_model" value="$(arg rear_camera_model)"/>
 		</include>
+		
+		<!-- run realsense camera on arm -->
+    <include file="$(find realsense2_camera)/launch/rs_rgbd.launch"/>
 
 		<!-- start complementary_filter (imu filter) -->
 		<!-- start px4 an open source flight control software -->
