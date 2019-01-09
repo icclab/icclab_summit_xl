@@ -115,7 +115,9 @@
 		</include>
 		
 		<!-- run realsense camera on arm -->
-    <include file="$(find realsense2_camera)/launch/rs_rgbd.launch"/>
+                <include file="$(find realsense2_camera)/launch/rs_rgbd.launch">
+                  <arg name="camera" value="arm_camera"/>
+                </include>
 
 		<!-- start complementary_filter (imu filter) -->
 		<!-- start px4 an open source flight control software -->
