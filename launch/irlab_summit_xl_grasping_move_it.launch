@@ -124,6 +124,11 @@
 		<!-- start mavros node -->
 		<include file="$(find summit_xl_bringup)/launch/pixhawk.launch"/>
 
+		<!-- the  mavros node generates unconnected frames in tf -->
+                <!-- with a crappy workaround we publish some dummy transforms -->
+                <node pkg="tf" type="static_transform_publisher" name="fcu_static_trafo_pub" args="0 0 0 0 0 0 $(arg id_robot)_odom fcu 1000" />
+		<node pkg="tf" type="static_transform_publisher" name="local_origin_static_trafo_pub" args="0 0 0 0 0 0 $(arg id_robot)_odom local_origin 1000" />
+
 		<include file="$(find summit_xl_localization)/launch/rl_utils.launch"/>
 
 		<!-- start summit_xl_web server -->
