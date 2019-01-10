@@ -109,6 +109,14 @@
                 <!-- run realsense camera on arm -->
                 <include file="$(find realsense2_camera)/launch/rs_rgbd.launch">
                   <arg name="camera" value="arm_camera"/>
+                  <arg name="align_depth" value="true"/>
+                  <arg name="fisheye_fps" value="6"/>
+                  <arg name="depth_fps" value="6"/>
+                  <arg name="infra1_fps" value="6"/>
+                  <arg name="infra2_fps" value="6"/>
+                  <arg name="color_fps" value="6"/>
+                  <arg name="gyro_fps" value="6"/>
+                  <arg name="accel_fps" value="6"/>
                 </include>
 
 		<!-- start complementary_filter (imu filter) -->
@@ -155,7 +163,7 @@
       <arg name="allow_trajectory_execution" value="true"/>
       <arg name="fake_execution" value="false"/>
       <arg name="info" value="true"/>
-      <arg name="debug" value="$(arg debug)"/>
+      <arg name="debug" value="false"/>
     </include>
 
     <!-- Controller parameters-->   
