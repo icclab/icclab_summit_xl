@@ -1,0 +1,19 @@
+sensors:
+  - sensor_plugin: occupancy_map_monitor/PointCloudOctomapUpdater
+    point_cloud_topic: /cloud_pcd 
+    max_range: 2.0
+    point_subsample: 1
+    padding_offset: 0.05
+    padding_scale: 1
+  - sensor_plugin: occupancy_map_monitor/PointCloudOctomapUpdater
+    point_cloud_topic: /cloud_pcd2disable # disabled octomap generation for /cloud_pcd2 topic
+    max_range: 2.0
+    point_subsample: 1
+    padding_offset: 0.05
+    padding_scale: 1
+  - sensor_plugin: occupancy_map_monitor/PointCloudOctomapUpdater
+    point_cloud_topic: /summit_xl/arm_camera/depth_registered/points #should be depth_registered on the summit_xl robot
+    max_range: 2.0
+    point_subsample: 1
+    padding_offset: 0.05
+    padding_scale: 1

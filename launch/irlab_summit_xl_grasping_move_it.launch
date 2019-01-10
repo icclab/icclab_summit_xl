@@ -168,6 +168,9 @@
 
     <!-- Controller parameters-->   
     <rosparam file="$(find robotnik_ur5_moveit_config)/config/controllers.yaml"/> 
+    
+    <!-- import octomap sensors -->
+    <include ns="move_group"  file="$(find icclab_summit_xl)/launch/include/sensor_manager.launch.xml"/>
 
 	</group>
 
