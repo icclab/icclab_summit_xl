@@ -1,17 +1,36 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(icclab_summit_xl)
 
+## Compile as C++11, supported in ROS Kinetic and newer
+add_compile_options(-std=c++11)
+
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
+  roscpp
   rospy
   std_msgs
-#  hector_sensors_description
 )
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
+find_package(catkin REQUIRED
+  COMPONENTS
+  interactive_markers
+  moveit_core
+  moveit_visual_tools
+  moveit_ros_planning
+  moveit_ros_planning_interface
+  pluginlib
+  geometric_shapes
+  pcl_ros
+  pcl_conversions
+  rosbag
+  tf2_ros
+  tf2_eigen
+  tf2_geometry_msgs
+)
 
 
 ## Uncomment this if the package has a setup.py. This macro ensures
@@ -128,16 +147,21 @@ include_directories(
 # add_dependencies(icclab_summit_xl ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Declare a C++ executable
-# add_executable(icclab_summit_xl_node src/icclab_summit_xl_node.cpp)
+add_executable(dock_arm_no_constraints src/dock_arm_no_constraints.cpp)
+add_executable(dock_arm_with_constraints src/dock_arm_with_constraints.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
 # add_dependencies(icclab_summit_xl_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-# target_link_libraries(icclab_summit_xl_node
-#   ${catkin_LIBRARIES}
-# )
+target_link_libraries(dock_arm_no_constraints
+   ${catkin_LIBRARIES}
+ )
+
+target_link_libraries(dock_arm_with_constraints
+   ${catkin_LIBRARIES}
+ )
 
 #############
 ## Install ##

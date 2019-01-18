@@ -89,12 +89,19 @@
     <disable_collisions link1="arm_wrist_3_link" link2="gripper_right_finger_base_link" reason="Never" />
     <disable_collisions link1="arm_wrist_3_link" link2="gripper_right_finger_link" reason="Never" />
     
+    <disable_collisions link1="arm_camera_link" link2="arm_camera_mount_link" reason="Adjacent" />
     <disable_collisions link1="arm_wrist_3_link" link2="arm_camera_link" reason="Adjacent" />
     <disable_collisions link1="arm_wrist_2_link" link2="arm_camera_link" reason="Adjacent" />
     <disable_collisions link1="arm_camera_link" link2="arm_wrist_2_link" reason="Adjacent" />
     <disable_collisions link1="arm_camera_link" link2="arm_wrist_3_link" reason="Adjacent" />
-    <disable_collisions link1="arm_wrist_1_link" link2="arm_camera_link" reason="Never" />
-    <disable_collisions link1="arm_camera_link" link2="arm_wrist_1_link" reason="Never" />
+    
+    <disable_collisions link1="arm_camera_link" link2="arm_camera_mount_link" reason="Adjacent" />
+    <disable_collisions link1="arm_camera_mount_link" link2="arm_camera_link" reason="Adjacent" />
+    <disable_collisions link1="arm_wrist_2_link" link2="arm_camera_mount_link" reason="Adjacent" />
+    <disable_collisions link1="arm_camera_mount_link" link2="arm_wrist_2_link" reason="Adjacent" />
+    <disable_collisions link1="arm_camera_mount_link" link2="arm_wrist_3_link" reason="Adjacent" />
+    <disable_collisions link1="arm_wrist_1_link" link2="arm_camera_mount_link" reason="Never" />
+    <disable_collisions link1="arm_camera_mount_link" link2="arm_wrist_1_link" reason="Never" />
     
     
     <disable_collisions link1="summit_xl_base_footprint" link2="summit_xl_front_laser_base_link" reason="Never" />
