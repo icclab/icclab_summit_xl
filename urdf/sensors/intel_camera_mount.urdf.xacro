@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<robot name="camera_mount" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="camera_mount" params="prefix parent *origin">
+
+    <!-- camera mount lined up with camera -->
+    <joint name="${prefix}_camera_mount_joint" type="fixed">
+      <xacro:insert_block name="origin"/>
+      <parent link="${parent}"/>
+      <child link="${prefix}_camera_mount_link"/>
+    </joint>
+
+    <link name="${prefix}_camera_mount_link">
+      <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>		  
+          <mesh filename="package://icclab_summit_xl/meshes/camera_mount/RealSense_D435_UR5_camera_mount.stl" scale="0.00095 0.00095 0.00095"/>
+        </geometry>
+        <material name="white">
+	  <color rgba="1 1 1 1"/>
+	</material>
+      </visual>
+      <collision>
+        <origin xyz="-0.005 -0.005 0.008" rpy="0 0 0"/>
+        <geometry>
+          <cylinder length="0.015" radius="0.053"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="1e-10"/>
+        <origin xyz="0 0 0"/>
+        <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6"/>
+      </inertial>
+    </link>
+  </xacro:macro>
+
+</robot>
