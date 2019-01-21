@@ -54,7 +54,7 @@
 
 	<!-- Nav/Map Stack -->
 	<arg name="launch_robot_localization" default="false"/>
-	<arg name="omni" default="false"/>
+	<arg name="omni" default="true"/>
 	<arg name="launch_gmapping" default="false"/>
 	<arg name="launch_amcl_and_mapserver" default="false"/>
 	<arg name="map_file" default="empty/empty.yaml"/>

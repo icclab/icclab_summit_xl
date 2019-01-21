@@ -4,14 +4,14 @@
         <param name="serial_port" type="string" value="/dev/front_lidar"/>
         <param name="serial_baudrate" type="int" value="115200"/>
         <param name="frame_id" type="string" value="summit_xl_front_laser_base_link"/>
-        <param name="rotation_speed" type="int" value="5"/>
+        <param name="rotation_speed" type="int" value="3"/> <!-- default 5 -->
         <remap from="pc2" to="pc2_front"/>
     </node>
     <node name="sweep_node_rear" pkg="sweep_ros" type="sweep_node" output="screen">
         <param name="serial_port" type="string" value="/dev/rear_lidar"/>
         <param name="serial_baudrate" type="int" value="115200"/>
         <param name="frame_id" type="string" value="summit_xl_rear_laser_base_link"/>
-        <param name="rotation_speed" type="int" value="5"/>
+        <param name="rotation_speed" type="int" value="3"/>
         <remap from="pc2" to="pc2_rear"/>
     </node>
 
@@ -28,10 +28,10 @@
             max_height: 1.0
 
             angle_min: -2.355 # -3*M_PI/4
-            angle_max: 2.355 # 3*M_PI/4
+            angle_max: 2.100 # 3*M_PI/4 (a little less)
             angle_increment: 0.001 # M_PI/360.0
             scan_time: 0.1
-            range_min: 0.0
+            range_min: 0.02
             range_max: 40.0
             use_inf: true
 
@@ -59,7 +59,7 @@
             angle_max: 2.355 # 3*M_PI/4
             angle_increment: 0.001 # M_PI/360.0
             scan_time: 0.1
-            range_min: 0.0
+            range_min: 0.02
             range_max: 40.0
             use_inf: true
 
