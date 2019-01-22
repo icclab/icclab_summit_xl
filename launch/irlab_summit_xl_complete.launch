@@ -61,6 +61,7 @@
 	<arg name="x_init_pose" default="0"/>
 	<arg name="y_init_pose" default="0"/>
 	<arg name="z_init_pose" default="0"/>
+	<arg name="debug_mode" default="false"/> <!-- currently just shows voxel map if true -->
 
 	<!-- Optional -->
 	<arg name="launch_web_server" default="false"/>
@@ -177,6 +178,7 @@
 			<arg name="scan_topic_rear" value="scan_rear"/>
 			<arg unless="$(arg launch_robot_localization)" name="odom_topic" value="robotnik_base_control/odom"/>
 			<arg if="$(arg launch_robot_localization)"     name="odom_topic" value="odometry/filtered_odom"/>
+			<arg name="debug_mode" value="$(arg debug_mode)"/>
 		</include>
 
 		<!-- amcl and map server base-->

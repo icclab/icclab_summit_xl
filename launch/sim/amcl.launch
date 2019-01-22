@@ -37,7 +37,7 @@
     <param name="odom_alpha1" value="0.2"/>
     <param name="odom_alpha2" value="0.2"/>
     <!-- translation std dev, m -->
-    <param name="odom_alpha3" value="0.8"/>
+    <param name="odom_alpha3" value="0.2"/>
     <param name="odom_alpha4" value="0.2"/>
     <param name="laser_z_hit" value="0.5"/>
     <param name="laser_z_short" value="0.05"/>
@@ -49,8 +49,8 @@
     <param name="laser_model_type" value="likelihood_field"/>
     <!-- <param name="laser_model_type" value="beam"/> -->
     <param name="laser_likelihood_max_dist" value="2.0"/>
-    <param name="update_min_d" value="0.2"/>
-    <param name="update_min_a" value="0.5"/>
+    <param name="update_min_d" value="0.25"/>
+    <param name="update_min_a" value="0.2"/>
     <param name="odom_frame_id" value="$(arg odom_frame)"/>
     <param name="base_frame_id" value="$(arg base_frame)"/>
     <param name="global_frame_id" value="$(arg global_frame)"/>
