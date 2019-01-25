@@ -131,7 +131,9 @@
 		<include if="$(arg launch_web_server)" file="$(find summit_xl_web)/launch/summit_xl_web.launch"/>
 
 		<!-- start laser nodes -->
-		<include if="$(arg has_scanse_lasers)" file="$(find icclab_summit_xl)/launch/real/irlab_sweep2scan.launch"/>
+		<include if="$(arg has_scanse_lasers)" file="$(find icclab_summit_xl)/launch/real/irlab_sweep2scan.launch">
+			<arg if="$(arg launch_gmapping)" name="angle_increment" value="0.0174533"/>
+		</include>
 
 		<include if="$(arg has_front_laser)" file="$(find summit_xl_bringup)/launch/$(arg front_laser_model).launch">
 			<arg name="port" value="$(arg front_laser_port)"/>

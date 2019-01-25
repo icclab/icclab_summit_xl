@@ -15,6 +15,8 @@
         <remap from="pc2" to="pc2_rear"/>
     </node>
 
+    <arg name="angle_increment" default="0.001" /> <!-- arg required for gmapping to work (https://github.com/scanse/sweep-ros/issues/14) -->
+
 
     <!-- run pointcloud_to_laserscan node -->
     <node pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node" name="pointcloud_to_laserscan_front">
@@ -29,7 +31,6 @@
 
             angle_min: -2.355 # -3*M_PI/4
             angle_max: 2.100 # 3*M_PI/4 (a little less)
-            angle_increment: 0.0174533 # default 0.001 though same number of valid points and bigger value required for gmapping to work (https://github.com/scanse/sweep-ros/issues/14)
             scan_time: 0.1
             range_min: 0.02
             range_max: 40.0
@@ -41,7 +42,7 @@
             # 2->inf : Parallelism level
             concurrency_level: 1
         </rosparam>
-
+	<param name="angle_increment" value="$(arg angle_increment)"/>
     </node>
 
     <!-- run pointcloud_to_laserscan node -->
@@ -57,7 +58,6 @@
 
             angle_min: -2.355 # -3*M_PI/4
             angle_max: 2.355 # 3*M_PI/4
-            angle_increment: 0.0174533 # default 0.001
             scan_time: 0.1
             range_min: 0.02
             range_max: 40.0
@@ -69,6 +69,7 @@
             # 2->inf : Parallelism level
             concurrency_level: 1
         </rosparam>
+	<param name="angle_increment" value="$(arg angle_increment)"/>
     </node>
 </launch>
 
