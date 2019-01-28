@@ -9,6 +9,8 @@ local_costmap:
   height: 5.0
   resolution: 0.025 #0.05
   transform_tolerance: 0.5
-  
-  # padding is 0.1 by default, making difficult to pass through narrow places
-  footprint_padding: 0.0
+  footprint_padding: 0.0 # helps with passing through narrow passages
+
+  plugins:
+    - {name: obstacle_layer,      type: "costmap_2d::VoxelLayer"}
+    - {name: inflation_layer,     type: "costmap_2d::InflationLayer"}
