@@ -1,13 +1,19 @@
-controller_frequency: 10.0
-controller_patience: 3.0
+# Local planner
+controller_frequency: 20.0
+controller_patience: 30.0
+
+# Global planner
 planner_frequency: 0.0 # global planner only run when new goal or path blocked
 planner_patience: 5.0
 
+# Oscillation
+oscillation_timeout: 10.0 # time to allow for oscillation before executing recovery behaviors
+oscillation_distance: 0.5
+
+# Recovery
 recovery_behavior_enabled: true
 clearing_rotation_allowed: false
 shutdown_costmaps: true # shutdown costmaps when move_base is inactive
-oscillation_timeout: 10.0 # time to allow for oscillation before executing recovery behaviors
-oscillation_distance: 0.5
 
 recovery_behaviors:
   - name: 'super_conservative_reset1'
@@ -28,6 +34,7 @@ recovery_behaviors:
     #type: 'rotate_recovery/RotateRecovery'
 
 # Reverts costmap to static map outside of reset_distance and clears unknown space around robot
+# NOTE: costmap clearing only works if there is a static layer in the costmap
 super_conservative_reset1:
   reset_distance: 2.0 # distance from robot beyond which obstacles will be cleared from costmap
   layer_names: ["obstacle_layer"]
