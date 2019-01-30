@@ -4,13 +4,16 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
+        - /MotionPlanning1
         - /MotionPlanning1/Scene Geometry1
         - /MotionPlanning1/Scene Robot1
         - /TF1/Frames1
         - /MarkerArray1
         - /PointCloud21
+        - /MarkerArray2
+        - /MarkerArray2/Namespaces1
       Splitter Ratio: 0.504792333
-    Tree Height: 208
+    Tree Height: 177
   - Class: rviz/Help
     Name: Help
   - Class: rviz/Views
@@ -106,6 +109,11 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
           arm_camera_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          arm_camera_mount_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -343,6 +351,11 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          arm_camera_mount_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
           arm_camera_right_ir_frame:
             Alpha: 1
             Show Axes: false
@@ -553,7 +566,7 @@ Visualization Manager:
       Color: 255; 255; 255
       Color Transformer: RGB8
       Decay Time: 0
-      Enabled: true
+      Enabled: false
       Invert Rainbow: false
       Max Color: 255; 255; 255
       Max Intensity: 4096
@@ -570,7 +583,7 @@ Visualization Manager:
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
-      Value: true
+      Value: false
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
@@ -601,6 +614,15 @@ Visualization Manager:
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
+    - Class: rviz/MarkerArray
+      Enabled: true
+      Marker Topic: /summit_xl/move_group/display_grasp_markers
+      Name: MarkerArray
+      Namespaces:
+        moveit_grasps:stage_1: true
+        moveit_grasps:stage_4: true
+      Queue Size: 100
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -617,30 +639,30 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/XYOrbit
-      Distance: 2.81194353
+      Distance: 1.67719865
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.788618028
-        Y: 0.162076235
+        X: 0.327835262
+        Y: 0.210180283
         Z: -1.97228474e-07
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.0500000007
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 0.564797461
+      Pitch: -0.100202553
       Target Frame: summit_xl_base_footprint
       Value: XYOrbit (rviz)
-      Yaw: 0.996760368
+      Yaw: 0.316737682
     Saved: ~
 Window Geometry:
   Displays:
     collapsed: false
-  Height: 1148
+  Height: 1023
   Help:
     collapsed: false
   Hide Left Dock: false
@@ -651,9 +673,9 @@ Window Geometry:
     collapsed: false
   MotionPlanning - Trajectory Slider:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd00000001000000000000027400000428fc0200000008fb000000100044006900730070006c006100790073010000003a0000010a000000c600fffffffb0000000800480065006c00700000000342000000bb0000006e00fffffffb0000000a0056006900650077007300000003b0000000b00000009e00fffffffb0000000c00430061006d00650072006100000002ff000001610000000000000000fb0000001e004d006f00740069006f006e00200050006c0061006e006e0069006e00670100000374000001890000000000000000fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000003e00fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e0067010000014a000003180000016b00fffffffb0000000a0049006d0061006700650000000282000000160000001600ffffff0000031f0000042800000001000000020000000100000002fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd000000010000000000000274000003abfc0200000008fb000000100044006900730070006c006100790073010000003a000000eb000000c600fffffffb0000000800480065006c00700000000342000000bb0000006e00fffffffb0000000a0056006900650077007300000003b0000000b00000009e00fffffffb0000000c00430061006d00650072006100000002ff000001610000000000000000fb0000001e004d006f00740069006f006e00200050006c0061006e006e0069006e00670100000374000001890000000000000000fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000003e00fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e0067010000012b000002ba0000016b00fffffffb0000000a0049006d0061006700650000000282000000160000001600ffffff0000031f000003ab00000001000000020000000100000002fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Views:
     collapsed: false
   Width: 1433
-  X: 2406
-  Y: 24
+  X: 3741
+  Y: 281
