@@ -1,7 +1,14 @@
 global_costmap:
   global_frame: /summit_xl_map
   robot_base_frame: /summit_xl_base_footprint
-  update_frequency: 5.0
-  static_map: true
-  transform_tolerance: 1.0
-  resolution: 0.025
+  update_frequency: 1.0
+  publish_frequency: 0.5
+  static_map: true # use external map
+  resolution: 0.025 # 0.05
+  footprint_padding: 0.0 # helps with passing through narrow passages
+
+  transform_tolerance: 0.5
+  plugins:
+    - {name: static_layer,            type: "costmap_2d::StaticLayer"}
+    - {name: inflation_layer,         type: "costmap_2d::InflationLayer"}
+    - {name: obstacle_layer,          type: "costmap_2d::VoxelLayer"}

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<launch>
+    
+        <arg name="scan_topic" default="laser/scan"/>
+        <arg name="intopic_front_laser" default="scan_front"/>
+        <arg name="intopic_rear_laser" default="scan_rear"/>
+
+	<!-- relay scan topics for gmapping input -->
+	<node pkg="topic_tools" type="relay" name="relay_front_laser" args="$(arg intopic_front_laser) $(arg scan_topic)"/>
+	<node pkg="topic_tools" type="relay" name="relay_rear_laser" args="$(arg intopic_rear_laser) $(arg scan_topic)"/>
+
+</launch>

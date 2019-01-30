@@ -54,13 +54,14 @@
 
 	<!-- Nav/Map Stack -->
 	<arg name="launch_robot_localization" default="false"/>
-	<arg name="omni" default="false"/>
+	<arg name="omni" default="true"/>
 	<arg name="launch_gmapping" default="false"/>
 	<arg name="launch_amcl_and_mapserver" default="false"/>
 	<arg name="map_file" default="empty/empty.yaml"/>
 	<arg name="x_init_pose" default="0"/>
 	<arg name="y_init_pose" default="0"/>
 	<arg name="z_init_pose" default="0"/>
+	<arg name="debug_mode" default="false"/> <!-- currently just shows voxel map if true -->
 
 	<!-- Optional -->
 	<arg name="launch_web_server" default="false"/>
@@ -130,7 +131,9 @@
 		<include if="$(arg launch_web_server)" file="$(find summit_xl_web)/launch/summit_xl_web.launch"/>
 
 		<!-- start laser nodes -->
-		<include if="$(arg has_scanse_lasers)" file="$(find icclab_summit_xl)/launch/real/irlab_sweep2scan.launch"/>
+		<include if="$(arg has_scanse_lasers)" file="$(find icclab_summit_xl)/launch/real/irlab_sweep2scan.launch">
+			<arg if="$(arg launch_gmapping)" name="angle_increment" value="0.0174533"/>
+		</include>
 
 		<include if="$(arg has_front_laser)" file="$(find summit_xl_bringup)/launch/$(arg front_laser_model).launch">
 			<arg name="port" value="$(arg front_laser_port)"/>
@@ -177,6 +180,7 @@
 			<arg name="scan_topic_rear" value="scan_rear"/>
 			<arg unless="$(arg launch_robot_localization)" name="odom_topic" value="robotnik_base_control/odom"/>
 			<arg if="$(arg launch_robot_localization)"     name="odom_topic" value="odometry/filtered_odom"/>
+			<arg name="debug_mode" value="$(arg debug_mode)"/>
 		</include>
 
 		<!-- amcl and map server base-->

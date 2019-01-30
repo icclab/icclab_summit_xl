@@ -7,12 +7,12 @@ TebLocalPlannerROS:
   # Trajectory
 
   teb_autosize: True
-  dt_ref: 0.3
-  dt_hysteresis: 0.1
-  min_samples: 3
+  dt_ref: 0.3 # Desired temporal resolution of the trajectory
+  dt_hysteresis: 0.1 # Hysteresis for automatic resizing depending on the current temporal resolution, usually approx. 10% of dt_ref is recommended
+  min_samples: 3 # Minimum number of samples (should be always greater than 2)
   global_plan_overwrite_orientation: True
   global_plan_viapoint_sep: 0.5 # negative, do not use viapoints. positive, use them. the actual value does not matter
-  max_global_plan_lookahead_dist: 3.0
+  max_global_plan_lookahead_dist: 3.0 # maximum length of the subset of the global plan taken into account for optimization
   force_reinit_new_goal_dist: 1.0
   feasibility_check_no_poses: 5
   publish_feedback: false
@@ -23,16 +23,16 @@ TebLocalPlannerROS:
 
   # Robot
 
-  max_vel_x: 1.2
-  max_vel_x_backwards: 0.15
+  max_vel_x: 0.1
+  max_vel_x_backwards: 0.1
   max_vel_theta: 0.2
-  max_vel_y: 0.5 # not used, is differential
-  acc_lim_y: 0.2 # not used, is differential
+  max_vel_y: 0.1 # omni drive
+  acc_lim_y: 0.2 # omni drive
   acc_lim_x: 0.2
   acc_lim_theta: 0.2
   min_turning_radius: 0.0
-  wheelbase: 0.0 # not used, is differential
-  cmd_angle_instead_rotvel: false # not used, is differential
+  wheelbase: 0.0 # not used, is omni
+  cmd_angle_instead_rotvel: false # not used, is omni
   footprint_model: # types: "point", "circular", "two_circles", "line", "polygon"
     #type: "circular"
     #radius: 0.5 # for type "circular"
@@ -43,12 +43,12 @@ TebLocalPlannerROS:
     #front_radius: 0.2 # for type "two_circles"
     #rear_offset: 0.2 # for type "two_circles"
     #rear_radius: 0.2 # for type "two_circles"
-    #vertices: [ [0.25, -0.05], [0.18, -0.05], [0.18, -0.18], [-0.19, -0.18], [-0.25, 0], [-0.19, 0.18], [0.18, 0.18], [0.18, 0.05], [0.25, 0.05] ] # for type "polygon"
+    #vertices: [ [0.40, -0.31], [0.40, 0.31], [-0.40, 0.31], [-0.40, -0.31] ] # for type "polygon"
 
   # GoalTolerance
 
   xy_goal_tolerance: 0.5
-  yaw_goal_tolerance: 3
+  yaw_goal_tolerance: 0.5
   free_goal_vel: False
 
   # Obstacles
@@ -57,7 +57,7 @@ TebLocalPlannerROS:
   include_costmap_obstacles: True # use the local costmap
   costmap_obstacles_behind_robot_dist: 1.0 # distance at which obstacles behind the robot are taken into account
   obstacle_poses_affected: 30 # unused if legacy_obstacle_association is false
-  inflation_dist: 0.0 # greater than min_obstacle_dist to take effect
+  inflation_dist: 0.400 # greater than min_obstacle_dist to take effect
   legacy_obstacle_association: false
   obstacle_association_force_inclusion_factor: 1.5 # the obstacles that will be taken into account are those closer than min_obstacle_dist*factor, if legacy is false
   obstacle_association_cutoff_factor: 5.0 # the obstacles that are further than min_obstacle_dist * factor will not be taken into account, if legacy is false
@@ -77,15 +77,15 @@ TebLocalPlannerROS:
   no_outer_iterations: 4
   optimization_activate: True # optimize
   optimization_verbose: False
-  penalty_epsilon: 0.1
+  penalty_epsilon: 0.09 # small safefy margin to penalty functions for hard-constraint approximations
   weight_max_vel_x: 1
   weight_max_vel_y: 1
   weight_max_vel_theta: 1
   weight_acc_lim_x: 1
   weight_acc_lim_y: 1
   weight_acc_lim_theta: 1
-  weight_kinematics_nh: 5 # is a nonholonomic robot
-  weight_kinematics_forward_drive: 10 # prefer forward driving, for differential
+  weight_kinematics_nh: 5000 # prefer nonholonomic driving
+  weight_kinematics_forward_drive: 10 # prefer forward driving
   weight_kinematics_turning_radius: 1 # prefer turns that respect the min_turning_radius, not used if differential (min_turning_radius = 0)
   weight_optimaltime: 10 # prefer trajectories with less transition time
   weight_obstacle: 50 # prefer trajectories that respect the min_obstacle_dist
