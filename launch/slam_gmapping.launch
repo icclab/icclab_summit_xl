@@ -2,17 +2,12 @@
 <launch>
 	
 	<arg name="prefix" default="summit_xl_"/>
-	<arg name="scan_topic" default="laser/scan"/>
+	<!-- gmapping accepts data from 1 source (see repo wiki for info) -->
+	<arg name="scan_topic" default="scan_combined"/>
 	<arg name="map_frame" default="$(arg prefix)map"/> 
 	<arg name="odom_frame" default="$(arg prefix)odom"/> 
 	<arg name="base_frame" default="$(arg prefix)base_link"/> 
-	<arg name="intopic_front_laser" default="scan_front"/>
-	<arg name="intopic_rear_laser" default="scan_rear"/>
 
-    <!-- relay scan topics for gmapping input -->
-    <node pkg="topic_tools" type="relay" name="relay_front_laser" args="$(arg intopic_front_laser) $(arg scan_topic)"/>
-    <node pkg="topic_tools" type="relay" name="relay_rear_laser" args="$(arg intopic_rear_laser) $(arg scan_topic)"/>
-	
     <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping">
       <remap from="scan" to ="$(arg scan_topic)"/>
       <!-- param name="map_udpate_interval" value="5.0"/ -->

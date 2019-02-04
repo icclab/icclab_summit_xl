@@ -54,7 +54,7 @@
 
 	<!-- Nav/Map Stack -->
 	<arg name="launch_robot_localization" default="false"/>
-	<arg name="omni" default="true"/>
+	<arg name="omni" default="true"/> <!-- planner is set to plan diff drive trajectories TODO: get omni drive to work-->
 	<arg name="launch_gmapping" default="false"/>
 	<arg name="launch_amcl_and_mapserver" default="false"/>
 	<arg name="map_file" default="empty/empty.yaml"/>
@@ -85,6 +85,7 @@
 		<include file="$(find summit_xl_bringup)/launch/robotnik_base_hw.launch">
 			<arg name="prefix" value="$(arg prefix)"/>
 		</include>
+
 		<!-- start summit_xl_control nodes -->
 		<include file="$(find summit_xl_control)/launch/summit_xl_control.launch">
 			<arg name="prefix" value="$(arg prefix)"/>
@@ -132,7 +133,6 @@
 
 		<!-- start laser nodes -->
 		<include if="$(arg has_scanse_lasers)" file="$(find icclab_summit_xl)/launch/real/irlab_sweep2scan.launch">
-			<arg if="$(arg launch_gmapping)" name="angle_increment" value="0.0174533"/>
 		</include>
 
 		<include if="$(arg has_front_laser)" file="$(find summit_xl_bringup)/launch/$(arg front_laser_model).launch">
@@ -181,6 +181,12 @@
 			<arg unless="$(arg launch_robot_localization)" name="odom_topic" value="robotnik_base_control/odom"/>
 			<arg if="$(arg launch_robot_localization)"     name="odom_topic" value="odometry/filtered_odom"/>
 			<arg name="debug_mode" value="$(arg debug_mode)"/>
+		</include>
+
+		<!-- merge laser scan topics to scan_combined for ACML or GMapping -->
+		<include if="$(eval launch_amcl_and_mapserver or launch_gmapping)" file="$(find icclab_summit_xl)/launch/laserscan_multi_merger.launch">
+		        <arg name="cloud_destination_topic" value="merged_cloud"/>
+			<arg name="scan_destination_topic" value="scan_combined"/>
 		</include>
 
 		<!-- amcl and map server base-->

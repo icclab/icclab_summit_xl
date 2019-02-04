@@ -5,19 +5,14 @@
   <arg name="x_init_pose" default="0"/>
   <arg name="y_init_pose" default="0"/>
   <arg name="z_init_pose" default="0"/>
-  <arg name="scan_topic" default="laser/scan"/>
+  <!-- slam accepts data from 1 source (see repo wiki for info) -->
+  <arg name="scan_topic" default="scan_combined"/>
   <arg name="map_topic" default="map"/>
   <arg name="global_frame" default="$(arg prefix)map"/>
   <arg name="odom_frame" default="$(arg prefix)odom"/>
   <arg name="base_frame" default="$(arg prefix)base_footprint"/>
   <arg name="odom_model_type" default="diff"/>
   <!-- omni -->
-
-  <!-- relay scan topics for amcl input -->
-  <arg name="intopic_front_laser" default="scan_front"/>
-  <arg name="intopic_rear_laser" default="scan_rear"/>
-  <node pkg="topic_tools" type="relay" name="relay_front_laser" args="$(arg intopic_front_laser) $(arg scan_topic)"/>
-  <node pkg="topic_tools" type="relay" name="relay_rear_laser" args="$(arg intopic_rear_laser) $(arg scan_topic)"/>
 
   <node pkg="amcl" type="amcl" name="amcl" output="screen">
     <remap from="scan" to="$(arg scan_topic)"/>
