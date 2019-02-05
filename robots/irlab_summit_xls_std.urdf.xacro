@@ -41,16 +41,16 @@
 	<xacro:property name="wheel_offset_z" value="0.0" />
 
 	<!-- <xacro:property name="front_laser_offset_x" value="0.377"/>    -->
-	<xacro:property name="front_laser_offset_x" value="0.357"/>
+	<xacro:property name="front_laser_offset_x" value="0.34"/>
 	<!-- <xacro:property name="front_laser_offset_y" value="-0.20957"/>     -->
-	<xacro:property name="front_laser_offset_y" value="-0.25957"/>
+	<xacro:property name="front_laser_offset_y" value="-0.235"/>
 	<!-- <xacro:property name="front_laser_offset_z" value="0.2024"/> -->
 	<xacro:property name="front_laser_offset_z" value="0.1566"/>
 
 	<!-- <xacro:property name="rear_laser_offset_x" value="-0.377"/> -->
-	<xacro:property name="rear_laser_offset_x" value="-0.357"/>
+	<xacro:property name="rear_laser_offset_x" value="-0.34"/>
 	<!-- <xacro:property name="rear_laser_offset_y" value="0.20957"/>     -->
-	<xacro:property name="rear_laser_offset_y" value="0.25957"/>
+	<xacro:property name="rear_laser_offset_y" value="0.235"/>
 	<!-- <xacro:property name="rear_laser_offset_z" value="0.2024"/> -->
 	<xacro:property name="rear_laser_offset_z" value="0.1566"/>
 
