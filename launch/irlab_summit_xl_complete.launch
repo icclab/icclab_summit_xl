@@ -14,7 +14,7 @@
 	<arg name="front_laser_port" default="$(optenv ROBOT_FRONT_LASER_PORT /dev/ttyACM_FRONT_LASER)"/>
 	<arg name="front_laser_ip" default="$(optenv ROBOT_FRONT_LASER_IP 192.168.0.10)"/>
 	<arg name="front_laser_node" default="front_laser"/>
-
+	<!-- not used -->
 	<arg name="has_rear_laser" default="$(optenv ROBOT_HAS_REAR_LASER false)"/>
 	<arg name="rear_laser_model" default="$(optenv ROBOT_REAR_LASER_MODEL hokuyo_ust)"/>
 	<arg name="rear_laser_port" default="$(optenv ROBOT_REAR_LASER_PORT /dev/ttyACM_REAR_LASER)"/>
@@ -27,8 +27,7 @@
 	<arg name="front_ptz_camera_node" default="front_ptz_camera"/>
 	<arg name="front_camera_ip" default="$(optenv ROBOT_FRONT_PTZ_CAMERA_IP 192.168.0.185)"/>
 	<arg name="front_camera_model" default="$(optenv ROBOT_FRONT_CAMERA_MODEL axis_p5534)"/>
-
-
+	<!-- not used -->
 	<arg name="has_rear_ptz_camera" default="$(optenv ROBOT_HAS_REAR_PTZ_CAMERA false)"/>
 	<arg name="rear_ptz_camera_node" default="rear_ptz_camera"/>
 	<arg name="rear_camera_ip" default="$(optenv ROBOT_REAR_PTZ_CAMERA_IP 192.168.0.186)"/>
@@ -43,7 +42,7 @@
 	<arg name="has_rear_upper_rgbd_camera" default="$(optenv ROBOT_HAS_REAR_UPPER_RGBD_CAMERA false)"/>
 	<arg name="rear_upper_rgbd_camera_node" default="rear_upper_rgbd_camera"/>
 	<arg name="rear_upper_rgbd_camera_id" default="$(optenv ROBOT_REAR_UPPER_RGBD_CAMERA_ID #1)"/>
-
+	<!-- not used -->
 	<arg name="has_rear_rgbd_camera" default="$(optenv ROBOT_HAS_REAR_RGBD_CAMERA false)"/>
 	<arg name="rear_rgbd_camera_node" default="rear_rgbd_camera"/>
 	<arg name="rear_rgbd_camera_id" default="$(optenv ROBOT_REAR_RGBD_CAMERA_ID #1)"/>
@@ -94,11 +93,13 @@
 		<param if="$(arg launch_robot_localization)" name="robotnik_base_control/odom_broadcast_tf" value="false"/>
 		<param unless="$(arg omni)" name="robotnik_base_control/kinematic_mode" value="diff"/>
 
+		<!-- not used -->
 		<!-- start nmea gps -->
 		<include if="$(arg has_gps)" file="$(find summit_xl_bringup)/launch/gps_nmea.launch">
 			<arg name="frame_id" value="$(arg prefix)gps_link"/>
 		</include>
 
+		<!-- not used -->
 		<!-- start axis camera -->
 		<include if="$(arg has_front_ptz_camera)" file="$(find summit_xl_bringup)/launch/axis.launch">
 			<arg name="prefix" value="$(arg prefix)"/>
@@ -107,7 +108,7 @@
 			<arg name="ip_address" value="$(arg front_camera_ip)"/>
 			<arg name="camera_model" value="$(arg front_camera_model)"/>
 		</include>
-
+		<!-- not used -->
 		<include if="$(arg has_rear_ptz_camera)" file="$(find summit_xl_bringup)/launch/axis.launch">
 			<arg name="prefix" value="$(arg prefix)"/>
 			<arg name="node_name" value="$(arg rear_ptz_camera_node)"/>
@@ -115,7 +116,7 @@
 			<arg name="ip_address" value="$(arg rear_camera_ip)"/>
 			<arg name="camera_model" value="$(arg rear_camera_model)"/>
 		</include>
-		
+
 		<!-- run realsense camera on arm -->
                 <include file="$(find realsense2_camera)/launch/rs_rgbd.launch">
                   <arg name="camera" value="arm_camera"/>
@@ -135,13 +136,14 @@
 		<include if="$(arg has_scanse_lasers)" file="$(find icclab_summit_xl)/launch/real/irlab_sweep2scan.launch">
 		</include>
 
+		<!-- not used -->
 		<include if="$(arg has_front_laser)" file="$(find summit_xl_bringup)/launch/$(arg front_laser_model).launch">
 			<arg name="port" value="$(arg front_laser_port)"/>
 			<arg name="ip_address" value="$(arg front_laser_ip)"/>
 			<arg name="node_name" value="$(arg front_laser_node)"/>
 			<arg name="frame_id" value="$(arg prefix)front_laser_link"/>
 		</include>
-
+		<!-- not used -->
 		<include if="$(arg has_rear_laser)" file="$(find summit_xl_bringup)/launch/$(arg rear_laser_model).launch">
 			<arg name="port" value="$(arg rear_laser_port)"/>
 			<arg name="ip_address" value="$(arg rear_laser_ip)"/>
@@ -156,12 +158,13 @@
 			<arg name="device_id" value="$(arg front_rgbd_camera_id)"/>
 		</include>
 
+		<!-- not used -->
 		<include if="$(arg has_rear_rgbd_camera)" file="$(find summit_xl_bringup)/launch/orbbec.launch">
 			<arg name="camera" value="$(arg rear_rgbd_camera_node)"/>
 			<arg name="prefix" value="$(arg prefix)$(arg rear_rgbd_camera_node)"/>
 			<arg name="device_id" value="$(arg rear_rgbd_camera_id)"/>
 		</include>
-
+		<!-- not used -->
 		<include if="$(arg has_rear_upper_rgbd_camera)" file="$(find summit_xl_bringup)/launch/orbbec.launch">
 			<arg name="camera" value="$(arg rear_upper_rgbd_camera_node)"/>
 			<arg name="prefix" value="$(arg prefix)$(arg rear_upper_rgbd_camera_node)"/>
