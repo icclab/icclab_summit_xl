@@ -8,11 +8,11 @@ TebLocalPlannerROS:
 
   teb_autosize: True
   dt_ref: 0.3 # Desired temporal resolution of the trajectory
-  dt_hysteresis: 0.1 # Hysteresis for automatic resizing depending on the current temporal resolution, usually approx. 10% of dt_ref is recommended
+  dt_hysteresis: 0.05 # Hysteresis for automatic resizing depending on the current temporal resolution, usually approx. 10% of dt_ref is recommended
   min_samples: 3 # Minimum number of samples (should be always greater than 2)
-  global_plan_overwrite_orientation: True
+  global_plan_overwrite_orientation: False # overwrite orientation_mode param in global planner
   global_plan_viapoint_sep: 0.5 # negative, do not use viapoints. positive, use them. the actual value does not matter
-  max_global_plan_lookahead_dist: 3.0 # maximum length of the subset of the global plan taken into account for optimization
+  max_global_plan_lookahead_dist: 6.0 # maximum length of the subset of the global plan taken into account for optimization
   force_reinit_new_goal_dist: 1.0
   feasibility_check_no_poses: 5
   publish_feedback: false
@@ -23,8 +23,8 @@ TebLocalPlannerROS:
 
   # Robot
 
-  max_vel_x: 0.1
-  max_vel_x_backwards: 0.1
+  max_vel_x: 0.15
+  max_vel_x_backwards: 0.15
   max_vel_theta: 0.2
   max_vel_y: 0.1 # omni drive
   acc_lim_y: 0.2 # omni drive
@@ -48,12 +48,12 @@ TebLocalPlannerROS:
   # GoalTolerance
 
   xy_goal_tolerance: 0.5
-  yaw_goal_tolerance: 0.5
+  yaw_goal_tolerance: 3
   free_goal_vel: False
 
   # Obstacles
 
-  min_obstacle_dist: 0.371 # minimum distance to obstacle: it depends on the footprint_model
+  min_obstacle_dist: 0.32 # minimum distance to obstacle: it depends on the footprint_model
   include_costmap_obstacles: True # use the local costmap
   costmap_obstacles_behind_robot_dist: 1.0 # distance at which obstacles behind the robot are taken into account
   obstacle_poses_affected: 30 # unused if legacy_obstacle_association is false
@@ -61,9 +61,9 @@ TebLocalPlannerROS:
   legacy_obstacle_association: false
   obstacle_association_force_inclusion_factor: 1.5 # the obstacles that will be taken into account are those closer than min_obstacle_dist*factor, if legacy is false
   obstacle_association_cutoff_factor: 5.0 # the obstacles that are further than min_obstacle_dist * factor will not be taken into account, if legacy is false
-  costmap_converter_plugin: "costmap_converter::CostmapToPolygonsDBSMCCH"
+  #costmap_converter_plugin: "costmap_converter::CostmapToPolygonsDBSMCCH"
   #costmap_converter_plugin: "costmap_converter::CostmapToLinesDBSRANSAC"
-  #costmap_converter_plugin: "costmap_converter::CostmapToLinesDBSMCCH"
+  costmap_converter_plugin: "costmap_converter::CostmapToLinesDBSMCCH"
   #costmap_converter_plugin: "costmap_converter::CostmapToPolygonsDBSConcaveHull"
   #costmap_converter_plugin: "" # deactivate plugin
   costmap_converter_spin_thread: True
@@ -85,13 +85,13 @@ TebLocalPlannerROS:
   weight_acc_lim_y: 1
   weight_acc_lim_theta: 1
   weight_kinematics_nh: 5000 # prefer nonholonomic driving
-  weight_kinematics_forward_drive: 10 # prefer forward driving
+  weight_kinematics_forward_drive: 1 # prefer forward driving
   weight_kinematics_turning_radius: 1 # prefer turns that respect the min_turning_radius, not used if differential (min_turning_radius = 0)
   weight_optimaltime: 10 # prefer trajectories with less transition time
   weight_obstacle: 50 # prefer trajectories that respect the min_obstacle_dist
-  weight_inflation: 1 # prefer trajectories that respect the inflation of the obstacles
+  weight_inflation: 10 # prefer trajectories that respect the inflation of the obstacles
   #weight_dynamic_obstacle: 10 # not in use yet
-  weight_viapoint: 1 # prefer trajectories that respect the viapoints in the global path
+  weight_viapoint: 10 # prefer trajectories that respect the viapoints in the global path
   weight_adapt_factor: 2 # factor to multiply some weights (currently only weight_obstacle) at each iteration (gives better results than a huge value for the weight)
 
   # Homotopy Class Planner
@@ -113,3 +113,4 @@ TebLocalPlannerROS:
   roadmap_graph_area_width: 5
   obstacle_keypoint_offset: 0.1
   visualize_hc_graph: False
+  oscillation_recovery: False
