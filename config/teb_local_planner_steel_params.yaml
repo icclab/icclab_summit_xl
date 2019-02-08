@@ -10,11 +10,11 @@ TebLocalPlannerROS:
   dt_ref: 0.3 # Desired temporal resolution of the trajectory
   dt_hysteresis: 0.05 # Hysteresis for automatic resizing depending on the current temporal resolution, usually approx. 10% of dt_ref is recommended
   min_samples: 3 # Minimum number of samples (should be always greater than 2)
-  global_plan_overwrite_orientation: False # overwrite orientation_mode param in global planner
+  global_plan_overwrite_orientation: True # overwrite orientation_mode param in global planner
   global_plan_viapoint_sep: 0.5 # negative, do not use viapoints. positive, use them. the actual value does not matter
   max_global_plan_lookahead_dist: 6.0 # maximum length of the subset of the global plan taken into account for optimization
   force_reinit_new_goal_dist: 1.0
-  feasibility_check_no_poses: 5
+  feasibility_check_no_poses: 3
   publish_feedback: false
   shrink_horizon_backup: true
   allow_init_with_backwards_motion: true
@@ -24,11 +24,11 @@ TebLocalPlannerROS:
   # Robot
 
   max_vel_x: 0.15
-  max_vel_x_backwards: 0.15
+  max_vel_x_backwards: 0.10
   max_vel_theta: 0.2
   max_vel_y: 0.1 # omni drive
   acc_lim_y: 0.2 # omni drive
-  acc_lim_x: 0.2
+  acc_lim_x: 0.1
   acc_lim_theta: 0.2
   min_turning_radius: 0.0
   wheelbase: 0.0 # not used, is omni
@@ -48,16 +48,16 @@ TebLocalPlannerROS:
   # GoalTolerance
 
   xy_goal_tolerance: 0.5
-  yaw_goal_tolerance: 3
+  yaw_goal_tolerance: 1
   free_goal_vel: False
 
   # Obstacles
 
-  min_obstacle_dist: 0.32 # minimum distance to obstacle: it depends on the footprint_model
+  min_obstacle_dist: 0.33 # minimum distance to obstacle: it depends on the footprint_model
   include_costmap_obstacles: True # use the local costmap
   costmap_obstacles_behind_robot_dist: 1.0 # distance at which obstacles behind the robot are taken into account
   obstacle_poses_affected: 30 # unused if legacy_obstacle_association is false
-  inflation_dist: 0.400 # greater than min_obstacle_dist to take effect
+  inflation_dist: 0.37 # greater than min_obstacle_dist to take effect
   legacy_obstacle_association: false
   obstacle_association_force_inclusion_factor: 1.5 # the obstacles that will be taken into account are those closer than min_obstacle_dist*factor, if legacy is false
   obstacle_association_cutoff_factor: 5.0 # the obstacles that are further than min_obstacle_dist * factor will not be taken into account, if legacy is false
@@ -85,13 +85,13 @@ TebLocalPlannerROS:
   weight_acc_lim_y: 1
   weight_acc_lim_theta: 1
   weight_kinematics_nh: 5000 # prefer nonholonomic driving
-  weight_kinematics_forward_drive: 1 # prefer forward driving
+  weight_kinematics_forward_drive: 300 # prefer forward driving
   weight_kinematics_turning_radius: 1 # prefer turns that respect the min_turning_radius, not used if differential (min_turning_radius = 0)
-  weight_optimaltime: 10 # prefer trajectories with less transition time
-  weight_obstacle: 50 # prefer trajectories that respect the min_obstacle_dist
-  weight_inflation: 10 # prefer trajectories that respect the inflation of the obstacles
+  weight_optimaltime: 1 # prefer trajectories with less transition time
+  weight_obstacle: 100 # prefer trajectories that respect the min_obstacle_dist
+  weight_inflation: 5 # prefer trajectories that respect the inflation of the obstacles
   #weight_dynamic_obstacle: 10 # not in use yet
-  weight_viapoint: 10 # prefer trajectories that respect the viapoints in the global path
+  weight_viapoint: 30 # prefer trajectories that respect the viapoints in the global path
   weight_adapt_factor: 2 # factor to multiply some weights (currently only weight_obstacle) at each iteration (gives better results than a huge value for the weight)
 
   # Homotopy Class Planner
@@ -114,3 +114,4 @@ TebLocalPlannerROS:
   obstacle_keypoint_offset: 0.1
   visualize_hc_graph: False
   oscillation_recovery: False
+  include_dynamic_obstacles: True
