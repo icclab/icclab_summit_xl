@@ -3,50 +3,45 @@ controller_frequency: 20.0
 controller_patience: 30.0
 
 # Global planner
-planner_frequency: 0.0 # global planner only run when new goal or path blocked
-planner_patience: 5.0
+planner_frequency: 0.2 # 0.0, global planner only run when new goal or path blocked
+planner_patience: 0.0
 
 # Oscillation
-oscillation_timeout: 10.0 # time to allow for oscillation before executing recovery behaviors
+oscillation_timeout: 0.0 # time to allow for oscillation before executing recovery behaviors
 oscillation_distance: 0.5
 
 # Recovery
-recovery_behavior_enabled: true
+recovery_behavior_enabled: false # TODO: fix clearing of obstacle layer in global costmap issue
 clearing_rotation_allowed: false
-shutdown_costmaps: true # shutdown costmaps when move_base is inactive
+shutdown_costmaps: false # true, shutdown costmaps when move_base is inactive
 
-recovery_behaviors:
-  - name: 'super_conservative_reset1'
-    type: 'clear_costmap_recovery/ClearCostmapRecovery'
-  - name: 'conservative_reset1'
-    type: 'clear_costmap_recovery/ClearCostmapRecovery'
-  - name: 'aggressive_reset1'
-    type: 'clear_costmap_recovery/ClearCostmapRecovery'
-  #- name: 'clearing_rotation1'
-    #type: 'rotate_recovery/RotateRecovery'
-  #- name: 'super_conservative_reset2'
+# execute `rospack plugins --attrib=plugin nav_core | grep recovery` to look at all available recovery plugins
+#recovery_behaviors:
+
+# custom plugins
+  #- name: 'super_aggressive_reset'
+    #type: 'clear_total_costmap_recovery/ClearTotalCostmapRecovery' # reverts all costmaps to the static map
+    # plugin code -> https://github.com/icclab/clear_total_costmap_recovery
+
+# default plugins
+  #- name: 'super_conservative_reset'
     #type: 'clear_costmap_recovery/ClearCostmapRecovery'
-  #- name: 'conservative_reset2'
+  #- name: 'conservative_reset'
     #type: 'clear_costmap_recovery/ClearCostmapRecovery'
-  #- name: 'aggressive_reset2'
+  #- name: 'aggressive_reset'
     #type: 'clear_costmap_recovery/ClearCostmapRecovery'
-  #- name: 'clearing_rotation2'
+  #- name: 'clearing_rotation'
     #type: 'rotate_recovery/RotateRecovery'
 
-# Reverts costmap to static map outside of reset_distance and clears unknown space around robot
+# Clear costmap recovery reverts costmap to static map outside reset_distance and clears unknown space around the robot
 # NOTE: costmap clearing only works if there is a static layer in the costmap
-super_conservative_reset1:
-  reset_distance: 2.0 # distance from robot beyond which obstacles will be cleared from costmap
-  layer_names: ["obstacle_layer"]
-conservative_reset1:
-  reset_distance: 1.0
-  layer_names: ["obstacle_layer"]
-aggressive_reset1:
-  reset_distance: 0.0
-  layer_names: ["obstacle_layer"]
-#super_conservative_reset2:
-  #reset_distance: 3.0
-#conservative_reset2:
-  #reset_distance: 1.5
-#aggressive_reset2:
+
+#super_conservative_reset:
+  #reset_distance: 3.0 # distance from robot beyond which obstacles will be cleared from costmap
+  #layer_names: ["obstacle_layer"]
+#conservative_reset:
+  #reset_distance: 2.0
+  #layer_names: ["obstacle_layer"]
+#aggressive_reset:
   #reset_distance: 0.0
+  #layer_names: ["obstacle_layer"]
