@@ -82,6 +82,8 @@
   <exec_depend>tf2_eigen</exec_depend>
   <exec_depend>tf2_geometry_msgs</exec_depend>
   <exec_depend>summit_xl_common</exec_depend>
+  <exec_depend>ur_gazebo</exec_depend>
+  <exec_depend>ira_laser_tools</exec_depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>
