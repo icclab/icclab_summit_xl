@@ -131,9 +131,9 @@ int main(int argc, char** argv)
   shape_msgs::SolidPrimitive bounding_box;
   bounding_box.type = bounding_box.BOX;
   std::vector<double> dim;
-  dim.push_back(3); // x
-  dim.push_back(2); // y
-  dim.push_back(3); // z
+  dim.push_back(2); // x
+  dim.push_back(1); // y
+  dim.push_back(2); // z
   bounding_box.dimensions = dim;
   pcm.constraint_region.primitives.push_back(bounding_box);
   geometry_msgs::Pose box_pose;
@@ -183,14 +183,14 @@ int main(int argc, char** argv)
 //position: [2.7645761966705322, -3.090015236531393, 3.119974374771118, 3.392937183380127, -4.649675909672872, 3.1415650844573975]
   joint_group_positions[0] = 0;  // radians arm_shoulder_pan_joint position
   joint_group_positions[1] = 0;  // radians arm_shoulder_lift_joint position
-  joint_group_positions[2] = -2.83;  // radians arm_elbow_joint
-  joint_group_positions[3] = -1;  // radians arm_wrist_1_joint 
-  joint_group_positions[4] = 1.63;  // radians arm_wrist_2_joint 
+  joint_group_positions[2] = -2.70;  // radians arm_elbow_joint
+  joint_group_positions[3] = 0;  // radians arm_wrist_1_joint 
+  joint_group_positions[4] = -1.52;  // radians arm_wrist_2_joint 
   joint_group_positions[5] = 0;  // radians arm_wrist_3_joint
   move_group.setJointValueTarget(joint_group_positions);
   
   // since we plan to use this as a script, let's move slowly
-  move_group.setMaxVelocityScalingFactor(0.5);
+  move_group.setMaxVelocityScalingFactor(0.05);
 
   bool success = (move_group.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
   ROS_INFO_NAMED(NODE_NAME, "Visualizing plan (joint space goal) %s", success ? "" : "FAILED");
