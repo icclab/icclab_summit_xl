@@ -46,6 +46,7 @@
     <param name="allow_trajectory_execution" value="$(arg allow_trajectory_execution)"/>
     <param name="max_safe_path_cost" value="$(arg max_safe_path_cost)"/>
     <param name="jiggle_fraction" value="$(arg jiggle_fraction)" />
+    <!-- this parameter does not exist <param name="max_velocity_scaling_factor" value="0.1" /> -->
 
     <!-- load these non-default MoveGroup capabilities -->
     <!--

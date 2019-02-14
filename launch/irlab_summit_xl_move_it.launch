@@ -69,45 +69,8 @@
 
 		<arg name="prefix" value="$(arg id_robot)_"/>
 
-		<!-- start robot_state_publisher - publish fixed transforms, load robot model to param server -->
-		<include file="$(find icclab_summit_xl)/launch/real/irlab_summit_xl_state_robot.launch">
-			<arg name="prefix" value="$(arg prefix)"/>
-			<arg name ="robot_model" value ="$(arg xacro_robot_a)"/>
-		</include>
-
-		<!-- start summit_xl_pad nodes -->
-		<include file="$(find summit_xl_bringup)/launch/summit_xl_pad.launch">
-			<arg name="pad_model" value="$(arg pad_model)"/>
-		</include>
-
-		<!-- start robotnik_base_hw nodes -->
-		<include file="$(find summit_xl_bringup)/launch/robotnik_base_hw.launch">
-			<arg name="prefix" value="$(arg prefix)"/>
-		</include>
-		<!-- start summit_xl_control nodes -->
-		<include file="$(find summit_xl_control)/launch/summit_xl_control.launch">
-			<arg name="prefix" value="$(arg prefix)"/>
-		</include>
-	
-		<!-- start axis camera -->
-		<include if="$(arg has_front_ptz_camera)" file="$(find summit_xl_bringup)/launch/axis.launch">
-			<arg name="prefix" value="$(arg prefix)"/>
-			<arg name="node_name" value="$(arg front_ptz_camera_node)"/>
-			<arg name="id_robot" value="$(arg id_robot)"/>
-			<arg name="ip_address" value="$(arg front_camera_ip)"/>
-			<arg name="camera_model" value="$(arg front_camera_model)"/>
-		</include>
-
-		<include if="$(arg has_rear_ptz_camera)" file="$(find summit_xl_bringup)/launch/axis.launch">
-			<arg name="prefix" value="$(arg prefix)"/>
-			<arg name="node_name" value="$(arg rear_ptz_camera_node)"/>
-			<arg name="id_robot" value="$(arg id_robot)"/>
-			<arg name="ip_address" value="$(arg rear_camera_ip)"/>
-			<arg name="camera_model" value="$(arg rear_camera_model)"/>
-		</include>
-		
                 <!-- run realsense camera on arm -->
-                <include file="$(find realsense2_camera)/launch/rs_rgbd.launch">
+                <!--<include file="$(find realsense2_camera)/launch/rs_rgbd.launch">
                   <arg name="camera" value="arm_camera"/>
                   <arg name="align_depth" value="true"/>
                   <arg name="fisheye_fps" value="6"/>
@@ -117,52 +80,13 @@
                   <arg name="color_fps" value="6"/>
                   <arg name="gyro_fps" value="6"/>
                   <arg name="accel_fps" value="6"/>
-                </include>
-
-		<!-- start complementary_filter (imu filter) -->
-		<!-- start px4 an open source flight control software -->
-		<!-- start mavros node -->
-		<include file="$(find summit_xl_bringup)/launch/pixhawk.launch"/>
-
-		<!-- the  mavros node generates unconnected frames in tf -->
-                <!-- with a crappy workaround we publish some dummy transforms -->
-                <node pkg="tf" type="static_transform_publisher" name="fcu_static_trafo_pub" args="0 0 0 0 0 0 $(arg id_robot)_odom fcu 1000" />
-		<node pkg="tf" type="static_transform_publisher" name="local_origin_static_trafo_pub" args="0 0 0 0 0 0 $(arg id_robot)_odom local_origin 1000" />
-
-		<include file="$(find summit_xl_localization)/launch/rl_utils.launch"/>
-
-		<!-- start summit_xl_web server -->
-		<include if="$(arg launch_web_server)" file="$(find summit_xl_web)/launch/summit_xl_web.launch"/>
-
-
-		<!-- start rgbd camera node -->
-		<include if="$(arg has_front_rgbd_camera)" file="$(find summit_xl_bringup)/launch/orbbec.launch">
-			<arg name="camera" value="$(arg front_rgbd_camera_node)"/>
-			<arg name="prefix" value="$(arg prefix)$(arg front_rgbd_camera_node)"/>
-			<arg name="device_id" value="$(arg front_rgbd_camera_id)"/>
-		</include>
-
-		<include if="$(arg has_rear_rgbd_camera)" file="$(find summit_xl_bringup)/launch/orbbec.launch">
-			<arg name="camera" value="$(arg rear_rgbd_camera_node)"/>
-			<arg name="prefix" value="$(arg prefix)$(arg rear_rgbd_camera_node)"/>
-			<arg name="device_id" value="$(arg rear_rgbd_camera_id)"/>
-		</include>
-
-		<include if="$(arg has_rear_upper_rgbd_camera)" file="$(find summit_xl_bringup)/launch/orbbec.launch">
-			<arg name="camera" value="$(arg rear_upper_rgbd_camera_node)"/>
-			<arg name="prefix" value="$(arg prefix)$(arg rear_upper_rgbd_camera_node)"/>
-			<arg name="device_id" value="$(arg rear_upper_rgbd_camera_id)"/>
-		</include>
-
-		<!-- start system monitor node-->
-		<include file="$(find system_monitor)/launch/system_monitor.launch">
-		</include>
+                </include>-->
 
     <!-- Load the URDF, SRDF and other .yaml configuration files on the param server -->
     <include file="$(find icclab_summit_xl)/launch/sim/planning_context.launch">
-      <arg name="load_robot_description" value="true"/>
+      <arg name="load_robot_description" value="false"/>
     </include>
-
+ 
     <!-- Run the main MoveIt executable -->
     <include file="$(find icclab_summit_xl)/launch/move_group.launch">
       <arg name="allow_trajectory_execution" value="true"/>
@@ -173,7 +97,7 @@
 
     <!-- Controller parameters-->   
     <rosparam file="$(find robotnik_ur5_moveit_config)/config/controllers.yaml"/> 
-    
+
     <!-- import octomap sensors -->
     <include ns="move_group"  file="$(find icclab_summit_xl)/launch/include/sensor_manager.launch.xml"/>
 
