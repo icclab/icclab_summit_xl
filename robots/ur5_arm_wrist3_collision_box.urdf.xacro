@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<robot name="collision_box_wrist3" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="collision_box_wrist3" params="prefix parent *origin">
+
+    <joint name="${prefix}_collision_box_wrist3_joint" type="fixed">
+      <xacro:insert_block name="origin"/>
+      <parent link="${parent}"/>
+      <child link="${prefix}_collision_box_wrist3_link"/>
+    </joint>
+
+    <link name="${prefix}_collision_box_wrist3_link">
+    <collision>
+      <geometry>
+        <box size="0.08 0.02 0.08"/>
+      </geometry>
+    </collision> 
+    </link>
+  </xacro:macro>
+
+</robot>
