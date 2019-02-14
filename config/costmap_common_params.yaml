@@ -1,11 +1,11 @@
 # description of params http://wiki.ros.org/costmap_2d/hydro/obstacles
-# & http://kaiyuzheng.me/documents/navguide.pdf
+# good read on ROS nav stack http://kaiyuzheng.me/documents/navguide.pdf
 max_obstacle_height: 1.5      # set to slightly higher than robot height
 
 footprint: [[0.35, -0.3], [0.35, 0.3], [-0.35, 0.3], [-0.35, -0.3]]
 robot_radius: 0.0 # set one of footprint or robot_radius
 
-map_type: voxel # set to 'costmap' if do not want to do 3d ray tracing (no 3d camera)
+#map_type: voxel # set to 'costmap' if do not want to do 3d ray tracing (no 3d camera)
 
 
 # NOTE: order of layers matter!
@@ -15,54 +15,59 @@ static_layer:
   #subscribe_to_updates: true
 
 
-obstacle_layer:
-  enabled:              true
-
-  # voxel costmap plugin
-  origin_z: 0.0                 # z origin of the map in meters
-  z_resolution: 0.2             # z resolution of the map in meters/cell
-  z_voxels: 2                   # height of box is z_resolution * z voxels
-  unknown_threshold:    15      # number of unknown cells allowed in a column considered to be ”known”
-  mark_threshold:       0       # maximum number of marked cells allowed in a column considered to be ”free”
-  publish_voxel_map:    false   # set to 'true' for debugging
-
+obstacle_3d_layer:
+  enabled:             true
   combination_method: 0         # obstacle layer will overwrite static layer, if 1 it will sum layers
   track_unknown_space: true     # true needed for disabling global path planning through unknown space
   obstacle_range: 2.5           # range at which to mark obstacles
-  raytrace_range: 6.1           # range at which to ray trace obstacles for marking/clearing
+  raytrace_range: 6.1           # range at which to ray trace obstacles for marking/clearing (should be higher than max range of sensor)
 
-  observation_sources: scan_front scan_rear camera_front
+  # voxel costmap plugin params
+  origin_z: 0.0                 # z origin of the map in meters
+  z_resolution: 0.4             # z resolution of the map in meters/cell
+  z_voxels: 10                  # number of voxels in a vertical column (height of column is z_resolution * z voxels)
+  unknown_threshold: 15         # number of unknown cells allowed in a column considered to be ”known”
+  mark_threshold: 0             # maximum number of marked cells allowed in a column considered to be ”free”
+  publish_voxel_map:   false    # set to 'true' for debugging, enabled through `debug_mode:=true` in complete
+
+  # sensor params
+  observation_sources: camera_front
+  camera_front:
+    data_type: PointCloud2
+    topic: /summit_xl/front_rgbd_camera/depth/points
+    marking: true               # true, use this sensor data to mark obstacles on costmap
+    clearing: true              # true, use this sensor data to clear obstalces on costmap
+    min_obstacle_height: 0.02
+    max_obstacle_height: 2.0
+    expected_update_rate: 1.5   # expected period between each consecutive message (set to ~twice expect)
+
+
+obstacle_2d_layer:
+  enabled:             true
+  combination_method: 1
+  track_unknown_space: true
+  obstacle_range: 2.5
+  raytrace_range: 6.1
+
+  # sensor params
+  observation_sources: scan_front scan_rear
   scan_front:
     data_type: LaserScan
     topic: /scan_front
     marking: true
     clearing: true
-    min_obstacle_height: 0.25
-    max_obstacle_height: 0.50
-    inf_is_valid: true # set to true if scan has inf values
-    expected_update_rate: 0.5 # expected period between each consecutive message (set to ~twice expect)
-
+    inf_is_valid: true          # set to true if sensor returns 'inf' for invalid measurements
+    expected_update_rate: 0.5
   scan_rear:
     data_type: LaserScan
     topic: /scan_rear
     marking: true
     clearing: true
-    min_obstacle_height: 0.25
-    max_obstacle_height: 0.50
     inf_is_valid: true
     expected_update_rate: 0.5
-
-  camera_front:
-    data_type: PointCloud2
-    topic: /summit_xl/front_rgbd_camera/depth/points
-    marking: true
-    clearing: true
-    min_obstacle_height: 0.02
-    max_obstacle_height: 2.0
-    expected_update_rate: 1.5
 
 
 inflation_layer:
   enabled:             true
-  cost_scaling_factor: 10.0  # exponential rate at which the obstacle cost drops off (default: 10)
-  inflation_radius:    1.5 # max. distance from an obstacle at which costs are incurred for planning paths.
+  cost_scaling_factor: 10.0     # exponential rate at which the obstacle cost drops off (default: 10)
+  inflation_radius:    1.5      # max. distance from an obstacle at which costs are incurred for planning paths.

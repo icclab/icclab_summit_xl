@@ -13,8 +13,8 @@
 	<arg name="omni" default="false"/>
 	<arg name="sim" default="false"/>
 	<arg name="debug_mode" default="false"/>
-	<arg name="voxel_grid" default="move_base/local_costmap/obstacle_layer/voxel_grid"/>
-	<arg name="visualization_marker" default="move_base/local_costmap/obstacle_layer/voxel_grid_marker"/>
+	<arg name="voxel_grid" default="move_base/local_costmap/obstacle_3d_layer/voxel_grid"/>
+	<arg name="visualization_marker" default="move_base/local_costmap/obstacle_3d_layer/voxel_grid_marker"/>
 
 	<!-- Run move_base -->
 	<node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
@@ -28,15 +28,15 @@
 
 		<!-- reset frame_id parameters using user input data -->
 		<!-- front laser -->
-		<param name="global_costmap/obstacle_layer/scan_front/sensor_frame" value="$(arg prefix)front_laser_link"/>
-		<param name="local_costmap/obstacle_layer/scan_front/sensor_frame" value="$(arg prefix)front_laser_link"/>
-		<param name="global_costmap/obstacle_layer/scan_front/topic" value="$(arg scan_topic_front)"/>
-		<param name="local_costmap/obstacle_layer/scan_front/topic" value="$(arg scan_topic_front)"/>
+		<param name="global_costmap/obstacle_2d_layer/scan_front/sensor_frame" value="$(arg prefix)front_laser_link"/>
+		<param name="local_costmap/obstacle_2d_layer/scan_front/sensor_frame" value="$(arg prefix)front_laser_link"/>
+		<param name="global_costmap/obstacle_2d_layer/scan_front/topic" value="$(arg scan_topic_front)"/>
+		<param name="local_costmap/obstacle_2d_layer/scan_front/topic" value="$(arg scan_topic_front)"/>
 		<!-- rear laser -->
-		<param name="global_costmap/obstacle_layer/scan_rear/sensor_frame" value="$(arg prefix)rear_laser_link"/>
-		<param name="local_costmap/obstacle_layer/scan_rear/sensor_frame" value="$(arg prefix)rear_laser_link"/>
-		<param name="global_costmap/obstacle_layer/scan_rear/topic" value="$(arg scan_topic_rear)"/>
-		<param name="local_costmap/obstacle_layer/scan_rear/topic" value="$(arg scan_topic_rear)"/>
+		<param name="global_costmap/obstacle_2d_layer/scan_rear/sensor_frame" value="$(arg prefix)rear_laser_link"/>
+		<param name="local_costmap/obstacle_2d_layer/scan_rear/sensor_frame" value="$(arg prefix)rear_laser_link"/>
+		<param name="global_costmap/obstacle_2d_layer/scan_rear/topic" value="$(arg scan_topic_rear)"/>
+		<param name="local_costmap/obstacle_2d_layer/scan_rear/topic" value="$(arg scan_topic_rear)"/>
 
 		<param name="local_costmap/global_frame" value="$(arg odom_frame)"/>
 		<param name="local_costmap/robot_base_frame" value="$(arg base_frame)"/>
@@ -48,7 +48,7 @@
 		<param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" />
 		<param name="controller_frequency" value="5.0" />
 		<param name="controller_patience" value="15.0" />
-		<param name="local_costmap/obstacle_layer/publish_voxel_map" value="$(arg debug_mode)"/>
+		<param name="local_costmap/obstacle_3d_layer/publish_voxel_map" value="$(arg debug_mode)"/>
 		<remap from="cmd_vel" to="$(arg cmd_vel_topic)" />
 		<remap from="odom" to="$(arg odom_topic)" />
 
