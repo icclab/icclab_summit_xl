@@ -14,7 +14,8 @@
 
   <!-- Load updated joint limits (override information from URDF) -->
   <group ns="$(arg robot_description)_planning">
-    <rosparam command="load" file="$(find robotnik_ur5_moveit_config)/config/joint_limits.yaml"/>
+	<rosparam command="load" file="$(find icclab_summit_xl)/config/joint_limits.yaml"/>
+  <!--   <rosparam command="load" file="$(find robotnik_ur5_moveit_config)/config/joint_limits.yaml"/> -->
   </group>
 
   <!-- Load default settings for kinematics; these settings are overridden by settings in a node's namespace -->
