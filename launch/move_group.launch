@@ -22,7 +22,8 @@
   <arg name="publish_monitored_planning_scene" default="true"/>
 
   <!-- Planning Functionality -->
-  <include ns="move_group" file="$(find robotnik_ur5_moveit_config)/launch/planning_pipeline.launch.xml">
+  <!--<include ns="move_group" file="$(find robotnik_ur5_moveit_config)/launch/planning_pipeline.launch.xml"> -->
+  <include ns="move_group" file="$(find icclab_summit_xl)/config/planning_pipeline.launch.xml">
     <arg name="pipeline" value="ompl" />
   </include>
 
