@@ -1,0 +1,11 @@
+<!--
+NOTE: this script fixes subscribing issue when merger + lidar bringup is in same launch file
+-->
+<launch>
+	<arg name="delay_time" default="5"/>
+	<include file="$(find timed_roslaunch)/launch/timed_roslaunch.launch">
+		<arg name="time" value="$(arg delay_time)" />
+		<arg name="pkg" value="icclab_summit_xl" />
+		<arg name="file" value="laserscan_multi_merger.launch" />
+	</include>
+</launch>

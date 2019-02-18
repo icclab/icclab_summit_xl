@@ -1,6 +1,5 @@
 <!--
-NOTE: at laserscan_multi_merger.cpp line 74 ros::Duration(5).sleep(); was added to fix subscribing issue when merger + lidar bringup is in same launch file
-      see https://answers.ros.org/question/225183/ira_laser_tools-merger-doesnt-subscribe-to-topics-from-laser-in-gazebo/?answer=229203#post-id-229203
+NOTE: timed_laserscan_multi_merger.launch fixes subscribing issue when merger + lidar bringup is in same launch file
 -->
 <launch>
 	<arg name="cloud_destination_topic" default="merged_cloud"/>
