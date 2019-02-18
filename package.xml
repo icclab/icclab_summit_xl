@@ -84,6 +84,7 @@
   <exec_depend>summit_xl_common</exec_depend>
   <exec_depend>ur_gazebo</exec_depend>
   <exec_depend>ira_laser_tools</exec_depend>
+  <exec_depend>timed_roslaunch</exec_depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>

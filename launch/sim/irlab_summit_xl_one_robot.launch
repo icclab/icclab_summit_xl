@@ -46,8 +46,12 @@
 		<!-- only use if you aren´t using a localization algorithm like amcl -->
 		<!--node if="$(arg fake_map_transform)" pkg="tf" type="static_transform_publisher" name="static_map_broadcaster" args="0 0 0 0 0 0 map $(arg namespace)odom 100" /-->
 
+		<!-- merge laser scan topics to scan_combined for ACML or GMapping, delay launch by 5 seconds -->
+		<include if="$(eval launch_amcl_and_mapserver or launch_gmapping)" file="$(find icclab_summit_xl)/launch/timed_laserscan_multi_merger.launch">
+			<arg name="delay_time" value="5"/>
+		</include>
+
 		<!-- amcl and map server base-->
-		<include if="$(arg launch_amcl_and_mapserver)" file="$(find icclab_summit_xl)/launch/laserscan_multi_merger.launch"/>
 		<include if="$(arg launch_amcl_and_mapserver)" file="$(find icclab_summit_xl)/launch/sim/map_server.launch">
 			<arg name="prefix" value="$(arg prefix)"/>
 			<arg name="map_file" value="$(arg map_file)"/>
@@ -70,7 +74,6 @@
 			<arg name="sim" value="true"/>
 			<arg name="debug_mode" value="true"/>
 		</include>
-
 
 		<!-- gmapping -->
 		<include if="$(arg launch_gmapping)" file="$(find icclab_summit_xl)/launch/slam_gmapping.launch">
