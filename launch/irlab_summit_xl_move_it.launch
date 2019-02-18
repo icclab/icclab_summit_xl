@@ -21,7 +21,7 @@
 		<arg name="prefix" value="$(arg id_robot)_"/>
 
     <!-- Load the URDF, SRDF and other .yaml configuration files on the param server -->
-    <include file="$(find icclab_summit_xl)/launch/sim/planning_context.launch">
+    <include file="$(find icclab_summit_xl)/launch/planning_context.launch">
       <arg name="load_robot_description" value="false"/>
       <arg name="simulation" value="$(arg simulation)"/>
     </include>
