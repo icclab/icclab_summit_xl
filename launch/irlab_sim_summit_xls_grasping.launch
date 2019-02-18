@@ -7,6 +7,7 @@
 
   <!-- By default, we are not in debug mode -->
   <arg name="debug" default="false" />
+  <arg name="simulation" default="true"/>
 
   <!--
   By default, hide joint_state_publisher's GUI
@@ -40,8 +41,9 @@
 	<group ns="$(arg id_robot)">
 
     <!-- Load the URDF, SRDF and other .yaml configuration files on the param server -->
-    <include file="$(find icclab_summit_xl)/launch/sim/planning_context.launch">
+    <include file="$(find icclab_summit_xl)/launch/planning_context.launch">
       <arg name="load_robot_description" value="true"/>
+      <arg name="simulation" value="$(arg simulation)"/>
     </include>
 <!--    <include file="$(find robotnik_ur5_moveit_config)/launch/planning_context.launch">-->
 <!--      <arg name="load_robot_description" value="true"/>-->
