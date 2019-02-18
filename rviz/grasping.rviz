@@ -6,6 +6,7 @@ Panels:
       Expanded:
         - /MotionPlanning1/Scene Geometry1
         - /MotionPlanning1/Scene Robot1
+        - /TF1/Frames1
         - /Grasps_Markers1/Namespaces1
       Splitter Ratio: 0.504792333
     Tree Height: 199
@@ -557,6 +558,12 @@ Visualization Manager:
           Value: false
         arm_base_link:
           Value: false
+        arm_camera_aligned_depth_to_color_frame:
+          Value: false
+        arm_camera_aligned_depth_to_infra1_frame:
+          Value: false
+        arm_camera_aligned_depth_to_infra2_frame:
+          Value: false
         arm_camera_bottom_screw_frame:
           Value: false
         arm_camera_color_frame:
@@ -566,6 +573,14 @@ Visualization Manager:
         arm_camera_depth_frame:
           Value: false
         arm_camera_depth_optical_frame:
+          Value: false
+        arm_camera_infra1_frame:
+          Value: false
+        arm_camera_infra1_optical_frame:
+          Value: false
+        arm_camera_infra2_frame:
+          Value: false
+        arm_camera_infra2_optical_frame:
           Value: false
         arm_camera_left_ir_frame:
           Value: false
@@ -591,6 +606,8 @@ Visualization Manager:
           Value: false
         arm_tool0:
           Value: false
+        arm_tool0_controller:
+          Value: false
         arm_upper_arm_link:
           Value: false
         arm_wrist_1_link:
@@ -598,6 +615,10 @@ Visualization Manager:
         arm_wrist_2_link:
           Value: false
         arm_wrist_3_link:
+          Value: false
+        fcu:
+          Value: false
+        fcu_frd:
           Value: false
         gripper_base_link:
           Value: false
@@ -608,6 +629,10 @@ Visualization Manager:
         gripper_right_finger_base_link:
           Value: false
         gripper_right_finger_link:
+          Value: false
+        local_origin:
+          Value: false
+        local_origin_ned:
           Value: false
         summit_xl_back_left_wheel_link:
           Value: false
@@ -652,11 +677,18 @@ Visualization Manager:
       Show Names: true
       Tree:
         summit_xl_odom:
+          fcu:
+            fcu_frd:
+              {}
+          local_origin:
+            local_origin_ned:
+              {}
           summit_xl_base_footprint:
             summit_xl_base_link:
               arm_base_link:
                 arm_base:
-                  {}
+                  arm_tool0_controller:
+                    {}
                 arm_shoulder_link:
                   arm_upper_arm_link:
                     arm_forearm_link:
@@ -664,6 +696,14 @@ Visualization Manager:
                         arm_wrist_2_link:
                           arm_camera_bottom_screw_frame:
                             arm_camera_link:
+                              arm_camera_aligned_depth_to_color_frame:
+                                {}
+                              arm_camera_aligned_depth_to_infra1_frame:
+                                arm_camera_infra1_optical_frame:
+                                  {}
+                              arm_camera_aligned_depth_to_infra2_frame:
+                                arm_camera_infra2_optical_frame:
+                                  {}
                               arm_camera_depth_frame:
                                 arm_camera_color_frame:
                                   arm_camera_color_optical_frame:
@@ -676,6 +716,10 @@ Visualization Manager:
                                 arm_camera_right_ir_frame:
                                   arm_camera_right_ir_optical_frame:
                                     {}
+                              arm_camera_infra1_frame:
+                                {}
+                              arm_camera_infra2_frame:
+                                {}
                           arm_camera_mount_link:
                             {}
                           arm_collision_box_wrist2_link:
@@ -829,7 +873,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/XYOrbit
-      Distance: 3.16952848
+      Distance: 3.97585654
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1
@@ -844,10 +888,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 0.564796388
+      Pitch: 0.449796081
       Target Frame: summit_xl_base_footprint
       Value: XYOrbit (rviz)
-      Yaw: 0.688552141
+      Yaw: 0.848553598
     Saved: ~
 Window Geometry:
   Displays:

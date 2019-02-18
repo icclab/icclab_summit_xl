@@ -79,15 +79,14 @@ int main(int argc, char** argv)
   // The package MoveItVisualTools provides many capabilties for visualizing objects, robots,
   // and trajectories in RViz as well as debugging tools such as step-by-step introspection of a script
   namespace rvt = rviz_visual_tools;
-  moveit_visual_tools::MoveItVisualTools visual_tools("arm_tool0");
+  moveit_visual_tools::MoveItVisualTools visual_tools("summit_xl_base_footprint");
   visual_tools.deleteAllMarkers();
 
-//  // Remote control is an introspection tool that allows users to step through a high level script
-//  // via buttons and keyboard shortcuts in RViz
-//  visual_tools.loadRemoteControl();
-// 
-//  // Batch publishing is used to reduce the number of messages being sent to RViz for large visualizations
-//  visual_tools.trigger();
+  // Remote control is an introspection tool that allows users to step through a high level script
+  // via buttons and keyboard shortcuts in RViz
+  visual_tools.loadRemoteControl();
+  // Batch publishing is used to reduce the number of messages being sent to RViz for large visualizations
+  visual_tools.trigger();
 
   // Getting Basic Information
   // ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -99,6 +98,12 @@ int main(int argc, char** argv)
   ROS_INFO_NAMED(NODE_NAME, "End effector link: %s", move_group.getEndEffectorLink().c_str());
 
 
+  // Start the demo
+  // ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+//  // Now, we call the planner to compute the plan and visualize it.
+//  // Note that we are just planning, not asking move_group
+//  // to actually move the robot.
   moveit::planning_interface::MoveGroupInterface::Plan my_plan;
 
   // Planning to a joint-space goal
@@ -114,11 +119,12 @@ int main(int argc, char** argv)
   // Next get the current set of joint values for the group.
 //  ROS_INFO_NAMED(NODE_NAME, "RobotState: %s", *current_state);
 //  current_state->printStateInfo();
-  
+  move_group.setPlanningTime(10.0);
   std::vector<double> joint_group_positions;
+  std::vector<string> joint_names = joint_model_group->getActiveJointModelNames();
   current_state->copyJointGroupPositions(joint_model_group, joint_group_positions);
-  for (double joint_pos : joint_group_positions){
-    ROS_INFO_NAMED(NODE_NAME, "Current joint position: %f", joint_pos);
+  for (int i = 0; i < joint_group_positions.size(); i++){
+    ROS_INFO_NAMED(NODE_NAME, "Current joint %s position: %f", joint_names[i].c_str(), joint_group_positions[i]);
   }
   // Now, let's modify the joints, plan to the new joint space goal and visualize the plan.
 //  name: [arm_elbow_joint, arm_shoulder_lift_joint, arm_shoulder_pan_joint, arm_wrist_1_joint,
@@ -134,9 +140,15 @@ int main(int argc, char** argv)
   move_group.setJointValueTarget(joint_group_positions);
   
   // since we plan to use this as a script, let's move slowly
-  move_group.setMaxVelocityScalingFactor(0.05);
+  move_group.setMaxVelocityScalingFactor(0.5);
+
+  visual_tools.trigger();
+  visual_tools.prompt("Press 'next' in the RvizVisualToolsGui window to plan to the pose");
+  ROS_INFO_NAMED(NODE_NAME, "Invoking planner");
 
   bool success = (move_group.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
+  visual_tools.publishTrajectoryLine(my_plan.trajectory_, joint_model_group);
+  visual_tools.trigger();
   ROS_INFO_NAMED(NODE_NAME, "Visualizing plan (joint space goal) %s", success ? "" : "FAILED");
   if (success){
     cout << "Please verify that the plan will not hit any objects uisng rviz.\n";
@@ -144,9 +156,11 @@ int main(int argc, char** argv)
     string reply;
     getline (cin, reply);
     if (reply.compare("y") == 0){
-      move_group.move();
+      move_group.execute(my_plan);
     }
   }
+  //  // When done with the path constraint be sure to clear it.
+  move_group.clearPathConstraints();
   
   // Since we set the start state we have to clear it before planning other paths
   move_group.setStartStateToCurrentState();

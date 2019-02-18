@@ -203,7 +203,7 @@ int main(int argc, char** argv)
   move_group.setGoalTolerance(0.005);
 
   // since we plan to use this as a script, let's move slowly
-  move_group.setMaxVelocityScalingFactor(0.05);
+  move_group.setMaxVelocityScalingFactor(0.5);
   
   // RViz provides many types of markers, in this demo we will use text, cylinders, and spheres
   Eigen::Affine3d text_pose = Eigen::Affine3d::Identity();
