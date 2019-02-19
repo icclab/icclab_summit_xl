@@ -10,7 +10,7 @@ NOTE: timed_laserscan_multi_merger.launch fixes subscribing issue when merger + 
                 <param name="cloud_destination_topic" value="$(arg cloud_destination_topic)"/>
                 <param name="scan_destination_topic" value="$(arg scan_destination_topic)"/>
 	<!-- hardcoded because needs '/' in front of topics -->
-        <param name="laserscan_topics" value="/summit_xl/scan_front /summit_xl/scan_rear" /> <!-- LIST OF THE LASER SCAN TOPICS TO SUBSCRIBE -->
+        <param name="laserscan_topics" value="/summit_xl/scan_front /summit_xl/scan_rear /summit_xl/front_rgbd_camera/scan" /> <!-- LIST OF THE LASER SCAN TOPICS TO SUBSCRIBE -->
 
         <param name="angle_min" value="-3.14"/>
         <param name="angle_max" value="3.14"/>

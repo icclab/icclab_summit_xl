@@ -5,58 +5,26 @@
 
 	<arg name="id_robot" default="$(optenv ROBOT_ID summit_xl)"/>
 	<arg name="xacro_robot_a" default="irlab_summit_xls_std.urdf.xacro"/>
+
 	<!-- 2D LASERS -->
 	<arg name="has_scanse_lasers" default="$(optenv ROBOT_HAS_SCANSE_LASERS true)"/>
 	
-	<!-- not used -->
-	<arg name="has_front_laser" default="$(optenv ROBOT_HAS_FRONT_LASER false)"/>
-	<arg name="front_laser_model" default="$(optenv ROBOT_FRONT_LASER_MODEL hokuyo_ust)"/>
-	<arg name="front_laser_port" default="$(optenv ROBOT_FRONT_LASER_PORT /dev/ttyACM_FRONT_LASER)"/>
-	<arg name="front_laser_ip" default="$(optenv ROBOT_FRONT_LASER_IP 192.168.0.10)"/>
-	<arg name="front_laser_node" default="front_laser"/>
-	<!-- not used -->
-	<arg name="has_rear_laser" default="$(optenv ROBOT_HAS_REAR_LASER false)"/>
-	<arg name="rear_laser_model" default="$(optenv ROBOT_REAR_LASER_MODEL hokuyo_ust)"/>
-	<arg name="rear_laser_port" default="$(optenv ROBOT_REAR_LASER_PORT /dev/ttyACM_REAR_LASER)"/>
-	<arg name="rear_laser_ip" default="$(optenv ROBOT_REAR_LASER_IP 192.168.0.11)"/>
-	<arg name="rear_laser_node" default="rear_laser"/>
-
-	<!-- PTZ CAMERAS -->
-	<!-- not used -->
-	<arg name="has_front_ptz_camera" default="$(optenv ROBOT_HAS_FRONT_PTZ_CAMERA false)"/>
-	<arg name="front_ptz_camera_node" default="front_ptz_camera"/>
-	<arg name="front_camera_ip" default="$(optenv ROBOT_FRONT_PTZ_CAMERA_IP 192.168.0.185)"/>
-	<arg name="front_camera_model" default="$(optenv ROBOT_FRONT_CAMERA_MODEL axis_p5534)"/>
-	<!-- not used -->
-	<arg name="has_rear_ptz_camera" default="$(optenv ROBOT_HAS_REAR_PTZ_CAMERA false)"/>
-	<arg name="rear_ptz_camera_node" default="rear_ptz_camera"/>
-	<arg name="rear_camera_ip" default="$(optenv ROBOT_REAR_PTZ_CAMERA_IP 192.168.0.186)"/>
-	<arg name="rear_camera_model" default="$(optenv ROBOT_REAR_CAMERA_MODEL axis_p5534)"/>
-
 	<!-- RGBD CAMERAS -->
 	<arg name="has_front_rgbd_camera" default="$(optenv ROBOT_HAS_FRONT_RGBD_CAMERA false)"/>
 	<arg name="front_rgbd_camera_node" default="front_rgbd_camera"/>
 	<arg name="front_rgbd_camera_id" default="$(optenv ROBOT_FRONT_RGBD_CAMERA_ID #1)"/>
 
-	<!-- not used -->
-	<arg name="has_rear_upper_rgbd_camera" default="$(optenv ROBOT_HAS_REAR_UPPER_RGBD_CAMERA false)"/>
-	<arg name="rear_upper_rgbd_camera_node" default="rear_upper_rgbd_camera"/>
-	<arg name="rear_upper_rgbd_camera_id" default="$(optenv ROBOT_REAR_UPPER_RGBD_CAMERA_ID #1)"/>
-	<!-- not used -->
-	<arg name="has_rear_rgbd_camera" default="$(optenv ROBOT_HAS_REAR_RGBD_CAMERA false)"/>
-	<arg name="rear_rgbd_camera_node" default="rear_rgbd_camera"/>
-	<arg name="rear_rgbd_camera_id" default="$(optenv ROBOT_REAR_RGBD_CAMERA_ID #1)"/>
-
 	<!-- Other devices -->
-	<arg name="has_gps" default="$(optenv ROBOT_HAS_GPS false)"/>
 	<arg name="pad_model" default="$(optenv ROBOT_PAD_MODEL ps4)"/>
 
 	<!-- Nav/Map Stack -->
-	<arg name="launch_robot_localization" default="false"/>
+	<arg name="teleop" default="false"/>
+	<arg name="launch_robot_localization" default="false"/> <!-- TODO: investigate effectiveness -->
 	<arg name="omni" default="true"/> <!-- planner is set to plan diff drive trajectories TODO: get omni drive to work-->
+	<arg name="launch_move_base" default="false"/>
 	<arg name="launch_gmapping" default="false"/>
 	<arg name="launch_amcl_and_mapserver" default="false"/>
-	<arg name="map_file" default="empty/empty.yaml"/>
+	<arg name="map_file" default="icclab/icclab_latest_map.yaml"/>
 	<arg name="x_init_pose" default="0"/>
 	<arg name="y_init_pose" default="0"/>
 	<arg name="z_init_pose" default="0"/>
@@ -89,66 +57,34 @@
 		<include file="$(find summit_xl_control)/launch/summit_xl_control.launch">
 			<arg name="prefix" value="$(arg prefix)"/>
 		</include>
+
 		<!-- if ekf_loc_odom node is launched base controller must not publish the odom -> base_footprint transform-->
 		<param if="$(arg launch_robot_localization)" name="robotnik_base_control/odom_broadcast_tf" value="false"/>
 		<param unless="$(arg omni)" name="robotnik_base_control/kinematic_mode" value="diff"/>
-
-		<!-- not used -->
-		<!-- start nmea gps -->
-		<include if="$(arg has_gps)" file="$(find summit_xl_bringup)/launch/gps_nmea.launch">
-			<arg name="frame_id" value="$(arg prefix)gps_link"/>
-		</include>
-
-		<!-- not used -->
-		<!-- start axis camera -->
-		<include if="$(arg has_front_ptz_camera)" file="$(find summit_xl_bringup)/launch/axis.launch">
-			<arg name="prefix" value="$(arg prefix)"/>
-			<arg name="node_name" value="$(arg front_ptz_camera_node)"/>
-			<arg name="id_robot" value="$(arg id_robot)"/>
-			<arg name="ip_address" value="$(arg front_camera_ip)"/>
-			<arg name="camera_model" value="$(arg front_camera_model)"/>
-		</include>
-		<!-- not used -->
-		<include if="$(arg has_rear_ptz_camera)" file="$(find summit_xl_bringup)/launch/axis.launch">
-			<arg name="prefix" value="$(arg prefix)"/>
-			<arg name="node_name" value="$(arg rear_ptz_camera_node)"/>
-			<arg name="id_robot" value="$(arg id_robot)"/>
-			<arg name="ip_address" value="$(arg rear_camera_ip)"/>
-			<arg name="camera_model" value="$(arg rear_camera_model)"/>
-		</include>
-
-		<!-- run realsense camera on arm -->
-                <include file="$(find realsense2_camera)/launch/rs_rgbd.launch">
-                  <arg name="camera" value="arm_camera"/>
-                </include>
 
 		<!-- start complementary_filter (imu filter) -->
 		<!-- start px4 an open source flight control software -->
 		<!-- start mavros node -->
 		<include file="$(find summit_xl_bringup)/launch/pixhawk.launch"/>
 
+		<!-- the  mavros node generates unconnected frames in tf -->
+		<!-- with a crappy workaround we publish some dummy transforms -->
+		<node pkg="tf" type="static_transform_publisher" name="fcu_static_trafo_pub" args="0 0 0 0 0 0 $(arg id_robot)_odom fcu 1000" />
+		<node pkg="tf" type="static_transform_publisher" name="local_origin_static_trafo_pub" args="0 0 0 0 0 0 $(arg id_robot)_odom local_origin 1000" />
+
 		<include file="$(find summit_xl_localization)/launch/rl_utils.launch"/>
 
 		<!-- start summit_xl_web server -->
 		<include if="$(arg launch_web_server)" file="$(find summit_xl_web)/launch/summit_xl_web.launch"/>
 
+                <!-- start system monitor node-->
+                <include file="$(find system_monitor)/launch/system_monitor.launch">
+                </include>
+
+
+		<!--================================== SENSOR BRINGUP ==================================-->
 		<!-- start laser nodes -->
 		<include if="$(arg has_scanse_lasers)" file="$(find icclab_summit_xl)/launch/real/irlab_sweep2scan.launch">
-		</include>
-
-		<!-- not used -->
-		<include if="$(arg has_front_laser)" file="$(find summit_xl_bringup)/launch/$(arg front_laser_model).launch">
-			<arg name="port" value="$(arg front_laser_port)"/>
-			<arg name="ip_address" value="$(arg front_laser_ip)"/>
-			<arg name="node_name" value="$(arg front_laser_node)"/>
-			<arg name="frame_id" value="$(arg prefix)front_laser_link"/>
-		</include>
-		<!-- not used -->
-		<include if="$(arg has_rear_laser)" file="$(find summit_xl_bringup)/launch/$(arg rear_laser_model).launch">
-			<arg name="port" value="$(arg rear_laser_port)"/>
-			<arg name="ip_address" value="$(arg rear_laser_ip)"/>
-			<arg name="node_name" value="$(arg rear_laser_node)"/>
-			<arg name="frame_id" value="$(arg prefix)rear_laser_link"/>
 		</include>
 
 		<!-- start rgbd camera node -->
@@ -158,25 +94,29 @@
 			<arg name="device_id" value="$(arg front_rgbd_camera_id)"/>
 		</include>
 
-		<!-- not used -->
-		<include if="$(arg has_rear_rgbd_camera)" file="$(find summit_xl_bringup)/launch/orbbec.launch">
-			<arg name="camera" value="$(arg rear_rgbd_camera_node)"/>
-			<arg name="prefix" value="$(arg prefix)$(arg rear_rgbd_camera_node)"/>
-			<arg name="device_id" value="$(arg rear_rgbd_camera_id)"/>
-		</include>
-		<!-- not used -->
-		<include if="$(arg has_rear_upper_rgbd_camera)" file="$(find summit_xl_bringup)/launch/orbbec.launch">
-			<arg name="camera" value="$(arg rear_upper_rgbd_camera_node)"/>
-			<arg name="prefix" value="$(arg prefix)$(arg rear_upper_rgbd_camera_node)"/>
-			<arg name="device_id" value="$(arg rear_upper_rgbd_camera_id)"/>
-		</include>
+                <!-- run realsense camera on arm -->
+                <include file="$(find realsense2_camera)/launch/rs_rgbd.launch">
+                  <arg name="camera" value="arm_camera"/>
+                  <arg name="align_depth" value="true"/>
+                  <arg name="fisheye_fps" value="6"/>
+                  <arg name="depth_fps" value="6"/>
+                  <arg name="infra1_fps" value="6"/>
+                  <arg name="infra2_fps" value="6"/>
+                  <arg name="color_fps" value="6"/>
+                  <arg name="gyro_fps" value="6"/>
+                  <arg name="accel_fps" value="6"/>
+                </include>
 
-		<!-- start system monitor node-->
-		<include file="$(find system_monitor)/launch/system_monitor.launch">
-		</include>
+
+		<!--================================== NAV STACK ==================================-->
+		<!-- teleop - manually control robot with keyboard -->
+		<node if="$(arg teleop)" pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" name="teleop_twist_keyboard"/>
+
+		<!-- convert front camera depth image to LaserScan for input to laserscan merger -->
+		<include if="$(eval launch_amcl_and_mapserver or launch_gmapping)" file="$(find icclab_summit_xl)/launch/depthimage_to_laserscan.launch"/>
 
 		<!-- move base -->
-		<include file="$(find icclab_summit_xl)/launch/move_base.launch">
+		<include if="$(arg launch_move_base)" file="$(find icclab_summit_xl)/launch/move_base.launch">
 			<arg name="prefix" value="$(arg prefix)"/>
 			<arg name="omni" value="$(arg omni)"/>
 			<arg name="scan_topic_front" value="scan_front"/>
@@ -186,10 +126,9 @@
 			<arg name="debug_mode" value="$(arg debug_mode)"/>
 		</include>
 
-		<!-- merge laser scan topics to scan_combined for ACML or GMapping -->
-		<include if="$(eval launch_amcl_and_mapserver or launch_gmapping)" file="$(find icclab_summit_xl)/launch/laserscan_multi_merger.launch">
-		        <arg name="cloud_destination_topic" value="merged_cloud"/>
-			<arg name="scan_destination_topic" value="scan_combined"/>
+		<!-- merge laser scan topics to scan_combined for ACML or GMapping, delay launch by 5 seconds -->
+		<include if="$(eval launch_amcl_and_mapserver or launch_gmapping)" file="$(find icclab_summit_xl)/launch/timed_laserscan_multi_merger.launch">
+			<arg name="delay_time" value="5"/>
 		</include>
 
 		<!-- amcl and map server base-->
