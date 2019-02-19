@@ -7,7 +7,7 @@ local_costmap:
   rolling_window: true
   width: 8.0
   height: 8.0
-  resolution: 0.025 #0.05
+  resolution: 0.02 #0.05
   transform_tolerance: 0.5
   footprint_padding: 0.0 # helps with passing through narrow passages
   always_send_full_costmap: true
