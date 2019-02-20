@@ -7,16 +7,17 @@ planner_frequency: 0.2 # 0.0, global planner only run when new goal or path bloc
 planner_patience: 0.0
 
 # Oscillation
-oscillation_timeout: 0.0 # time to allow for oscillation before executing recovery behaviors
+oscillation_timeout: 5.0 # time to allow for oscillation before executing recovery behaviors
 oscillation_distance: 0.5
 
 # Recovery
-recovery_behavior_enabled: false # TODO: fix clearing of obstacle layer in global costmap issue
+recovery_behavior_enabled: true
 clearing_rotation_allowed: false
 shutdown_costmaps: false # true, shutdown costmaps when move_base is inactive
+max_planning_retries: 1 # -1.0, infinite retries. Max global planning retries before executing recovery
 
 # execute `rospack plugins --attrib=plugin nav_core | grep recovery` to look at all available recovery plugins
-#recovery_behaviors:
+recovery_behaviors:
 
 # custom plugins
   #- name: 'super_aggressive_reset'
@@ -24,24 +25,24 @@ shutdown_costmaps: false # true, shutdown costmaps when move_base is inactive
     # plugin code -> https://github.com/icclab/clear_total_costmap_recovery
 
 # default plugins
-  #- name: 'super_conservative_reset'
-    #type: 'clear_costmap_recovery/ClearCostmapRecovery'
-  #- name: 'conservative_reset'
-    #type: 'clear_costmap_recovery/ClearCostmapRecovery'
-  #- name: 'aggressive_reset'
-    #type: 'clear_costmap_recovery/ClearCostmapRecovery'
+  - name: 'aggressive_reset_1'
+    type: 'clear_costmap_recovery/ClearCostmapRecovery'
+  - name: 'aggressive_reset_2'
+    type: 'clear_costmap_recovery/ClearCostmapRecovery'
+  - name: 'aggressive_reset_3'
+    type: 'clear_costmap_recovery/ClearCostmapRecovery'
   #- name: 'clearing_rotation'
     #type: 'rotate_recovery/RotateRecovery'
 
 # Clear costmap recovery reverts costmap to static map outside reset_distance and clears unknown space around the robot
 # NOTE: costmap clearing only works if there is a static layer in the costmap
 
-#super_conservative_reset:
-  #reset_distance: 3.0 # distance from robot beyond which obstacles will be cleared from costmap
-  #layer_names: ["obstacle_layer"]
-#conservative_reset:
-  #reset_distance: 2.0
-  #layer_names: ["obstacle_layer"]
-#aggressive_reset:
-  #reset_distance: 0.0
-  #layer_names: ["obstacle_layer"]
+aggressive_reset_1:
+  reset_distance: 0.0 # distance from robot beyond which obstacles will be cleared from costmap
+  layer_names: ["obstacle_3d_layer"] # layers that recovery behavior will clear
+aggressive_reset_2:
+  reset_distance: 0.0
+  layer_names: ["obstacle_3d_layer"]
+aggressive_reset_3:
+  reset_distance: 0.0
+  layer_names: ["obstacle_3d_layer"]
