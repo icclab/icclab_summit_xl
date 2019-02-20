@@ -7,7 +7,7 @@ planner_frequency: 0.2 # 0.0, global planner only run when new goal or path bloc
 planner_patience: 0.0
 
 # Oscillation
-oscillation_timeout: 5.0 # time to allow for oscillation before executing recovery behaviors
+oscillation_timeout: 0.0 # time to allow for oscillation before executing recovery behaviors
 oscillation_distance: 0.5
 
 # Recovery
