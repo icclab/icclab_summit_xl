@@ -69,7 +69,6 @@
   <exec_depend>pluginlib</exec_depend>
   <exec_depend>moveit_core</exec_depend>
   <exec_depend>moveit_commander</exec_depend>
-  <exec_depend>moveit_fake_controller_manager</exec_depend>
   <exec_depend>moveit_ros_planning_interface</exec_depend>
   <exec_depend>moveit_ros_perception</exec_depend>
   <exec_depend>interactive_markers</exec_depend>
@@ -86,6 +85,19 @@
   <exec_depend>ira_laser_tools</exec_depend>
   <exec_depend>timed_roslaunch</exec_depend>
   <exec_depend>teleop_twist_keyboard</exec_depend>
+
+  <exec_depend>moveit_ros_move_group</exec_depend>
+  <exec_depend>moveit_fake_controller_manager</exec_depend>
+  <exec_depend>moveit_kinematics</exec_depend>
+  <exec_depend>moveit_planners_ompl</exec_depend>
+  <exec_depend>moveit_ros_visualization</exec_depend>
+  <exec_depend>joint_state_publisher</exec_depend>
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>xacro</exec_depend>
+  <!-- This package is referenced in the warehouse launch files, but does not build out of the box at the moment. Commented the dependency until this works. -->
+  <!-- <run_depend>warehouse_ros_mongo</run_depend> -->
+  <build_depend>summit_xl_description</build_depend>
+  <exec_depend>summit_xl_description</exec_depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>
