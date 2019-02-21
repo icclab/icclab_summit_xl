@@ -8,7 +8,6 @@ Panels:
         - /Robot1
         - /Global Planner1
         - /Local Planner1
-        - /Local Planner1/Voxel Grid1
       Splitter Ratio: 0.657060504
     Tree Height: 853
   - Class: rviz/Selection
@@ -29,7 +28,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: Front LaserScan
+    SyncSource: ""
 Visualization Manager:
   Class: ""
   Displays:
@@ -128,6 +127,16 @@ Visualization Manager:
               Alpha: 1
               Show Axes: false
               Show Trail: false
+            arm_collision_box_wrist2_link:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+              Value: true
+            arm_collision_box_wrist3_link:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+              Value: true
             arm_ee_link:
               Alpha: 1
               Show Axes: false
@@ -471,6 +480,16 @@ Visualization Manager:
           Unreliable: false
           Use Timestamp: false
           Value: true
+        - Alpha: 0.699999988
+          Class: rviz/Map
+          Color Scheme: costmap
+          Draw Behind: false
+          Enabled: false
+          Name: Potential
+          Topic: /summit_xl/move_base/GlobalPlanner/potential
+          Unreliable: false
+          Use Timestamp: false
+          Value: false
       Enabled: true
       Name: Global Planner
     - Class: rviz/Group
@@ -496,7 +515,10 @@ Visualization Manager:
           Marker Topic: /summit_xl/move_base/TebLocalPlannerROS/teb_markers
           Name: TebMarker
           Namespaces:
-            {}
+            LineObstacles: true
+            PointObstacles: true
+            RobotFootprintModel: true
+            ViaPoints: true
           Queue Size: 100
           Value: true
         - Alpha: 1
@@ -576,10 +598,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Scale: 40
-      Target Frame: <Fixed Frame>
+      Scale: 30
+      Target Frame: summit_xl_base_footprint
       Value: TopDownOrtho (rviz)
-      X: -10
+      X: 0
       Y: 0
     Saved: ~
 Window Geometry:
@@ -599,4 +621,4 @@ Window Geometry:
     collapsed: false
   Width: 1920
   X: 0
-  Y: 24
+  Y: 144
