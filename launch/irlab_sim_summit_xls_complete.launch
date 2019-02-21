@@ -44,7 +44,7 @@
 			<arg name="load_robot_description" value="true"/>
 		</include>
 
-		<!--    <include file="$(find robotnik_ur5_moveit_config)/launch/planning_context.launch">-->
+		<!--    <include file="$(find icclab_summit_xl)/launch/planning_context.launch">-->
 		<!--      <arg name="load_robot_description" value="true"/>-->
 		<!--    </include>-->
 
@@ -57,7 +57,7 @@
 		</include>
 
 		<!-- Controller parameters-->
-		<rosparam file="$(find robotnik_ur5_moveit_config)/config/controllers.yaml"/> 
+		<rosparam file="$(find icclab_summit_xl)/config/controllers.yaml"/> 
 
 		<!-- run point cloud filtering--> 
 		<node name="pointcloud_filtering" pkg="irlab_point_cloud_filtering" type="point_cloud_filtering_server" respawn="false" args="/summit_xl/arm_camera/depth_registered/points" output="screen"/>
@@ -68,7 +68,7 @@
 		<!-- Run Rviz and load the default config to see the state of the move_group node -->
 		<arg name="command_args" value="-d $(find icclab_summit_xl)/rviz/grasping.rviz" />
 		<node name="rviz_grasping" pkg="rviz" type="rviz" args="$(arg command_args)" respawn="false" output="screen">
-			<rosparam command="load" file="$(find robotnik_ur5_moveit_config)/config/kinematics.yaml"/>
+			<rosparam command="load" file="$(find icclab_summit_xl)/config/kinematics.yaml"/>
 		</node>
 
 	</group>
