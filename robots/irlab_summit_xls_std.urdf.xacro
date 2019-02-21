@@ -148,7 +148,7 @@
 			 <origin xyz="0.0 0 0.0" rpy="0 0 0" />
 		</xacro:schunk_egp_40> 
 		
-		<!-- Camera on gripper --> 
+		<!-- Camera on gripper  --> 
 		<!-- had to copy and modidy camera to avoid name clash with robotnik defined sensors -->
 		<sensor_d435_icclab prefix="arm" prefix_topic="arm_camera" parent="arm_wrist_2_link">
      		<!-- <origin xyz="0 0.07 0.145" rpy="0 0 ${PI/2}"/> -->
