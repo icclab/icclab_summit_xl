@@ -33,6 +33,9 @@
 	<!-- Intel camera mount -->
 	<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/intel_camera_mount.urdf.xacro" />
 
+	<!-- Collision box on arm camera cable -->
+	<xacro:include filename="$(find icclab_summit_xl)/robots/ur5_arm_camera_cable_collision_box.urdf.xacro" />
+
 	<!-- Collision box on arm wrist 3 -->
 	<xacro:include filename="$(find icclab_summit_xl)/robots/ur5_arm_wrist3_collision_box.urdf.xacro" />
 
@@ -147,7 +150,9 @@
 		<!-- Camera on gripper --> 
 		<!-- had to copy and modidy camera to avoid name clash with robotnik defined sensors -->
 		<sensor_d435_icclab prefix="arm" prefix_topic="arm_camera" parent="arm_wrist_2_link">
-     		<origin xyz="0 0.07 0.145" rpy="0 0 ${PI/2}"/>
+     		<!-- <origin xyz="0 0.07 0.145" rpy="0 0 ${PI/2}"/> -->
+			<!--<origin xyz="-0.075 0.07 0.09" rpy="${PI/2} 0 ${PI/2}"/>  --><!-- camera on the one side -->
+			<origin xyz="0.075 0.07 0.1" rpy="${-PI/2} 0 ${PI/2}"/> <!-- camera on the other oner side -->
    		</sensor_d435_icclab> 
 
 <!--		<sensor_d415_icclab prefix="arm" prefix_topic="arm_camera" parent="arm_wrist_2_link">
@@ -156,8 +161,15 @@
 
 		<!-- Camera mount -->
 		<xacro:camera_mount prefix="arm" parent="arm_wrist_2_link">
-			 <origin xyz="-0.005 0.04 0.095" rpy="${PI/2} 0 ${PI}" />
+			<!-- <origin xyz="-0.005 0.04 0.095" rpy="${PI/2} 0 ${PI}" /> -->
+			<!-- <origin xyz="-0.005 0.04 0.095" rpy=" ${PI/2} ${PI/2} ${PI}" /> --> <!-- camera on the one side -->
+			<origin xyz="0 0.04 0.1" rpy=" ${PI/2} ${-PI/2} ${PI}" /> <!-- camera on the other one side -->
 		</xacro:camera_mount>
+
+		<!-- Collision box camera cable -->
+		<xacro:collision_box_camera_cable prefix="arm" parent="arm_camera_link">
+			 <origin xyz="-0.02 -0.08 0" rpy="0 0 0" />
+		</xacro:collision_box_camera_cable>
 		
 		<!-- Collision box wrist 3 -->
 		<xacro:collision_box_wrist3 prefix="arm" parent="arm_wrist_3_link">
