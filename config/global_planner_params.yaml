@@ -1,10 +1,13 @@
+# More info -> http://wiki.ros.org/global_planner
+
 base_global_planner: global_planner/GlobalPlanner
 
 GlobalPlanner:
   planner_frequency: 1.0
   planner_patience: 0.0
-  orientation_mode: 2 # Orientations are a linear blend of start and goal pose
+  orientation_mode: 1 # Positive x axis points along path, except for the goal orientation
   # orientation filter (param orientation_mode) is a post-processing step where an orientation is added to the points on the global path
+  # move_base node crashes if set to 2 and planner fails
 
   old_navfn_behavior: false                     # Exactly mirror behavior of navfn, use defaults for other boolean parameters, default false
   use_quadratic: true                           # Use the quadratic approximation of the potential. Otherwise, use a simpler calculation, default true

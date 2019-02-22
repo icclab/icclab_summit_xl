@@ -23,6 +23,7 @@
 		<rosparam file="$(find icclab_summit_xl)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
 		<rosparam file="$(find icclab_summit_xl)/config/local_costmap_params.yaml" command="load" />
 		<rosparam file="$(find icclab_summit_xl)/config/global_costmap_params_map.yaml" command="load" />
+		<rosparam file="$(find icclab_summit_xl)/config/global_planner_params.yaml" command="load" />
 		<rosparam if="$(arg omni)" file="$(find icclab_summit_xl)/config/teb_local_planner_steel_params.yaml" command="load" />
 		<rosparam unless="$(arg omni)" file="$(find icclab_summit_xl)/config/teb_local_planner_diff_params.yaml" command="load" />
 
@@ -42,11 +43,10 @@
 		<param name="local_costmap/robot_base_frame" value="$(arg base_frame)"/>
 		<param name="global_costmap/global_frame" value="$(arg global_frame)"/>
 		<param name="global_costmap/robot_base_frame" value="$(arg base_frame)"/>
-		<param name="DWAPlannerROS/global_frame_id" value="$(arg odom_frame)"/>
 		<param name="TebLocalPlannerROS/map_frame" value="$(arg global_frame)"/>
 	        <param name="TebLocalPlannerROS/odom_topic" value="$(arg odom_topic)"/>
 		<param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" />
-		<param name="controller_frequency" value="5.0" />
+		<param name="controller_frequency" value="10.0" />
 		<param name="controller_patience" value="15.0" />
 		<param name="local_costmap/obstacle_3d_layer/publish_voxel_map" value="$(arg debug_mode)"/>
 		<remap from="cmd_vel" to="$(arg cmd_vel_topic)" />
