@@ -5,6 +5,7 @@
   <arg name="x_init_pose" default="0"/>
   <arg name="y_init_pose" default="0"/>
   <arg name="z_init_pose" default="0"/>
+  <arg name="a_init_pose" default="0"/>
   <!-- slam accepts data from 1 source (see repo wiki for info) -->
   <arg name="scan_topic" default="scan_combined"/>
   <arg name="map_topic" default="map"/>
@@ -58,7 +59,7 @@
     <param name="initial_pose_x" value ="$(arg x_init_pose)"/>
     <param name="initial_pose_y" value ="$(arg y_init_pose)"/>
     <param name="initial_pose_z" value ="$(arg z_init_pose)"/>
-    <param name="initial_pose_a" value ="0.0"/>
+    <param name="initial_pose_a" value ="$(arg a_init_pose)"/>
 
   </node>
 

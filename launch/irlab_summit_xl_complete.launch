@@ -25,9 +25,10 @@
 	<arg name="launch_gmapping" default="false"/>
 	<arg name="launch_amcl_and_mapserver" default="false"/>
 	<arg name="map_file" default="icclab/icclab_latest_map.yaml"/>
-	<arg name="x_init_pose" default="0"/>
-	<arg name="y_init_pose" default="0"/>
-	<arg name="z_init_pose" default="0"/>
+	<arg name="x_init_pose" default="-16.910"/>
+	<arg name="y_init_pose" default="-0.777"/>
+	<arg name="z_init_pose" default="0.0"/>
+	<arg name="a_init_pose" default="-1.597"/>
 	<arg name="debug_mode" default="false"/> <!-- currently just shows voxel map if true -->
 
 	<!-- Optional -->
@@ -143,6 +144,7 @@
 			<arg name="x_init_pose" value="$(arg x_init_pose)"/>
 			<arg name="y_init_pose" value="$(arg y_init_pose)"/>
 			<arg name="z_init_pose" value="$(arg z_init_pose)"/>
+			<arg name="a_init_pose" value="$(arg a_init_pose)"/>
 		</include>
 
 		<!-- gmapping -->
