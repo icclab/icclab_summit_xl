@@ -17,29 +17,46 @@ static_layer:
 
 obstacle_3d_layer:
   enabled:             true
-  combination_method: 0         # obstacle layer will overwrite static layer, if 1 it will sum layers
-  track_unknown_space: true     # true needed for disabling global path planning through unknown space
-  obstacle_range: 2.5           # range at which to mark obstacles
-  raytrace_range: 40            # range at which to ray trace obstacles for marking/clearing (should be higher than max range of sensor)
-
-  # voxel costmap plugin params
-  origin_z: 0.0                 # z origin of the map in meters
-  z_resolution: 0.4             # z resolution of the map in meters/cell
-  z_voxels: 10                  # number of voxels in a vertical column (height of column is z_resolution * z voxels)
-  unknown_threshold: 15         # number of unknown cells allowed in a column considered to be ”known”
-  mark_threshold: 0             # maximum number of marked cells allowed in a column considered to be ”free”
-  publish_voxel_map:   false    # set to 'true' for debugging, enabled through `debug_mode:=true` in complete
-
+  voxel_decay:           15     # seconds if linear, e^n if exponential
+  decay_model:           0      # 0=linear, 1=exponential, -1=persistent
+  voxel_size:            0.05   # meters
+  track_unknown_space:   true   # default space is unknown
+  observation_persistence: 0.0  # seconds
+  unknown_threshold:     15     # number of unknown cells allowed in a column considered to be ”known”
+  mark_threshold:        0      # maximum number of marked cells allowed in a column considered to be ”free”
+  update_footprint_enabled: true
+  combination_method:    0      # obstacle layer will overwrite layer above, if 1 it will sum layers
+  obstacle_range:        3.0    # range at which to mark obstacles in meters
+  origin_z:              0.0    # z origin of the map in meters
+  publish_voxel_map:     false  # set to 'true' for debugging, enabled through `debug_mode:=true` in complete
+  transform_tolerance:   0.2    # seconds
+  mapping_mode:          false  # default off, saves map not for navigation
+  map_save_duration:     60     # default 60s, how often to autosave
   # sensor params
-  observation_sources: camera_front
-  camera_front:
+  observation_sources: camera_front_mark camera_front_clear
+  camera_front_mark:
     data_type: PointCloud2
     topic: /summit_xl/front_rgbd_camera/depth/points
     marking: true               # true, use this sensor data to mark obstacles on costmap
-    clearing: true              # true, use this sensor data to clear obstalces on costmap
+    clearing: false             # true, use this sensor data to clear obstalces on costmap
     min_obstacle_height: 0.02
     max_obstacle_height: 2.0
     expected_update_rate: 1.5   # expected period between each consecutive message (set to ~twice expect)
+    observation_persistence: 0.0 # default 0, use all measurements taken during now-value, 0=latest
+    inf_is_valid: false         # default false, for laser scans
+    clear_after_reading: true   # default false, clear the buffer after the layer gets readings from it
+    voxel_filter: true          # default off, apply voxel filter to sensor, recommend on
+  camera_front_clear:
+    data_type: PointCloud2
+    topic: /summit_xl/front_rgbd_camera/depth/points
+    marking: false
+    clearing: true
+    min_z: 0.1                  # default 0, meters
+    max_z: 7.0                  # default 10, meters
+    vertical_fov_angle: 0.7     # default 0.7, radians
+    horizontal_fov_angle: 1.04  # default 1.04, radians
+    decay_acceleration: 1.      # default 0, 1/s^2. If laser scanner MUST be 0
+    model_type: 0               # default 0 (depth camera). Use 1 for 3D Lidar
 
 
 obstacle_2d_layer:
@@ -47,7 +64,7 @@ obstacle_2d_layer:
   combination_method: 1
   track_unknown_space: true
   obstacle_range: 2.5
-  raytrace_range: 6.1
+  raytrace_range: 6.1           # range at which to ray trace obstacles for marking/clearing (should be higher than max range of sensor)
 
   # sensor params
   observation_sources: scan_front scan_rear

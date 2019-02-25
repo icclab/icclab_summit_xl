@@ -8,6 +8,7 @@ Panels:
         - /Robot1
         - /Global Planner1
         - /Local Planner1
+        - /Local Planner1/Voxel Grid1/Status1
       Splitter Ratio: 0.657060504
     Tree Height: 853
   - Class: rviz/Selection
@@ -28,7 +29,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: ""
+    SyncSource: Voxel Grid
 Visualization Manager:
   Class: ""
   Displays:
@@ -127,6 +128,11 @@ Visualization Manager:
               Alpha: 1
               Show Axes: false
               Show Trail: false
+            arm_collision_box_camera_cable_link:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+              Value: true
             arm_collision_box_wrist2_link:
               Alpha: 1
               Show Axes: false
@@ -554,13 +560,35 @@ Visualization Manager:
           Unreliable: false
           Use Timestamp: false
           Value: true
-        - Class: rviz/Marker
+        - Alpha: 1
+          Autocompute Intensity Bounds: true
+          Autocompute Value Bounds:
+            Max Value: 10
+            Min Value: -10
+            Value: true
+          Axis: Z
+          Channel Name: z
+          Class: rviz/PointCloud2
+          Color: 255; 0; 0
+          Color Transformer: FlatColor
+          Decay Time: 0
           Enabled: false
-          Marker Topic: /summit_xl/move_base/local_costmap/obstacle_3d_layer/voxel_grid_marker
+          Invert Rainbow: false
+          Max Color: 255; 255; 255
+          Max Intensity: 1.5
+          Min Color: 0; 0; 0
+          Min Intensity: 0
           Name: Voxel Grid
-          Namespaces:
-            {}
-          Queue Size: 100
+          Position Transformer: XYZ
+          Queue Size: 10
+          Selectable: true
+          Size (Pixels): 3
+          Size (m): 0.0500000007
+          Style: Squares
+          Topic: /summit_xl/move_base/local_costmap/obstacle_3d_layer/voxel_grid
+          Unreliable: false
+          Use Fixed Frame: true
+          Use rainbow: true
           Value: false
       Enabled: true
       Name: Local Planner

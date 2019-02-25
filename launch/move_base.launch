@@ -13,8 +13,6 @@
 	<arg name="omni" default="false"/>
 	<arg name="sim" default="false"/>
 	<arg name="debug_mode" default="false"/>
-	<arg name="voxel_grid" default="move_base/local_costmap/obstacle_3d_layer/voxel_grid"/>
-	<arg name="visualization_marker" default="move_base/local_costmap/obstacle_3d_layer/voxel_grid_marker"/>
 
 	<!-- Run move_base -->
 	<node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
@@ -64,7 +62,5 @@
 		<param name="move_base/TebLocalPlannerROS/acc_lim_x" value="1.0"/>
 		<param name="move_base/TebLocalPlannerROS/acc_lim_theta" value="2.0"/>
 	</group>
-
-	<node if="$(arg debug_mode)" pkg="costmap_2d" type="costmap_2d_markers" name="costmap_2d_markers" args="voxel_grid:=$(arg voxel_grid) visualization_marker:=$(arg visualization_marker)"/>
 
 </launch>
