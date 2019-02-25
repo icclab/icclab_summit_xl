@@ -84,6 +84,6 @@
   </group>
   
   <!-- run grasp detection -->
-  <include file="$(find gpd)/launch/grasp_generation.launch"/>
+  <include file="$(find icclab_summit_xl)/launch/include/grasp_generation.launch.xml"/>
 
 </launch>
