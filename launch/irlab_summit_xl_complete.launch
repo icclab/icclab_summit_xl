@@ -85,7 +85,7 @@
 
 		<!--================================== SENSOR BRINGUP ==================================-->
 		<!-- start laser nodes -->
-		<include if="$(arg has_scanse_lasers)" file="$(find icclab_summit_xl)/launch/real/irlab_sweep2scan.launch">
+		<include if="$(eval has_scanse_lasers and launch_move_base)" file="$(find icclab_summit_xl)/launch/real/irlab_sweep2scan.launch">
 		</include>
 
 		<!-- start rgbd camera node -->
