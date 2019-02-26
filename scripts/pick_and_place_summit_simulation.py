@@ -440,14 +440,16 @@ class GpdPickPlace(object):
         # pose_goal.orientation.y = 0.470291614532#0.478404045105
         # pose_goal.orientation.z = 0.503242969513#0.511537611485
 
-        pose_goal.position.x = 1.06285917759
-        pose_goal.position.y = -0.00109632476233
-        pose_goal.position.z = 0.828287780285
-        pose_goal.orientation.w = 0.512402296066
-        pose_goal.orientation.x = -0.512062907219
-        pose_goal.orientation.y = 0.470357865095
-        pose_goal.orientation.z = 0.503983080387
+        pose_goal.position.x = 1.069
+        pose_goal.position.y = -0.012
+        pose_goal.position.z = 0.831
+        pose_goal.orientation.x = -0.534
+        pose_goal.orientation.y = 0.445
+        pose_goal.orientation.z = 0.478
+        pose_goal.orientation.w = 0.536
         group.set_start_state_to_current_state()
+        group.set_goal_tolerance(0.01);
+        group.set_planning_time(10);
         group.set_pose_target(pose_goal)
 
         # The go command can be called with joint values, poses, or without any
@@ -460,7 +462,8 @@ class GpdPickPlace(object):
             plan = group.plan()
             rospy.sleep(1)
             cont_plan += 1
-        if (len(plan.joint_trajectory.points) != 0):
+        group.clear_path_constraints()
+	if (len(plan.joint_trajectory.points) != 0):
             inp = raw_input("Have a look at the planned motion. Do you want to proceed? y/n: ")[0]
             if (inp == 'y'):
                 pevent("Executing place: ")
@@ -615,7 +618,7 @@ if __name__ == "__main__":
         result = gripper_client_2(8)
         print("Gripper opened")
         pnp.remove_pose_constraints()
-        pnp.set_pose_constraints(1.57, 1.57, 1.57)
+        #pnp.set_pose_constraints(1.57, 1.57, 1.57)
         successful_grasp = pnp.pick(formatted_grasps, verbose=True)
         if successful_grasp is not None:
         #    ipdb.set_trace()
