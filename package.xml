@@ -86,7 +86,6 @@
   <exec_depend>timed_roslaunch</exec_depend>
   <exec_depend>teleop_twist_keyboard</exec_depend>
   <exec_depend>spatio_temporal_voxel_layer</exec_depend>
-
   <exec_depend>moveit_ros_move_group</exec_depend>
   <exec_depend>moveit_fake_controller_manager</exec_depend>
   <exec_depend>moveit_kinematics</exec_depend>
@@ -95,6 +94,8 @@
   <exec_depend>joint_state_publisher</exec_depend>
   <exec_depend>robot_state_publisher</exec_depend>
   <exec_depend>xacro</exec_depend>
+  <exec_depend>rplidar_ros</exec_depend>
+  <exec_depend>depthimage_to_laserscan</exec_depend>
   <!-- This package is referenced in the warehouse launch files, but does not build out of the box at the moment. Commented the dependency until this works. -->
   <!-- <run_depend>warehouse_ros_mongo</run_depend> -->
   <build_depend>summit_xl_description</build_depend>

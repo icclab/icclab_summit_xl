@@ -1,9 +1,9 @@
 <?xml version=  "1.0"?>
-<robot name="scanse" 
+<robot name="rplidar"
   xmlns:xacro="http://www.ros.org/wiki/xacro">
 
 
-  <xacro:macro name="scanse" params="prefix parent prefix_topic:='front_laser' *origin min_angle:=-2.35 max_angle:=2.35">
+  <xacro:macro name="rplidar" params="prefix parent prefix_topic:='front_laser' *origin min_angle:=1.5708 max_angle:=6.2832">
 
     <joint name="${prefix}_base_joint" type="fixed">
       <!-- FRONT MOUNT  -->
@@ -18,23 +18,23 @@
 
     <link name="${prefix}_base_link">
       <collision>        <!-- added -->
-        <origin xyz="0 0 0.02" rpy="0 0 0"/>
+        <origin xyz="0.005 0 0.02" rpy="0 0 0"/>
         <geometry>
-          <cylinder length="0.06" radius="0.035"/>
+          <cylinder length="0.0315" radius="0.040"/>
         </geometry>
       </collision>
 
       <visual>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <origin xyz="0 0 0.02" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://icclab_summit_xl/meshes/sensors/sweep_lidar.stl"/>
+          <mesh filename="package://icclab_summit_xl/meshes/sensors/lds.stl" scale="0.001 0.001 0.001"/>
         </geometry>
       </visual>
 
       <inertial>
-        <mass value="1e-5" />
+        <mass value="0.114" />
         <origin xyz="0 0 0" rpy="0 0 0"/>
-        <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+        <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001" />
       </inertial>
     </link>
 
@@ -47,12 +47,12 @@
     </joint>
 
     <!-- simulation -->
-    <sensor_scanse_gazebo/>
+    <sensor_rplidar_gazebo/>
 
   </xacro:macro>
 
 <!-- uses ROS Laser Scanner Controller plugin -->
-  <xacro:macro name="sensor_scanse_gazebo">
+  <xacro:macro name="sensor_rplidar_gazebo">
     <gazebo reference="${prefix}_link">
       <sensor type="ray" name="${prefix}_sensor">
         <pose>0 0 0 0 0 0</pose>
