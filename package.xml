@@ -86,7 +86,6 @@
   <exec_depend>timed_roslaunch</exec_depend>
   <exec_depend>teleop_twist_keyboard</exec_depend>
   <exec_depend>spatio_temporal_voxel_layer</exec_depend>
-
   <exec_depend>moveit_ros_move_group</exec_depend>
   <exec_depend>moveit_fake_controller_manager</exec_depend>
   <exec_depend>moveit_kinematics</exec_depend>
