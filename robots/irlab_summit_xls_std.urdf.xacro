@@ -72,9 +72,9 @@
 	<xacro:property name="imu_offset_z" value="0.18"/>
 
 
-	<xacro:property name="front_rgbd_camera_offset_x" value="0.35"/>  <!-- 328 --> <!-- 35 leo--> 
+	<xacro:property name="front_rgbd_camera_offset_x" value="0.375"/>  <!-- 328 --> <!-- 35 leo--> 
 	<xacro:property name="front_rgbd_camera_offset_y" value="0.012"/>    
-	<xacro:property name="front_rgbd_camera_offset_z" value="0.230"/>  <!-- 214 -->
+	<xacro:property name="front_rgbd_camera_offset_z" value="0.26"/>  <!-- 214 -->
 
   <xacro:property name="base_arm_x" value="0.225"/>
   <xacro:property name="base_arm_y" value="0.0"/>
