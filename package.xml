@@ -96,6 +96,7 @@
   <exec_depend>xacro</exec_depend>
   <exec_depend>hls_lfcd_lds_driver</exec_depend>
   <exec_depend>depthimage_to_laserscan</exec_depend>
+  <exec_depend>laser_filters</exec_depend>
   <!-- This package is referenced in the warehouse launch files, but does not build out of the box at the moment. Commented the dependency until this works. -->
   <!-- <run_depend>warehouse_ros_mongo</run_depend> -->
   <build_depend>summit_xl_description</build_depend>

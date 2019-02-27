@@ -1,12 +1,5 @@
 <launch>
 
-    <node name="sweep_node_front" pkg="sweep_ros" type="sweep_node" output="screen">
-        <param name="serial_port" type="string" value="/dev/front_lidar"/>
-        <param name="serial_baudrate" type="int" value="115200"/>
-        <param name="frame_id" type="string" value="summit_xl_front_laser_base_link"/>
-        <param name="rotation_speed" type="int" value="5"/> <!-- default 5 -->
-        <remap from="pc2" to="pc2_front"/>
-    </node>
     <node name="sweep_node_rear" pkg="sweep_ros" type="sweep_node" output="screen">
         <param name="serial_port" type="string" value="/dev/rear_lidar"/>
         <param name="serial_baudrate" type="int" value="115200"/>
@@ -16,33 +9,6 @@
     </node>
 
 
-
-    <!-- run pointcloud_to_laserscan node -->
-    <node pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node" name="pointcloud_to_laserscan_front">
-
-        <remap from="cloud_in" to="pc2_front"/>
-        <remap from="scan" to="scan_front"/>
-        <rosparam>
-            target_frame: summit_xl_front_laser_base_link # Leave disabled to output scan in pointcloud frame
-            transform_tolerance: 0.001
-            min_height: -1.0
-            max_height: 1.0
-
-            angle_min: -2.355 # -3*M_PI/4
-            angle_max: 2.100 # 3*M_PI/4 (a little less)
-            angle_increment: 0.001 # laserscan_multi_merger fixes this issue https://github.com/scanse/sweep-ros/issues/14
-            scan_time: 0.1
-            range_min: 0.02
-            range_max: 6.0 # default 40.0
-            use_inf: true
-
-            # Concurrency level, affects number of pointclouds queued for processing and number of threads used
-            # 0 : Detect number of cores
-            # 1 : Single threaded
-            # 2->inf : Parallelism level
-            concurrency_level: 1
-        </rosparam>
-    </node>
 
     <!-- run pointcloud_to_laserscan node -->
     <node pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node" name="pointcloud_to_laserscan_rear">
