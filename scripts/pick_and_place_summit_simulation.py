@@ -12,7 +12,7 @@ from moveit_python import *
 from moveit_msgs.msg import Grasp, PlaceLocation
 from geometry_msgs.msg import PoseStamped, Vector3, Pose
 from trajectory_msgs.msg import JointTrajectoryPoint
-from visualization_msgs.msg import Marker
+from visualization_msgs.msg import MarkerArray
 from std_msgs.msg import Header, ColorRGBA
 from moveit_python.geometry import rotate_pose_msg_by_euler_angles, translate_pose_msg
 from tf.transformations import *
@@ -43,6 +43,7 @@ from moveit_msgs.msg import Constraints, OrientationConstraint, PositionConstrai
 from copy import deepcopy
 from pointcloud_operations import create_mesh_and_save
 from sensor_msgs import point_cloud2
+from show_pose_marker import place_marker_at_pose
 
 client = None
 from moveit_msgs.msg import MoveItErrorCodes
@@ -66,7 +67,7 @@ class GpdPickPlace(object):
         self.grasp_subscriber = rospy.Subscriber("/detect_grasps/clustered_grasps", GraspConfigList, self.grasp_callback)
         if mark_pose:
             self.mark_pose = True
-            self.marker_publisher = rospy.Publisher('visualization_marker', Marker, queue_size=10)
+            self.marker_publisher = rospy.Publisher('visualization_marker_array', MarkerArray, queue_size=1)
         self.p = PickPlaceInterface(group="manipulator", ee_group="endeffector", verbose=True, ns="/summit_xl/")
         self.tf = tf.TransformListener()
 
@@ -77,26 +78,7 @@ class GpdPickPlace(object):
         pevent("Received new grasps")
 
     def show_grasp_pose(self, publisher, grasp_pose):
-        marker_x = Marker(
-            type=Marker.ARROW,
-            id=0,
-            lifetime=rospy.Duration(60),
-            pose=grasp_pose,
-            scale=Vector3(0.04, 0.02, 0.02),
-            header=Header(frame_id='summit_xl_base_footprint'),
-            color=ColorRGBA(1.0, 0.0, 0.0, 0.8))
-        publisher.publish(marker_x)
-
-  #  def show_graspik_pose(self, publisher, grasp_pose):
-  #      marker_x = Marker(
-  #          type=Marker.ARROW,
-  #          id=0,
-  #          lifetime=rospy.Duration(60),
-  #          pose=grasp_pose,
-  #          scale=Vector3(0.04, 0.02, 0.02),
-  #          header=Header(frame_id='summit_xl_base_footprint'),
-  #          color=ColorRGBA(0.0, 1.0, 0.0, 0.8))
-  #      publisher.publish(marker_x)
+        place_marker_at_pose(publisher, grasp_pose)
 
     def get_gpd_grasps(self):
         pevent("Waiting for grasps to arrive")
@@ -209,7 +191,7 @@ class GpdPickPlace(object):
         self.add_object_mesh()
         for single_grasp in grasps_list:
             if self.mark_pose:
-                self.show_grasp_pose(self.marker_publisher, single_grasp.grasp_pose.pose)
+                self.show_grasp_pose(self.marker_publisher, single_grasp.grasp_pose)
                 rospy.sleep(1)
             pevent("Planning grasp:")
             pprint(single_grasp.grasp_pose)
