@@ -40,7 +40,7 @@
 	<group if="$(arg enable_arm)" ns="$(arg id_robot)">
 
 		<!-- Load the URDF, SRDF and other .yaml configuration files on the param server -->
-		<include file="$(find icclab_summit_xl)/launch/sim/planning_context.launch">
+		<include file="$(find icclab_summit_xl)/launch/planning_context.launch">
 			<arg name="load_robot_description" value="true"/>
 		</include>
 
@@ -74,6 +74,6 @@
 	</group>
 
 	<!-- run grasp detection -->
-	<include if="$(arg enable_arm)" file="$(find gpd)/launch/grasp_generation.launch"/>
+	<include if="$(arg enable_arm)" file="$(find icclab_summit_xl)/launch/include/grasp_generation.launch.xml"/>
 
 </launch>
