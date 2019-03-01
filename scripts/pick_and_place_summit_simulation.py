@@ -106,8 +106,8 @@ class GpdPickPlace(object):
 
 #function for dyanamic tf listener
     def tf_listen(self, pose):
-        if self.tf.frameExists("arm_camera_depth_optical_frame") and self.tf.frameExists("summit_xl_base_footprint"):
-            t = self.tf.getLatestCommonTime("arm_camera_depth_optical_frame", "summit_xl_base_footprint")
+        if self.tf.frameExists("arm_camera_color_optical_frame") and self.tf.frameExists("summit_xl_base_footprint"):
+            t = self.tf.getLatestCommonTime("arm_camera_color_optical_frame", "summit_xl_base_footprint")
            # position, quaternion = self.tf.lookupTransform("summit_xl_base_footprint", "arm_camera_depth_optical_frame", t)
             #p1 = geometry_msgs.msg.PoseStamped()
             #p1.header.frame_id = "arm_camera_depth_optical_frame"
@@ -126,7 +126,7 @@ class GpdPickPlace(object):
             cont = 0
             filtered_orientation = 0
             for i in range(0, len(selected_grasps)):
-                z_axis_unit = (0, 0, 1)
+                z_axis_unit = (0, 0, -1)
                 ap_axis = (selected_grasps[i].approach.x, selected_grasps[i].approach.y, selected_grasps[i].approach.z)
                 angle = numpy.dot(z_axis_unit, ap_axis)
                 if (angle <= 0):
@@ -137,20 +137,10 @@ class GpdPickPlace(object):
                 g = Grasp()
                 g.id = "dupa"
                 gp = PoseStamped()
-                gp.header.frame_id = "arm_camera_depth_optical_frame"
+                gp.header.frame_id = "summit_xl_base_footprint"
                 org_q = self.trans_matrix_to_quaternion(selected_grasps[i])
 
-                #   self.tf_listener_ = TransformListener()
-                #    rospy.sleep(1)
-                #           dyn_rot = self.tf_listen()
-                #          dyn_rot_pyquaternion = copy.deepcopy(dyn_rot)
-                #           dyn_rot_pyquaternion[0] = copy.deepcopy(dyn_rot[3])
-                #           dyn_rot_pyquaternion[1] = copy.deepcopy(dyn_rot[0])
-                #          dyn_rot_pyquaternion[2] = copy.deepcopy(dyn_rot[1])
-                #         dyn_rot_pyquaternion[3] = copy.deepcopy(dyn_rot[2])
-                #         quat2 = org_q * dyn_rot_pyquaternion
-                # quat =  quat1 * rot_z_q
-                quat = org_q  # * rot_z_q
+                quat = org_q
                 gp.pose.position.x = selected_grasps[i].surface.x + self.grasp_offset * selected_grasps[i].approach.x
                 gp.pose.position.y = selected_grasps[i].surface.y + self.grasp_offset * selected_grasps[i].approach.y
                 gp.pose.position.z = selected_grasps[i].surface.z + self.grasp_offset * selected_grasps[i].approach.z
@@ -158,13 +148,7 @@ class GpdPickPlace(object):
                 gp.pose.orientation.y = float(quat.elements[2])
                 gp.pose.orientation.z = float(quat.elements[3])
                 gp.pose.orientation.w = float(quat.elements[0])
-               #  listener = TransformListener(True, rospy.Duration(10.0))
-                tf_listener_.waitForTransform('/arm_camera_depth_optical_frame', '/summit_xl_base_footprint',
-                                              rospy.Time(), rospy.Duration(2.0))
-              #  print("Grasp pose before transformation:" + str(gp))
-                grasp_pose = tf_listener_.transformPose("summit_xl_base_footprint", gp)
-               # print("Grasp pose after transformation:" + str(grasp_pose))
-                g.grasp_pose = grasp_pose
+                g.grasp_pose = gp
                 #            ipdb.set_trace()
                 #                gp_in_base = self.tf_listen(gp)
                 #                resp = gik.get_ik(gp_in_base)
@@ -337,7 +321,8 @@ class GpdPickPlace(object):
         places = list()
         l = PlaceLocation()
         l.id = "dupadupa"
-        l.place_pose.header.frame_id = "arm_camera_depth_optical_frame"
+        #l.place_pose.header.frame_id = "arm_camera_color_optical_frame"
+        l.place_pose.header.frame_id = "summit_xl_base_footprint"
         q = Quaternion(initial_place_pose.grasp_pose.pose.orientation.w,
                         initial_place_pose.grasp_pose.pose.orientation.x,
                         initial_place_pose.grasp_pose.pose.orientation.y,
@@ -481,19 +466,6 @@ class GpdPickPlace(object):
             pevent("Initial position planning failed. Aborting")
             return False
 
-    def move_a_bit(self,x_move,y_move,z_move):
-        pevent("Started to move a bit")
-        pose_goal = geometry_msgs.msg.Pose()
-        #ipdb.set_trace()
-        pose_goal = group.get_current_pose("arm_ee_link")
-        pose_goal.pose.position.x += x_move
-        pose_goal.pose.position.y += y_move
-        pose_goal.pose.position.z += z_move
-        group.set_start_state_to_current_state()
-        group.set_pose_target(pose_goal)
-        plan = group.go(wait=True)
-        group.stop()
-        group.clear_pose_targets()
 
     def wait_for_pcl_and_save(self):
         pinfo("Subscribing to pointcloud to generate pointcloud")
@@ -510,7 +482,6 @@ class GpdPickPlace(object):
         self.obj_pc_subscriber.unregister()
 
     def create_pcd_and_save(cloud):
-        #ipdb.set_trace()
         np_cloud = np.asarray(cloud)
 
     def wait_for_mesh_and_save(self):
@@ -561,15 +532,14 @@ if __name__ == "__main__":
     pnp = GpdPickPlace(mark_pose=True)
     group_name = "manipulator"
     group = moveit_commander.MoveGroupCommander(group_name, robot_description="/summit_xl/robot_description", ns="/summit_xl")
-    group.set_planner_id("RRTStar")
-   # group.set_planner_id("RRTConnect")
+    group.set_planner_id("RRTConnect")
     group.set_planning_time(2)
   #  group.set_max_velocity_scaling_factor(0.05)
    # group.set_goal_orientation_tolerance(0.01)
   #  group.set_goal_position_tolerance(0.01)
-    planning = PlanningSceneInterface("arm_camera_depth_optical_frame", ns="/summit_xl/")
+    planning = PlanningSceneInterface("summit_xl_base_footprint", ns="/summit_xl/")
     rospy.sleep(1)
-    num_objects = 10
+    num_objects = 5
     succesfull_objects_placements = 0
     objects_grasped_lost = 0
     objects_grasped_not_placed = 0
@@ -584,12 +554,13 @@ if __name__ == "__main__":
         #we have to add a check, so that this is called only if the initial_pose was successful
         call_pointcloud_filter_service()
         pnp.wait_for_mesh_and_save()
-        # Wait for grasps from gpd, wrap them into Grasp msg format and start picking
+    # Wait for grasps from gpd, wrap them into Grasp msg format and start picking
         selected_grasps = pnp.get_gpd_grasps()
         formatted_grasps = pnp.generate_grasp_msgs(selected_grasps)
         result = gripper_client_2(8)
         print("Gripper opened")
         pnp.remove_pose_constraints()
+       # pnp.set_pose_constraints(1.57, 1.57, 1.57)
         successful_grasp = pnp.pick(formatted_grasps, verbose=True)
         if successful_grasp is not None:
             result = gripper_client_2(-8)
