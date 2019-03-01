@@ -7,7 +7,7 @@
                 <param name="scan_height" value="5"/>
                 <param name="scan_time" value="0.2"/>
                 <param name="range_min" value="0.05"/>
-                <param name="range_max" value="6.0"/>
+                <param name="range_max" value="10.0"/>
                 <param name="output_frame_id" value="summit_xl_front_rgbd_camera_depth_frame"/>
         </node>
 </launch>

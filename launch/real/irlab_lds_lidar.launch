@@ -9,7 +9,7 @@
 
     <!-- laser filter -->
     <node pkg="laser_filters" type="scan_to_scan_filter_chain" name="lds_node_front_filter">
-        <remap from="scan" to="scan_front_base"/>
+        <remap from="base_scan" to="scan_front_base"/>
         <remap from="scan_filtered" to="scan_front"/>
         <param name="target_frame" type="string" value="summit_xl_front_laser_base_link"/>
         <rosparam>
@@ -18,7 +18,15 @@
               type: LaserScanAngularBoundsFilterInPlace
               params:
                   lower_angle: 0.0 
-                  upper_angle: 1.57 
+                  upper_angle: 1.57
+            - name: range
+              type: LaserScanRangeFilter
+              params:
+                  use_message_range_limits: false
+                  lower_threshold: 0.50 # high value reduces number of points from reflections
+                  upper_threshold: 3.5
+                  lower_replacement_value: .inf # setting to inf improves clearing
+                  upper_replacement_value: .inf
         </rosparam>
     </node>
 </launch>
