@@ -12,7 +12,7 @@ from moveit_python import *
 from moveit_msgs.msg import Grasp, PlaceLocation
 from geometry_msgs.msg import PoseStamped, Vector3, Pose
 from trajectory_msgs.msg import JointTrajectoryPoint
-from visualization_msgs.msg import Marker
+from visualization_msgs.msg import MarkerArray
 from std_msgs.msg import Header, ColorRGBA
 from moveit_python.geometry import rotate_pose_msg_by_euler_angles, translate_pose_msg
 from tf.transformations import *
@@ -26,7 +26,6 @@ from math import pi
 from std_msgs.msg import String
 from moveit_commander.conversions import pose_to_list
 from tf.msg import tfMessage
-#from niryo_one_python_api.niryo_one_api import *
 import time
 from send_gripper import gripper_client
 from send_gripper import gripper_client_2
@@ -43,6 +42,7 @@ from moveit_msgs.msg import Constraints, OrientationConstraint, PositionConstrai
 from copy import deepcopy
 from pointcloud_operations import create_mesh_and_save
 from sensor_msgs import point_cloud2
+from show_pose_marker import place_marker_at_pose
 
 client = None
 from moveit_msgs.msg import MoveItErrorCodes
@@ -66,58 +66,22 @@ class GpdPickPlace(object):
         self.grasp_subscriber = rospy.Subscriber("/detect_grasps/clustered_grasps", GraspConfigList, self.grasp_callback)
         if mark_pose:
             self.mark_pose = True
-            self.marker_publisher = rospy.Publisher('visualization_marker', Marker, queue_size=10)
+            self.marker_publisher = rospy.Publisher('visualization_marker_array', MarkerArray, queue_size=1)
         self.p = PickPlaceInterface(group="manipulator", ee_group="endeffector", verbose=True, ns="/summit_xl/")
         self.tf = tf.TransformListener()
 
     def grasp_callback(self, msg):
         self.grasps = msg.grasps
-        #self.grasp_subscriber.unregister()
-       # frame_id = msg.header.frame_id
         pevent("Received new grasps")
 
     def show_grasp_pose(self, publisher, grasp_pose):
-        marker_x = Marker(
-            type=Marker.ARROW,
-            id=0,
-            lifetime=rospy.Duration(60),
-            pose=grasp_pose,
-            scale=Vector3(0.04, 0.02, 0.02),
-            header=Header(frame_id='summit_xl_base_footprint'),
-            color=ColorRGBA(1.0, 0.0, 0.0, 0.8))
-        publisher.publish(marker_x)
-
-  #  def show_graspik_pose(self, publisher, grasp_pose):
-  #      marker_x = Marker(
-  #          type=Marker.ARROW,
-  #          id=0,
-  #          lifetime=rospy.Duration(60),
-  #          pose=grasp_pose,
-  #          scale=Vector3(0.04, 0.02, 0.02),
-  #          header=Header(frame_id='summit_xl_base_footprint'),
-  #          color=ColorRGBA(0.0, 1.0, 0.0, 0.8))
-  #      publisher.publish(marker_x)
+        place_marker_at_pose(publisher, grasp_pose)
 
     def get_gpd_grasps(self):
         pevent("Waiting for grasps to arrive")
         while len(self.grasps) == 0:
             rospy.sleep(0.01)
         return self.grasps
-
-#function for dyanamic tf listener
-    def tf_listen(self, pose):
-        if self.tf.frameExists("arm_camera_color_optical_frame") and self.tf.frameExists("summit_xl_base_footprint"):
-            t = self.tf.getLatestCommonTime("arm_camera_color_optical_frame", "summit_xl_base_footprint")
-           # position, quaternion = self.tf.lookupTransform("summit_xl_base_footprint", "arm_camera_depth_optical_frame", t)
-            #p1 = geometry_msgs.msg.PoseStamped()
-            #p1.header.frame_id = "arm_camera_depth_optical_frame"
-            #p1.pose.orientation.w = 1.0  # Neutral orientation
-            p_in_base = tf_listener_.transformPose("/summit_xl_base_footprint", pose)
-        #    print "Position of the camera in the robot base:"
-         #   print p_in_base
-            return p_in_base
-           # print position, quaternion
-           # return quaternion
 
     def generate_grasp_msgs(self, selected_grasps):
             self.grasps = []
@@ -149,20 +113,6 @@ class GpdPickPlace(object):
                 gp.pose.orientation.z = float(quat.elements[3])
                 gp.pose.orientation.w = float(quat.elements[0])
                 g.grasp_pose = gp
-                #            ipdb.set_trace()
-                #                gp_in_base = self.tf_listen(gp)
-                #                resp = gik.get_ik(gp_in_base)
-                #                #   rospy.loginfo(str(resp))
-                #                err_code = resp.error_code.val
-                #                self.show_grasp_pose(self.marker_publisher, gp.pose)
-                #                rospy.sleep(1)
-#                self.show_graspik_pose(self.marker_publisher, gp_in_base.pose)
-#                rospy.sleep(1)
-                #                rospy.loginfo("IK result on grasp is: " + moveit_error_dict[err_code])
-                #                if (err_code == -31):
-                #                    cont += 1
-                #                elif (err_code == 1):
-                #                g.grasp_pose = gp
                 g.pre_grasp_approach.direction.header.frame_id = "arm_ee_link"
                 g.pre_grasp_approach.direction.vector.x = 1.0
                 g.pre_grasp_approach.min_distance = 0.06
@@ -186,11 +136,8 @@ class GpdPickPlace(object):
                # g.allowed_touch_objects = ["<octomap>", "obj"]
                 g.allowed_touch_objects = ["obj"]
              #   g.max_contact_force = 0.0
-                 # g.grasp_quality = grasps[0].score.data  perche 0 e non i????
                 g.grasp_quality = selected_grasps[0].score.data
                 formatted_grasps.append(g)
-                #else:
-                #    pass
             print(repr(cont) + " grasps out of " + repr(tot_grasps) + " removed because of no IK_SOLUTION error")
             # sort grasps using z (get higher grasps first)
             formatted_grasps.sort(key=lambda grasp: grasp.grasp_pose.pose.position.z, reverse=True)
@@ -209,7 +156,7 @@ class GpdPickPlace(object):
         self.add_object_mesh()
         for single_grasp in grasps_list:
             if self.mark_pose:
-                self.show_grasp_pose(self.marker_publisher, single_grasp.grasp_pose.pose)
+                self.show_grasp_pose(self.marker_publisher, single_grasp.grasp_pose)
                 rospy.sleep(1)
             pevent("Planning grasp:")
             pprint(single_grasp.grasp_pose)
@@ -255,9 +202,6 @@ class GpdPickPlace(object):
 #                    exit(1)
         ### end code NOT using pick interface ###
 
-
-       # pevent("All grasps failed. Aborting")
-       # exit(1)
         self.grasps = []
 
     def place2(self, place_pose):
@@ -321,7 +265,6 @@ class GpdPickPlace(object):
         places = list()
         l = PlaceLocation()
         l.id = "dupadupa"
-        #l.place_pose.header.frame_id = "arm_camera_color_optical_frame"
         l.place_pose.header.frame_id = "summit_xl_base_footprint"
         q = Quaternion(initial_place_pose.grasp_pose.pose.orientation.w,
                         initial_place_pose.grasp_pose.pose.orientation.x,
@@ -410,8 +353,8 @@ class GpdPickPlace(object):
         pose_goal.orientation.z = 0
         pose_goal.orientation.w = 1
         group.set_start_state_to_current_state()
-        group.set_goal_tolerance(0.01);
-        group.set_planning_time(20);
+        group.set_goal_tolerance(0.01)
+        group.set_planning_time(20)
         group.set_pose_target(pose_goal)
 
         # The go command can be called with joint values, poses, or without any
@@ -433,8 +376,6 @@ class GpdPickPlace(object):
         pose_goal.orientation.z = 0.478
         pose_goal.orientation.w = 0.536
         group.set_start_state_to_current_state()
-        group.set_goal_tolerance(0.01);
-        group.set_planning_time(10);
         group.set_pose_target(pose_goal)
 
         # The go command can be called with joint values, poses, or without any
@@ -533,10 +474,11 @@ if __name__ == "__main__":
     group_name = "manipulator"
     group = moveit_commander.MoveGroupCommander(group_name, robot_description="/summit_xl/robot_description", ns="/summit_xl")
     group.set_planner_id("RRTConnect")
-    group.set_planning_time(2)
   #  group.set_max_velocity_scaling_factor(0.05)
    # group.set_goal_orientation_tolerance(0.01)
   #  group.set_goal_position_tolerance(0.01)
+    group.set_goal_tolerance(0.01);
+    group.set_planning_time(10);
     planning = PlanningSceneInterface("summit_xl_base_footprint", ns="/summit_xl/")
     rospy.sleep(1)
     num_objects = 5
@@ -548,6 +490,8 @@ if __name__ == "__main__":
     for i in range (0, num_objects):
         # Subscribe for grasps
         print("--- Move Arm to Initial Position---")
+        pnp.remove_pose_constraints()
+        pnp.set_pose_constraints(3.14 / 2, 3.14/4*3, 3.14/4*3 )
         while (pnp.initial_pose() == False):
             print("Initial arm positioning failed!")
         print("Initial arm positioning performed")
