@@ -3,7 +3,7 @@
 
 	<!-- roslaunch arguments -->
 	<arg name="debug" default="false"/>
-	<arg name="launch_rviz" default="false"/>
+	<arg name="launch_rviz_nav" default="false"/>
 	<arg name="world" default="$(find icclab_summit_xl)/worlds/summit_xl.world"/>
 	<!-- located in summit_xl_gazebo/worlds -->
 
@@ -17,7 +17,7 @@
 		<arg name="gui" value="true"/>
 	</include>
 
-	<!-- launch rviz -->
-	<node if="$(arg launch_rviz)" name="rviz" pkg="rviz" type="rviz" required="true" args="-d $(find icclab_summit_xl)/rviz/irlab_summitxl.rviz"/>
+	<!-- launch rviz with navigation config-->
+	<node if="$(arg launch_rviz_nav)" name="rviz" pkg="rviz" type="rviz" required="true" args="-d $(find icclab_summit_xl)/rviz/irlab_summitxl.rviz"/>
 
 </launch>

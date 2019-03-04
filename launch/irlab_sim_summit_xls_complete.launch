@@ -7,7 +7,7 @@
 
 	 <!-- By default, we are not in debug mode -->
 	<arg name="debug" default="false" />  
-	<arg name="launch_rviz" default="true"/>
+	<arg name="launch_rviz_nav" default="false"/>
 	<arg name="gazebo_world" default="$(find icclab_summit_xl)/worlds/summit_xl_office.world"/>
 
         <!-- Nav/Map Stack -->
@@ -23,7 +23,7 @@
 
 	<include file="$(find icclab_summit_xl)/launch/sim/irlab_summit_xl_gazebo.launch">
 		<!-- general args -->
-		<arg name="launch_rviz" value="$(arg launch_rviz)"/>
+		<arg name="launch_rviz_nav" value="$(arg launch_rviz_nav)"/>
 		<arg name="gazebo_world" value="$(arg gazebo_world)"/>
 		<arg name="ros_planar_move_plugin" value="$(arg ros_planar_move_plugin)"/>
 		<!-- robot args -->

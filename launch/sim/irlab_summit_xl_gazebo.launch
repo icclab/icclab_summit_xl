@@ -5,7 +5,7 @@
 
 	<!--launch_navigation and launch_navigation_nomap args are exclusive
 	and they are (or not) launched for all robots-->
-	<arg name="launch_rviz" default="true"/>
+	<arg name="launch_rviz_nav" default="true"/>
 	<arg name="gazebo_world" default="$(find icclab_summit_xl)/worlds/summit_xl_office.world"/>
 	<arg name="debug" default="false"/>
 	<arg name="ros_planar_move_plugin" default="false"/>
@@ -38,7 +38,7 @@
 
 	<!-- gazebo simulation and rviz visualization-->
 	<include file="$(find icclab_summit_xl)/launch/sim/irlab_gazebo_rviz.launch">
-		<arg name="launch_rviz" value="$(arg launch_rviz)"/>
+		<arg name="launch_rviz_nav" value="$(arg launch_rviz_nav)"/>
 		<arg name="world" value="$(arg gazebo_world)"/>
 		<arg name="debug" value="$(arg debug)"/>
 	</include>
