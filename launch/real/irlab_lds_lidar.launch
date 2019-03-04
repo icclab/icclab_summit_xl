@@ -23,10 +23,20 @@
               type: LaserScanRangeFilter
               params:
                   use_message_range_limits: false
-                  lower_threshold: 0.50 # high value reduces number of points from reflections
+                  lower_threshold: 0.15 # hardware limit is 0.12
                   upper_threshold: 3.5
                   lower_replacement_value: .inf # setting to inf improves clearing
                   upper_replacement_value: .inf
+            - name: box
+              type: LaserScanBoxFilter
+              params:
+                  box_frame: summit_xl_front_laser_base_link
+                  min_x: -0.10
+                  max_x: 0.50
+                  min_y: -0.10
+                  max_y: 0.60
+                  min_z: -1.0
+                  max_z: 1.0
         </rosparam>
     </node>
 </launch>
