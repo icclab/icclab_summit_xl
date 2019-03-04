@@ -1,89 +1,27 @@
 <launch>
 
-  <!-- By default, we do not start a database (it can be large) -->
-  <arg name="db" default="false" />
-  <!-- Allow user to specify database location -->
-  <arg name="db_path" default="$(find icclab_summit_xl)/default_warehouse_mongo_db" />
+        <!-- GAZEBO -->
+        <arg name="ros_planar_move_plugin" default="false"/> <!-- disables gazebo ros_control plugin -->
+        <arg name="gazebo_world"           default="$(find icclab_summit_xl)/worlds/summit_xl_grasping.world"/>
 
-  <!-- By default, we are not in debug mode -->
-  <arg name="debug" default="false" />
-  <arg name="simulation" default="true"/>
+        <!-- ARM CONTROL PARAMS -->
+        <arg name="launch_rviz_grasping"   default="true"/>
+        <arg name="enable_arm"             default="true"/>
+        <arg name="db"                     default="false"/> <!-- By default, we do not start a database (it can be large) -->
+        <arg name="db_path"                default="$(find icclab_summit_xl)/default_warehouse_mongo_db"/> <!-- Allow user to specify database location -->
+        <arg name="debug"                  default="false"/> <!-- By default, we are not in debug mode -->
+        <arg name="simulation"             default="true"/>
 
-  <!--
-  By default, hide joint_state_publisher's GUI
-
-  MoveIt!'s "demo" mode replaces the real robot driver with the joint_state_publisher.
-  The latter one maintains and publishes the current joint configuration of the simulated robot.
-  It also provides a GUI to move the simulated robot around "manually".
-  This corresponds to moving around the real robot without the use of MoveIt.
-  -->
-  <arg name="use_gui" default="false" />
-  <arg name="gazebo_world" default="$(find icclab_summit_xl)/worlds/summit_xl_grasping.world"/>
-  <arg name="localization_robot_a" default="false"/>
-	<arg name="gmapping_robot_a" default="false"/>
-	<arg name="move_base_robot_a" default="false"/>
-	<arg name="amcl_and_mapserver_a" default="false"/>
-	<arg name="xacro_robot_a" default="irlab_summit_xls_std.urdf.xacro"/>
-  
-  <include file="$(find icclab_summit_xl)/launch/sim/irlab_summit_xl_gazebo.launch">
-		<!-- general args -->
-		<arg name="launch_rviz" value="false"/>
-		<arg name="gazebo_world" value="$(arg gazebo_world)"/>
-		<!-- robot args -->
-		<arg name="localization_robot_a" value="$(arg localization_robot_a)"/>
-		<arg name="gmapping_robot_a" value="$(arg gmapping_robot_a)"/>
-		<arg name="move_base_robot_a" value="$(arg move_base_robot_a)"/>
-		<arg name="amcl_and_mapserver_a" value="$(arg amcl_and_mapserver_a)"/>
-		<arg name="xacro_robot_a" value="$(arg xacro_robot_a)"/>
-	</include>
-  
-  <arg name="id_robot" default="summit_xl"/>
-	<group ns="$(arg id_robot)">
-
-    <!-- Load the URDF, SRDF and other .yaml configuration files on the param server -->
-    <include file="$(find icclab_summit_xl)/launch/planning_context.launch">
-      <arg name="load_robot_description" value="true"/>
-      <arg name="simulation" value="$(arg simulation)"/>
-    </include>
-<!--    <include file="$(find icclab_summit_xl)/launch/planning_context.launch">-->
-<!--      <arg name="load_robot_description" value="true"/>-->
-<!--    </include>-->
-
-    <!-- Run the main MoveIt executable without trajectory execution (we do not have controllers configured by default) -->
-    <include file="$(find icclab_summit_xl)/launch/move_group.launch">
-      <arg name="allow_trajectory_execution" value="true"/>
-      <arg name="fake_execution" value="false"/>
-      <arg name="info" value="true"/>
-      <arg name="debug" value="$(arg debug)"/>
-    </include>
-
-    <!-- Controller parameters-->   
-    <rosparam file="$(find icclab_summit_xl)/config/controllers.yaml"/> 
-
-    <!-- Run Rviz and load the default config to see the state of the move_group node -->
-     <arg name="command_args" value="-d $(find icclab_summit_xl)/rviz/grasping.rviz" />
-     <node name="rviz_grasping" pkg="rviz" type="rviz" args="$(arg command_args)" respawn="false" output="screen">
-      <rosparam command="load" file="$(find icclab_summit_xl)/config/kinematics.yaml"/>
-    </node>
-    
-    <!-- The semantic description that corresponds to the URDF -->
-<!--    <arg name="robot_description" default="robot_description"/>-->
-<!--    <param name="$(arg robot_description)_semantic" textfile="$(find icclab_summit_xl)/config/summit_xl.srdf" />-->
-    
-    <!-- run point cloud filtering--> 
-    <node name="pointcloud_filtering" pkg="irlab_point_cloud_filtering" type="point_cloud_filtering_server" respawn="false" args="/summit_xl/arm_camera/depth_registered/points" output="screen"/>
-
-   <!-- import octomap sensors -->
-    <include ns="move_group"  file="$(find icclab_summit_xl)/launch/include/sensor_manager.launch.xml"/>
-
-    <!-- If database loading was enabled, start mongodb as well -->
-    <include file="$(find icclab_summit_xl)/launch/default_warehouse_db.launch" if="$(arg db)">
-      <arg name="moveit_warehouse_database_path" value="$(arg db_path)"/>
-    </include>
-  
-  </group>
-  
-  <!-- run grasp detection -->
-  <include file="$(find icclab_summit_xl)/launch/include/grasp_generation.launch.xml"/>
+        <!--======================== LAUNCH SIM COMPLETE ==================================-->
+        <include file="$(find icclab_summit_xl)/launch/irlab_sim_summit_xls_complete.launch">
+                <arg name="ros_planar_move_plugin" value="$(arg ros_planar_move_plugin)"/>
+                <arg name="gazebo_world"           value="$(arg gazebo_world)"/>
+                <arg name="launch_rviz_grasping"   value="$(arg launch_rviz_grasping)"/>
+                <arg name="enable_arm"             value="$(arg enable_arm)"/>
+                <arg name="db"                     value="$(arg db)"/>
+                <arg name="db_path"                value="$(arg db_path)"/>
+                <arg name="debug"                  value="$(arg debug)"/>
+                <arg name="simulation"             value="$(arg simulation)"/>
+        </include>
 
 </launch>
