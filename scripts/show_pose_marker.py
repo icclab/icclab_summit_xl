@@ -27,10 +27,10 @@ def place_marker_at_pose(publisher, poseStamped):
     header=poseStamped.header,
     color=ColorRGBA(1.0, 0.0, 0.0, 0.8))
   markerArray.markers.append(marker_x)
-  # RPY to convert: 90deg around z -> we get y from x
+  # RPY to convert: -90deg around z -> we get y from x
   quat_tf = poseStamped.pose.orientation
   quat_x = [quat_tf.x, quat_tf.y, quat_tf.z, quat_tf.w]
-  quat_rot = quaternion_from_euler(0, 0, 1.5707)
+  quat_rot = quaternion_from_euler(0, 0, -1.5707)
   quat_y = quaternion_multiply(quat_rot, quat_x)
   marker_y = Marker(
     type=Marker.ARROW,
@@ -45,8 +45,8 @@ def place_marker_at_pose(publisher, poseStamped):
   marker_y.pose.orientation.z = quat_y[2]
   marker_y.pose.orientation.w = quat_y[3]
   markerArray.markers.append(marker_y)
-  # RPY to convert: -90deg around y -> we get z from x
-  quat_rot = quaternion_from_euler(0, -1.5707, 0)
+  # RPY to convert: +90deg around y -> we get z from x
+  quat_rot = quaternion_from_euler(0, 1.5707, 0)
   quat_z = quaternion_multiply(quat_rot, quat_x)
   marker_z = Marker(
     type=Marker.ARROW,
