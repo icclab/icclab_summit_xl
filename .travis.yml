@@ -4,6 +4,7 @@ services:
 install:
 - git clone https://github.com/icclab/rosdocked-irlab
 before_script:
+- echo $(locate rosdocked-irlab)
 - cd ~/rosdocked-irlab/workspace_included
 #- ./build.sh
 script: ./.ci/run_tests.sh
