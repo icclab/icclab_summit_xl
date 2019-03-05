@@ -1,0 +1,14 @@
+language: python
+services:
+- docker
+install:
+- git clone https://github.com/icclab/rosdocked-irlab
+before_script:
+- cd ~/rosdocked-irlab/workspace_included
+#- ./build.sh
+script: ./.ci/run_tests.sh
+#deploy:
+#  provider: script
+#  script: bash ./.ci/docker_push.sh
+#  on:
+#    branch: master
