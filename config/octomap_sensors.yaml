@@ -1,6 +1,6 @@
 sensors:
   - sensor_plugin: occupancy_map_monitor/PointCloudOctomapUpdater
-    point_cloud_topic: /summit_xl/arm_camera/depth_registered/points #should be depth_registered on the summit_xl robot
+    point_cloud_topic: /summit_xl/arm_camera/depth_registered/points_throttled #should be depth_registered on the summit_xl robot
     max_range: 0.9
     point_subsample: 1
     padding_offset: 0.05
