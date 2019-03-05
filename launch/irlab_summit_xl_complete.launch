@@ -109,6 +109,9 @@
                   <arg name="accel_fps" value="6"/>
                 </include>
 
+  <node name="foo_throttler_front" type="throttle" pkg="topic_tools" args="messages /summit_xl/front_rgbd_camera/depth/points 1 /summit_xl/front_rgbd_camera/depth/points_throttled" />
+
+  <node name="foo_throttler_arm" type="throttle" pkg="topic_tools" args="messages /summit_xl/arm_camera/depth_registered/points 1 /summit_xl/arm_camera/depth_registered/points_throttled" />
 
 		<!--================================== NAV STACK ==================================-->
 		<!-- teleop - manually control robot with keyboard -->
