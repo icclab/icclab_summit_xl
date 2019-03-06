@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-cd ~/rosdocked-irlab/workspace_included
-#./run-with-dev.sh
+ls
+hostname
 
 exit 0
