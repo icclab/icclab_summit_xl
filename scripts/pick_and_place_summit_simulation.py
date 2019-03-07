@@ -43,7 +43,7 @@ from copy import deepcopy
 from pointcloud_operations import create_mesh_and_save
 from sensor_msgs import point_cloud2
 from show_pose_marker import place_marker_at_pose
-
+from std_srvs.srv import Empty
 client = None
 from moveit_msgs.msg import MoveItErrorCodes
 
@@ -61,6 +61,7 @@ class GpdPickPlace(object):
     finger_indexes = None
     gripper_closed = False
     global objects_grasped_not_placed
+    grasps_received = False
 
     def __init__(self, mark_pose=False):
         self.grasp_subscriber = rospy.Subscriber("/detect_grasps/clustered_grasps", GraspConfigList, self.grasp_callback)
@@ -72,14 +73,20 @@ class GpdPickPlace(object):
 
     def grasp_callback(self, msg):
         self.grasps = msg.grasps
-        pevent("Received new grasps")
+        self.grasps_received = True
+        if (len(msg.grasps)==0):
+            pevent("No grasps found, aborting!")
+        else:
+            pevent("Received new grasps")
+
 
     def show_grasp_pose(self, publisher, grasp_pose):
         place_marker_at_pose(publisher, grasp_pose)
 
     def get_gpd_grasps(self):
         pevent("Waiting for grasps to arrive")
-        while len(self.grasps) == 0:
+      #  while len(self.grasps) == 0:
+        while (self.grasps_received == False):
             rospy.sleep(0.01)
         return self.grasps
 
@@ -362,7 +369,9 @@ class GpdPickPlace(object):
         success = group.go(wait=True)
         result = gripper_client_2(8)
         group.clear_pose_targets()
+        group.stop()
         print("Gripper opened")
+        group.detach_object("obj")
         return success
 
     def initial_pose(self):
@@ -473,21 +482,26 @@ if __name__ == "__main__":
     pnp = GpdPickPlace(mark_pose=True)
     group_name = "manipulator"
     group = moveit_commander.MoveGroupCommander(group_name, robot_description="/summit_xl/robot_description", ns="/summit_xl")
-    group.set_planner_id("RRTConnect")
+    group.set_planner_id("BiTRRT")
   #  group.set_max_velocity_scaling_factor(0.05)
    # group.set_goal_orientation_tolerance(0.01)
   #  group.set_goal_position_tolerance(0.01)
-    group.set_goal_tolerance(0.01);
-    group.set_planning_time(10);
+    group.set_goal_tolerance(0.01)
+    group.set_planning_time(10)
     planning = PlanningSceneInterface("summit_xl_base_footprint", ns="/summit_xl/")
+    planning.clear()
     rospy.sleep(1)
     num_objects = 5
     succesfull_objects_placements = 0
     objects_grasped_lost = 0
     objects_grasped_not_placed = 0
+    rospy.wait_for_service('/summit_xl/clear_octomap')
+    clear_octomap = rospy.ServiceProxy('/summit_xl/clear_octomap', Empty)
+    clear_octomap()
 
     #num_view = 1
     for i in range (0, num_objects):
+        planning.clear()
         # Subscribe for grasps
         print("--- Move Arm to Initial Position---")
         pnp.remove_pose_constraints()
@@ -499,6 +513,7 @@ if __name__ == "__main__":
         call_pointcloud_filter_service()
         pnp.wait_for_mesh_and_save()
     # Wait for grasps from gpd, wrap them into Grasp msg format and start picking
+        pnp.grasps_received = False
         selected_grasps = pnp.get_gpd_grasps()
         formatted_grasps = pnp.generate_grasp_msgs(selected_grasps)
         result = gripper_client_2(8)
@@ -510,9 +525,10 @@ if __name__ == "__main__":
             result = gripper_client_2(-8)
             print("Gripper closed")
             pnp.start_grasp_check()
-            success = pnp.drop_obj_on_robot()
-            if success == False:
-                objects_grasped_not_placed += 1
+            while (pnp.drop_obj_on_robot() == False):
+                print("Object placing failed!")
+            #if success == False:
+            #    objects_grasped_not_placed += 1
             result = gripper_client_2(8)
             print("Gripper opened")
 

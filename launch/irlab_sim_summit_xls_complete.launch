@@ -91,6 +91,11 @@
 			<arg name="moveit_warehouse_database_path" value="$(arg db_path)"/>
 		</include>
 
+
+  <node name="foo_throttler_front" type="throttle" pkg="topic_tools" args="messages /summit_xl/front_rgbd_camera/depth/points 1 /summit_xl/front_rgbd_camera/depth/points_throttled" />
+
+  <node name="foo_throttler_arm" type="throttle" pkg="topic_tools" args="messages /summit_xl/arm_camera/depth_registered/points 1 /summit_xl/arm_camera/depth_registered/points_throttled" />
+
 	</group>
 
 	<!-- run grasp detection -->
