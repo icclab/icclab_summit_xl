@@ -1,5 +1,4 @@
 import rospy
-import ipdb
 import numpy as np
 import copy
 import tf
@@ -15,8 +14,6 @@ from geometry_msgs.msg import PoseStamped, Vector3, Pose
 from trajectory_msgs.msg import JointTrajectoryPoint
 from visualization_msgs.msg import Marker
 from std_msgs.msg import Header, ColorRGBA
-from gpd_controller_summit import GpdGrasps
-from robot_controller import RobotPreparation
 from moveit_python.geometry import rotate_pose_msg_by_euler_angles, translate_pose_msg
 from tf.transformations import *
 import geometry_msgs.msg #for pose2 simple
@@ -29,7 +26,6 @@ from math import pi
 from std_msgs.msg import String
 from moveit_commander.conversions import pose_to_list
 from tf.msg import tfMessage
-#from niryo_one_python_api.niryo_one_api import *
 import time
 from send_gripper import gripper_client
 from send_gripper import gripper_client_2
@@ -48,7 +44,7 @@ from moveit_msgs.msg import Constraints, OrientationConstraint, PositionConstrai
 from copy import deepcopy
 from pointcloud_operations import create_mesh_and_save
 from sensor_msgs import point_cloud2
-from get_ik import GetIK
+from std_srvs.srv import Empty
 
 client = None
 from moveit_msgs.msg import MoveItErrorCodes
@@ -63,10 +59,11 @@ for name in MoveItErrorCodes.__dict__.keys():
 class GpdPickPlace(object):
     grasps = []
     mark_pose = False
-    grasp_offset = -0.15
+    grasp_offset = -0.11
     finger_indexes = None
     gripper_closed = False
     global objects_grasped_not_placed
+    grasps_received = False
 
     def __init__(self, mark_pose=False):
         self.grasp_subscriber = rospy.Subscriber("/detect_grasps/clustered_grasps", GraspConfigList, self.grasp_callback)
@@ -78,7 +75,12 @@ class GpdPickPlace(object):
 
     def grasp_callback(self, msg):
         self.grasps = msg.grasps
-        pevent("Received new grasps")
+        self.grasps_received = True
+        if (len(msg.grasps)==0):
+            pevent("No grasps found, aborting!")
+        else:
+            pevent("Received new grasps")
+
 
     def show_grasp_pose(self, publisher, grasp_pose):
         marker_x = Marker(
@@ -93,7 +95,8 @@ class GpdPickPlace(object):
 
     def get_gpd_grasps(self):
         pevent("Waiting for grasps to arrive")
-        while len(self.grasps) == 0:
+      #  while len(self.grasps) == 0:
+        while (self.grasps_received == False):
             rospy.sleep(0.01)
         return self.grasps
 
@@ -129,8 +132,8 @@ class GpdPickPlace(object):
                 g.grasp_pose = gp
                 g.pre_grasp_approach.direction.header.frame_id = "arm_ee_link"
                 g.pre_grasp_approach.direction.vector.x = 1.0
-                g.pre_grasp_approach.min_distance = 0.06
-                g.pre_grasp_approach.desired_distance = 0.1
+                g.pre_grasp_approach.min_distance = 0.04
+                g.pre_grasp_approach.desired_distance = 0.08
                 #   g.pre_grasp_posture.joint_names = ["gripper_right_finger_joint", "gripper_left_finger_joint"]
                 #   g.pre_grasp_posture.joint_names = ["arm_tool0"]
                 #     g.pre_grasp_posture.header.frame_id = "arm_wrist_3_link"
@@ -150,8 +153,7 @@ class GpdPickPlace(object):
                 #  g.grasp_posture.header.frame_id = "hand_link"
 
                 g.allowed_touch_objects = ["obj"]
-                g.max_contact_force = 0.0
-                # g.grasp_quality = grasps[0].score.data  perche 0 e non i????
+               # g.max_contact_force = 0.0
                 g.grasp_quality = selected_grasps[0].score.data
                 formatted_grasps.append(g)
 #                else:
@@ -182,42 +184,42 @@ class GpdPickPlace(object):
             group.detach_object("obj")
 
             ### start code using pick interface ###
-            # pick_result = group.pick("obj", single_grasp)
-            # pevent("Planner returned: " + get_moveit_error_code(pick_result))
-            # if pick_result == 1:
-            #    pevent("Grasp successful!")
-            #    group.attach_object("obj")
-            #    group.stop()
-            #    group.clear_pose_targets()
-            #    return single_grasp
-            # else:
-            #    failed_grasps += 1
-            #    group.stop()
-            #    group.clear_pose_targets()
+            pick_result = group.pick("obj", single_grasp)
+            pevent("Planner returned: " + get_moveit_error_code(pick_result))
+            if pick_result == 1:
+               pevent("Grasp successful!")
+               group.attach_object("obj")
+               group.stop()
+               group.clear_pose_targets()
+               return single_grasp
+            else:
+               failed_grasps += 1
+               group.stop()
+               group.clear_pose_targets()
             ### end code using pick interface ###
 
             ### start code NOT using pick interface ###
-            group.set_pose_target(single_grasp.grasp_pose.pose)
-            plan = group.plan()
-            if (len(plan.joint_trajectory.points) != 0):
-                inp = raw_input("Have a look at the planned motion. Do you want to proceed? y/n: ")[0]
-                if (inp == 'y'):
-                    pevent("Executing grasp: ")
-                    pick_result = group.execute(plan, wait=True)
-                    if pick_result == True:
-                        pevent("Grasp successful!")
-                        group.attach_object("obj")
-                        return single_grasp
-                    else:
-                        failed_grasps += 1
-                    group.stop()
-                    group.clear_pose_targets()
-                    group.clear_path_constraints()
-                elif (inp == 'exit'):
-                    group.stop()
-                    group.clear_pose_targets()
-                    group.clear_path_constraints()
-                    exit(1)
+            # group.set_pose_target(single_grasp.grasp_pose.pose)
+            # plan = group.plan()
+            # if (len(plan.joint_trajectory.points) != 0):
+            #     inp = raw_input("Have a look at the planned motion. Do you want to proceed? y/n: ")[0]
+            #     if (inp == 'y'):
+            #         pevent("Executing grasp: ")
+            #         pick_result = group.execute(plan, wait=True)
+            #         if pick_result == True:
+            #             pevent("Grasp successful!")
+            #             group.attach_object("obj")
+            #             return single_grasp
+            #         else:
+            #             failed_grasps += 1
+            #         group.stop()
+            #         group.clear_pose_targets()
+            #         group.clear_path_constraints()
+            #     elif (inp == 'exit'):
+            #         group.stop()
+            #         group.clear_pose_targets()
+            #         group.clear_path_constraints()
+            #         exit(1)
         ### end code NOT using pick interface ###
 
 
@@ -451,6 +453,30 @@ class GpdPickPlace(object):
         self.fingers_subscriber.unregister()
         return self.gripper_closed
 
+    def drop_obj_on_robot(self):
+        pevent("Dropping object on robot")
+        pose_goal = geometry_msgs.msg.Pose()
+        pose_goal.position.x = -0.1
+        pose_goal.position.y = 0
+        pose_goal.position.z = 0.7
+        pose_goal.orientation.x = 0
+        pose_goal.orientation.y = 0
+        pose_goal.orientation.z = 0
+        pose_goal.orientation.w = 1
+        group.set_start_state_to_current_state()
+        group.set_goal_tolerance(0.01)
+        group.set_planning_time(5)
+        group.set_pose_target(pose_goal)
+
+        # The go command can be called with joint values, poses, or without any
+        # parameters if you have already set the pose or joint target for the group
+        success = group.go(wait=True)
+        group.clear_pose_targets()
+        group.stop()
+        print("Gripper opened")
+        group.detach_object("obj")
+        return success
+
 
 if __name__ == "__main__":
     start_time = datetime.datetime.now()
@@ -460,52 +486,62 @@ if __name__ == "__main__":
     pnp = GpdPickPlace(mark_pose=True)
     group_name = "manipulator"
     group = moveit_commander.MoveGroupCommander(group_name, robot_description="/summit_xl/robot_description", ns="/summit_xl")
-    group.set_planner_id("RRTConnect")
-    group.set_planning_time(2)
+   # group.set_planner_id("BiEST")
+    group.set_planning_time(5)
   #  group.set_max_velocity_scaling_factor(0.05)
+    group.set_goal_tolerance(0.01)
    # group.set_goal_orientation_tolerance(0.01)
   #  group.set_goal_position_tolerance(0.01)
     planning = PlanningSceneInterface("summit_xl_base_footprint", ns="/summit_xl/")
+    planning.clear()
     rospy.sleep(1)
-    num_objects = 1
+    num_objects = 2
     succesfull_objects_placements = 0
     objects_grasped_lost = 0
     objects_grasped_not_placed = 0
+    rospy.wait_for_service('/summit_xl/clear_octomap')
+    clear_octomap = rospy.ServiceProxy('/summit_xl/clear_octomap', Empty)
+    clear_octomap()
 
     for i in range (0, num_objects):
+        planning.clear()
         # Subscribe for grasps
         print("--- Move Arm to Initial Position---")
       #  print "Please make sure that your robot can move freely in vertical before proceeding!"
       #  inp = raw_input("Do you want to proceed? y/n: ")[0]
       #  if (inp == 'y'):
         pnp.remove_pose_constraints()
+
        # pnp.set_pose_constraints(3.14 / 2, 3.14/4*3, 3.14/4*3 )
-        if (pnp.initial_pose() == True):
-            print("Initial arm positioning performed")
-        else:
-            print("Initial arm positioning failed. Aborting")
+        while (pnp.initial_pose() == False):
+            print("Initial arm positioning failed")
+        #else:
+        print("Initial arm positioning succesful.")
         #we have to add a check, so that this is called only if the initial_pose was successful
         call_pointcloud_filter_service()
         pnp.wait_for_mesh_and_save()
     # Wait for grasps from gpd, wrap them into Grasp msg format and start picking
+        pnp.grasps_received = False
         selected_grasps = pnp.get_gpd_grasps()
         formatted_grasps = pnp.generate_grasp_msgs(selected_grasps)
         open_gripper_summit()
         print("Gripper opened")
         pnp.remove_pose_constraints()
-        pnp.set_pose_constraints(1.57, 1.57, 1.57)
+        #pnp.set_pose_constraints(1.57, 1.57, 1.57)
         successful_grasp = pnp.pick(formatted_grasps, verbose=True)
         if successful_grasp is not None:
             close_gripper_summit()
             print("Gripper closed")
     # Place object with successful grasp pose as the starting point
             pnp.remove_pose_constraints()
-            pnp.set_pose_constraints(3.14 , 3.14 / 4 * 3, 3.14 / 4 * 3)
-            success=pnp.place2(successful_grasp)
-            if success == False:
-                objects_grasped_not_placed += 1
-            else:
-                succesfull_objects_placements += 1
+          #  pnp.set_pose_constraints(3.14 , 3.14 / 4 * 3, 3.14 / 4 * 3)
+          #  success=pnp.place2(successful_grasp)
+            while (pnp.drop_obj_on_robot() == False):
+                print("Object placing failed!")
+          #  if success == False:
+          #      objects_grasped_not_placed += 1
+          #  else:
+            succesfull_objects_placements += 1
             open_gripper_summit()
             print("Gripper opened")
 
