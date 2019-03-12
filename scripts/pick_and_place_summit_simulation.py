@@ -360,7 +360,7 @@ class GpdPickPlace(object):
         orientation_constraint.header = pose.header
         orientation_constraint.link_name = group.get_end_effector_link()
         orientation_constraint.orientation = pose.pose.orientation
-        orientation_constraint.absolute_x_axis_tolerance = 0.1
+        orientation_constraint.absolute_x_axis_tolerance = 3.14
         orientation_constraint.absolute_y_axis_tolerance = 0.1
         orientation_constraint.absolute_z_axis_tolerance = 0.1
         #orientation_constraint.absolute_z_axis_tolerance = 3.14 #ignore this axis
@@ -554,7 +554,7 @@ if __name__ == "__main__":
     pnp = GpdPickPlace(mark_pose=True)
     group_name = "manipulator"
     group = moveit_commander.MoveGroupCommander(group_name, robot_description="/summit_xl/robot_description", ns="/summit_xl")
-  #  group.set_planner_id("BiTRRT")
+    group.set_planner_id("BiTRRT")
   #  group.set_max_velocity_scaling_factor(0.05)
    # group.set_goal_orientation_tolerance(0.01)
     group.set_planning_time(20)
@@ -601,10 +601,10 @@ if __name__ == "__main__":
             print("Gripper closed")
             pnp.start_grasp_check()
             pnp.remove_pose_constraints()
-            pnp.start_con_setup()
-            rospy.sleep(1)
-            pnp.set_pose_constraints(3.14, 1.0, 1.0)
-            pnp.stop_con_setup()
+         #   pnp.start_con_setup()
+         #   rospy.sleep(1)
+         #   pnp.set_pose_constraints(3.14, 1.0, 1.0)
+         #   pnp.stop_con_setup()
             pnp.set_upright_constraints(successful_grasp.grasp_pose)
             while (pnp.drop_obj_on_robot(successful_grasp) == False):
                 print("Object placing failed!")
