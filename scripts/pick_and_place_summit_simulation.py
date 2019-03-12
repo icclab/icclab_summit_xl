@@ -1,6 +1,6 @@
 import rospy
 import numpy as np
-import ipdb
+#import ipdb
 import copy
 import tf
 import datetime
@@ -554,7 +554,7 @@ if __name__ == "__main__":
     pnp = GpdPickPlace(mark_pose=True)
     group_name = "manipulator"
     group = moveit_commander.MoveGroupCommander(group_name, robot_description="/summit_xl/robot_description", ns="/summit_xl")
-    group.set_planner_id("BiTRRT")
+  #  group.set_planner_id("BiTRRT")
   #  group.set_max_velocity_scaling_factor(0.05)
    # group.set_goal_orientation_tolerance(0.01)
     group.set_planning_time(20)
