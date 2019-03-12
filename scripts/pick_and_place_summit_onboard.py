@@ -57,7 +57,7 @@ for name in MoveItErrorCodes.__dict__.keys():
 class GpdPickPlace(object):
     grasps = []
     mark_pose = False
-    grasp_offset = -0.1
+    grasp_offset = -0.08
     finger_indexes = None
     con_joints_indexes = None
     joint1_con = 0
@@ -386,16 +386,18 @@ class GpdPickPlace(object):
         self.joints_subscriber.unregister()
 
     def joints_callback(self, data):
-        if (self.con_joints_indexes == None):
-            names = data.name
+        joint_names=['arm_shoulder_pan_joint','arm_wrist_1_joint','arm_wrist_2_joint']
+        names = data.name
+        if joint_names[0] in (names):
             j1_index = names.index("arm_shoulder_pan_joint")
-            j2_index = names.index("arm_wrist_2_joint")
-            j3_index = names.index("arm_wrist_1_joint")
-            self.con_joints_indexes = (j1_index, j2_index, j3_index)
-
-        self.joint1_con = data.position[self.con_joints_indexes[0]]
-        self.joint2_con = data.position[self.con_joints_indexes[1]]
-        self.joint3_con = data.position[self.con_joints_indexes[2]]
+            if joint_names[1] in (names):
+                j2_index = names.index("arm_wrist_1_joint")
+                if joint_names[2] in (names):
+                    j3_index = names.index("arm_wrist_2_joint")
+                    self.con_joints_indexes = (j1_index, j2_index, j3_index)
+                    self.joint1_con = data.position[self.con_joints_indexes[0]]
+                    self.joint2_con = data.position[self.con_joints_indexes[1]]
+                    self.joint3_con = data.position[self.con_joints_indexes[2]]
 
 
     def remove_pose_constraints(self):
@@ -559,7 +561,7 @@ if __name__ == "__main__":
     pnp = GpdPickPlace(mark_pose=True)
     group_name = "manipulator"
     group = moveit_commander.MoveGroupCommander(group_name, robot_description="/summit_xl/robot_description", ns="/summit_xl")
-    group.set_planner_id("BiTRRT")
+   # group.set_planner_id("BiTRRT")
   #  group.set_max_velocity_scaling_factor(0.05)
    # group.set_goal_orientation_tolerance(0.01)
     group.set_planning_time(20)
