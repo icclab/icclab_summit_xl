@@ -27,8 +27,6 @@ from std_msgs.msg import String
 from moveit_commander.conversions import pose_to_list
 from tf.msg import tfMessage
 import time
-from send_gripper import gripper_client
-from send_gripper import gripper_client_2
 from send_gripper import open_gripper_summit, close_gripper_summit
 
 from tf import TransformListener
@@ -421,7 +419,7 @@ class GpdPickPlace(object):
         # parameters if you have already set the pose or joint target for the group
         #success = group.go(wait=True)
         # if (success==True):
-        #     result = gripper_client_2(8)
+        #     open_gripper_summit()
         #     print("Gripper opened")
         #     group.detach_object("obj")
         # group.clear_pose_targets()
@@ -436,27 +434,32 @@ class GpdPickPlace(object):
             rospy.sleep(1)
             cont_plan_drop += 1
         if (len(plan.joint_trajectory.points) != 0):
-            pevent("Executing dropping: ")
-            result = group.execute(plan, wait=True)
-            rospy.sleep(1)
-            if result == True:
-                pevent("Dropping successful!")
-                result = gripper_client_2(8)
-                print("Gripper opened")
-                group.detach_object("obj")
+            inp = raw_input("Have a look at the planned motion. Do you want to proceed? y/n: ")[0]
+            if (inp == 'y'):
+                pevent("Executing dropping: ")
+                result = group.execute(plan, wait=True)
+                rospy.sleep(1)
+                if result == True:
+                    pevent("Dropping successful!")
+                    group.detach_object("obj")
+                    group.stop()
+                    group.clear_pose_targets()
+                    open_gripper_summit()
+                    print("Gripper opened")
+                    return True
+                else:
+                    pevent("Dropping failed!")
+                    group.stop()
+                    group.clear_pose_targets()
+                    return False
+            elif (inp == 'exit'):
                 group.stop()
                 group.clear_pose_targets()
-                return True
-            else:
-                pevent("Dropping failed!")
-                group.stop()
-                group.clear_pose_targets()
-                return False
+                group.clear_path_constraints()
+                exit(1)
         else:
             pevent("Dropping position planning failed. Aborting")
             return False
-
-
 
     def initial_pose(self):
         pevent("Initial constrained pose sequence started")
@@ -617,9 +620,6 @@ if __name__ == "__main__":
           #      objects_grasped_not_placed += 1
           #  else:
             succesfull_objects_placements += 1
-            open_gripper_summit()
-            print("Gripper opened")
-
         else:
             print("Grasp NOT performed")
             pnp.remove_pose_constraints()
