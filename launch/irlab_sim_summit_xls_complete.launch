@@ -8,6 +8,7 @@
 	<!-- GAZEBO -->
 	<arg name="ros_planar_move_plugin" default="true"/> <!-- disables gazebo ros_control plugin -->
 	<arg name="gazebo_world" default="$(find icclab_summit_xl)/worlds/summit_xl_office.world"/>
+	<arg name="gazebo_gui" default="true"/>
 
         <!-- NAV STACK PARAMS -->
         <arg name="launch_rviz_nav" default="false"/>
@@ -39,6 +40,7 @@
 		<!-- general args -->
 		<arg name="launch_rviz_nav" value="$(arg launch_rviz_nav)"/>
 		<arg name="gazebo_world" value="$(arg gazebo_world)"/>
+		<arg name="gui" value="$(arg gazebo_gui)"/>
 		<arg name="ros_planar_move_plugin" value="$(arg ros_planar_move_plugin)"/>
 		<!-- robot args -->
 		<arg name="map_file_a" value="$(arg map_file_a)"/>
@@ -91,10 +93,9 @@
 			<arg name="moveit_warehouse_database_path" value="$(arg db_path)"/>
 		</include>
 
+		<node name="foo_throttler_front" type="throttle" pkg="topic_tools" args="messages /summit_xl/front_rgbd_camera/depth/points 1 /summit_xl/front_rgbd_camera/depth/points_throttled" />
 
-  <node name="foo_throttler_front" type="throttle" pkg="topic_tools" args="messages /summit_xl/front_rgbd_camera/depth/points 1 /summit_xl/front_rgbd_camera/depth/points_throttled" />
-
-  <node name="foo_throttler_arm" type="throttle" pkg="topic_tools" args="messages /summit_xl/arm_camera/depth_registered/points 1 /summit_xl/arm_camera/depth_registered/points_throttled" />
+		<node name="foo_throttler_arm" type="throttle" pkg="topic_tools" args="messages /summit_xl/arm_camera/depth_registered/points 1 /summit_xl/arm_camera/depth_registered/points_throttled" />
 
 	</group>
 

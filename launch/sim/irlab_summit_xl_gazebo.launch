@@ -8,6 +8,7 @@
 	<arg name="launch_rviz_nav" default="true"/>
 	<arg name="gazebo_world" default="$(find icclab_summit_xl)/worlds/summit_xl_office.world"/>
 	<arg name="debug" default="false"/>
+	<arg name="gui" default="true"/>
 	<arg name="ros_planar_move_plugin" default="false"/>
 
 	<arg name="id_robot_a" default="summit_xl"/>
@@ -41,6 +42,7 @@
 		<arg name="launch_rviz_nav" value="$(arg launch_rviz_nav)"/>
 		<arg name="world" value="$(arg gazebo_world)"/>
 		<arg name="debug" value="$(arg debug)"/>
+		<arg name="gui" value="$(arg gui)"/>
 	</include>
 
 </launch>	
