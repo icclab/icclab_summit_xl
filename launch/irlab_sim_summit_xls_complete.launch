@@ -34,6 +34,9 @@
 	-->
 	<arg name="use_gui" default="false"/> <!-- TODO: remove or use (arg not currently used) -->
 
+	<!-- TESTING -->
+	<arg name="nav_test" default="false"/>
+
 
 	<!--======================== GAZEBO + NAV STACK ==================================-->
 	<include file="$(find icclab_summit_xl)/launch/sim/irlab_summit_xl_gazebo.launch">
@@ -49,6 +52,7 @@
 		<arg name="move_base_robot_a" value="$(arg move_base_robot_a)"/>
 		<arg name="amcl_and_mapserver_a" value="$(arg amcl_and_mapserver_a)"/>
 		<arg name="xacro_robot_a" value="$(arg xacro_robot_a)"/>
+		<arg name="nav_test" value="$(arg nav_test)"/>
 	</include>
 	
 

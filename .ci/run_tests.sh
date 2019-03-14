@@ -16,16 +16,11 @@ docker run\
 export CONTAINER_NAME=$(docker ps --latest --format "{{.Names}}")
 echo $CONTAINER_NAME
 
-# bringup sim complete with amcl and without rviz or gazebo gui
-# TODO: output log of this process
-docker exec -d $CONTAINER_NAME bash -c "cd ~/catkin_ws/src/icclab_summit_xl/; git pull; . /opt/ros/kinetic/setup.bash; . ~/catkin_ws/devel/setup.bash; roslaunch icclab_summit_xl irlab_sim_summit_xls_amcl.launch launch_rviz_nav:=false gazebo_gui:=false"
-
-# wait for repo to pulled
-sleep 5
-
-# TODO: assign output to a variable
-# launch move base action client
-docker exec -it $CONTAINER_NAME bash -c ". /opt/ros/kinetic/setup.bash; . ~/catkin_ws/devel/setup.bash; ROS_NAMESPACE=summit_xl rosrun icclab_summit_xl move_base_client.py"
+# TEST #1: testing navigation stack
+# bringup sim complete with amcl and move_base action client
+echo "Testing navigation stack..."
+echo "Executing 'roslaunch icclab_summit_xl irlab_sim_summit_xls_amcl.launch launch_rviz_nav:=false gazebo_gui:=false nav_test:=true' inside container $CONTAINER_NAME..."
+docker exec -it $CONTAINER_NAME bash -c "cd ~/catkin_ws/src/icclab_summit_xl/; git pull; . /opt/ros/kinetic/setup.bash; . ~/catkin_ws/devel/setup.bash; roslaunch icclab_summit_xl irlab_sim_summit_xls_amcl.launch launch_rviz_nav:=false gazebo_gui:=false nav_test:=true"
 
 # kill gzserver process
 ps -ef | grep 'gzserver' | grep -v grep | awk '{print $2}' | xargs -r kill -9
