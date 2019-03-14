@@ -20,7 +20,7 @@ def movebase_client():
     wait = client.wait_for_server(timeout=rospy.Duration(300.0)) # takes a while for sim environment to bring up
     if not wait:
         rospy.logerr("Action server not available!")
-        rospy.logerr("Navigation test has failed!")
+        rospy.logerr("Navigation test failed!")
         rospy.signal_shutdown("Action server not available!")
         return
     rospy.loginfo("Connected to move base server")
@@ -52,7 +52,7 @@ if __name__ == '__main__':
         rospy.init_node('movebase_client_py')
         result = movebase_client()
         if result:
-            rospy.loginfo("Goal execution done!")
+            rospy.loginfo("Goal execution done; success!")
             nodes = rosnode.get_node_names()
             rospy.loginfo("Killing all nodes")
             rosnode.kill_nodes(nodes)
