@@ -22,17 +22,17 @@ echo "Testing navigation stack..."
 echo "Executing 'roslaunch icclab_summit_xl irlab_sim_summit_xls_amcl.launch launch_rviz_nav:=false gazebo_gui:=false nav_test:=true' inside container $CONTAINER_NAME..."
 docker exec -it $CONTAINER_NAME bash -c "cd ~/catkin_ws/src/icclab_summit_xl/; git pull; . /opt/ros/kinetic/setup.bash; . ~/catkin_ws/devel/setup.bash; roslaunch icclab_summit_xl irlab_sim_summit_xls_amcl.launch launch_rviz_nav:=false gazebo_gui:=false nav_test:=true"
 
-# kill gzserver process
-ps -ef | grep 'gzserver' | grep -v grep | awk '{print $2}' | xargs -r kill -9
+# extract output of movebase_client_py node
+docker exec -it $CONTAINER_NAME bash -c ". /opt/ros/kinetic/setup.bash; roscd log; cat $(ls | grep movebase_client)" >> movebase_client_py_log.txt
+nav_test_output=$(cat movebase_client_py_log.txt)
 
-#echo $nav_test_output
-#if [[ "$nav_test_output" == *"fail"* ]] ; then
-#  echo "Navigation test failed. Check output."
-#  echo $nav_test_output
-#  exit 1
-#elif [[ "$nav_test_output" == *"success"* ]]; then
-#  echo "Navigation test succeeded. No issues found"
-#  exit 0
-#fi
+if [[ "$nav_test_output" == *"fail"* ]] ; then
+  echo "Navigation test failed. Check output."
+  echo $nav_test_output
+  exit 1
+elif [[ "$nav_test_output" == *"success"* ]]; then
+  echo "Navigation test succeeded. No issues found"
+  exit 0
+fi
 
 exit 0

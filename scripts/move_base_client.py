@@ -2,6 +2,7 @@
 
 # used code as ref from https://hotblackrobotics.github.io/en/blog/2018/01/29/action-client-py/
 
+import psutil
 import rospy
 import rosnode 
 
@@ -22,6 +23,7 @@ def movebase_client():
         rospy.logerr("Action server not available!")
         rospy.logerr("Navigation test failed!")
         rospy.signal_shutdown("Action server not available!")
+        kill_gzserver()
         return
     rospy.loginfo("Connected to move base server")
     rospy.loginfo("Starting goals achievements ...")
@@ -43,7 +45,15 @@ def movebase_client():
     client.wait_for_result()
     
     # Result of executing the action
-    return client.get_result()   
+    return client.get_result()
+
+# kills gazebo
+def kill_gzserver():
+    PROC_NAME = "gzserver"
+    rospy.loginfo("Killing gzserver")
+    for proc in psutil.process_iter():
+        if proc.name() == PROC_NAME:
+            proc.kill()
 
 # If the python node is executed as main process (sourced directly)
 if __name__ == '__main__':
@@ -56,5 +66,6 @@ if __name__ == '__main__':
             nodes = rosnode.get_node_names()
             rospy.loginfo("Killing all nodes")
             rosnode.kill_nodes(nodes)
+            kill_gzserver()
     except rospy.ROSInterruptException:
             rospy.loginfo("Navigation test finished.")
