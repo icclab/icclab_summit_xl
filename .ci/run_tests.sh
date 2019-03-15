@@ -33,6 +33,10 @@ if [[ "$nav_test_output" == *"fail"* ]] ; then
 elif [[ "$nav_test_output" == *"success"* ]]; then
   echo "Navigation test succeeded. No issues found"
   exit 0
+else
+  echo "State of test unknown. Check output."
+  echo $nav_test_output
+  exit 1
 fi
 
 exit 0
