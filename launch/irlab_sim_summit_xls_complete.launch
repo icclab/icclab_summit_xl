@@ -25,14 +25,6 @@
 	<arg name="db_path" default="$(find icclab_summit_xl)/default_warehouse_mongo_db"/> <!-- Allow user to specify database location -->
 	<arg name="debug" default="false"/> <!-- By default, we are not in debug mode -->
 	<arg name="simulation" default="false"/>
-	<!--
-	By default, hide joint_state_publisher's GUI
-	MoveIt!'s "demo" mode replaces the real robot driver with the joint_state_publisher.
-	The latter one maintains and publishes the current joint configuration of the simulated robot.
-	It also provides a GUI to move the simulated robot around "manually".
-	This corresponds to moving around the real robot without the use of MoveIt.
-	-->
-	<arg name="use_gui" default="false"/> <!-- TODO: remove or use (arg not currently used) -->
 
 	<!-- TESTING -->
 	<arg name="nav_test" default="false"/>
