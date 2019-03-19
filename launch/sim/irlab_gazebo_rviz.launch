@@ -5,6 +5,7 @@
 	<arg name="debug" default="false"/>
 	<arg name="launch_rviz_nav" default="false"/>
 	<arg name="world" default="$(find icclab_summit_xl)/worlds/summit_xl.world"/>
+	<arg name="gui" default="true"/>
 	<!-- located in summit_xl_gazebo/worlds -->
 
 	<!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
@@ -14,7 +15,7 @@
 		<arg name="paused" value="false"/>
 		<arg name="use_sim_time" value="true"/>
 		<arg name="headless" value="false"/>
-		<arg name="gui" value="true"/>
+		<arg name="gui" value="$(arg gui)"/>
 	</include>
 
 	<!-- launch rviz with navigation config-->

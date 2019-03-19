@@ -1,4 +1,6 @@
-language: python
+dist: xenial
+
+language: generic
 
 services:
 - docker
@@ -7,10 +9,7 @@ install:
 - git clone --depth=1 https://github.com/icclab/rosdocked-irlab --branch=master ~/rosdocked-irlab
 
 before_script:
-- cd ~/rosdocked-irlab/workspace_included
-- ./run-with-dev.sh
-- ls
-- hostname
+- docker pull robopaas/rosdocked-kinetic-workspace-included:latest
 
 script: ./.ci/run_tests.sh
 
