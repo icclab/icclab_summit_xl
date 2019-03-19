@@ -182,27 +182,52 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-          gripper_base_link:
+          robotiq_85_base_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          gripper_left_finger_base_link:
+          robotiq_85_left_finger_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          gripper_left_finger_link:
+          robotiq_85_left_finger_tip_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          gripper_right_finger_base_link:
+          robotiq_85_left_inner_knuckle_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          gripper_right_finger_link:
+          robotiq_85_left_knuckle_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robotiq_85_right_finger_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robotiq_85_right_finger_tip_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robotiq_85_right_inner_knuckle_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robotiq_85_right_knuckle_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robotiq_coupler:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -439,27 +464,52 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-          gripper_base_link:
+          robotiq_85_base_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          gripper_left_finger_base_link:
+          robotiq_85_left_finger_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          gripper_left_finger_link:
+          robotiq_85_left_finger_tip_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          gripper_right_finger_base_link:
+          robotiq_85_left_inner_knuckle_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          gripper_right_finger_link:
+          robotiq_85_left_knuckle_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robotiq_85_right_finger_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robotiq_85_right_finger_tip_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robotiq_85_right_inner_knuckle_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robotiq_85_right_knuckle_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robotiq_coupler:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -560,182 +610,19 @@ Visualization Manager:
       Unreliable: false
       Value: false
     - Class: rviz/TF
-      Enabled: true
+      Enabled: false
       Frame Timeout: 15
       Frames:
         All Enabled: false
-        arm_base:
-          Value: false
-        arm_base_link:
-          Value: false
-        arm_camera_bottom_screw_frame:
-          Value: false
-        arm_camera_color_frame:
-          Value: false
-        arm_camera_color_optical_frame:
-          Value: false
-        arm_camera_depth_frame:
-          Value: false
-        arm_camera_depth_optical_frame:
-          Value: false
-        arm_camera_left_ir_frame:
-          Value: false
-        arm_camera_left_ir_optical_frame:
-          Value: false
-        arm_camera_link:
-          Value: false
-        arm_camera_mount_link:
-          Value: false
-        arm_camera_right_ir_frame:
-          Value: false
-        arm_camera_right_ir_optical_frame:
-          Value: false
-        arm_collision_box_camera_cable_link:
-          Value: false
-        arm_collision_box_wrist2_link:
-          Value: false
-        arm_collision_box_wrist3_link:
-          Value: false
-        arm_ee_link:
-          Value: true
-        arm_forearm_link:
-          Value: false
-        arm_shoulder_link:
-          Value: false
-        arm_tool0:
-          Value: false
-        arm_upper_arm_link:
-          Value: false
-        arm_wrist_1_link:
-          Value: false
-        arm_wrist_2_link:
-          Value: false
-        arm_wrist_3_link:
-          Value: false
-        gripper_base_link:
-          Value: false
-        gripper_left_finger_base_link:
-          Value: false
-        gripper_left_finger_link:
-          Value: false
-        gripper_right_finger_base_link:
-          Value: false
-        gripper_right_finger_link:
-          Value: false
-        summit_xl_back_left_wheel_link:
-          Value: false
-        summit_xl_back_right_wheel_link:
-          Value: false
-        summit_xl_base_docking_contact:
-          Value: false
-        summit_xl_base_footprint:
-          Value: true
-        summit_xl_base_link:
-          Value: false
-        summit_xl_front_laser_base_link:
-          Value: false
-        summit_xl_front_laser_link:
-          Value: false
-        summit_xl_front_left_wheel_link:
-          Value: false
-        summit_xl_front_rgbd_camera_depth_frame:
-          Value: false
-        summit_xl_front_rgbd_camera_depth_optical_frame:
-          Value: false
-        summit_xl_front_rgbd_camera_link:
-          Value: false
-        summit_xl_front_rgbd_camera_rgb_base_link:
-          Value: false
-        summit_xl_front_rgbd_camera_rgb_optical_frame:
-          Value: false
-        summit_xl_front_right_wheel_link:
-          Value: false
-        summit_xl_imu_link:
-          Value: false
-        summit_xl_odom:
-          Value: false
-        summit_xl_rear_laser_base_link:
-          Value: false
-        summit_xl_rear_laser_link:
-          Value: false
       Marker Scale: 0.5
       Name: TF
       Show Arrows: true
       Show Axes: true
       Show Names: true
       Tree:
-        summit_xl_odom:
-          summit_xl_base_footprint:
-            summit_xl_base_link:
-              arm_base_link:
-                arm_base:
-                  {}
-                arm_shoulder_link:
-                  arm_upper_arm_link:
-                    arm_forearm_link:
-                      arm_wrist_1_link:
-                        arm_wrist_2_link:
-                          arm_camera_bottom_screw_frame:
-                            arm_camera_link:
-                              arm_camera_depth_frame:
-                                arm_camera_color_frame:
-                                  arm_camera_color_optical_frame:
-                                    {}
-                                arm_camera_depth_optical_frame:
-                                  {}
-                                arm_camera_left_ir_frame:
-                                  arm_camera_left_ir_optical_frame:
-                                    {}
-                                arm_camera_right_ir_frame:
-                                  arm_camera_right_ir_optical_frame:
-                                    {}
-                              arm_collision_box_camera_cable_link:
-                                {}
-                          arm_camera_mount_link:
-                            {}
-                          arm_collision_box_wrist2_link:
-                            {}
-                          arm_wrist_3_link:
-                            arm_collision_box_wrist3_link:
-                              {}
-                            arm_ee_link:
-                              {}
-                            arm_tool0:
-                              gripper_base_link:
-                                gripper_left_finger_base_link:
-                                  gripper_left_finger_link:
-                                    {}
-                                gripper_right_finger_base_link:
-                                  gripper_right_finger_link:
-                                    {}
-              summit_xl_back_left_wheel_link:
-                {}
-              summit_xl_back_right_wheel_link:
-                {}
-              summit_xl_base_docking_contact:
-                {}
-              summit_xl_front_laser_base_link:
-                summit_xl_front_laser_link:
-                  {}
-              summit_xl_front_left_wheel_link:
-                {}
-              summit_xl_front_rgbd_camera_rgb_base_link:
-                summit_xl_front_rgbd_camera_depth_frame:
-                  summit_xl_front_rgbd_camera_depth_optical_frame:
-                    {}
-                summit_xl_front_rgbd_camera_link:
-                  {}
-                summit_xl_front_rgbd_camera_rgb_optical_frame:
-                  {}
-              summit_xl_front_right_wheel_link:
-                {}
-              summit_xl_imu_link:
-                {}
-              summit_xl_rear_laser_base_link:
-                summit_xl_rear_laser_link:
-                  {}
+        {}
       Update Interval: 0
-      Value: true
+      Value: false
     - Class: rviz/Marker
       Enabled: true
       Marker Topic: /visualization_marker
@@ -818,7 +705,7 @@ Visualization Manager:
       Marker Topic: /summit_xl/move_group/display_grasp_markers
       Name: Grasps_Markers
       Namespaces:
-        {}
+        moveit_grasps:stage_1: true
       Queue Size: 100
       Value: true
     - Class: rviz/MarkerArray
@@ -845,7 +732,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/XYOrbit
-      Distance: 3.0789032
+      Distance: 2.70943475
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1
@@ -885,5 +772,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1879
-  X: 1961
-  Y: 24
+  X: 1987
+  Y: 0

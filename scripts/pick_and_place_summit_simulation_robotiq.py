@@ -60,7 +60,7 @@ for name in MoveItErrorCodes.__dict__.keys():
 class GpdPickPlace(object):
     grasps = []
     mark_pose = False
-    grasp_offset = -0.09
+    grasp_offset = -0.11
     finger_indexes = None
     con_joints_indexes = None
     joint1_con = 0
