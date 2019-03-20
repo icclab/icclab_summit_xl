@@ -72,7 +72,7 @@ if __name__ == '__main__':
     try:
        # Initializes a rospy node to let the SimpleActionClient publish and subscribe
         rospy.init_node('movebase_client_py')
-        rospy.Subscriber("scan_front", LaserScan, callback) # debugging TODO: remove me
+        rospy.Subscriber("scan_combined", LaserScan, callback) # debugging TODO: remove me
         result = movebase_client()
         if result:
             rospy.loginfo("Goal execution done; success!")
