@@ -15,6 +15,13 @@ from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 def movebase_client():
     # Create an action client called "move_base" with action definition file "MoveBaseAction"
     client = actionlib.SimpleActionClient('move_base', MoveBaseAction)
+
+    # debugging
+    while(t<300):
+        topics = rospy.get_published_topics()
+        rospy.loginfo(topics)
+        rospy.sleep(1)
+        t += 1
      
     # Waits until the action server has started up and started listening for goals.
     rospy.loginfo("Waiting for move_base action server...")
