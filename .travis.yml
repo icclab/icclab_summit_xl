@@ -83,9 +83,9 @@ before_install:
 
 # Create a catkin workspace with the package under integration.
 install:
+  - git clone --depth=1 https://github.com/icclab/rosdocked-irlab --branch=master ~/rosdocked-irlab
   - mkdir -p ~/catkin_ws/src
   - cd ~/catkin_ws/src
-  - git clone --depth=1 https://github.com/icclab/rosdocked-irlab --branch=master ~/rosdocked-irlab
   - catkin_init_workspace
   # Create the devel/setup.bash (run catkin_make with an empty workspace) and
   # source it to set the path variables.
@@ -125,7 +125,7 @@ script:
   # Run the tests, ensuring the path is set correctly.
   - source devel/setup.bash
   - catkin_make run_tests && catkin_test_results
-  - ./.ci/run_tests.sh
+  - cd && ./.ci/run_tests.sh
 
 after_script:
 - ./.ci/docker_build.sh
