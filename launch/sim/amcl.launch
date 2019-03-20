@@ -7,7 +7,7 @@
   <arg name="z_init_pose" default="0"/>
   <arg name="a_init_pose" default="0"/>
   <!-- slam accepts data from 1 source (see repo wiki for info) -->
-  <arg name="scan_topic" default="scan_combined"/>
+  <arg name="scan_topic" default="scan_front"/>
   <arg name="map_topic" default="map"/>
   <arg name="global_frame" default="$(arg prefix)map"/>
   <arg name="odom_frame" default="$(arg prefix)odom"/>
