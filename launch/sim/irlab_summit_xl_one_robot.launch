@@ -50,7 +50,7 @@
 
 		<!--================================== NAV STACK ==================================-->
                 <!-- convert front camera depth image to LaserScan for input to laserscan merger -->
-                <!--include if="$(eval launch_amcl_and_mapserver or launch_gmapping)" file="$(find icclab_summit_xl)/launch/depthimage_to_laserscan.launch"/-->
+                <include if="$(eval launch_amcl_and_mapserver or launch_gmapping)" file="$(find icclab_summit_xl)/launch/depthimage_to_laserscan.launch"/>
 
                 <!-- move base -->
                 <include if="$(arg launch_move_base)" file="$(find icclab_summit_xl)/launch/move_base.launch">
@@ -65,9 +65,9 @@
                 </include>
 
 		<!-- merge laser scan topics to scan_combined for ACML or GMapping, delay launch by 5 seconds -->
-		<!--include if="$(eval launch_amcl_and_mapserver or launch_gmapping)" file="$(find icclab_summit_xl)/launch/timed_laserscan_multi_merger.launch">
+		<include if="$(eval launch_amcl_and_mapserver or launch_gmapping)" file="$(find icclab_summit_xl)/launch/timed_laserscan_multi_merger.launch">
 			<arg name="delay_time" value="30"/>
-		</include-->
+		</include>
 
 		<!-- amcl and map server base-->
 		<include if="$(arg launch_amcl_and_mapserver)" file="$(find icclab_summit_xl)/launch/sim/map_server.launch">
