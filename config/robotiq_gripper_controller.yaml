@@ -1,0 +1,20 @@
+gripper_joint_trajectory_controller:
+  type: position_controllers/JointTrajectoryController
+  joints:
+     - robotiq_85_left_knuckle_joint
+  constraints:
+      goal_time: 0.6
+      stopped_velocity_tolerance: 0.05
+      robotiq_85_left_knuckle_joint: {trajectory: 0.1, goal: 0.1}
+  stop_trajectory_duration: 0.5
+  state_publish_rate:  25
+  action_monitor_rate: 10
+# Gripper controller
+gripper_action_controller:
+  type: position_controllers/GripperActionController
+  joint: robotiq_85_left_knuckle_joint
+  action_monitor_rate: 20
+  goal_tolerance: 0.002
+  max_effort: 100
+  stall_velocity_threshold: 0.001
+  stall_timeout: 1.0

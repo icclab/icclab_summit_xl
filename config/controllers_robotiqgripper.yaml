@@ -9,4 +9,14 @@ controller_list:
       - arm_wrist_1_joint
       - arm_wrist_2_joint
       - arm_wrist_3_joint
+  - name: gripper_joint_trajectory_controller
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    joints:
+      - robotiq_85_left_knuckle_joint
+  - name: gripper_action_controller
+    action_ns: gripper_cmd
+    type: GripperCommand
+    joints:
+      - robotiq_85_left_knuckle_joint
 
