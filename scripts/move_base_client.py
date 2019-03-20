@@ -5,7 +5,6 @@
 import psutil
 import rospy
 import rosnode
-from sensor_msgs.msg import LaserScan
 
 # Brings in the SimpleActionClient
 import actionlib
@@ -17,14 +16,6 @@ def movebase_client():
     # Create an action client called "move_base" with action definition file "MoveBaseAction"
     client = actionlib.SimpleActionClient('move_base', MoveBaseAction)
 
-    # debugging
-    t=0
-    while(t<300):
-        topics = rospy.get_published_topics()
-        rospy.loginfo(topics)
-        rospy.sleep(1)
-        t += 1
-     
     # Waits until the action server has started up and started listening for goals.
     rospy.loginfo("Waiting for move_base action server...")
     wait = client.wait_for_server(timeout=rospy.Duration(300.0)) # takes a while for sim environment to bring up
@@ -64,15 +55,11 @@ def kill_gzserver():
         if proc.name() == PROC_NAME:
             proc.kill()
 
-def callback(data):
-    rospy.loginfo(rospy.get_caller_id() + "%s", data.ranges)
-
 # If the python node is executed as main process (sourced directly)
 if __name__ == '__main__':
     try:
        # Initializes a rospy node to let the SimpleActionClient publish and subscribe
         rospy.init_node('movebase_client_py')
-        rospy.Subscriber("scan_combined", LaserScan, callback) # debugging TODO: remove me
         result = movebase_client()
         if result:
             rospy.loginfo("Goal execution done; success!")
