@@ -4,7 +4,7 @@
 
 import psutil
 import rospy
-import rosnode 
+import rosnode
 
 # Brings in the SimpleActionClient
 import actionlib
@@ -15,7 +15,7 @@ from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 def movebase_client():
     # Create an action client called "move_base" with action definition file "MoveBaseAction"
     client = actionlib.SimpleActionClient('move_base', MoveBaseAction)
-     
+
     # Waits until the action server has started up and started listening for goals.
     rospy.loginfo("Waiting for move_base action server...")
     wait = client.wait_for_server(timeout=rospy.Duration(300.0)) # takes a while for sim environment to bring up
