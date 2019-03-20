@@ -60,7 +60,7 @@ for name in MoveItErrorCodes.__dict__.keys():
 class GpdPickPlace(object):
     grasps = []
     mark_pose = False
-    grasp_offset = -0.11
+    grasp_offset = -0.1
     finger_indexes = None
     con_joints_indexes = None
     joint1_con = 0
@@ -168,7 +168,7 @@ class GpdPickPlace(object):
         pevent("Pick sequence started")
         # Add object mesh to planning scene
         self.add_object_mesh()
-      #  group.set_goal_tolerance(0.01)
+        group.set_goal_tolerance(0.02)
         for single_grasp in grasps_list:
             if self.mark_pose:
                 self.show_grasp_pose(self.marker_publisher, single_grasp.grasp_pose)
@@ -560,7 +560,7 @@ if __name__ == "__main__":
   #  group.set_planner_id("BiTRRT")
   #  group.set_max_velocity_scaling_factor(0.05)
    # group.set_goal_orientation_tolerance(0.01)
-    group.set_planning_time(5)
+    group.set_planning_time(10)
    # group.allow_replanning(True)
     planning = PlanningSceneInterface("summit_xl_base_footprint", ns="/summit_xl/")
     planning.clear()
@@ -602,12 +602,13 @@ if __name__ == "__main__":
         successful_grasp = pnp.pick(formatted_grasps, verbose=True)
         if successful_grasp is not None:
            # result = gripper_client_2(-8)
-            gripper_client_2(0.7)
+            gripper_client_2(0.8)
             print("Gripper closed")
+
           #  pnp.start_grasp_check()
             pnp.remove_pose_constraints()
          #   pnp.start_con_setup()
-         #   rospy.sleep(1)
+            rospy.sleep(1)
          #   pnp.set_pose_constraints(3.14, 1.0, 1.0)
          #   pnp.stop_con_setup()
      #       pnp.set_upright_constraints(successful_grasp.grasp_pose)
