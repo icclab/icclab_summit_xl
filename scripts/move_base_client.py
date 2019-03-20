@@ -17,6 +17,7 @@ def movebase_client():
     client = actionlib.SimpleActionClient('move_base', MoveBaseAction)
 
     # debugging
+    t=0
     while(t<300):
         topics = rospy.get_published_topics()
         rospy.loginfo(topics)
