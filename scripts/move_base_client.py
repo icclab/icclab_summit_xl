@@ -4,7 +4,8 @@
 
 import psutil
 import rospy
-import rosnode 
+import rosnode
+from sensor_msgs.msg import LaserScan
 
 # Brings in the SimpleActionClient
 import actionlib
@@ -62,11 +63,15 @@ def kill_gzserver():
         if proc.name() == PROC_NAME:
             proc.kill()
 
+def callback(data):
+    rospy.loginfo(rospy.get_caller_id() + "%s", data.ranges)
+
 # If the python node is executed as main process (sourced directly)
 if __name__ == '__main__':
     try:
        # Initializes a rospy node to let the SimpleActionClient publish and subscribe
         rospy.init_node('movebase_client_py')
+        rospy.Subscriber("scan_front", LaserScan, callback) # debugging TODO: remove me
         result = movebase_client()
         if result:
             rospy.loginfo("Goal execution done; success!")
