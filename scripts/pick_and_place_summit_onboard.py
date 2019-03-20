@@ -176,6 +176,7 @@ class GpdPickPlace(object):
         pevent("Pick sequence started")
         # Add object mesh to planning scene
         self.add_object_mesh()
+        rospy.sleep(2.0)
         group.set_goal_tolerance(0.01)
         for single_grasp in grasps_list:
             if self.mark_pose:
@@ -561,10 +562,10 @@ if __name__ == "__main__":
     pnp = GpdPickPlace(mark_pose=True)
     group_name = "manipulator"
     group = moveit_commander.MoveGroupCommander(group_name, robot_description="/summit_xl/robot_description", ns="/summit_xl")
-   # group.set_planner_id("BiTRRT")
+    group.set_planner_id("BiTRRT")
   #  group.set_max_velocity_scaling_factor(0.05)
    # group.set_goal_orientation_tolerance(0.01)
-    group.set_planning_time(20)
+    group.set_planning_time(5)
    # group.allow_replanning(True)
     planning = PlanningSceneInterface("summit_xl_base_footprint", ns="/summit_xl/")
     planning.clear()
@@ -592,6 +593,7 @@ if __name__ == "__main__":
         while (pnp.initial_pose() == False):
             print("Initial arm positioning failed!")
         print("Initial arm positioning performed")
+        clear_octomap()
         #we have to add a check, so that this is called only if the initial_pose was successful
         call_pointcloud_filter_service()
         pnp.wait_for_mesh_and_save()
@@ -615,7 +617,7 @@ if __name__ == "__main__":
          #   rospy.sleep(1)
          #   pnp.set_pose_constraints(3.14, 1.0, 1.0)
          #   pnp.stop_con_setup()
-            pnp.set_upright_constraints(successful_grasp.grasp_pose)
+          #  pnp.set_upright_constraints(successful_grasp.grasp_pose)
             while (pnp.drop_obj_on_robot(successful_grasp) == False):
                 print("Object placing failed!")
           #  if success == False:
