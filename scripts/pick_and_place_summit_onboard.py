@@ -58,7 +58,7 @@ class GpdPickPlace(object):
     grasps = []
     grasps_cartesian = []
     mark_pose = False
-    grasp_offset = -0.08
+    grasp_offset = -0.11
     grasp_offset_cartesian = -0.2
     finger_indexes = None
     con_joints_indexes = None
@@ -139,7 +139,7 @@ class GpdPickPlace(object):
                 g.pre_grasp_approach.direction.header.frame_id = "arm_ee_link"
                 g.pre_grasp_approach.direction.vector.x = 1.0
                 g.pre_grasp_approach.min_distance = 0.04
-                g.pre_grasp_approach.desired_distance = 0.09
+                g.pre_grasp_approach.desired_distance = 0.06
                 #   g.pre_grasp_posture.joint_names = ["gripper_right_finger_joint", "gripper_left_finger_joint"]
                 #   g.pre_grasp_posture.joint_names = ["arm_tool0"]
                 #     g.pre_grasp_posture.header.frame_id = "arm_wrist_3_link"
@@ -260,7 +260,7 @@ class GpdPickPlace(object):
         # Add object mesh to planning scene
         self.add_object_mesh()
         rospy.sleep(2.0)
-        group.set_goal_tolerance(0.05)
+        group.set_goal_tolerance(0.01)
         cont_c = 0
 
         for single_grasp in grasps_list_cartesian:
@@ -290,7 +290,9 @@ class GpdPickPlace(object):
                         waypoints.append(copy.deepcopy(wpose))
                        # wpose.position.y -= 0.1  # Third move sideways (y)
                        # waypoints.append(copy.deepcopy(wpose))
-
+                        if self.mark_pose:
+                            self.show_grasp_pose(self.marker_publisher, wpose)
+                            rospy.sleep(1)
                         # We want the Cartesian path to be interpolated at a resolution of 1 cm
                         # which is why we will specify 0.01 as the eef_step in Cartesian
                         # translation.  We will disable the jump threshold by setting it to 0.0 disabling:
@@ -501,7 +503,7 @@ class GpdPickPlace(object):
         pose_goal = geometry_msgs.msg.Pose()
         pose_goal.position.x = -0.2
         pose_goal.position.y = 0
-        pose_goal.position.z = 0.4+successful_grasp.grasp_pose.pose.position.z
+        pose_goal.position.z = 0.4+0.06+successful_grasp.grasp_pose.pose.position.z
         pose_goal.orientation.x = 0+successful_grasp.grasp_pose.pose.orientation.x
         pose_goal.orientation.y = 0+successful_grasp.grasp_pose.pose.orientation.y
         pose_goal.orientation.z = 0+successful_grasp.grasp_pose.pose.orientation.z
@@ -696,9 +698,9 @@ if __name__ == "__main__":
         open_gripper_summit()
         print("Gripper opened")
         pnp.remove_pose_constraints()
-        #pnp.start_con_setup()
+       # pnp.start_con_setup()
        # pnp.set_pose_constraints(1.57, 1.57, 1.57)
-        #        pnp.stop_con_setup()
+       # pnp.stop_con_setup()
        # successful_grasp = pnp.pick(formatted_grasps, verbose=True)
         successful_grasp = pnp.pick_cartesian(formatted_grasps, formatted_grasps_cartesian, verbose=True)
         if successful_grasp is not None:
