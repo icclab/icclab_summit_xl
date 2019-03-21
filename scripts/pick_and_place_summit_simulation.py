@@ -57,8 +57,10 @@ for name in MoveItErrorCodes.__dict__.keys():
 
 class GpdPickPlace(object):
     grasps = []
+    grasps_cartesian = []
     mark_pose = False
-    grasp_offset = -0.09
+    grasp_offset = -0.08
+    grasp_offset_cartesian = -0.2
     finger_indexes = None
     con_joints_indexes = None
     joint1_con = 0
@@ -98,6 +100,8 @@ class GpdPickPlace(object):
     def generate_grasp_msgs(self, selected_grasps):
             self.grasps = []
             formatted_grasps = []
+            self.grasps_cartesian = []
+            formatted_grasps_cartesian = []
             tot_grasps = len(selected_grasps)
             cont = 0
             filtered_orientation = 0
@@ -150,10 +154,27 @@ class GpdPickPlace(object):
              #   g.max_contact_force = 0.0
                 g.grasp_quality = selected_grasps[0].score.data
                 formatted_grasps.append(g)
+
+                #Added code lines for cartesian pick
+                gp_cartesian = PoseStamped()
+                gp_cartesian.pose.position.x = selected_grasps[i].surface.x + self.grasp_offset_cartesian * selected_grasps[i].approach.x
+                gp_cartesian.pose.position.y = selected_grasps[i].surface.y + self.grasp_offset_cartesian * selected_grasps[i].approach.y
+                gp_cartesian.pose.position.z = selected_grasps[i].surface.z + self.grasp_offset_cartesian * selected_grasps[i].approach.z
+                gp_cartesian.pose.orientation.x = float(quat.elements[1])
+                gp_cartesian.pose.orientation.y = float(quat.elements[2])
+                gp_cartesian.pose.orientation.z = float(quat.elements[3])
+                gp_cartesian.pose.orientation.w = float(quat.elements[0])
+
+                g_cartesian = Grasp ()
+                g_cartesian.grasp_pose = gp_cartesian
+                g_cartesian.allowed_touch_objects = ["obj"]
+                formatted_grasps_cartesian.append(g_cartesian)
+
            # print(repr(cont) + " grasps out of " + repr(tot_grasps) + " removed because of no IK_SOLUTION error")
             # sort grasps using z (get higher grasps first)
             formatted_grasps.sort(key=lambda grasp: grasp.grasp_pose.pose.position.z, reverse=True)
-            return formatted_grasps
+            formatted_grasps_cartesian.sort(key=lambda grasp: grasp.grasp_pose.pose.position.z, reverse=True)
+            return formatted_grasps, formatted_grasps_cartesian
 
     def trans_matrix_to_quaternion(self, grasp):
         r = np.array([[grasp.approach.x, grasp.binormal.x, grasp.axis.x],
@@ -167,7 +188,7 @@ class GpdPickPlace(object):
         # Add object mesh to planning scene
         self.add_object_mesh()
         rospy.sleep(2.0)
-        group.set_goal_tolerance(0.01)
+        group.set_goal_tolerance(0.02)
         for single_grasp in grasps_list:
             if self.mark_pose:
                 self.show_grasp_pose(self.marker_publisher, single_grasp.grasp_pose)
@@ -204,7 +225,9 @@ class GpdPickPlace(object):
             #        pick_result = group.execute(plan, wait=True)
             #        if pick_result == True:
             #            pevent("Grasp successful!")
-            #            group.attach_object("obj")
+            #            attach_link = "arm_ee_link"
+            #  	         touch_links = ["gripper_base_link","gripper_left_finger_base_link","gripper_left_finger_link","gripper_right_finger_base_link","gripper_right_finger_link"]
+            #            group.attach_object("obj", attach_link, touch_links)
             #            return single_grasp
             #        else:
             #            failed_grasps += 1
@@ -219,6 +242,76 @@ class GpdPickPlace(object):
         ### end code NOT using pick interface ###
 
         self.grasps = []
+
+    def pick_cartesian(self, grasps_list, grasps_list_cartesian, verbose=False):
+        failed_grasps = 0
+        pevent("Pick sequence started")
+        # Add object mesh to planning scene
+        self.add_object_mesh()
+        rospy.sleep(2.0)
+        group.set_goal_tolerance(0.05)
+        cont_c = 0
+        for single_grasp in grasps_list_cartesian:
+
+            if self.mark_pose:
+                self.show_grasp_pose(self.marker_publisher, single_grasp.grasp_pose)
+                rospy.sleep(1)
+            pevent("Planning grasp:")
+            pprint(single_grasp.grasp_pose)
+            group.set_start_state_to_current_state()
+            group.detach_object("obj")
+            # ipdb.set_trace()
+           # single_grasp.grasp_pose.pose.position.x = single_grasp.grasp_pose.pose.position.x - 0.1
+            ### start code NOT using pick interface ###
+            group.set_pose_target(single_grasp.grasp_pose.pose)
+            plan = group.plan()
+            if (len(plan.joint_trajectory.points) != 0):
+                inp = raw_input("Have a look at the planned motion. Do you want to proceed? y/n: ")
+                if (inp == 'y'):
+                    pevent("Executing grasp: ")
+                    pick_result = group.execute(plan, wait=True)
+                    if pick_result == True:
+                        group.set_start_state_to_current_state()
+                        group.set_goal_tolerance(0.05)
+                        waypoints = []
+
+                        wpose = grasps_list[cont_c].grasp_pose.pose
+                        waypoints.append(copy.deepcopy(wpose))
+                       # wpose.position.y -= 0.1  # Third move sideways (y)
+                       # waypoints.append(copy.deepcopy(wpose))
+
+                        # We want the Cartesian path to be interpolated at a resolution of 1 cm
+                        # which is why we will specify 0.01 as the eef_step in Cartesian
+                        # translation.  We will disable the jump threshold by setting it to 0.0 disabling:
+                        (plan, fraction) = group.compute_cartesian_path(
+                            waypoints,  # waypoints to follow
+                            0.01,  # eef_step
+                            0.0)  # jump_threshold
+                        waypoints_result = group.execute(plan, wait=True)
+                        if waypoints_result == True:
+                            pevent("Grasp successful!")
+                            attach_link = "arm_ee_link"
+                            touch_links = ["gripper_base_link","gripper_left_finger_base_link","gripper_left_finger_link","gripper_right_finger_base_link","gripper_right_finger_link"]
+                            group.attach_object("obj", attach_link, touch_links)
+                            return single_grasp
+                        else:
+                            failed_grasps += 1
+                            group.stop()
+                            group.clear_pose_targets()
+                            group.clear_path_constraints()
+                    else:
+                        failed_grasps += 1
+                        group.stop()
+                        group.clear_pose_targets()
+                        group.clear_path_constraints()
+                elif (inp == 'exit'):
+                    group.stop()
+                    group.clear_pose_targets()
+                    group.clear_path_constraints()
+                    exit(1)
+            cont_c += 1
+        self.grasps = []
+
 
     def place2(self, place_pose):
         #returns True or False if the place was successfull or not
@@ -460,6 +553,7 @@ class GpdPickPlace(object):
         group.set_start_state_to_current_state()
         group.set_goal_tolerance(0.05)
         group.set_pose_target(pose_goal)
+        group.set_planning_time(5)
 
         # The go command can be called with joint values, poses, or without any
         # parameters if you have already set the pose or joint target for the group
@@ -572,7 +666,7 @@ if __name__ == "__main__":
     clear_octomap()
 
     #num_view = 1
-    for i in range (0, num_objects):
+    for r in range (0, num_objects):
         planning.clear()
         # Subscribe for grasps
         print("--- Move Arm to Initial Position---")
@@ -590,14 +684,15 @@ if __name__ == "__main__":
     # Wait for grasps from gpd, wrap them into Grasp msg format and start picking
         pnp.grasps_received = False
         selected_grasps = pnp.get_gpd_grasps()
-        formatted_grasps = pnp.generate_grasp_msgs(selected_grasps)
+        [formatted_grasps, formatted_grasps_cartesian] = pnp.generate_grasp_msgs(selected_grasps)
         result = gripper_client_2(8)
         print("Gripper opened")
         pnp.remove_pose_constraints()
         #pnp.start_con_setup()
        # pnp.set_pose_constraints(1.57, 1.57, 1.57)
         #        pnp.stop_con_setup()
-        successful_grasp = pnp.pick(formatted_grasps, verbose=True)
+       # successful_grasp = pnp.pick(formatted_grasps, verbose=True)
+        successful_grasp = pnp.pick_cartesian(formatted_grasps, formatted_grasps_cartesian, verbose=True)
         if successful_grasp is not None:
             result = gripper_client_2(-8)
             print("Gripper closed")
