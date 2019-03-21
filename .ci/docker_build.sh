@@ -1,4 +1,7 @@
 #!/bin/bash
+set -e
+
 cd ~/rosdocked-irlab/workspace_included
 ./build.sh
-docker images
+
+exit 0

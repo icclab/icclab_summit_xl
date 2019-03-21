@@ -12,13 +12,10 @@ before_script:
 - docker pull robopaas/rosdocked-kinetic-workspace-included:latest
 
 script: 
-- ./.ci/run_tests.sh
-
-after_script:
 - ./.ci/docker_build.sh
 
-#deploy:
-#  provider: script
-#  script: bash ./.ci/docker_push.sh
-#  on:
-#    branch: master
+deploy:
+  provider: script
+  script: bash ./.ci/docker_push.sh
+  on:
+    branch: master
