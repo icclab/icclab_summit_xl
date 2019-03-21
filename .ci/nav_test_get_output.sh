@@ -5,3 +5,5 @@
 . /opt/ros/kinetic/setup.bash
 roscd log
 cat *movebase_client_py*
+
+exit 0
