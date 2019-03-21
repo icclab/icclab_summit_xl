@@ -254,7 +254,7 @@ class GpdPickPlace(object):
         for single_grasp in grasps_list_cartesian:
 
             if self.mark_pose:
-                self.show_grasp_pose(self.marker_publisher, single_grasp.grasp_pose)
+                self.show_grasp_pose(self.marker_publisher, single_grasp.grasp_pose.pose)
                 rospy.sleep(1)
             pevent("Planning grasp:")
             pprint(single_grasp.grasp_pose)
@@ -272,7 +272,7 @@ class GpdPickPlace(object):
                     pick_result = group.execute(plan, wait=True)
                     if pick_result == True:
                         group.set_start_state_to_current_state()
-                        group.set_goal_tolerance(0.05)
+                        group.set_goal_tolerance(0.01)
                         waypoints = []
 
                         wpose = grasps_list[cont_c].grasp_pose.pose

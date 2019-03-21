@@ -164,7 +164,10 @@ class GpdPickPlace(object):
                 formatted_grasps.append(g)
 
                 #Added code lines for cartesian pick
+                g_cartesian = Grasp ()
+                g_cartesian.id = "cart"
                 gp_cartesian = PoseStamped()
+                gp_cartesian.header.frame_id = "summit_xl_base_footprint"
                 gp_cartesian.pose.position.x = selected_grasps[i].surface.x + self.grasp_offset_cartesian * selected_grasps[i].approach.x
                 gp_cartesian.pose.position.y = selected_grasps[i].surface.y + self.grasp_offset_cartesian * selected_grasps[i].approach.y
                 gp_cartesian.pose.position.z = selected_grasps[i].surface.z + self.grasp_offset_cartesian * selected_grasps[i].approach.z
@@ -173,7 +176,7 @@ class GpdPickPlace(object):
                 gp_cartesian.pose.orientation.z = float(quat.elements[3])
                 gp_cartesian.pose.orientation.w = float(quat.elements[0])
 
-                g_cartesian = Grasp ()
+
                 g_cartesian.grasp_pose = gp_cartesian
                 g_cartesian.allowed_touch_objects = ["obj"]
                 formatted_grasps_cartesian.append(g_cartesian)
@@ -259,10 +262,10 @@ class GpdPickPlace(object):
         rospy.sleep(2.0)
         group.set_goal_tolerance(0.05)
         cont_c = 0
-        for single_grasp in grasps_list_cartesian:
 
+        for single_grasp in grasps_list_cartesian:
             if self.mark_pose:
-                self.show_grasp_pose(self.marker_publisher, single_grasp.grasp_pose)
+                self.show_grasp_pose(self.marker_publisher, single_grasp.grasp_pose.pose)
                 rospy.sleep(1)
             pevent("Planning grasp:")
             pprint(single_grasp.grasp_pose)
@@ -280,7 +283,7 @@ class GpdPickPlace(object):
                     pick_result = group.execute(plan, wait=True)
                     if pick_result == True:
                         group.set_start_state_to_current_state()
-                        group.set_goal_tolerance(0.05)
+                        group.set_goal_tolerance(0.01)
                         waypoints = []
 
                         wpose = grasps_list[cont_c].grasp_pose.pose
@@ -689,7 +692,7 @@ if __name__ == "__main__":
     # Wait for grasps from gpd, wrap them into Grasp msg format and start picking
         pnp.grasps_received = False
         selected_grasps = pnp.get_gpd_grasps()
-   	[formatted_grasps, formatted_grasps_cartesian] = pnp.generate_grasp_msgs(selected_grasps)
+        [formatted_grasps, formatted_grasps_cartesian] = pnp.generate_grasp_msgs(selected_grasps)
         open_gripper_summit()
         print("Gripper opened")
         pnp.remove_pose_constraints()

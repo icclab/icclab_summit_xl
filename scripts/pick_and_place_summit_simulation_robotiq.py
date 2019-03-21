@@ -259,7 +259,7 @@ class GpdPickPlace(object):
         for single_grasp in grasps_list_cartesian:
 
             if self.mark_pose:
-                self.show_grasp_pose(self.marker_publisher, single_grasp.grasp_pose)
+                self.show_grasp_pose(self.marker_publisher, single_grasp.grasp_pose.pose)
                 rospy.sleep(1)
             pevent("Planning grasp:")
             pprint(single_grasp.grasp_pose)
