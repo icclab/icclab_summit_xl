@@ -32,11 +32,24 @@ if [[ "$nav_test_output" == *"fail"* ]] ; then
   exit 1
 elif [[ "$nav_test_output" == *"success"* ]]; then
   echo "Navigation test succeeded. No issues found"
-  exit 0
 else
   echo "State of test unknown. Check output."
   echo $nav_test_output
   exit 1
 fi
+
+# TEST #2: testing grasping
+# bring up sim complete with grasping then execute pick and place script
+echo "Testing grasping..."
+echo "Executing 'roslaunch icclab_summit_xl irlab_sim_summit_xls_grasping.launch launch_rviz_grasping:=false gazebo_gui:=false' inside container $CONTAINER_NAME..."
+docker exec -d $CONTAINER_NAME ./catkin_ws/src/icclab_summit_xl/.ci/grasping.sh
+
+echo "Executing 'python pick_and_place_summit_simulation.py' inside container $CONTAINER_NAME..."
+docker exec -it $CONTAINER_NAME ./catkin_ws/src/icclab_summit_xl/.ci/pick_and_place.sh | tee pick_and_place_log.txt
+grasping_test_output=$(cat pick_and_place_log.txt)
+
+# TODO: logic based on pick_and_place_log.txt
+
+# TODO: add test results to master log sheet
 
 exit 0

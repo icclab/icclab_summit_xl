@@ -2,6 +2,8 @@
 #
 # test navigation stack in sim
 
+set -e
+
 cd ~/catkin_ws/src/icclab_summit_xl/
 git pull
 . /opt/ros/kinetic/setup.bash
