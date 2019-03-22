@@ -9,7 +9,7 @@ install:
 - git clone --depth=1 https://github.com/icclab/rosdocked-irlab --branch=master ~/rosdocked-irlab
 
 before_script:
-- docker pull robopaas/rosdocked-kinetic-workspace-included:latest
+#- docker pull robopaas/rosdocked-kinetic-workspace-included:latest
 
 script: 
 - ./.ci/docker_build.sh
