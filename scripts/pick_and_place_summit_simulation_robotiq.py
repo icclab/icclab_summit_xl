@@ -717,7 +717,7 @@ if __name__ == "__main__":
     pnp = GpdPickPlace(mark_pose=True)
     group_name = "manipulator"
     group = moveit_commander.MoveGroupCommander(group_name, robot_description="/summit_xl/robot_description", ns="/summit_xl")
-    group.set_planner_id("BiRRT")
+    group.set_planner_id("BiTRRT")
   #  group.set_max_velocity_scaling_factor(0.05)
    # group.set_goal_orientation_tolerance(0.01)
     group.set_planning_time(5)
@@ -765,7 +765,7 @@ if __name__ == "__main__":
         successful_grasp = pnp.pick_two_steps(formatted_grasps, formatted_grasps_cartesian, verbose=True)
         if successful_grasp is not None:
            # result = gripper_client_2(-8)
-            gripper_client_2(0.8)
+            gripper_client_2(0.71)
             print("Gripper closed")
           #  pnp.start_grasp_check()
             pnp.remove_pose_constraints()
