@@ -13,6 +13,7 @@
 	<arg name="omni" default="false"/>
 	<arg name="sim" default="false"/>
 	<arg name="debug_mode" default="false"/>
+	<arg name="slam" default="false"/>
 
 	<!-- Run move_base -->
 	<node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
@@ -20,7 +21,8 @@
 		<rosparam file="$(find icclab_summit_xl)/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
 		<rosparam file="$(find icclab_summit_xl)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
 		<rosparam file="$(find icclab_summit_xl)/config/local_costmap_params.yaml" command="load" />
-		<rosparam file="$(find icclab_summit_xl)/config/global_costmap_params_map.yaml" command="load" />
+		<rosparam if="$(arg slam)" file="$(find icclab_summit_xl)/config/global_costmap_params_no_map.yaml" command="load" />
+		<rosparam unless="$(arg slam)" file="$(find icclab_summit_xl)/config/global_costmap_params_map.yaml" command="load" />
 		<rosparam file="$(find icclab_summit_xl)/config/global_planner_params.yaml" command="load" />
 		<rosparam if="$(arg omni)" file="$(find icclab_summit_xl)/config/teb_local_planner_steel_params.yaml" command="load" />
 		<rosparam unless="$(arg omni)" file="$(find icclab_summit_xl)/config/teb_local_planner_diff_params.yaml" command="load" />
@@ -47,6 +49,7 @@
 		<param name="controller_frequency" value="10.0" />
 		<param name="controller_patience" value="15.0" />
 		<param name="local_costmap/obstacle_3d_layer/publish_voxel_map" value="$(arg debug_mode)"/>
+		<param name="GlobalPlanner/allow_unknown" value="$(arg slam)"/>
 		<remap from="cmd_vel" to="$(arg cmd_vel_topic)" />
 		<remap from="odom" to="$(arg odom_topic)" />
 

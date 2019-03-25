@@ -17,6 +17,7 @@
         <arg name="gmapping_robot_a" default="false"/>
         <arg name="move_base_robot_a" default="false"/>
         <arg name="amcl_and_mapserver_a" default="false"/>
+        <arg name="slam" default="false"/>
 
 	<!-- ARM CONTROL PARAMS -->
 	<arg name="launch_rviz_grasping" default="false"/>
@@ -45,6 +46,7 @@
 		<arg name="amcl_and_mapserver_a" value="$(arg amcl_and_mapserver_a)"/>
 		<arg name="xacro_robot_a" value="$(arg xacro_robot_a)"/>
 		<arg name="nav_test" value="$(arg nav_test)"/>
+		<arg name="slam" value="$(arg slam)"/>
 	</include>
 	
 

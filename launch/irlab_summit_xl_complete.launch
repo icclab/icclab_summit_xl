@@ -31,6 +31,7 @@
 	<arg name="z_init_pose" default="0.0"/>
 	<arg name="a_init_pose" default="-1.597"/>
 	<arg name="debug_mode" default="false"/> <!-- currently just shows voxel map if true -->
+	<arg name="slam" default="false"/>
 
 	<!-- Optional -->
 	<arg name="launch_web_server" default="false"/>
@@ -109,9 +110,11 @@
                   <arg name="accel_fps" value="6"/>
                 </include>
 
-  <node name="foo_throttler_front" type="throttle" pkg="topic_tools" args="messages /summit_xl/front_rgbd_camera/depth/points 1 /summit_xl/front_rgbd_camera/depth/points_throttled" />
+		<node name="foo_throttler_front" type="throttle" pkg="topic_tools"
+                        args="messages /summit_xl/front_rgbd_camera/depth/points 1 /summit_xl/front_rgbd_camera/depth/points_throttled" />
 
-  <node name="foo_throttler_arm" type="throttle" pkg="topic_tools" args="messages /summit_xl/arm_camera/depth_registered/points 1 /summit_xl/arm_camera/depth_registered/points_throttled" />
+		<node name="foo_throttler_arm" type="throttle" pkg="topic_tools"
+                        args="messages /summit_xl/arm_camera/depth_registered/points 1 /summit_xl/arm_camera/depth_registered/points_throttled" />
 
 		<!--================================== NAV STACK ==================================-->
 		<!-- teleop - manually control robot with keyboard -->
@@ -129,6 +132,7 @@
 			<arg unless="$(arg launch_robot_localization)" name="odom_topic" value="robotnik_base_control/odom"/>
 			<arg if="$(arg launch_robot_localization)"     name="odom_topic" value="odometry/filtered_odom"/>
 			<arg name="debug_mode" value="$(arg debug_mode)"/>
+			<arg name="slam" value="$(arg slam)"/>
 		</include>
 
 		<!-- merge laser scan topics to scan_combined for ACML or GMapping, delay launch by 5 seconds -->

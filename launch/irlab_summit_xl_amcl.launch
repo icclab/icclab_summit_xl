@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<launch>
+
+        <!-- SIMULATION -->
+        <arg name="sim"                    default="true"/>
+
+        <!-- GAZEBO -->
+        <arg name="ros_planar_move_plugin" default="true"/> <!-- disables gazebo ros_control plugin -->
+        <arg name="gazebo_world"           default="$(find icclab_summit_xl)/worlds/summit_xl_office.world"/>
+        <arg name="gazebo_gui"             default="true"/>
+
+        <!-- NAV STACK PARAMS -->
+        <arg name="teleop"                 default="false"/>
+        <arg name="launch_rviz_nav"        default="true"/>
+        <arg name="launch_robot_localization" default="false"/>
+        <arg name="omni"                   default="true"/>
+        <arg name="launch_move_base"       default="true"/>
+        <arg name="launch_amcl_and_mapserver" default="true"/>
+        <arg if="$(arg sim)" name="map_file" default="willow_garage/willow_garage.yaml"/>
+        <arg unless="$(arg sim)" name="map_file" default="icclab/icclab_latest_map.yaml"/>
+        <arg name="x_init_pose"            default="-16.910"/>
+        <arg name="y_init_pose"            default="-0.777"/>
+        <arg name="z_init_pose"            default="0.0"/>
+        <arg name="a_init_pose"            default="-1.597"/>
+        <arg name="debug_mode"             default="false"/> <!-- currently just shows voxel map if true -->
+
+	<!-- TESTING -->
+	<arg name="nav_test"               default="false"/>
+
+        <!--======================== LAUNCH SIM ==================================-->
+        <include if="$(arg sim)" file="$(find icclab_summit_xl)/launch/irlab_sim_summit_xls_complete.launch">
+		<arg name="ros_planar_move_plugin" value="$(arg ros_planar_move_plugin)"/>
+		<arg name="gazebo_world"           value="$(arg gazebo_world)"/>
+		<arg name="gazebo_gui"             value="$(arg gazebo_gui)"/>
+		<arg name="launch_rviz_nav"        value="$(arg launch_rviz_nav)"/>
+		<arg name="map_file_a"             value="$(arg map_file)"/>
+		<arg name="localization_robot_a"   value="$(arg launch_robot_localization)"/>
+		<arg name="move_base_robot_a"      value="$(arg launch_move_base)"/>
+		<arg name="amcl_and_mapserver_a"   value="$(arg launch_amcl_and_mapserver)"/>
+		<arg name="nav_test"               value="$(arg nav_test)"/>
+	</include>
+
+        <!--======================== LAUNCH ITR ==================================-->
+	<include unless="$(arg sim)" file="$(find icclab_summit_xl)/launch/irlab_summit_xl_complete.launch">
+                <arg name="teleop"                 value="$(arg teleop)"/>
+                <arg name="launch_robot_localization" value="$(arg launch_robot_localization)"/>
+                <arg name="omni"                   value="$(arg omni)"/>
+                <arg name="launch_move_base"       value="$(arg launch_move_base)"/>
+                <arg name="launch_amcl_and_mapserver" value="$(arg launch_amcl_and_mapserver)"/>
+                <arg name="map_file"               value="$(arg map_file)"/>
+                <arg name="x_init_pose"            value="$(arg x_init_pose)"/>
+                <arg name="y_init_pose"            value="$(arg y_init_pose)"/>
+                <arg name="z_init_pose"            value="$(arg z_init_pose)"/>
+                <arg name="a_init_pose"            value="$(arg a_init_pose)"/>
+                <arg name="debug_mode"             value="$(arg debug_mode)"/>
+        </include>
+
+</launch>
