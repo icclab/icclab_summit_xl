@@ -27,7 +27,7 @@
 	<!-- TESTING -->
 	<arg name="nav_test"               default="false"/>
 
-        <!--======================== LAUNCH SIM ==================================-->
+        <!--======================== COMPLETE SIM ==================================-->
         <include if="$(arg sim)" file="$(find icclab_summit_xl)/launch/irlab_sim_summit_xls_complete.launch">
 		<arg name="ros_planar_move_plugin" value="$(arg ros_planar_move_plugin)"/>
 		<arg name="gazebo_world"           value="$(arg gazebo_world)"/>
@@ -40,7 +40,7 @@
 		<arg name="nav_test"               value="$(arg nav_test)"/>
 	</include>
 
-        <!--======================== LAUNCH ITR ==================================-->
+        <!--======================== COMPLETE ITR ==================================-->
 	<include unless="$(arg sim)" file="$(find icclab_summit_xl)/launch/irlab_summit_xl_complete.launch">
                 <arg name="teleop"                 value="$(arg teleop)"/>
                 <arg name="launch_robot_localization" value="$(arg launch_robot_localization)"/>
