@@ -80,7 +80,10 @@
   <exec_depend>tf2_ros</exec_depend>
   <exec_depend>tf2_eigen</exec_depend>
   <exec_depend>tf2_geometry_msgs</exec_depend>
-  <exec_depend>summit_xl_common</exec_depend>
+  <exec_depend>summit_xl_localization</exec_depend>
+  <exec_depend>summit_xl_navigation</exec_depend>
+  <exec_depend>summit_xl_pad</exec_depend>
+  <exec_depend>summit_xl_control</exec_depend>
   <exec_depend>ur_gazebo</exec_depend>
   <exec_depend>ira_laser_tools</exec_depend>
   <exec_depend>timed_roslaunch</exec_depend>
