@@ -68,7 +68,7 @@
 
 		<!-- merge laser scan topics to scan_combined for ACML or GMapping, delay launch by 5 seconds -->
 		<include if="$(eval launch_amcl_and_mapserver or launch_gmapping)" file="$(find icclab_summit_xl)/launch/timed_laserscan_multi_merger.launch">
-			<arg name="delay_time" value="30"/>
+			<arg name="delay_time" value="5"/>
 		</include>
 
 		<!-- amcl and map server base-->

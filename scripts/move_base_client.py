@@ -32,8 +32,8 @@ def movebase_client():
     goal = MoveBaseGoal()
     goal.target_pose.header.frame_id = "summit_xl_map"
     goal.target_pose.header.stamp = rospy.Time.now()
-    # Move 0.5 meters forward along the x axis of the "summit_xl_map" coordinate frame 
-    goal.target_pose.pose.position.x = 0.5
+    # Move 2.0 meters forward along the x axis of the "summit_xl_map" coordinate frame
+    goal.target_pose.pose.position.x = 2.0
     # No rotation of the mobile base frame w.r.t. summit_xl_map frame
     goal.target_pose.pose.orientation.w = 1.0
 
