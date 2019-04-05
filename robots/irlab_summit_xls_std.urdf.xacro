@@ -22,8 +22,15 @@
 	<!-- Import all available robotnik sensors -->
 	<xacro:include filename="$(find robotnik_sensors)/urdf/all_sensors.urdf.xacro" />
 
-	<!-- Import gripper Schunk EGP40-->
-	<xacro:include filename="$(find icclab_summit_xl)/urdf/gripper/schunk_egp40.urdf.xacro" />
+	<xacro:arg name="robotiq_gripper" default="true"/>
+   	<xacro:unless value="$(arg robotiq_gripper)">
+		<!-- Import gripper Schunk EGP40-->
+	   	<xacro:include filename="$(find icclab_summit_xl)/urdf/gripper/schunk_egp40.urdf.xacro" />
+   	</xacro:unless>
+	<xacro:if value="$(arg robotiq_gripper)">
+		<!-- Import gripper Robotiq85-->
+		<xacro:include filename="$(find icclab_summit_xl)/urdf/gripper/ur5_robotiq85_gripper_mod.urdf.xacro" />
+	</xacro:if>
 
 	<!-- ICCLab sensors -->
 	<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/scanse.urdf.xacro" />
@@ -144,10 +151,20 @@
 		</joint>
 
 		<!-- GRIPPER -->
+		<xacro:unless value="$(arg robotiq_gripper)">
+			<xacro:schunk_egp_40 prefix="gripper_" parent="arm_tool0" >
+				 <origin xyz="0.0 0 0.0" rpy="0 0 0" />
+			</xacro:schunk_egp_40> 
+  		</xacro:unless>
 
-		<xacro:schunk_egp_40 prefix="gripper_" parent="arm_tool0" >
-			 <origin xyz="0.0 0 0.0" rpy="0 0 0" />
-		</xacro:schunk_egp_40> 
+		<xacro:if value="$(arg robotiq_gripper)">
+    			  <!-- Plugin -->
+			<plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so" >
+				 <robotNamespace>/summit_xl</robotNamespace>
+   				 <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+   				 <legacyModeNS>true</legacyModeNS>
+			</plugin>
+		</xacro:if>
 		
 		<!-- Camera on gripper  --> 
 		<!-- had to copy and modidy camera to avoid name clash with robotnik defined sensors -->

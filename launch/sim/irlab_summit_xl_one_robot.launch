@@ -1,11 +1,14 @@
 <?xml version="1.0"?>
 <launch>
+        <!-- GRIPPER PARAMS -->
+        <arg name="robotiq_gripper"   default="false"/>
 
 	<arg name="id_robot" default="summit_xl"/>
 	<arg name="x_init_pose" default="0"/>
 	<arg name="y_init_pose" default="0"/>
 	<arg name="z_init_pose" default="0"/>
-	<arg name="xacro_robot" default="irlab_summit_xls_std.urdf.xacro"/>
+	<arg name="xacro_robot" default="irlab_summit_xls_std.urdf.xacro" unless="$(arg robotiq_gripper)"/>
+	<arg name="xacro_robot" default="irlab_summit_xls_std_robotiqgripper.urdf.xacro" if="$(arg robotiq_gripper)"/>
 	<arg name="launch_robot_localization" default="false"/>
 	<arg name="launch_amcl_and_mapserver" default="false"/>
 	<arg name="launch_gmapping" default="false"/>
@@ -37,6 +40,7 @@
 			<arg if="$(arg ros_planar_move_plugin)" name="kinematics" value="steel_omni"/>
 			<arg name="ros_planar_move_plugin" value="$(arg ros_planar_move_plugin)"/>
 			<arg name="launch_robot_localization" value="$(arg launch_robot_localization)"/>
+			<arg name="robotiq_gripper" value="$(arg robotiq_gripper)"/>
 		</include>
 
 		<!-- robot_localization nodes, publishes transformation world->odom->base_footprint -->

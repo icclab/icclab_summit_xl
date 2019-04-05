@@ -1,9 +1,12 @@
 <?xml version="1.0"?>
 <launch>
+        <!-- GRIPPER PARAMS -->
+        <arg name="robotiq_gripper"   default="false"/>
 
 	<!-- SUMMIT XL STEEL-->
 	<arg name="id_robot" default="summit_xl"/>
-	<arg name="xacro_robot_a" default="irlab_summit_xls_std.urdf.xacro"/>
+	<arg name="xacro_robot_a" default="irlab_summit_xls_std.urdf.xacro" unless="$(arg robotiq_gripper)"/>
+	<arg name="xacro_robot_a" default="irlab_summit_xls_std_robotiqgripper.urdf.xacro" if="$(arg robotiq_gripper)"/>
 
 	<!-- GAZEBO -->
 	<arg name="ros_planar_move_plugin" default="true"/> <!-- disables gazebo ros_control plugin -->
@@ -31,6 +34,8 @@
 	<arg name="nav_test" default="false"/>
 
 
+
+
 	<!--======================== GAZEBO + NAV STACK ==================================-->
 	<include file="$(find icclab_summit_xl)/launch/sim/irlab_summit_xl_gazebo.launch">
 		<!-- general args -->
@@ -47,6 +52,7 @@
 		<arg name="xacro_robot_a" value="$(arg xacro_robot_a)"/>
 		<arg name="nav_test" value="$(arg nav_test)"/>
 		<arg name="slam" value="$(arg slam)"/>
+		<arg name="robotiq_gripper"        value="$(arg robotiq_gripper)"/>
 	</include>
 	
 
@@ -57,7 +63,9 @@
 		<include file="$(find icclab_summit_xl)/launch/planning_context.launch">
 			<arg name="load_robot_description" value="true"/>
 			<arg name="simulation" value="$(arg simulation)"/>
+			<arg name="robotiq_gripper" value="$(arg robotiq_gripper)"/>
 		</include>
+
 
 		<!-- Run the main MoveIt executable without trajectory execution (we do not have controllers configured by default) -->
 		<include file="$(find icclab_summit_xl)/launch/move_group.launch">
@@ -67,8 +75,10 @@
 			<arg name="debug" value="$(arg debug)"/>
 		</include>
 
-		<!-- Controller parameters-->
-		<rosparam file="$(find icclab_summit_xl)/config/controllers.yaml"/>
+		<!-- Controller parameters with Schunk gripper-->
+		<rosparam file="$(find icclab_summit_xl)/config/controllers.yaml" unless="$(arg robotiq_gripper)"/>
+		<!-- Controller parameters with Robotiq gripper-->
+		<rosparam file="$(find icclab_summit_xl)/config/controllers_robotiqgripper.yaml" if="$(arg robotiq_gripper)"/>
 
 		<!--	The semantic description that corresponds to the URDF -->
 		<!--	<arg name="robot_description" default="robot_description"/>-->

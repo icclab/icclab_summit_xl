@@ -1,5 +1,8 @@
 <?xml version="1.0"?>
 <launch>
+        <!-- GRIPPER PARAMS -->
+        <arg name="robotiq_gripper"   default="false"/>
+
 	<!-- skid, omni, steel_skid, steel_omni, diffdrive -->
 	<!-- diffdrive has been tested only in simulation -->
 	<arg name="kinematics" default="$(optenv ROBOT_KINEMATICS skid)"/>
@@ -44,9 +47,15 @@
     <rosparam file="$(find ur_gazebo)/controller/joint_state_controller.yaml" command="load"/>
     <node name="joint_state_controller_spawner" pkg="controller_manager" type="controller_manager" args="spawn joint_state_controller" respawn="false" output="screen"/>
     <!-- gripper controller -->
-  <node name="$(arg prefix)gripper_controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+  <node unless="$(arg robotiq_gripper)" name="$(arg prefix)gripper_controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
     output="screen" args="gripper_left_controller gripper_right_controller  --shutdown-timeout 1" />
     
+ 
+<rosparam if="$(arg robotiq_gripper)" file="$(find icclab_summit_xl)/config/robotiq_gripper_controller.yaml" command="load"/>
+ <!-- spawn controller manager -->
+  <node  if="$(arg robotiq_gripper)" name="gripper_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="gripper_joint_trajectory_controller  --shutdown-timeout 1" />
+
+
 	  
 	  <!-- if robot_localization node is launched the controller must not publish the odom tf-->
 	  <param if="$(arg launch_robot_localization)" name="robotnik_base_control/enable_odom_tf" value="false"/>	 
