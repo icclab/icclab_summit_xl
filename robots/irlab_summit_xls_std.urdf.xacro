@@ -22,7 +22,7 @@
 	<!-- Import all available robotnik sensors -->
 	<xacro:include filename="$(find robotnik_sensors)/urdf/all_sensors.urdf.xacro" />
 
-	<xacro:arg name="robotiq_gripper" default="true"/>
+	<xacro:arg name="robotiq_gripper" default="false"/>
    	<xacro:unless value="$(arg robotiq_gripper)">
 		<!-- Import gripper Schunk EGP40-->
 	   	<xacro:include filename="$(find icclab_summit_xl)/urdf/gripper/schunk_egp40.urdf.xacro" />
@@ -49,6 +49,9 @@
 
 	<!-- Collision box on arm wrist 2 -->
 	<xacro:include filename="$(find icclab_summit_xl)/robots/ur5_arm_wrist2_collision_box.urdf.xacro" />
+
+	<!-- Collision wall robot side -->
+	<xacro:include filename="$(find icclab_summit_xl)/robots/wall_collision_box.urdf.xacro" />
 
 	<xacro:property name="PI" value="3.1415926535897931"/>
 
@@ -199,6 +202,16 @@
 		<xacro:collision_box_wrist2 prefix="arm" parent="arm_wrist_2_link">
 			 <origin xyz="0 0 -0.06" rpy="${PI/2} 0 0" />
 		</xacro:collision_box_wrist2> 
+
+		<!-- Collision box side 1 -->
+		<xacro:collision_box_wall prefix="right" parent="summit_xl_base_footprint">
+			 <origin xyz="0 0.9 0.5" rpy="0 0 0" />
+		</xacro:collision_box_wall> 
+
+		<!-- Collision box side 2 -->
+		<xacro:collision_box_wall prefix="left" parent="summit_xl_base_footprint">
+			 <origin xyz="0 -0.9 0.5" rpy="0 0 0" />
+		</xacro:collision_box_wall> 
 		
    </xacro:macro>
    

@@ -3,6 +3,7 @@
 	<!-- valid for summitxl - summitxl hl - summitxl hls -->
 	<!-- The environment variables should be set in a file or .bashrc -->
 
+
 	<arg name="id_robot" default="$(optenv ROBOT_ID summit_xl)"/>
 	<arg name="simulation" default="false"/>
 	
