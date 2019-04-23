@@ -14,26 +14,24 @@
 	<arg name="gazebo_gui" default="true"/>
 
         <!-- NAV STACK PARAMS -->
-        <arg name="launch_rviz_nav" default="false"/>
+        <arg name="launch_rviz_nav" default="true"/>
         <arg name="map_file_a" default="willow_garage/willow_garage.yaml"/>
         <arg name="localization_robot_a" default="false"/>
         <arg name="gmapping_robot_a" default="false"/>
-        <arg name="move_base_robot_a" default="false"/>
-        <arg name="amcl_and_mapserver_a" default="false"/>
+        <arg name="move_base_robot_a" default="true"/>
+        <arg name="amcl_and_mapserver_a" default="true"/>
         <arg name="slam" default="false"/>
 
 	<!-- ARM CONTROL PARAMS -->
-	<arg name="launch_rviz_grasping" default="false"/>
-	<arg name="enable_arm" default="false"/>
+	<arg name="launch_rviz_grasping" default="true"/>
+	<arg name="enable_arm" default="true"/>
 	<arg name="db" default="false"/> <!-- By default, we do not start a database (it can be large) -->
 	<arg name="db_path" default="$(find icclab_summit_xl)/default_warehouse_mongo_db"/> <!-- Allow user to specify database location -->
 	<arg name="debug" default="false"/> <!-- By default, we are not in debug mode -->
-	<arg name="simulation" default="false"/>
+	<arg name="simulation" default="true"/>
 
 	<!-- TESTING -->
 	<arg name="nav_test" default="false"/>
-
-
 
 
 	<!--======================== GAZEBO + NAV STACK ==================================-->
@@ -59,9 +57,8 @@
 	<!--============================= ARM CONTROL =============================-->
 	<group if="$(arg enable_arm)" ns="$(arg id_robot)">
 
-		<!-- Load the URDF, SRDF and other .yaml configuration files on the param server -->
+		<!-- Load the SRDF and other .yaml configuration files on the param server -->
 		<include file="$(find icclab_summit_xl)/launch/planning_context.launch">
-			<arg name="load_robot_description" value="true"/>
 			<arg name="simulation" value="$(arg simulation)"/>
 			<arg name="robotiq_gripper" value="$(arg robotiq_gripper)"/>
 		</include>

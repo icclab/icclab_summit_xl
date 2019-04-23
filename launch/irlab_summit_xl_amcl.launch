@@ -24,6 +24,11 @@
         <arg name="a_init_pose"            default="-1.597"/>
         <arg name="debug_mode"             default="false"/> <!-- currently just shows voxel map if true -->
 
+        <!-- DISABLE ARM CONTROL PARAMS -->
+        <arg name="launch_rviz_grasping" default="false"/>
+        <arg name="enable_arm" default="false"/>
+        <arg name="simulation" default="false"/>
+
 	<!-- TESTING -->
 	<arg name="nav_test"               default="false"/>
 
@@ -38,6 +43,9 @@
 		<arg name="move_base_robot_a"      value="$(arg launch_move_base)"/>
 		<arg name="amcl_and_mapserver_a"   value="$(arg launch_amcl_and_mapserver)"/>
 		<arg name="nav_test"               value="$(arg nav_test)"/>
+		<arg name="launch_rviz_grasping"   value="$(arg launch_rviz_grasping)"/>
+		<arg name="enable_arm"             value="$(arg enable_arm)"/>
+		<arg name="simulation"             value="$(arg simulation)"/>
 	</include>
 
         <!--======================== COMPLETE ITR ==================================-->

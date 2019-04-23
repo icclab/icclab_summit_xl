@@ -7,8 +7,7 @@
 	<arg name="x_init_pose" default="0"/>
 	<arg name="y_init_pose" default="0"/>
 	<arg name="z_init_pose" default="0"/>
-	<arg name="xacro_robot" default="irlab_summit_xls_std.urdf.xacro" unless="$(arg robotiq_gripper)"/>
-	<arg name="xacro_robot" default="irlab_summit_xls_std_robotiqgripper.urdf.xacro" if="$(arg robotiq_gripper)"/>
+	<arg name="xacro_robot" default="irlab_summit_xls_std.urdf.xacro"/>
 	<arg name="launch_robot_localization" default="false"/>
 	<arg name="launch_amcl_and_mapserver" default="false"/>
 	<arg name="launch_gmapping" default="false"/>
@@ -24,7 +23,7 @@
 		<arg name="prefix" value="$(arg id_robot)_"/>
 
 		<!-- Load the URDF into the ROS Parameter Server -->
-		<param name="robot_description" command="$(find xacro)/xacro '$(find icclab_summit_xl)/robots/$(arg xacro_robot)' prefix:=$(arg prefix) ros_planar_move_plugin:=$(arg ros_planar_move_plugin) --inorder"/>
+		<param name="robot_description" command="$(find xacro)/xacro '$(find icclab_summit_xl)/robots/$(arg xacro_robot)' prefix:=$(arg prefix) ros_planar_move_plugin:=$(arg ros_planar_move_plugin) robotiq_gripper:=$(arg robotiq_gripper) --inorder"/>
 
 		<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen">
 			<remap from="/joint_states" to="joint_states" />

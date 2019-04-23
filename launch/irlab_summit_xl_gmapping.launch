@@ -21,6 +21,11 @@
         <arg name="debug_mode"             default="false"/> <!-- currently just shows voxel map if true -->
         <arg name="slam"                   default="true"/>
 
+        <!-- DISABLE ARM CONTROL PARAMS -->
+        <arg name="launch_rviz_grasping" default="false"/>
+        <arg name="enable_arm" default="false"/>
+        <arg name="simulation" default="false"/>
+
 	<!-- TESTING -->
 	<arg name="nav_test"               default="false"/>
 
@@ -36,6 +41,9 @@
 		<arg name="gmapping_robot_a"       value="$(arg launch_gmapping)"/>
 		<arg name="nav_test"               value="$(arg nav_test)"/>
                 <arg name="slam"                   value="$(arg slam)"/>
+                <arg name="launch_rviz_grasping"   value="$(arg launch_rviz_grasping)"/>
+                <arg name="enable_arm"             value="$(arg enable_arm)"/>
+                <arg name="simulation"             value="$(arg simulation)"/>
 	</include>
 
         <!--======================== COMPLETE ITR ==================================-->
