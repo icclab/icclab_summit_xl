@@ -20,7 +20,7 @@
 
 	<!-- Nav/Map Stack -->
 	<arg name="teleop" default="false"/>
-	<arg name="launch_robot_localization" default="false"/> <!-- TODO: investigate effectiveness -->
+	<arg name="launch_robot_localization" default="false"/> <!-- TODO: to fix, currently not working due to bad imu data -->
 	<arg name="omni" default="true"/> <!-- planner is set to plan diff drive trajectories TODO: get omni drive to work-->
 	<arg name="launch_move_base" default="false"/>
 	<arg name="launch_gmapping" default="false"/>
