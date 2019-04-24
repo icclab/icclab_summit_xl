@@ -1,10 +1,12 @@
+### All parameter descriptions found here http://wiki.ros.org/move_base
+
 # Local planner
 controller_frequency: 20.0
 controller_patience: 30.0
 
 # Global planner
-planner_frequency: 0.2 # 0.0, global planner only run when new goal or path blocked
-planner_patience: 0.0
+planner_frequency: 0.5 # 0.0, global planner only run when new goal or path blocked
+planner_patience: 30.0
 
 # Oscillation
 oscillation_timeout: 0.0 # time to allow for oscillation before executing recovery behaviors
@@ -14,7 +16,7 @@ oscillation_distance: 0.5
 recovery_behavior_enabled: true
 clearing_rotation_allowed: false
 shutdown_costmaps: false # true, shutdown costmaps when move_base is inactive
-max_planning_retries: 1 # -1.0, infinite retries. Max global planning retries before executing recovery
+max_planning_retries: 20 # -1.0, infinite retries. Max global planning retries before executing recovery
 
 # execute `rospack plugins --attrib=plugin nav_core | grep recovery` to look at all available recovery plugins
 recovery_behaviors:
