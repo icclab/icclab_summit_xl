@@ -11,7 +11,7 @@
 	<!-- GAZEBO -->
 	<arg name="ros_planar_move_plugin" default="true"/> <!-- disables gazebo ros_control plugin -->
 	<arg name="gazebo_world" default="$(find icclab_summit_xl)/worlds/summit_xl_office.world"/>
-	<arg name="gazebo_gui" default="true"/>
+	<arg name="gazebo_gui" default="false"/>
 
         <!-- NAV STACK PARAMS -->
         <arg name="launch_rviz_nav" default="true"/>

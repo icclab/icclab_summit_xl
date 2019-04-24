@@ -18,9 +18,9 @@
 
         <!-- DISABLE NAV STACK PARAMS -->
         <arg name="launch_rviz_nav"        default="false"/>
-        <arg name="gmapping_robot_a"       default="false"/>
-        <arg name="move_base_robot_a"      default="false"/>
-        <arg name="amcl_and_mapserver_a"   default="false"/>
+        <arg name="launch_gmapping"        default="false"/>
+        <arg name="launch_move_base"       default="false"/>
+        <arg name="launch_amcl_and_mapserver" default="false"/>
         <arg name="slam"                   default="false"/> 
 
         <!--======================== LAUNCH SIM COMPLETE ==================================-->
@@ -35,9 +35,9 @@
                 <arg name="simulation"             value="$(arg simulation)"/>
 		<arg name="robotiq_gripper"        value="$(arg robotiq_gripper)"/>
                 <arg name="launch_rviz_nav"        value="$(arg launch_rviz_nav)"/>
-                <arg name="gmapping_robot_a"       value="$(arg gmapping_robot_a)"/>
-                <arg name="move_base_robot_a"      value="$(arg move_base_robot_a)"/>
-                <arg name="amcl_and_mapserver_a"   value="$(arg amcl_and_mapserver_a)"/>
+                <arg name="gmapping_robot_a"       value="$(arg launch_gmapping)"/>
+                <arg name="move_base_robot_a"      value="$(arg launch_move_base)"/>
+                <arg name="amcl_and_mapserver_a"   value="$(arg launch_amcl_and_mapserver)"/>
                 <arg name="slam"                   value="$(arg slam)"/>
         </include>
 

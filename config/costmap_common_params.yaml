@@ -37,7 +37,7 @@ obstacle_3d_layer:
     topic: /summit_xl/front_rgbd_camera/depth/points
     marking: true               # true, use this sensor data to mark obstacles on costmap
     clearing: false             # true, use this sensor data to clear obstalces on costmap
-    min_obstacle_height: 0.02
+    min_obstacle_height: 0.04
     max_obstacle_height: 2.0
     expected_update_rate: 1.5   # expected period between each consecutive message (set to ~twice expect)
     observation_persistence: 0.0 # default 0, use all measurements taken during now-value, 0=latest
