@@ -2,8 +2,11 @@
 <launch>
 
 	<!-- arg to config the launch file-->
-        <!-- GRIPPER PARAMS -->
+        <!-- GRIPPER PARAM -->
         <arg name="robotiq_gripper"   default="false"/>
+
+        <!-- COLLISION WALLS PARAM -->
+        <arg name="collision_walls"   default="false"/>
 
 	<!--launch_navigation and launch_navigation_nomap args are exclusive
 	and they are (or not) launched for all robots-->
@@ -42,6 +45,7 @@
 		<arg name="nav_test" value="$(arg nav_test)"/>
 		<arg name="slam" value="$(arg slam)"/>
 		<arg name="robotiq_gripper" value="$(arg robotiq_gripper)"/>
+		<arg name="collision_walls" value="$(arg collision_walls)"/>
 	</include>
 
 	<!-- gazebo simulation and rviz visualization-->
