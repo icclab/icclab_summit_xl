@@ -25,9 +25,9 @@
         <arg name="debug_mode"             default="false"/> <!-- currently just shows voxel map if true -->
 
         <!-- DISABLE ARM CONTROL PARAMS -->
-        <arg name="launch_rviz_grasping" default="false"/>
-        <arg name="enable_arm" default="false"/>
-        <arg name="simulation" default="false"/>
+        <arg name="launch_rviz_grasping"   default="false"/>
+        <arg name="enable_arm"             default="false"/>
+        <arg name="simulation"             default="false"/>
 
 	<!-- TESTING -->
 	<arg name="nav_test"               default="false"/>
