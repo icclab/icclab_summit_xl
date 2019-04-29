@@ -8,8 +8,6 @@
         <!-- COLLISION WALLS PARAM -->
         <arg name="collision_walls"   default="false"/>
 
-	<!--launch_navigation and launch_navigation_nomap args are exclusive
-	and they are (or not) launched for all robots-->
 	<arg name="launch_rviz_nav" default="true"/>
 	<arg name="gazebo_world" default="$(find icclab_summit_xl)/worlds/summit_xl_office.world"/>
 	<arg name="debug" default="false"/>
@@ -27,7 +25,8 @@
 	<arg name="map_file_a" default="willow_garage/willow_garage.yaml"/>
 	<arg name="xacro_robot_a" default="irlab_summit_xls_std.urdf.xacro"/>
 	<arg name="nav_test" default="false"/>
-	<arg name="slam" default="slam"/>
+	<arg name="slam" default="false"/>
+	<arg name="omni" default="true"/>
 
 
 	<include file="$(find icclab_summit_xl)/launch/sim/irlab_summit_xl_one_robot.launch">
@@ -44,6 +43,7 @@
 		<arg name="ros_planar_move_plugin" value="$(arg ros_planar_move_plugin)"/>
 		<arg name="nav_test" value="$(arg nav_test)"/>
 		<arg name="slam" value="$(arg slam)"/>
+		<arg name="omni" value="$(arg omni)"/>
 		<arg name="robotiq_gripper" value="$(arg robotiq_gripper)"/>
 		<arg name="collision_walls" value="$(arg collision_walls)"/>
 	</include>

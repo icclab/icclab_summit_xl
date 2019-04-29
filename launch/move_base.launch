@@ -24,8 +24,7 @@
 		<rosparam if="$(arg slam)" file="$(find icclab_summit_xl)/config/global_costmap_params_no_map.yaml" command="load" />
 		<rosparam unless="$(arg slam)" file="$(find icclab_summit_xl)/config/global_costmap_params_map.yaml" command="load" />
 		<rosparam file="$(find icclab_summit_xl)/config/global_planner_params.yaml" command="load" />
-		<rosparam if="$(arg omni)" file="$(find icclab_summit_xl)/config/teb_local_planner_steel_params.yaml" command="load" />
-		<rosparam unless="$(arg omni)" file="$(find icclab_summit_xl)/config/teb_local_planner_diff_params.yaml" command="load" />
+		<rosparam file="$(find icclab_summit_xl)/config/teb_local_planner_steel_params.yaml" command="load" />
 
 		<!-- reset frame_id parameters using user input data -->
 		<!-- front laser -->
@@ -45,6 +44,7 @@
 		<param name="global_costmap/robot_base_frame" value="$(arg base_frame)"/>
 		<param name="TebLocalPlannerROS/map_frame" value="$(arg global_frame)"/>
 	        <param name="TebLocalPlannerROS/odom_topic" value="$(arg odom_topic)"/>
+		<param if="$(arg omni)" name="TebLocalPlannerROS/weight_kinematics_nh" value="10"/>
 		<param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" />
 		<param name="controller_frequency" value="10.0" />
 		<param name="controller_patience" value="15.0" />

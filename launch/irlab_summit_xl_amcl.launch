@@ -38,6 +38,7 @@
 		<arg name="gazebo_world"           value="$(arg gazebo_world)"/>
 		<arg name="gazebo_gui"             value="$(arg gazebo_gui)"/>
 		<arg name="launch_rviz_nav"        value="$(arg launch_rviz_nav)"/>
+		<arg name="omni"                   value="$(arg omni)"/>
 		<arg name="map_file_a"             value="$(arg map_file)"/>
 		<arg name="localization_robot_a"   value="$(arg launch_robot_localization)"/>
 		<arg name="move_base_robot_a"      value="$(arg launch_move_base)"/>

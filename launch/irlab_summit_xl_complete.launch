@@ -21,7 +21,7 @@
 	<!-- Nav/Map Stack -->
 	<arg name="teleop" default="false"/>
 	<arg name="launch_robot_localization" default="false"/> <!-- TODO: to fix, currently not working due to bad imu data -->
-	<arg name="omni" default="true"/> <!-- planner is set to plan diff drive trajectories TODO: get omni drive to work-->
+	<arg name="omni" default="true"/>
 	<arg name="launch_move_base" default="false"/>
 	<arg name="launch_gmapping" default="false"/>
 	<arg name="launch_amcl_and_mapserver" default="false"/>
@@ -123,6 +123,9 @@
 		<!-- convert front camera depth image to LaserScan for input to laserscan merger -->
 		<include if="$(eval launch_amcl_and_mapserver or launch_gmapping)" file="$(find icclab_summit_xl)/launch/depthimage_to_laserscan.launch"/>
 
+		<!-- set kinematics mode (default is diff or mode=1) -->
+		<node if="$(arg omni)" pkg="rosservice" type="rosservice" name="set_kin_mode" args='call --wait /summit_xl/set_mode "mode: 2"'/>
+
 		<!-- move base -->
 		<include if="$(arg launch_move_base)" file="$(find icclab_summit_xl)/launch/move_base.launch">
 			<arg name="prefix" value="$(arg prefix)"/>
@@ -140,7 +143,7 @@
 			<arg name="delay_time" value="5"/>
 		</include>
 
-		<!-- amcl and map server base-->
+		<!-- amcl and map server -->
 		<include if="$(arg launch_amcl_and_mapserver)" file="$(find icclab_summit_xl)/launch/sim/map_server.launch">
 			<arg name="prefix" value="$(arg prefix)"/>
 			<arg name="map_file" value="$(arg map_file)"/>

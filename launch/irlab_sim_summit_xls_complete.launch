@@ -10,7 +10,6 @@
 	<arg name="id_robot" default="summit_xl"/>
 	<arg name="xacro_robot_a" default="irlab_summit_xls_std.urdf.xacro" />
 
-
 	<!-- GAZEBO -->
 	<arg name="ros_planar_move_plugin" default="true"/> <!-- disables gazebo ros_control plugin -->
 	<arg name="gazebo_world" default="$(find icclab_summit_xl)/worlds/summit_xl_office.world"/>
@@ -24,6 +23,7 @@
         <arg name="move_base_robot_a" default="true"/>
         <arg name="amcl_and_mapserver_a" default="true"/>
         <arg name="slam" default="false"/>
+        <arg name="omni" default="true"/>
 
 	<!-- ARM CONTROL PARAMS -->
 	<arg name="launch_rviz_grasping" default="true"/>
@@ -53,6 +53,7 @@
 		<arg name="xacro_robot_a" value="$(arg xacro_robot_a)"/>
 		<arg name="nav_test" value="$(arg nav_test)"/>
 		<arg name="slam" value="$(arg slam)"/>
+		<arg name="omni" value="$(arg omni)"/>
 		<arg name="robotiq_gripper"        value="$(arg robotiq_gripper)"/>
 		<arg name="collision_walls"        value="$(arg collision_walls)"/>
 	</include>
