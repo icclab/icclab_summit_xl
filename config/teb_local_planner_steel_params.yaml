@@ -85,13 +85,13 @@ TebLocalPlannerROS:
   weight_acc_lim_y: 1
   weight_acc_lim_theta: 1
   weight_kinematics_nh: 5000 # prefer nonholonomic driving
-  weight_kinematics_forward_drive: 50 # prefer forward driving
+  weight_kinematics_forward_drive: 80 # prefer forward driving
   weight_kinematics_turning_radius: 1 # prefer turns that respect the min_turning_radius, not used if differential (min_turning_radius = 0)
   weight_optimaltime: 1 # prefer trajectories with less transition time
   weight_obstacle: 100 # prefer trajectories that respect the min_obstacle_dist
   weight_inflation: 5 # prefer trajectories that respect the inflation of the obstacles
   #weight_dynamic_obstacle: 10 # not in use yet
-  weight_viapoint: 30 # prefer trajectories that respect the viapoints in the global path
+  weight_viapoint: 20 # prefer trajectories that respect the viapoints in the global path
   weight_adapt_factor: 2 # factor to multiply some weights (currently only weight_obstacle) at each iteration (gives better results than a huge value for the weight)
 
   # Homotopy Class Planner
