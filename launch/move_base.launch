@@ -12,7 +12,7 @@
 	<arg name="scan_topic_rear" default="scan_rear"/>
 	<arg name="omni" default="false"/>
 	<arg name="sim" default="false"/>
-	<arg name="debug_mode" default="false"/>
+	<arg name="publish_voxel_map" default="false"/>
 	<arg name="slam" default="false"/>
 
 	<!-- Run move_base -->
@@ -48,7 +48,7 @@
 		<param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" />
 		<param name="controller_frequency" value="10.0" />
 		<param name="controller_patience" value="15.0" />
-		<param name="local_costmap/obstacle_3d_layer/publish_voxel_map" value="$(arg debug_mode)"/>
+		<param name="local_costmap/obstacle_3d_layer/publish_voxel_map" value="$(arg publish_voxel_map)"/>
 		<param name="GlobalPlanner/allow_unknown" value="$(arg slam)"/>
 		<remap from="cmd_vel" to="$(arg cmd_vel_topic)" />
 		<remap from="odom" to="$(arg odom_topic)" />

@@ -68,7 +68,7 @@
                         <arg unless="$(arg launch_robot_localization)" name="odom_topic" value="robotnik_base_control/odom"/>
                         <arg if="$(arg launch_robot_localization)"     name="odom_topic" value="odometry/filtered_odom"/>
                         <arg name="sim" value="true"/>
-                        <arg name="debug_mode" value="true"/>
+                        <arg name="publish_voxel_map" value="true"/>
                         <arg name="slam" value="$(arg slam)"/>
                         <arg name="omni" value="$(arg omni)"/>
                 </include>

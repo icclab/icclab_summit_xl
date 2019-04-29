@@ -30,7 +30,7 @@
 	<arg name="y_init_pose" default="-0.777"/>
 	<arg name="z_init_pose" default="0.0"/>
 	<arg name="a_init_pose" default="-1.597"/>
-	<arg name="debug_mode" default="false"/> <!-- currently just shows voxel map if true -->
+	<arg name="publish_voxel_map" default="false"/>
 	<arg name="slam" default="false"/>
 
 	<!-- Optional -->
@@ -134,7 +134,7 @@
 			<arg name="scan_topic_rear" value="scan_rear"/>
 			<arg unless="$(arg launch_robot_localization)" name="odom_topic" value="robotnik_base_control/odom"/>
 			<arg if="$(arg launch_robot_localization)"     name="odom_topic" value="odometry/filtered_odom"/>
-			<arg name="debug_mode" value="$(arg debug_mode)"/>
+			<arg name="publish_voxel_map" value="$(arg publish_voxel_map)"/>
 			<arg name="slam" value="$(arg slam)"/>
 		</include>
 

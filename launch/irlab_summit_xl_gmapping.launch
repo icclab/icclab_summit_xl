@@ -16,9 +16,10 @@
         <arg name="omni"                   default="true"/>
         <arg name="launch_move_base"       default="true"/>
         <arg name="launch_gmapping"        default="true"/>
+        <arg name="launch_amcl_and_mapserver" default="false"/>
         <arg if="$(arg sim)" name="map_file" default="willow_garage/willow_garage.yaml"/>
         <arg unless="$(arg sim)" name="map_file" default="icclab/icclab_latest_map.yaml"/>
-        <arg name="debug_mode"             default="false"/> <!-- currently just shows voxel map if true -->
+        <arg name="publish_voxel_map"      default="false"/>
         <arg name="slam"                   default="true"/>
 
         <!-- DISABLE ARM CONTROL PARAMS -->
@@ -40,6 +41,7 @@
 		<arg name="localization_robot_a"   value="$(arg launch_robot_localization)"/>
 		<arg name="move_base_robot_a"      value="$(arg launch_move_base)"/>
 		<arg name="gmapping_robot_a"       value="$(arg launch_gmapping)"/>
+		<arg name="amcl_and_mapserver_a"   value="$(arg launch_amcl_and_mapserver)"/>
 		<arg name="nav_test"               value="$(arg nav_test)"/>
                 <arg name="slam"                   value="$(arg slam)"/>
                 <arg name="launch_rviz_grasping"   value="$(arg launch_rviz_grasping)"/>
@@ -54,8 +56,9 @@
                 <arg name="omni"                   value="$(arg omni)"/>
                 <arg name="launch_move_base"       value="$(arg launch_move_base)"/>
                 <arg name="launch_gmapping"        value="$(arg launch_gmapping)"/>
+		<arg name="launch_amcl_and_mapserver" value="$(arg launch_amcl_and_mapserver)"/>
                 <arg name="map_file"               value="$(arg map_file)"/>
-                <arg name="debug_mode"             value="$(arg debug_mode)"/>
+                <arg name="publish_voxel_map"      value="$(arg publish_voxel_map)"/>
                 <arg name="slam"                   value="$(arg slam)"/>
         </include>
 
