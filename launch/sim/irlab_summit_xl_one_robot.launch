@@ -63,7 +63,6 @@
                 <!-- move base -->
                 <include if="$(arg launch_move_base)" file="$(find icclab_summit_xl)/launch/move_base.launch">
                         <arg name="prefix" value="$(arg prefix)"/>
-                        <arg name="omni" value="$(arg ros_planar_move_plugin)"/>
                         <arg name="scan_topic_front" value="scan_front"/>
                         <arg name="scan_topic_rear" value="scan_rear"/>
                         <arg unless="$(arg launch_robot_localization)" name="odom_topic" value="robotnik_base_control/odom"/>
@@ -86,8 +85,8 @@
 		</include>
 		<include if="$(arg launch_amcl_and_mapserver)" file="$(find icclab_summit_xl)/launch/sim/amcl.launch">
 			<arg name="prefix" value="$(arg prefix)"/>
-			<arg if="$(arg ros_planar_move_plugin)" name="odom_model_type" value="omni"/>
-			<arg unless="$(arg ros_planar_move_plugin)" name="odom_model_type" value="diff"/>
+			<arg if="$(arg omni)" name="odom_model_type" value="omni"/>
+			<arg unless="$(arg omni)" name="odom_model_type" value="diff"/>
 			<arg name="x_init_pose" value="$(arg x_init_pose)"/>
 			<arg name="y_init_pose" value="$(arg y_init_pose)"/>
 			<arg name="z_init_pose" value="$(arg z_init_pose)"/>
