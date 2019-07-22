@@ -9,7 +9,7 @@
 
     <!-- laser filter -->
     <node pkg="laser_filters" type="scan_to_scan_filter_chain" name="lds_node_front_filter">
-        <remap from="base_scan" to="scan_front_base"/>
+        <remap from="scan" to="scan_front_base"/>
         <remap from="scan_filtered" to="scan_front"/>
         <param name="target_frame" type="string" value="summit_xl_front_laser_base_link"/>
         <rosparam>
