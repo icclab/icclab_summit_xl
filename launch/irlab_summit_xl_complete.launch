@@ -24,7 +24,8 @@
 	<arg name="omni" default="true"/>
 	<arg name="launch_move_base" default="false"/>
 	<arg name="launch_gmapping" default="false"/>
-	<arg name="launch_amcl_and_mapserver" default="false"/>
+	<arg name="launch_amcl" default="false"/>
+	<arg name="launch_map_server" default="false"/>
 	<arg name="map_file" default="icclab/icclab_latest_map.yaml"/>
 	<arg name="x_init_pose" default="-16.910"/>
 	<arg name="y_init_pose" default="-0.777"/>
@@ -121,7 +122,7 @@
 		<node if="$(arg teleop)" pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" name="teleop_twist_keyboard"/>
 
 		<!-- convert front camera depth image to LaserScan for input to laserscan merger -->
-		<include if="$(eval launch_amcl_and_mapserver or launch_gmapping)" file="$(find icclab_summit_xl)/launch/depthimage_to_laserscan.launch"/>
+		<include if="$(eval launch_amcl or launch_gmapping)" file="$(find icclab_summit_xl)/launch/depthimage_to_laserscan.launch"/>
 
 		<!-- set kinematics mode (default is diff or mode=1) -->
 		<node if="$(arg omni)" pkg="rosservice" type="rosservice" name="set_kin_mode" args='call --wait /summit_xl/set_mode "mode: 2"'/>
@@ -139,16 +140,16 @@
 		</include>
 
 		<!-- merge laser scan topics to scan_combined for ACML or GMapping, delay launch by 5 seconds -->
-		<include if="$(eval launch_amcl_and_mapserver or launch_gmapping)" file="$(find icclab_summit_xl)/launch/timed_laserscan_multi_merger.launch">
+		<include if="$(eval launch_amcl or launch_gmapping)" file="$(find icclab_summit_xl)/launch/timed_laserscan_multi_merger.launch">
 			<arg name="delay_time" value="5"/>
 		</include>
 
 		<!-- amcl and map server -->
-		<include if="$(arg launch_amcl_and_mapserver)" file="$(find icclab_summit_xl)/launch/sim/map_server.launch">
+		<include if="$(arg launch_map_server)" file="$(find icclab_summit_xl)/launch/sim/map_server.launch">
 			<arg name="prefix" value="$(arg prefix)"/>
 			<arg name="map_file" value="$(arg map_file)"/>
 		</include>
-		<include if="$(arg launch_amcl_and_mapserver)" file="$(find icclab_summit_xl)/launch/sim/amcl.launch">
+		<include if="$(arg launch_amcl)" file="$(find icclab_summit_xl)/launch/sim/amcl.launch">
 			<arg name="prefix" value="$(arg prefix)"/>
 			<arg if="$(arg omni)" name="odom_model_type" value="omni"/>
 			<arg unless="$(arg omni)" name="odom_model_type" value="diff"/>
