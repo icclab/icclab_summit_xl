@@ -8,7 +8,8 @@
   <arg unless="$(arg debug)" name="launch_prefix" value="" />
   <arg     if="$(arg debug)" name="launch_prefix" value="gdb --ex run --args" />
 
-  <arg name="robot_ip" value="192.168.1.110"/>
+  <!-- <arg name="robot_ip" value="192.168.1.111"/> robonet address-->
+  <arg name="robot_ip" value="192.168.0.210"/>
   <arg name="reverse_port" value="5001"/>
   <arg name="limited" default="true"/>
   <arg name="min_payload"  default="0.0"/>
@@ -27,7 +28,6 @@
   <arg name="tool_frame" default="$(arg prefix)tool0_controller" />
   <arg name="shutdown_on_disconnect" default="true" /> 
 
- <group ns="$(arg id_robot)">
 
 
   <!-- Load hardware interface -->
@@ -58,8 +58,6 @@
         <arg name="prefix" value="arm_"/>
   </include>
 
-
- </group>
 
 </launch>
 
