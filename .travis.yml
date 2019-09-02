@@ -11,8 +11,8 @@ install:
 before_script:
 #- docker pull robopaas/rosdocked-kinetic-workspace-included:latest
 
-script: 
-# - ./.ci/docker_build.sh
+script:
+- ./.ci/docker_build.sh
 
 # deploy:
 #   provider: script
