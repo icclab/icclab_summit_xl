@@ -689,7 +689,7 @@ Visualization Manager:
   Global Options:
     Background Color: 48; 48; 48
     Default Light: true
-    Fixed Frame: summit_xl_map
+    Fixed Frame: summit_xl_base_footprint
     Frame Rate: 5
   Name: root
   Tools:
