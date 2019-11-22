@@ -116,10 +116,12 @@ class GpdPickPlace(object):
                     filtered_orientation += 1
                     print(repr(filtered_orientation) + " Grasp filtered because coming from underneath the ground")
                     continue
-                g = Grasp()
+                tf_listener_.waitForTransform('/arm_camera_depth_optical_frame', '/summit_xl_base_footprint',
+                                              rospy.Time(), rospy.Duration(2.0))
+		g = Grasp()
                 g.id = "dupa"
                 gp = PoseStamped()
-                gp.header.frame_id = "summit_xl_base_footprint"
+                gp.header.frame_id = "arm_camera_depth_optical_frame"
                 org_q = self.trans_matrix_to_quaternion(selected_grasps[i])
 
                 quat = org_q
@@ -131,8 +133,10 @@ class GpdPickPlace(object):
                 gp.pose.orientation.y = float(quat.elements[2])
                 gp.pose.orientation.z = float(quat.elements[3])
                 gp.pose.orientation.w = float(quat.elements[0])
-
-                g.grasp_pose = gp
+		
+		translated_pose = tf_listener_.transformPose("summit_xl_base_footprint", gp)
+			
+                g.grasp_pose = translated_pose #gp
                 g.pre_grasp_approach.direction.header.frame_id = "arm_ee_link"
                 g.pre_grasp_approach.direction.vector.x = 1.0
                 g.pre_grasp_approach.min_distance = 0.06
@@ -161,7 +165,7 @@ class GpdPickPlace(object):
 
                 #Added code lines for cartesian pick
                 gp_cartesian = PoseStamped()
-                gp_cartesian.header.frame_id = "summit_xl_base_footprint"
+                gp_cartesian.header.frame_id = "arm_camera_depth_optical_frame"
                 gp_cartesian.pose.position.x = selected_grasps[i].surface.x + self.grasp_offset_cartesian * selected_grasps[i].approach.x
                 gp_cartesian.pose.position.y = selected_grasps[i].surface.y + self.grasp_offset_cartesian * selected_grasps[i].approach.y
                 gp_cartesian.pose.position.z = selected_grasps[i].surface.z + self.grasp_offset_cartesian * selected_grasps[i].approach.z
@@ -170,9 +174,11 @@ class GpdPickPlace(object):
                 gp_cartesian.pose.orientation.z = float(quat.elements[3])
                 gp_cartesian.pose.orientation.w = float(quat.elements[0])
 
+		translated_pose = tf_listener_.transformPose("summit_xl_base_footprint", gp_cartesian)
+
                 g_cartesian = Grasp ()
                 g_cartesian.id = "cart"
-                g_cartesian.grasp_pose = gp_cartesian
+                g_cartesian.grasp_pose = translated_pose
                 g_cartesian.allowed_touch_objects = ["obj"]
                 formatted_grasps_cartesian.append(g_cartesian)
 
@@ -252,7 +258,7 @@ class GpdPickPlace(object):
 
     def pick_cartesian(self, grasps_list, grasps_list_cartesian, verbose=False):
         failed_grasps = 0
-        pevent("Pick sequence started")
+        pevent("Cartesian pick sequence started")
         # Add object mesh to planning scene
         self.add_object_mesh()
         rospy.sleep(2.0)
@@ -320,7 +326,7 @@ class GpdPickPlace(object):
 
     def pick_two_steps(self, grasps_list, grasps_list_cartesian, verbose=False):
         failed_grasps = 0
-        pevent("Pick sequence started")
+        pevent("Two step pick sequence started")
         # Add object mesh to planning scene
         self.add_object_mesh()
         rospy.sleep(2.0)
@@ -469,7 +475,7 @@ class GpdPickPlace(object):
     def add_object_mesh(self):
         #rospy.sleep(2)
         obj_pose = PoseStamped()
-        obj_pose.header.frame_id = "summit_xl_base_footprint"
+        obj_pose.header.frame_id = "arm_camera_depth_optical_frame"
         obj_pose.pose.position.x = 0
         obj_pose.pose.position.y = 0
         obj_pose.pose.position.z = 0
