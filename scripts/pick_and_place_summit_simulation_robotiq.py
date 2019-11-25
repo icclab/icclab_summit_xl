@@ -111,7 +111,7 @@ class GpdPickPlace(object):
                 z_axis_unit = (0, 0, -1)
                 ap_axis = (selected_grasps[i].approach.x, selected_grasps[i].approach.y, selected_grasps[i].approach.z)
                 angle = numpy.dot(z_axis_unit, ap_axis)
-                if (angle <= 0):
+                if (angle >= 0):
                     # filter it out, because grasp coming from below the ground
                     filtered_orientation += 1
                     print(repr(filtered_orientation) + " Grasp filtered because coming from underneath the ground")
@@ -483,10 +483,12 @@ class GpdPickPlace(object):
         obj_pose.pose.orientation.y = 0
         obj_pose.pose.orientation.z = 0
         obj_pose.pose.orientation.w = 1
-        #remove collision object from previous run
+        translated_pose = tf_listener_.transformPose("summit_xl_base_footprint", obj_pose)
+	
+	#remove collision object from previous run
         planning.removeCollisionObject("obj")
         rospy.sleep(1)
-        planning.addMesh("obj", obj_pose.pose, "object.stl")
+        planning.addMesh("obj", translated_pose.pose, "object.stl")
         print("Collision object is:")
         rospy.sleep(1)
         pprint(planning.getKnownCollisionObjects())
