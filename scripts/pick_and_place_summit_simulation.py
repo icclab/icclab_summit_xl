@@ -1,6 +1,5 @@
 import rospy
 import numpy as np
-#import ipdb
 import copy
 import tf
 import datetime
@@ -92,7 +91,6 @@ class GpdPickPlace(object):
 
     def get_gpd_grasps(self):
         pevent("Waiting for grasps to arrive")
-      #  while len(self.grasps) == 0:
         while (self.grasps_received == False):
             rospy.sleep(0.01)
         return self.grasps
@@ -139,29 +137,13 @@ class GpdPickPlace(object):
                 g.pre_grasp_approach.direction.vector.x = 1.0
                 g.pre_grasp_approach.min_distance = 0.06
                 g.pre_grasp_approach.desired_distance = 0.1
-                    #   g.pre_grasp_posture.joint_names = ["gripper_right_finger_joint", "gripper_left_finger_joint"]
-                    #   g.pre_grasp_posture.joint_names = ["arm_tool0"]
-                    #     g.pre_grasp_posture.header.frame_id = "arm_wrist_3_link"
-                    #    pos = JointTrajectoryPoint()
-                    #    pos.positions.append(0)
-                    #   pos.positions.append(0.1337)
-                    #   g.pre_grasp_posture.points.append(pos)
-                    #  g.grasp_posture.joint_names = ["gripper_right_finger_joint", "gripper_left_finger_joint"]
-                    #  g.grasp_posture.joint_names = ["joint_6"]
-                    #  pos = JointTrajectoryPoint()
-                    #  pos.positions.append(0.0)
-                    #  pos.positions.append(0.0)
-                    #  pos.accelerations.append(0.0)
-                    #  pos.accelerations.append(0.0)
-                    #  g.grasp_posture.points.append(pos)
-                    #  g.grasp_posture.header.frame_id = "hand_link"
-               # g.allowed_touch_objects = ["<octomap>", "obj"]
+                #g.allowed_touch_objects = ["<octomap>", "obj"]
                 g.allowed_touch_objects = ["obj"]
-             #   g.max_contact_force = 0.0
+                #g.max_contact_force = 0.0
                 g.grasp_quality = selected_grasps[0].score.data
                 formatted_grasps.append(g)
 
-                #Added code lines for cartesian pick
+                # Add config for cartesian pick
                 gp_cartesian = PoseStamped()
                 gp_cartesian.header.frame_id = "arm_camera_depth_optical_frame"
                 gp_cartesian.pose.position.x = selected_grasps[i].surface.x + self.grasp_offset_cartesian * selected_grasps[i].approach.x
@@ -180,8 +162,7 @@ class GpdPickPlace(object):
                 g_cartesian.allowed_touch_objects = ["obj"]
                 formatted_grasps_cartesian.append(g_cartesian)
 
-           # print(repr(cont) + " grasps out of " + repr(tot_grasps) + " removed because of no IK_SOLUTION error")
-            # sort grasps using z (get higher grasps first)
+            # Sort grasps using z (get higher grasps first)
             formatted_grasps.sort(key=lambda grasp: grasp.grasp_pose.pose.position.z, reverse=True)
             formatted_grasps_cartesian.sort(key=lambda grasp: grasp.grasp_pose.pose.position.z, reverse=True)
             return formatted_grasps, formatted_grasps_cartesian
@@ -195,10 +176,11 @@ class GpdPickPlace(object):
     def pick(self, grasps_list, verbose=False):
         failed_grasps = 0
         pevent("Pick sequence started")
-        # Add object mesh to planning scene
+        
+	# Add object mesh to planning scene
         self.add_object_mesh()
-        rospy.sleep(2.0)
-        group.set_goal_tolerance(0.02)
+        
+	group.set_goal_tolerance(0.02)
         for single_grasp in grasps_list:
             if self.mark_pose:
                 self.show_grasp_pose(self.marker_publisher, single_grasp.grasp_pose)
@@ -256,10 +238,11 @@ class GpdPickPlace(object):
     def pick_cartesian(self, grasps_list, grasps_list_cartesian, verbose=False):
         failed_grasps = 0
         pevent("Cartesian pick sequence started")
-        # Add object mesh to planning scene
+        
+	# Add object mesh to planning scene
         self.add_object_mesh()
-        rospy.sleep(2.0)
-        group.set_goal_tolerance(0.01)
+        
+	group.set_goal_tolerance(0.01)
         cont_c = 0
         for single_grasp in grasps_list_cartesian:
             if self.mark_pose:
@@ -288,7 +271,8 @@ class GpdPickPlace(object):
                         waypoints = []
                         wpose = grasps_list[cont_c].grasp_pose.pose
                         waypoints.append(copy.deepcopy(wpose))
-                        # We want the Cartesian path to be interpolated at a resolution of 1 cm
+               
+			# We want the Cartesian path to be interpolated at a resolution of 1 cm
                         # which is why we will specify 0.01 as the eef_step in Cartesian
                         # translation.  We will disable the jump threshold by setting it to 0.0 disabling:
                         (plan, fraction) = group.compute_cartesian_path(
@@ -324,10 +308,11 @@ class GpdPickPlace(object):
     def pick_two_steps(self, grasps_list, grasps_list_cartesian, verbose=False):
         failed_grasps = 0
         pevent("Two step pick sequence started")
-        # Add object mesh to planning scene
+        
+	# Add object mesh to planning scene
         self.add_object_mesh()
-        rospy.sleep(2.0)
-        group.set_goal_tolerance(0.01)
+        
+	group.set_goal_tolerance(0.01)
         group.set_planning_time(5)
         cont_c = 0
         for single_grasp in grasps_list_cartesian:
@@ -435,7 +420,7 @@ class GpdPickPlace(object):
         places = self.generate_place_poses(place_pose)
         place_result = self.p.place_with_retry("obj", places, support_name="<octomap>", planning_time=9001,
                                   goal_is_eef=True)
-               # pevent("Planner returned: " + get_moveit_error_code(place_result.error_code.val))
+        #pevent("Planner returned: " + get_moveit_error_code(place_result.error_code.val))
 
     def generate_place_poses(self, initial_place_pose):
         places = list()
@@ -446,20 +431,23 @@ class GpdPickPlace(object):
                         initial_place_pose.grasp_pose.pose.orientation.x,
                         initial_place_pose.grasp_pose.pose.orientation.y,
                         initial_place_pose.grasp_pose.pose.orientation.z)
-# Load successful grasp pose
+	# Load successful grasp pose
         l.place_pose.pose.position = initial_place_pose.grasp_pose.pose.position
         l.place_pose.pose.orientation.w = q.elements[0]
         l.place_pose.pose.orientation.x = q.elements[1]
         l.place_pose.pose.orientation.y = q.elements[2]
         l.place_pose.pose.orientation.z = q.elements[3]
-# Move 20cm to the right
+
+	# Move 20cm to the right
         l.place_pose.pose.position.y += 0.2
-# Fill rest of the msg with some data
+
+	# Fill rest of the msg with some data
         l.post_place_posture = initial_place_pose.grasp_posture
         l.post_place_retreat = initial_place_pose.post_grasp_retreat
         l.pre_place_approach = initial_place_pose.pre_grasp_approach
         places.append(copy.deepcopy(l))
-# Rotate place pose to generate more possible configurations for the planner
+
+	# Rotate place pose to generate more possible configurations for the planner
         m = 16  # Number of possible place poses
         for i in range(0, m - 1):
             l.place_pose.pose = rotate_pose_msg_by_euler_angles(l.place_pose.pose, 0, 0, 2 * math.pi / m)
@@ -467,7 +455,6 @@ class GpdPickPlace(object):
         return places
 
     def add_object_mesh(self):
-        #rospy.sleep(2)
         obj_pose = PoseStamped()
         obj_pose.header.frame_id = "arm_camera_depth_optical_frame"
         obj_pose.pose.position.x = 0
@@ -484,7 +471,7 @@ class GpdPickPlace(object):
         rospy.sleep(1)
         planning.addMesh("obj", translated_pose.pose, "object.stl")
         print("Collision object is:")
-        rospy.sleep(1)
+        rospy.sleep(3)
         pprint(planning.getKnownCollisionObjects())
 
     def set_pose_constraints(self,tol_joint1,tol_joint2,tol_joint3):
@@ -716,11 +703,11 @@ if __name__ == "__main__":
     pnp = GpdPickPlace(mark_pose=True)
     group_name = "manipulator"
     group = moveit_commander.MoveGroupCommander(group_name, robot_description="/summit_xl/robot_description", ns="/summit_xl")
-   # group.set_planner_id("BiTRRT")
-  #  group.set_max_velocity_scaling_factor(0.05)
-   # group.set_goal_orientation_tolerance(0.01)
+    #group.set_planner_id("BiTRRT")
+    #group.set_max_velocity_scaling_factor(0.05)
+    #group.set_goal_orientation_tolerance(0.01)
     group.set_planning_time(5)
-   # group.allow_replanning(True)
+    #group.allow_replanning(True)
     planning = PlanningSceneInterface("summit_xl_base_footprint", ns="/summit_xl/")
     planning.clear()
     rospy.sleep(1)
@@ -735,7 +722,8 @@ if __name__ == "__main__":
     #num_view = 1
     for r in range (0, num_objects):
         planning.clear()
-        # Subscribe for grasps
+        
+	# Subscribe for grasps
         print("--- Move Arm to Initial Position---")
         pnp.remove_pose_constraints()
         pnp.start_con_setup()
@@ -745,10 +733,12 @@ if __name__ == "__main__":
             print("Initial arm positioning failed!")
         print("Initial arm positioning performed")
         clear_octomap()
-        #we have to add a check, so that this is called only if the initial_pose was successful
+        
+	# We have to add a check, so that this is called only if the initial_pose was successful
         call_pointcloud_filter_service()
         pnp.wait_for_mesh_and_save()
-    # Wait for grasps from gpd, wrap them into Grasp msg format and start picking
+    	
+	# Wait for grasps from gpd, wrap them into Grasp msg format and start picking
         pnp.grasps_received = False
         selected_grasps = pnp.get_gpd_grasps()
         [formatted_grasps, formatted_grasps_cartesian] = pnp.generate_grasp_msgs(selected_grasps)
@@ -756,21 +746,21 @@ if __name__ == "__main__":
         print("Gripper opened")
         pnp.remove_pose_constraints()
         #pnp.start_con_setup()
-       # pnp.set_pose_constraints(1.57, 1.57, 1.57)
+        #pnp.set_pose_constraints(1.57, 1.57, 1.57)
         #        pnp.stop_con_setup()
-       # successful_grasp = pnp.pick(formatted_grasps, verbose=True)
-      #  successful_grasp = pnp.pick_cartesian(formatted_grasps, formatted_grasps_cartesian, verbose=True)
+        #successful_grasp = pnp.pick(formatted_grasps, verbose=True)
+        #successful_grasp = pnp.pick_cartesian(formatted_grasps, formatted_grasps_cartesian, verbose=True)
         successful_grasp = pnp.pick_two_steps(formatted_grasps, formatted_grasps_cartesian, verbose=True)
         if successful_grasp is not None:
             result = gripper_client_2(-8)
             print("Gripper closed")
             pnp.start_grasp_check()
             pnp.remove_pose_constraints()
-         #   pnp.start_con_setup()
-         #   rospy.sleep(1)
-         #   pnp.set_pose_constraints(3.14, 1.0, 1.0)
-         #   pnp.stop_con_setup()
-         #   pnp.set_upright_constraints(successful_grasp.grasp_pose)
+            #pnp.start_con_setup()
+            #rospy.sleep(1)
+            #pnp.set_pose_constraints(3.14, 1.0, 1.0)
+            #pnp.stop_con_setup()
+            #pnp.set_upright_constraints(successful_grasp.grasp_pose)
             while (pnp.drop_obj_on_robot(successful_grasp) == False):
                 print("Object placing failed!")
             #if success == False:
