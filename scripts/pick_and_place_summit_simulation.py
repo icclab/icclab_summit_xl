@@ -109,18 +109,21 @@ class GpdPickPlace(object):
                 z_axis_unit = (0, 0, -1)
                 ap_axis = (selected_grasps[i].approach.x, selected_grasps[i].approach.y, selected_grasps[i].approach.z)
                 angle = numpy.dot(z_axis_unit, ap_axis)
-                if (angle <= 0):
+                if (angle >= 0):
                     # filter it out, because grasp coming from below the ground
                     filtered_orientation += 1
                     print(repr(filtered_orientation) + " Grasp filtered because coming from underneath the ground")
                     continue
-                g = Grasp()
+                tf_listener_.waitForTransform('/arm_camera_depth_optical_frame', '/summit_xl_base_footprint',
+                                              rospy.Time(), rospy.Duration(2.0))
+		g = Grasp()
                 g.id = "dupa"
                 gp = PoseStamped()
-                gp.header.frame_id = "summit_xl_base_footprint"
+                gp.header.frame_id = "arm_camera_depth_optical_frame"
                 org_q = self.trans_matrix_to_quaternion(selected_grasps[i])
 
                 quat = org_q
+
                 gp.pose.position.x = selected_grasps[i].surface.x + self.grasp_offset * selected_grasps[i].approach.x
                 gp.pose.position.y = selected_grasps[i].surface.y + self.grasp_offset * selected_grasps[i].approach.y
                 gp.pose.position.z = selected_grasps[i].surface.z + self.grasp_offset * selected_grasps[i].approach.z
@@ -128,7 +131,10 @@ class GpdPickPlace(object):
                 gp.pose.orientation.y = float(quat.elements[2])
                 gp.pose.orientation.z = float(quat.elements[3])
                 gp.pose.orientation.w = float(quat.elements[0])
-                g.grasp_pose = gp
+		
+		translated_pose = tf_listener_.transformPose("summit_xl_base_footprint", gp)
+			
+                g.grasp_pose = translated_pose #gp
                 g.pre_grasp_approach.direction.header.frame_id = "arm_ee_link"
                 g.pre_grasp_approach.direction.vector.x = 1.0
                 g.pre_grasp_approach.min_distance = 0.06
@@ -157,7 +163,7 @@ class GpdPickPlace(object):
 
                 #Added code lines for cartesian pick
                 gp_cartesian = PoseStamped()
-                gp_cartesian.header.frame_id = "summit_xl_base_footprint"
+                gp_cartesian.header.frame_id = "arm_camera_depth_optical_frame"
                 gp_cartesian.pose.position.x = selected_grasps[i].surface.x + self.grasp_offset_cartesian * selected_grasps[i].approach.x
                 gp_cartesian.pose.position.y = selected_grasps[i].surface.y + self.grasp_offset_cartesian * selected_grasps[i].approach.y
                 gp_cartesian.pose.position.z = selected_grasps[i].surface.z + self.grasp_offset_cartesian * selected_grasps[i].approach.z
@@ -166,9 +172,11 @@ class GpdPickPlace(object):
                 gp_cartesian.pose.orientation.z = float(quat.elements[3])
                 gp_cartesian.pose.orientation.w = float(quat.elements[0])
 
+		translated_pose = tf_listener_.transformPose("summit_xl_base_footprint", gp_cartesian)
+
                 g_cartesian = Grasp ()
                 g_cartesian.id = "cart"
-                g_cartesian.grasp_pose = gp_cartesian
+                g_cartesian.grasp_pose = translated_pose
                 g_cartesian.allowed_touch_objects = ["obj"]
                 formatted_grasps_cartesian.append(g_cartesian)
 
@@ -247,7 +255,7 @@ class GpdPickPlace(object):
 
     def pick_cartesian(self, grasps_list, grasps_list_cartesian, verbose=False):
         failed_grasps = 0
-        pevent("Pick sequence started")
+        pevent("Cartesian pick sequence started")
         # Add object mesh to planning scene
         self.add_object_mesh()
         rospy.sleep(2.0)
@@ -315,11 +323,12 @@ class GpdPickPlace(object):
 
     def pick_two_steps(self, grasps_list, grasps_list_cartesian, verbose=False):
         failed_grasps = 0
-        pevent("Pick sequence started")
+        pevent("Two step pick sequence started")
         # Add object mesh to planning scene
         self.add_object_mesh()
         rospy.sleep(2.0)
         group.set_goal_tolerance(0.01)
+        group.set_planning_time(5)
         cont_c = 0
         for single_grasp in grasps_list_cartesian:
             if self.mark_pose:
@@ -460,7 +469,7 @@ class GpdPickPlace(object):
     def add_object_mesh(self):
         #rospy.sleep(2)
         obj_pose = PoseStamped()
-        obj_pose.header.frame_id = "summit_xl_base_footprint"
+        obj_pose.header.frame_id = "arm_camera_depth_optical_frame"
         obj_pose.pose.position.x = 0
         obj_pose.pose.position.y = 0
         obj_pose.pose.position.z = 0
@@ -468,10 +477,12 @@ class GpdPickPlace(object):
         obj_pose.pose.orientation.y = 0
         obj_pose.pose.orientation.z = 0
         obj_pose.pose.orientation.w = 1
-        #remove collision object from previous run
+        translated_pose = tf_listener_.transformPose("summit_xl_base_footprint", obj_pose)
+	
+	#remove collision object from previous run
         planning.removeCollisionObject("obj")
         rospy.sleep(1)
-        planning.addMesh("obj", obj_pose.pose, "object.stl")
+        planning.addMesh("obj", translated_pose.pose, "object.stl")
         print("Collision object is:")
         rospy.sleep(1)
         pprint(planning.getKnownCollisionObjects())
@@ -708,7 +719,7 @@ if __name__ == "__main__":
    # group.set_planner_id("BiTRRT")
   #  group.set_max_velocity_scaling_factor(0.05)
    # group.set_goal_orientation_tolerance(0.01)
-    group.set_planning_time(3)
+    group.set_planning_time(5)
    # group.allow_replanning(True)
     planning = PlanningSceneInterface("summit_xl_base_footprint", ns="/summit_xl/")
     planning.clear()

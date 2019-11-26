@@ -629,7 +629,7 @@ class GpdPickPlace(object):
         group.set_start_state_to_current_state()
         group.set_goal_tolerance(0.05)
         group.set_pose_target(pose_goal)
-        group.set_planning_time(3)
+        group.set_planning_time(5)
 
         # The go command can be called with joint values, poses, or without any
         # parameters if you have already set the pose or joint target for the group
