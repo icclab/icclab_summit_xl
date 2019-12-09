@@ -600,10 +600,10 @@ class GpdPickPlace(object):
         pose_goal.position.x = 1.069
         pose_goal.position.y = -0.012
         pose_goal.position.z = 0.831
-        pose_goal.orientation.x = -0.534
-        pose_goal.orientation.y = 0.445
-        pose_goal.orientation.z = 0.478
-        pose_goal.orientation.w = 0.536
+        pose_goal.orientation.x = -0.5
+        pose_goal.orientation.y = 0.5
+        pose_goal.orientation.z = 0.5
+        pose_goal.orientation.w = 0.5
         group.set_start_state_to_current_state()
         group.set_goal_tolerance(0.05)
         group.set_pose_target(pose_goal)
