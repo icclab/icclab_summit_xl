@@ -35,7 +35,7 @@
     <!-- Preprocessing of point cloud -->
     <param name="voxelize" value="true"/>
     <param name="remove_outliers" value="false"/>
-    <rosparam param="workspace"> [-2.0, 2.0, -2.0, 2.0, -2.0, 2.0] </rosparam>
+    <rosparam param="workspace"> [-2.0, 2.0, -2.0, 2.0, -2.0, 0.7] </rosparam>
     <rosparam param="camera_position"> [0, 0, 0] </rosparam>
             
     <!-- General parameters -->
