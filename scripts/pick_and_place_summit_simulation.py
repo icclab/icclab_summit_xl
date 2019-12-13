@@ -597,9 +597,9 @@ class GpdPickPlace(object):
     def initial_pose(self):
         pevent("Initial constrained pose sequence started")
         pose_goal = geometry_msgs.msg.Pose()
-        pose_goal.position.x = 1.069
-        pose_goal.position.y = -0.012
-        pose_goal.position.z = 0.831
+        pose_goal.position.x = 1.15
+        pose_goal.position.y = 0
+        pose_goal.position.z = 0.7
         pose_goal.orientation.x = -0.5
         pose_goal.orientation.y = 0.5
         pose_goal.orientation.z = 0.5
