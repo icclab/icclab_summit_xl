@@ -467,11 +467,12 @@ class GpdPickPlace(object):
         translated_pose = tf_listener_.transformPose("summit_xl_base_footprint", obj_pose)
 	
 	#remove collision object from previous run
+        group.detach_object("obj")
         planning.removeCollisionObject("obj")
-        rospy.sleep(1)
+        rospy.sleep(2)
         planning.addMesh("obj", translated_pose.pose, "object.stl")
         print("Collision object is:")
-        rospy.sleep(3)
+        rospy.sleep(2)
         pprint(planning.getKnownCollisionObjects())
 
     def set_pose_constraints(self,tol_joint1,tol_joint2,tol_joint3):
