@@ -58,8 +58,8 @@ class GpdPickPlace(object):
     grasps = []
     grasps_cartesian = []
     mark_pose = False
-    grasp_offset = -0.08
-    grasp_offset_cartesian = -0.25
+    grasp_offset = -0.04
+    grasp_offset_cartesian = -0.15
     finger_indexes = None
     con_joints_indexes = None
     joint1_con = 0
@@ -104,7 +104,7 @@ class GpdPickPlace(object):
             cont = 0
             filtered_orientation = 0
             for i in range(0, len(selected_grasps)):
-                z_axis_unit = (0, 0, -1)
+                z_axis_unit = (0, 0, 1)
                 ap_axis = (selected_grasps[i].approach.x, selected_grasps[i].approach.y, selected_grasps[i].approach.z)
                 angle = numpy.dot(z_axis_unit, ap_axis)
                 if (angle >= 0):
@@ -117,7 +117,7 @@ class GpdPickPlace(object):
 		g = Grasp()
                 g.id = "dupa"
                 gp = PoseStamped()
-                gp.header.frame_id = "arm_camera_depth_optical_frame"
+                gp.header.frame_id = "/summit_xl_base_footprint"
                 org_q = self.trans_matrix_to_quaternion(selected_grasps[i])
 
                 quat = org_q
@@ -130,9 +130,9 @@ class GpdPickPlace(object):
                 gp.pose.orientation.z = float(quat.elements[3])
                 gp.pose.orientation.w = float(quat.elements[0])
 		
-		translated_pose = tf_listener_.transformPose("summit_xl_base_footprint", gp)
+		#translated_pose = tf_listener_.transformPose("summit_xl_base_footprint", gp)
 			
-                g.grasp_pose = translated_pose #gp
+                g.grasp_pose = gp #translated_pose
                 g.pre_grasp_approach.direction.header.frame_id = "arm_ee_link"
                 g.pre_grasp_approach.direction.vector.x = 1.0
                 g.pre_grasp_approach.min_distance = 0.06
@@ -145,7 +145,7 @@ class GpdPickPlace(object):
 
                 # Add config for cartesian pick
                 gp_cartesian = PoseStamped()
-                gp_cartesian.header.frame_id = "arm_camera_depth_optical_frame"
+                gp_cartesian.header.frame_id = "/summit_xl_base_footprint"
                 gp_cartesian.pose.position.x = selected_grasps[i].surface.x + self.grasp_offset_cartesian * selected_grasps[i].approach.x
                 gp_cartesian.pose.position.y = selected_grasps[i].surface.y + self.grasp_offset_cartesian * selected_grasps[i].approach.y
                 gp_cartesian.pose.position.z = selected_grasps[i].surface.z + self.grasp_offset_cartesian * selected_grasps[i].approach.z
@@ -313,7 +313,7 @@ class GpdPickPlace(object):
         self.add_object_mesh()
         
 	group.set_goal_tolerance(0.01)
-        group.set_planning_time(5)
+        group.set_planning_time(10)
         cont_c = 0
         for single_grasp in grasps_list_cartesian:
             if self.mark_pose:
@@ -326,7 +326,8 @@ class GpdPickPlace(object):
             group.set_pose_target(single_grasp.grasp_pose.pose)
             plan = group.plan()
             if (len(plan.joint_trajectory.points) != 0):
-                inp = raw_input("Have a look at the planned motion. Do you want to proceed? y/n/exit: ")
+                #inp = raw_input("Have a look at the planned motion. Do you want to proceed? y/n/exit: ")
+		inp = 'y'
                 if (inp == 'y'):
                     pevent("Executing grasp")
                     pick_result = group.execute(plan, wait=True)
@@ -456,7 +457,7 @@ class GpdPickPlace(object):
 
     def add_object_mesh(self):
         obj_pose = PoseStamped()
-        obj_pose.header.frame_id = "arm_camera_depth_optical_frame"
+        obj_pose.header.frame_id = "/summit_xl_base_footprint"
         obj_pose.pose.position.x = 0
         obj_pose.pose.position.y = 0
         obj_pose.pose.position.z = 0
@@ -597,13 +598,13 @@ class GpdPickPlace(object):
     def initial_pose(self):
         pevent("Initial constrained pose sequence started")
         pose_goal = geometry_msgs.msg.Pose()
-        pose_goal.position.x = 0.6
+        pose_goal.position.x = 0.7
         pose_goal.position.y = 0
-        pose_goal.position.z = 0.8
-        pose_goal.orientation.x = 0.9091919
-        pose_goal.orientation.y = -0.0040008
-        pose_goal.orientation.z = -0.4160878
-        pose_goal.orientation.w = 0.0150032
+        pose_goal.position.z = 1
+        pose_goal.orientation.x = -0.5
+        pose_goal.orientation.y = 0.5
+        pose_goal.orientation.z = 0.5
+        pose_goal.orientation.w = 0.5
        
 	group.set_start_state_to_current_state()
         group.set_goal_tolerance(0.05)
