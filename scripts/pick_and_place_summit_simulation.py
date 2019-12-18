@@ -58,8 +58,8 @@ class GpdPickPlace(object):
     grasps = []
     grasps_cartesian = []
     mark_pose = False
-    grasp_offset = -0.04
-    grasp_offset_cartesian = -0.15
+    grasp_offset = -0.08
+    grasp_offset_cartesian = -0.20
     finger_indexes = None
     con_joints_indexes = None
     joint1_con = 0
@@ -598,9 +598,9 @@ class GpdPickPlace(object):
     def initial_pose(self):
         pevent("Initial constrained pose sequence started")
         pose_goal = geometry_msgs.msg.Pose()
-        pose_goal.position.x = 0.7
-        pose_goal.position.y = 0
-        pose_goal.position.z = 1
+        pose_goal.position.x = 1.05
+        pose_goal.position.y = -0.1
+        pose_goal.position.z = 0.75
         pose_goal.orientation.x = -0.5
         pose_goal.orientation.y = 0.5
         pose_goal.orientation.z = 0.5

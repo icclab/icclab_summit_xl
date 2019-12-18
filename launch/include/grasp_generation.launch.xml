@@ -39,16 +39,16 @@
     <rosparam param="camera_position"> [0, 0, 0] </rosparam>
             
     <!-- General parameters -->
-    <param name="num_samples" value="2000" />
+    <param name="num_samples" value="1000" />
     <param name="num_threads" value="8" />
     
     <!-- Parameters for local grasp candidate search -->
     <param name="nn_radius" value="0.01" />
-    <param name="num_orientations" value="12" /> <!-- Number of orientations to consider -->
+    <param name="num_orientations" value="48" /> <!-- Number of orientations to consider -->
     
     <!-- Filtering of grasp candidates --> 
     <param name="filter_grasps" value="true" /> <!-- on workspace and robot hand aperture -->
-    <rosparam param="workspace_grasps"> [0.5, 2.0, -1.0, 1.0, 0.02, 1.0] </rosparam>
+    <rosparam param="workspace_grasps"> [0.5, 2.0, -1.0, 1.0, 0.00, 1.0] </rosparam>
     <param name="filter_half_antipodal" value="false"/> <!-- on half antipodal -->
     
     <!-- Grasp image creation -->
@@ -59,9 +59,9 @@
     <param name="min_inliers" value="1" />
         
     <!-- Grasp selection -->
-    <param name="min_score_diff" value="0" />
+    <param name="min_score_diff" value="1" />
     <param name="min_aperture" value="0.01" />
-    <param name="max_aperture" value="0.05" />
+    <param name="max_aperture" value="0.08" />
     <param name="num_selected" value="500" />
         
 	</node>
