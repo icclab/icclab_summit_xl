@@ -16,8 +16,8 @@
     <param name="use_importance_sampling" value="false" />
         
     <!-- What type of point cloud is used and what ROS topic it comes from -->
-    <param name="cloud_type" value="1" /> <!-- 0: PointCloud2, 1: CloudIndexed, 2: CloudSamples -->
-    <param name="cloud_topic" value="/cloud_indexed" />
+    <param name="cloud_type" value="0" /> <!-- 0: PointCloud2, 1: CloudIndexed, 2: CloudSamples -->
+    <param name="cloud_topic" value="/cloud_indexed_pc_only" />
     
     <!-- (optional) The ROS topic that the samples come from (default: an empty string) -->
     <param name="samples_topic" value="" />
@@ -35,7 +35,7 @@
     <!-- Preprocessing of point cloud -->
     <param name="voxelize" value="true"/>
     <param name="remove_outliers" value="false"/>
-    <rosparam param="workspace"> [-2.0, 2.0, -2.0, 2.0, -2.0, 2.0] </rosparam>
+    <rosparam param="workspace"> [-2.0, 2.0, -2.0, 2.0, -2.0, 1.5] </rosparam>
     <rosparam param="camera_position"> [0, 0, 0] </rosparam>
             
     <!-- General parameters -->
@@ -48,7 +48,7 @@
     
     <!-- Filtering of grasp candidates --> 
     <param name="filter_grasps" value="true" /> <!-- on workspace and robot hand aperture -->
-    <rosparam param="workspace_grasps"> [-2.0, 2.0, -2.0, 2.0, -2.0, 2.0] </rosparam>
+    <rosparam param="workspace_grasps"> [-2.0, 2.0, -2.0, 2.0, -2.0, 1.0] </rosparam>
     <param name="filter_half_antipodal" value="false"/> <!-- on half antipodal -->
     
     <!-- Grasp image creation -->
