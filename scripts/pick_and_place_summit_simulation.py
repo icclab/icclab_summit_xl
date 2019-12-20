@@ -467,8 +467,9 @@ class GpdPickPlace(object):
         translated_pose = tf_listener_.transformPose("summit_xl_base_footprint", obj_pose)
 	
 	#remove collision object from previous run
+        group.detach_object("obj")
         planning.removeCollisionObject("obj")
-        rospy.sleep(1)
+        rospy.sleep(2)
         planning.addMesh("obj", translated_pose.pose, "object.stl")
         pinfo("Collision object is:")
         rospy.sleep(2)
@@ -544,15 +545,15 @@ class GpdPickPlace(object):
     def drop_obj_on_robot(self, successful_grasp):
         pevent("Dropping object on robot")
         pose_goal = geometry_msgs.msg.Pose()
-        pose_goal.position.x = -0.2
+        pose_goal.position.x = -0.55
         pose_goal.position.y = 0
-        pose_goal.position.z = 0.4+0.06+successful_grasp.grasp_pose.pose.position.z
-        pose_goal.orientation.x = 0+successful_grasp.grasp_pose.pose.orientation.x
-        pose_goal.orientation.y = 0+successful_grasp.grasp_pose.pose.orientation.y
-        pose_goal.orientation.z = 0+successful_grasp.grasp_pose.pose.orientation.z
-        pose_goal.orientation.w = successful_grasp.grasp_pose.pose.orientation.w
+        pose_goal.position.z = 0.45+successful_grasp.grasp_pose.pose.position.z
+        pose_goal.orientation.x = -0.5#0+successful_grasp.grasp_pose.pose.orientation.x
+        pose_goal.orientation.y = 0.5#0+successful_grasp.grasp_pose.pose.orientation.y
+        pose_goal.orientation.z = 0.5#0+successful_grasp.grasp_pose.pose.orientation.z
+        pose_goal.orientation.w = 0.5#successful_grasp.grasp_pose.pose.orientation.w
         group.set_start_state_to_current_state()
-        group.set_goal_tolerance(0.05)
+        group.set_goal_tolerance(0.1)
         group.set_pose_target(pose_goal)
 
         # The go command can be called with joint values, poses, or without any
@@ -596,14 +597,15 @@ class GpdPickPlace(object):
     def initial_pose(self):
         pevent("Initial constrained pose sequence started")
         pose_goal = geometry_msgs.msg.Pose()
-        pose_goal.position.x = 1.069
-        pose_goal.position.y = -0.012
-        pose_goal.position.z = 0.831
-        pose_goal.orientation.x = -0.534
-        pose_goal.orientation.y = 0.445
-        pose_goal.orientation.z = 0.478
-        pose_goal.orientation.w = 0.536
-        group.set_start_state_to_current_state()
+        pose_goal.position.x = 0.6
+        pose_goal.position.y = 0
+        pose_goal.position.z = 0.8
+        pose_goal.orientation.x = 0.9091919
+        pose_goal.orientation.y = -0.0040008
+        pose_goal.orientation.z = -0.4160878
+        pose_goal.orientation.w = 0.0150032
+       
+	group.set_start_state_to_current_state()
         group.set_goal_tolerance(0.05)
         group.set_pose_target(pose_goal)
         group.set_planning_time(5)
@@ -703,7 +705,7 @@ if __name__ == "__main__":
     group_name = "manipulator"
     group = moveit_commander.MoveGroupCommander(group_name, robot_description="/summit_xl/robot_description", ns="/summit_xl")
     #group.set_planner_id("BiTRRT")
-    #group.set_max_velocity_scaling_factor(0.05)
+    group.set_max_velocity_scaling_factor(0.5)
     #group.set_goal_orientation_tolerance(0.01)
     group.set_planning_time(5)
     #group.allow_replanning(True)
