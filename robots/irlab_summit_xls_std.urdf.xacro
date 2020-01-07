@@ -30,8 +30,9 @@
 	   	<xacro:include filename="$(find icclab_summit_xl)/urdf/gripper/schunk_egp40.urdf.xacro" />
    	</xacro:unless>
 	<xacro:if value="$(arg robotiq_gripper)">
-		<!-- Import gripper Robotiq85-->
-		<xacro:include filename="$(find icclab_summit_xl)/urdf/gripper/ur5_robotiq85_gripper_mod.urdf.xacro" />
+		<!-- Import gripper Robotiq85 -->
+		<!--xacro:include filename="$(find icclab_summit_xl)/urdf/gripper/ur5_robotiq85_gripper_mod.urdf.xacro"/-->
+		<xacro:include filename="$(find icclab_summit_xl)/urdf/Danfoa_140_2f_robotiq/robotiq_arg2f_140_model_macro.xacro"/>
 	</xacro:if>
 
 	<!-- ICCLab sensors -->
@@ -89,9 +90,9 @@
 	<xacro:property name="front_rgbd_camera_offset_y" value="0.012"/>    
 	<xacro:property name="front_rgbd_camera_offset_z" value="0.26"/>  <!-- 214 -->
 
-  <xacro:property name="base_arm_x" value="0.225"/>
-  <xacro:property name="base_arm_y" value="0.0"/>
-  <xacro:property name="base_arm_z" value="0.355"/>
+  	<xacro:property name="base_arm_x" value="0.225"/>
+  	<xacro:property name="base_arm_y" value="0.0"/>
+  	<xacro:property name="base_arm_z" value="0.355"/>
 
 	<!-- Flag to select the high or low quality model -->
 	<xacro:property name="hq" value="true" />
@@ -163,7 +164,14 @@
   		</xacro:unless>
 
 		<xacro:if value="$(arg robotiq_gripper)">
-    			  <!-- Plugin -->
+			<xacro:robotiq_arg2f_140 prefix="gripper_"/>
+     				<joint name="gripper_base_joint" type="fixed">
+					<origin xyz="0.0 0 0.0" rpy="0 0 0" />
+					<parent link="arm_tool0" />
+					<child link="gripper_robotiq_arg2f_base_link" />
+				</joint>
+			
+    			<!-- Plugin -->
 			<plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so" >
 				 <robotNamespace>/summit_xl</robotNamespace>
    				 <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
