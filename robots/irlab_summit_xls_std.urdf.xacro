@@ -26,8 +26,8 @@
 
 	<xacro:arg name="robotiq_gripper" default="false"/>
    	<xacro:unless value="$(arg robotiq_gripper)">
-		<!-- Import gripper Schunk EGP40-->
-	   	<xacro:include filename="$(find icclab_summit_xl)/urdf/gripper/schunk_egp40.urdf.xacro" />
+	<!-- Import gripper Schunk EGP40-->
+	<xacro:include filename="$(find icclab_summit_xl)/urdf/gripper/schunk_egp40.urdf.xacro" />
    	</xacro:unless>
 	<xacro:if value="$(arg robotiq_gripper)">
 		<!-- Import gripper Robotiq85 -->
