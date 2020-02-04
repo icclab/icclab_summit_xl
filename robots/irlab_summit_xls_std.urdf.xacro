@@ -36,7 +36,7 @@
 	</xacro:if>
 
 	<!-- ICCLab sensors -->
-	<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/scanse.urdf.xacro" />
+	<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/hokuyo.urdf.xacro" />
 	<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/lds.urdf.xacro" />
 	<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/intel_d435.urdf.xacro" /> 
 <!--	<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/intel_d415.urdf.xacro" /> -->
@@ -63,18 +63,16 @@
 	<xacro:property name="wheel_offset_y" value="0.2045" />
 	<xacro:property name="wheel_offset_z" value="0.0" />
 
-	<!-- <xacro:property name="front_laser_offset_x" value="0.377"/>    -->
-	<xacro:property name="front_laser_offset_x" value="0.346"/>
-	<!-- <xacro:property name="front_laser_offset_y" value="-0.20957"/>     -->
-	<xacro:property name="front_laser_offset_y" value="-0.235"/>
-	<!-- <xacro:property name="front_laser_offset_z" value="0.2024"/> -->
+	<!--xacro:property name="front_laser_offset_x" value="0.346"/-->
+	<xacro:property name="front_laser_offset_x" value="0.356"/>
+	<!--xacro:property name="front_laser_offset_y" value="-0.235"/-->
+	<xacro:property name="front_laser_offset_y" value="-0.251"/>
 	<xacro:property name="front_laser_offset_z" value="0.1566"/>
 
-	<!-- <xacro:property name="rear_laser_offset_x" value="-0.377"/> -->
-	<xacro:property name="rear_laser_offset_x" value="-0.34"/>
-	<!-- <xacro:property name="rear_laser_offset_y" value="0.20957"/>     -->
-	<xacro:property name="rear_laser_offset_y" value="0.235"/>
-	<!-- <xacro:property name="rear_laser_offset_z" value="0.2024"/> -->
+	<!--xacro:property name="rear_laser_offset_x" value="-0.34"/-->
+	<xacro:property name="rear_laser_offset_x" value="-0.35"/>
+	<!--xacro:property name="rear_laser_offset_y" value="0.235"/-->
+	<xacro:property name="rear_laser_offset_y" value="0.251"/>
 	<xacro:property name="rear_laser_offset_z" value="0.1566"/>
 
 	<xacro:property name="front_ptz_camera_offset_x" value="0.308"/>
@@ -136,15 +134,15 @@
 			<origin xyz="${front_rgbd_camera_offset_x} ${front_rgbd_camera_offset_y} ${front_rgbd_camera_offset_z}" rpy="0 0 0"/>
 		</xacro:sensor_orbbec_astra>
 
-		<!-- LDS-01 front lidar -->
-		<xacro:lds prefix="$(arg prefix)front_laser" parent="$(arg prefix)base_link" prefix_topic="scan_front">
-			<origin xyz="${front_laser_offset_x} ${front_laser_offset_y} ${front_laser_offset_z}" rpy="0 0 ${PI/2}"/>
-		</xacro:lds>
+		<!-- Hokuyo front lidar -->
+		<xacro:hokuyo prefix="$(arg prefix)front_laser" parent="$(arg prefix)base_link" prefix_topic="scan_front">
+			<origin xyz="${front_laser_offset_x} ${front_laser_offset_y} ${front_laser_offset_z}" rpy="0 0 ${3.0*PI/4.0}"/>
+		</xacro:hokuyo>
 
-		<!-- Scanse rear lidar -->
-		<xacro:scanse prefix="$(arg prefix)rear_laser" parent="$(arg prefix)base_link" prefix_topic="scan_rear">
+		<!-- Hokuyo rear lidar -->
+		<xacro:hokuyo prefix="$(arg prefix)rear_laser" parent="$(arg prefix)base_link" prefix_topic="scan_rear">
 			<origin xyz="${rear_laser_offset_x} ${rear_laser_offset_y} ${rear_laser_offset_z}" rpy="0 0 ${3.0*PI/4.0}"/>
-		</xacro:scanse>
+		</xacro:hokuyo>
 
 		<!-- UR5 Arm -->
 		<xacro:ur5_robot prefix="arm_" joint_limited="true">
