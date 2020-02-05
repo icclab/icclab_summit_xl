@@ -1,0 +1,23 @@
+<launch>
+
+    <!-- LIDAR bringup node -->
+    <!--node pkg="hls_lfcd_lds_driver" type="hlds_laser_publisher" name="lds_node_front" output="screen">
+        <param name="port" value="/dev/front_lidar"/>
+        <param name="frame_id" value="summit_xl_front_laser_base_link"/>
+        <remap from="scan" to="scan_front_base"/>
+    </node-->
+
+    <node pkg="urg_node" type="urg_node" name="urg_node_front" output="screen">
+        <param name="serial_port" value="/dev/ttyACM0"/>
+	<param name="ip_address" value=""/>
+    	<param name="serial_baud" value="115200"/>
+    	<param name="frame_id" value="summit_xl_front_laser_base_link"/>
+    	<param name="calibrate_time" value="false"/>
+    	<param name="skip" value="true"/>
+	<param name="publish_intensity" value="false"/>
+    	<param name="publish_multiecho" value="false"/>
+    	<param name="angle_min" value="-2.2689"/>
+    	<param name="angle_max" value="2.2689"/>
+	<remap from="scan" to="scan_front"/>
+    </node>
+</launch>

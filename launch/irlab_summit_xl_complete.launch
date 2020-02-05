@@ -7,8 +7,8 @@
 	<arg name="xacro_robot_a" default="irlab_summit_xls_std.urdf.xacro"/>
 
 	<!-- 2D LASERS -->
-	<arg name="has_scanse_lasers" default="$(optenv ROBOT_HAS_SCANSE_LASERS true)"/>
-	<arg name="has_lds_lasers" default="$(optenv ROBOT_HAS_LDS_LASERS true)"/>
+	<!--arg name="has_scanse_lasers" default="$(optenv ROBOT_HAS_SCANSE_LASERS true)"/>
+	<arg name="has_lds_lasers" default="$(optenv ROBOT_HAS_LDS_LASERS true)"/-->
 	
 	<!-- RGBD CAMERAS -->
 	<arg name="has_front_rgbd_camera" default="$(optenv ROBOT_HAS_FRONT_RGBD_CAMERA false)"/>
@@ -22,10 +22,10 @@
 	<arg name="teleop" default="false"/>
 	<arg name="launch_robot_localization" default="false"/> <!-- TODO: to fix, currently not working due to bad imu data -->
 	<arg name="omni" default="true"/>
-	<arg name="launch_move_base" default="false"/>
+	<arg name="launch_move_base" default="true"/>
 	<arg name="launch_gmapping" default="false"/>
-	<arg name="launch_amcl" default="false"/>
-	<arg name="launch_map_server" default="false"/>
+	<arg name="launch_amcl" default="true"/>
+	<arg name="launch_map_server" default="true"/>
 	<arg name="map_file" default="icclab/icclab_latest_map.yaml"/>
 	<arg name="x_init_pose" default="-16.910"/>
 	<arg name="y_init_pose" default="-0.777"/>
@@ -88,9 +88,12 @@
 
 		<!--================================== SENSOR BRINGUP ==================================-->
 		<!-- start laser nodes -->
-		<include if="$(eval has_scanse_lasers and launch_move_base)" file="$(find icclab_summit_xl)/launch/real/irlab_sweep2scan.launch"/>
-		<include if="$(eval has_lds_lasers and launch_move_base)" file="$(find icclab_summit_xl)/launch/real/irlab_lds_lidar.launch"/>
-
+		<!--include if="$(eval has_scanse_lasers and launch_move_base)" file="$(find icclab_summit_xl)/launch/real/irlab_sweep2scan.launch"/>
+		<include if="$(eval has_lds_lasers and launch_move_base)" file="$(find icclab_summit_xl)/launch/real/irlab_lds_lidar.launch"/-->
+		
+		<include file="$(find icclab_summit_xl)/launch/real/irlab_hokuyo_front_lidar.launch"/>
+		<include file="$(find icclab_summit_xl)/launch/real/irlab_hokuyo_rear_lidar.launch"/>
+		
 		<!-- start rgbd camera node -->
 		<include if="$(arg has_front_rgbd_camera)" file="$(find summit_xl_bringup)/launch/orbbec.launch">
 			<arg name="camera" value="$(arg front_rgbd_camera_node)"/>
@@ -157,6 +160,7 @@
 			<arg name="y_init_pose" value="$(arg y_init_pose)"/>
 			<arg name="z_init_pose" value="$(arg z_init_pose)"/>
 			<arg name="a_init_pose" value="$(arg a_init_pose)"/>
+			<!--arg name="use_map_topic" value="true"/-->
 		</include>
 
 		<!-- gmapping -->
