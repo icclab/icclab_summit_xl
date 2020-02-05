@@ -37,7 +37,6 @@
 
 	<!-- ICCLab sensors -->
 	<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/hokuyo.urdf.xacro" />
-	<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/lds.urdf.xacro" />
 	<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/intel_d435.urdf.xacro" /> 
 <!--	<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/intel_d415.urdf.xacro" /> -->
 
@@ -136,7 +135,7 @@
 
 		<!-- Hokuyo front lidar -->
 		<xacro:hokuyo prefix="$(arg prefix)front_laser" parent="$(arg prefix)base_link" prefix_topic="scan_front">
-			<origin xyz="${front_laser_offset_x} ${front_laser_offset_y} ${front_laser_offset_z}" rpy="0 0 ${3.0*PI/4.0}"/>
+			<origin xyz="${front_laser_offset_x} ${front_laser_offset_y} ${front_laser_offset_z}" rpy="0 0 ${7.0*PI/4.0}"/>
 		</xacro:hokuyo>
 
 		<!-- Hokuyo rear lidar -->
