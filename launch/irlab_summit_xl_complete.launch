@@ -6,10 +6,6 @@
 	<arg name="id_robot" default="$(optenv ROBOT_ID summit_xl)"/>
 	<arg name="xacro_robot_a" default="irlab_summit_xls_std.urdf.xacro"/>
 
-	<!-- 2D LASERS -->
-	<!--arg name="has_scanse_lasers" default="$(optenv ROBOT_HAS_SCANSE_LASERS true)"/>
-	<arg name="has_lds_lasers" default="$(optenv ROBOT_HAS_LDS_LASERS true)"/-->
-	
 	<!-- RGBD CAMERAS -->
 	<arg name="has_front_rgbd_camera" default="$(optenv ROBOT_HAS_FRONT_RGBD_CAMERA false)"/>
 	<arg name="front_rgbd_camera_node" default="front_rgbd_camera"/>
@@ -88,11 +84,15 @@
 
 		<!--================================== SENSOR BRINGUP ==================================-->
 		<!-- start laser nodes -->
-		<!--include if="$(eval has_scanse_lasers and launch_move_base)" file="$(find icclab_summit_xl)/launch/real/irlab_sweep2scan.launch"/>
-		<include if="$(eval has_lds_lasers and launch_move_base)" file="$(find icclab_summit_xl)/launch/real/irlab_lds_lidar.launch"/-->
+		<include file="$(find icclab_summit_xl)/launch/real/irlab_hokuyo_lidar.launch">
+			<arg name="type" value="front"/>
+			<arg name="serial_port" value="/dev/ttyACM0"/>
+		</include>
 		
-		<include file="$(find icclab_summit_xl)/launch/real/irlab_hokuyo_front_lidar.launch"/>
-		<include file="$(find icclab_summit_xl)/launch/real/irlab_hokuyo_rear_lidar.launch"/>
+		<include file="$(find icclab_summit_xl)/launch/real/irlab_hokuyo_lidar.launch">
+			<arg name="type" value="rear"/>
+			<arg name="serial_port" value="/dev/ttyACM1"/>
+		</include>
 		
 		<!-- start rgbd camera node -->
 		<include if="$(arg has_front_rgbd_camera)" file="$(find summit_xl_bringup)/launch/orbbec.launch">

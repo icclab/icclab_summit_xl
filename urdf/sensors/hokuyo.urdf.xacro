@@ -50,12 +50,12 @@
     </joint>
 
     <!-- simulation -->
-    <sensor_scanse_gazebo/>
+    <sensor_hokuyo_gazebo/>
 
   </xacro:macro>
 
 <!-- uses ROS Laser Scanner Controller plugin -->
-  <xacro:macro name="sensor_scanse_gazebo">
+  <xacro:macro name="sensor_hokuyo_gazebo">
     <gazebo reference="${prefix}_link">
       <sensor type="ray" name="${prefix}_sensor">
         <pose>0 0 0 0 0 0</pose>
