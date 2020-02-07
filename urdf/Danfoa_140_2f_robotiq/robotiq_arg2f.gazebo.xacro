@@ -7,19 +7,19 @@
             <plugin filename="libroboticsgroup_gazebo_mimic_joint_plugin.so" name="${prefix}mimic_robotiq_140_1">
                 <joint>${prefix}finger_joint</joint>
                 <mimicJoint>${prefix}right_outer_knuckle_joint</mimicJoint>
-                <multiplier>-1.0</multiplier>
+                <multiplier>1.0</multiplier>
                 <offset>0.0</offset>
             </plugin>
             <plugin filename="libroboticsgroup_gazebo_mimic_joint_plugin.so" name="${prefix}mimic_robotiq_140_2">
                 <joint>${prefix}finger_joint</joint>
                 <mimicJoint>${prefix}left_inner_knuckle_joint</mimicJoint>
-                <multiplier>-1.0</multiplier>
+                <multiplier>1.0</multiplier>
                 <offset>0.0</offset>
             </plugin>
             <plugin filename="libroboticsgroup_gazebo_mimic_joint_plugin.so" name="${prefix}mimic_robotiq_140_3">
                 <joint>${prefix}finger_joint</joint>
                 <mimicJoint>${prefix}right_inner_knuckle_joint</mimicJoint>
-                <multiplier>-1.0</multiplier>
+                <multiplier>1.0</multiplier>
                 <offset>0.0</offset>
             </plugin>
             <plugin filename="libroboticsgroup_gazebo_mimic_joint_plugin.so" name="${prefix}mimic_robotiq_140_4">

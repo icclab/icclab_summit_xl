@@ -53,7 +53,7 @@
  
 <rosparam if="$(arg robotiq_gripper)" file="$(find icclab_summit_xl)/config/robotiq_gripper_controller.yaml" command="load"/>
  <!-- spawn controller manager -->
-  <node  if="$(arg robotiq_gripper)" name="gripper_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="gripper_joint_trajectory_controller  --shutdown-timeout 1" />
+  <node  if="$(arg robotiq_gripper)" name="gripper_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="gripper_left_controller gripper_right_controller" />
 
 
 	  

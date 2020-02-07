@@ -177,8 +177,9 @@
     <xacro:finger_links prefix="${prefix}" fingerprefix="right" stroke="140"/>
     <xacro:finger_joint prefix="${prefix}"/>
     <xacro:right_outer_knuckle_joint prefix="${prefix}"/>
-    <xacro:robotiq_arg2f_transmission prefix="${prefix}"/>
-    <xacro:robotiq_arg2f_gazebo prefix="${prefix}"/>
+    <xacro:robotiq_arg2f_transmission0 prefix="${prefix}"/>
+    <xacro:robotiq_arg2f_transmission1 prefix="${prefix}"/>
+        <xacro:robotiq_arg2f_gazebo prefix="${prefix}"/>
 </xacro:macro><mimic joint="${prefix}finger_joint" multiplier="-1" offset="0" />
     </joint>
   </xacro:macro>
@@ -234,7 +235,8 @@
     <xacro:finger_links prefix="${prefix}" fingerprefix="right" stroke="140"/>
     <xacro:finger_joint prefix="${prefix}"/>
     <xacro:right_outer_knuckle_joint prefix="${prefix}"/>
-    <xacro:robotiq_arg2f_transmission prefix="${prefix}"/>
-    <xacro:robotiq_arg2f_gazebo prefix="${prefix}"/>
+    <xacro:robotiq_arg2f_transmission0 prefix="${prefix}"/>
+    <xacro:robotiq_arg2f_transmission1 prefix="${prefix}"/>
+        <xacro:robotiq_arg2f_gazebo prefix="${prefix}"/>
   </xacro:macro>
 </robot>
