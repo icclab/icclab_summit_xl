@@ -34,7 +34,7 @@ gripper_left_controller:
 
 gripper_right_controller:
     type: effort_controllers/JointEffortController
-    joint: gripper_right_outer_knuckle_joint
+    joint: gripper_right_inner_finger_joint
     action_monitor_rate: 20
     goal_tolerance: 0.002
     max_effort: 10

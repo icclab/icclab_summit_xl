@@ -1,7 +1,9 @@
 <?xml version="1.0"?>
 <robot name="ur5" xmlns:xacro="http://ros.org/wiki/xacro">
   <xacro:include filename="$(find icclab_summit_xl)/urdf/Danfoa_140_2f_robotiq/robotiq_arg2f_transmission.xacro" />
-  <xacro:include filename="$(find icclab_summit_xl)/urdf/Danfoa_140_2f_robotiq/robotiq_arg2f.gazebo.xacro" />
+ <!-- import the xacro file -->
+ <xacro:include filename="$(find icclab_summit_xl)/urdf/Danfoa_140_2f_robotiq/robotiq_arg2f.gazebo.xacro" />
+
 
   <xacro:macro name="outer_knuckle" params="prefix fingerprefix stroke">
     <link name="${prefix}${fingerprefix}_outer_knuckle">
@@ -167,20 +169,7 @@
       <child link="${prefix}${fingerprefix}_inner_knuckle" />
       <axis xyz="1 0 0" />
       <limit lower="0" upper="0.8757" velocity="2.0" effort="1000" />
-      <!-- mport the xacro file -->
-<xacro:include filename="$(find icclab_summit_xl)/urdf/Danfoa_140_2f_robotiq/robotiq_arg2f.gazebo.xacro" />
-
-<!-- Use it in the last xacro block -->
-<xacro:macro name="robotiq_arg2f_140" params="prefix">
-    <xacro:robotiq_arg2f_base_link prefix="${prefix}"/>
-    <xacro:finger_links prefix="${prefix}" fingerprefix="left" stroke="140"/>
-    <xacro:finger_links prefix="${prefix}" fingerprefix="right" stroke="140"/>
-    <xacro:finger_joint prefix="${prefix}"/>
-    <xacro:right_outer_knuckle_joint prefix="${prefix}"/>
-    <xacro:robotiq_arg2f_transmission0 prefix="${prefix}"/>
-    <xacro:robotiq_arg2f_transmission1 prefix="${prefix}"/>
-        <xacro:robotiq_arg2f_gazebo prefix="${prefix}"/>
-</xacro:macro><mimic joint="${prefix}finger_joint" multiplier="-1" offset="0" />
+      <mimic joint="${prefix}finger_joint" multiplier="1" offset="0" />
     </joint>
   </xacro:macro>
 
@@ -229,6 +218,7 @@
     <xacro:finger_joints prefix="${prefix}" fingerprefix="right" reflect="-1.0"/>
   </xacro:macro>
 
+  <!-- Use it in the last xacro block -->
   <xacro:macro name="robotiq_arg2f_140" params="prefix">
     <xacro:robotiq_arg2f_base_link prefix="${prefix}"/>
     <xacro:finger_links prefix="${prefix}" fingerprefix="left" stroke="140"/>
@@ -237,6 +227,6 @@
     <xacro:right_outer_knuckle_joint prefix="${prefix}"/>
     <xacro:robotiq_arg2f_transmission0 prefix="${prefix}"/>
     <xacro:robotiq_arg2f_transmission1 prefix="${prefix}"/>
-        <xacro:robotiq_arg2f_gazebo prefix="${prefix}"/>
+    <xacro:robotiq_arg2f_gazebo prefix="${prefix}"/>
   </xacro:macro>
 </robot>

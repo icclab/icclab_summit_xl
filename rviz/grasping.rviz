@@ -5,11 +5,15 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Global Options1
+        - /MotionPlanning1
         - /MotionPlanning1/Scene Geometry1
         - /MotionPlanning1/Scene Robot1
+        - /MotionPlanning1/Planning Request1
+        - /TF1
+        - /TF1/Frames1
         - /Grasps_Markers1/Namespaces1
       Splitter Ratio: 0.504792333
-    Tree Height: 279
+    Tree Height: 242
   - Class: rviz/Help
     Name: Help
   - Class: rviz/Views
@@ -19,6 +23,8 @@ Panels:
     Splitter Ratio: 0.5
   - Class: rviz_visual_tools/RvizVisualToolsGui
     Name: RvizVisualToolsGui
+Toolbars:
+  toolButtonStyle: 2
 Visualization Manager:
   Class: ""
   Displays:
@@ -26,7 +32,7 @@ Visualization Manager:
       Cell Size: 1
       Class: rviz/Grid
       Color: 160; 160; 164
-      Enabled: true
+      Enabled: false
       Line Style:
         Line Width: 0.0299999993
         Value: Lines
@@ -39,7 +45,7 @@ Visualization Manager:
       Plane: XY
       Plane Cell Count: 10
       Reference Frame: <Fixed Frame>
-      Value: true
+      Value: false
     - Acceleration_Scaling_Factor: 1
       Class: moveit_rviz_plugin/MotionPlanning
       Enabled: true
@@ -182,37 +188,57 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-          gripper_base_link:
+          gripper_left_inner_finger:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          gripper_left_finger_base_link:
+          gripper_left_inner_finger_pad:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          gripper_left_finger_link:
+          gripper_left_inner_knuckle:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          gripper_right_finger_base_link:
+          gripper_left_outer_finger:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          gripper_right_finger_link:
+          gripper_left_outer_knuckle:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          left_collision_box_wall_link:
+          gripper_right_inner_finger:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          right_collision_box_wall_link:
+          gripper_right_inner_finger_pad:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          gripper_right_inner_knuckle:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          gripper_right_outer_finger:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          gripper_right_outer_knuckle:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          gripper_robotiq_arg2f_base_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -318,7 +344,7 @@ Visualization Manager:
         Interactive Marker Size: 0.300000012
         Joint Violation Color: 255; 0; 255
         Planning Group: manipulator
-        Query Goal State: true
+        Query Goal State: false
         Query Start State: false
         Show Workspace: false
         Start State Alpha: 1
@@ -329,7 +355,7 @@ Visualization Manager:
         Scene Alpha: 1
         Scene Color: 50; 230; 50
         Scene Display Time: 0.200000003
-        Show Scene Geometry: true
+        Show Scene Geometry: false
         Voxel Coloring: Z-Axis
         Voxel Rendering: Occupied Voxels
       Scene Robot:
@@ -449,37 +475,57 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-          gripper_base_link:
+          gripper_left_inner_finger:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          gripper_left_finger_base_link:
+          gripper_left_inner_finger_pad:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          gripper_left_finger_link:
+          gripper_left_inner_knuckle:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          gripper_right_finger_base_link:
+          gripper_left_outer_finger:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          gripper_right_finger_link:
+          gripper_left_outer_knuckle:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          left_collision_box_wall_link:
+          gripper_right_inner_finger:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          right_collision_box_wall_link:
+          gripper_right_inner_finger_pad:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          gripper_right_inner_knuckle:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          gripper_right_outer_finger:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          gripper_right_outer_knuckle:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          gripper_robotiq_arg2f_base_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -563,7 +609,7 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
         Robot Alpha: 0.5
-        Show Robot Collision: false
+        Show Robot Collision: true
         Show Robot Visual: true
       Value: true
       Velocity_Scaling_Factor: 1
@@ -588,7 +634,7 @@ Visualization Manager:
       Name: TF
       Show Arrows: true
       Show Axes: true
-      Show Names: true
+      Show Names: false
       Tree:
         {}
       Update Interval: 0
@@ -701,30 +747,30 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/XYOrbit
-      Distance: 2.70943475
+      Distance: 1.42598712
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.327835262
-        Y: 0.210180283
-        Z: -1.97228474e-07
+        X: -0.376389503
+        Y: 0.149796784
+        Z: -2.56833118e-07
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.0500000007
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 0.479796052
+      Pitch: 0.199796185
       Target Frame: summit_xl_base_footprint
       Value: XYOrbit (rviz)
-      Yaw: 5.82673597
+      Yaw: 5.55173635
     Saved: ~
 Window Geometry:
   Displays:
     collapsed: false
-  Height: 1176
+  Height: 1056
   Help:
     collapsed: false
   Hide Left Dock: false
@@ -735,11 +781,11 @@ Window Geometry:
     collapsed: false
   MotionPlanning - Trajectory Slider:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd00000001000000000000027400000444fc0200000009fb000000100044006900730070006c006100790073010000003a00000151000000c600fffffffb0000000800480065006c00700000000342000000bb0000006e00fffffffb0000000a0056006900650077007300000003b0000000b00000009e00fffffffb0000000c00430061006d00650072006100000002ff000001610000000000000000fb0000001e004d006f00740069006f006e00200050006c0061006e006e0069006e00670100000374000001890000000000000000fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000003e00fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e006701000001910000027d0000017600fffffffb0000000a0049006d0061006700650000000282000000160000001600fffffffb00000024005200760069007a00560069007300750061006c0054006f006f006c007300470075006901000004140000006a0000003e00ffffff000004dd0000044400000001000000020000000100000002fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd000000010000000000000274000003ccfc0200000009fb000000100044006900730070006c006100790073010000003a0000012c000000c600fffffffb0000000800480065006c00700000000342000000bb0000006e00fffffffb0000000a0056006900650077007300000003b0000000b00000009e00fffffffb0000000c00430061006d00650072006100000002ff000001610000000000000000fb0000001e004d006f00740069006f006e00200050006c0061006e006e0069006e00670100000374000001890000000000000000fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000001600000016fb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e0067010000016c000002360000016b00fffffffb0000000a0049006d0061006700650000000282000000160000001600fffffffb00000024005200760069007a00560069007300750061006c0054006f006f006c007300470075006901000003a80000005e0000003e00ffffff000004c5000003cc00000001000000020000000100000002fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   RvizVisualToolsGui:
     collapsed: false
   Views:
     collapsed: false
-  Width: 1879
-  X: 1987
-  Y: 0
+  Width: 1855
+  X: 885
+  Y: 1464
