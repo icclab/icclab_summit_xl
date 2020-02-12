@@ -166,20 +166,8 @@
       <parent link="${prefix}robotiq_arg2f_base_link" />
       <child link="${prefix}${fingerprefix}_inner_knuckle" />
       <axis xyz="1 0 0" />
-      <limit lower="0" upper="0.8757" velocity="2.0" effort="1000" />
-      <!-- mport the xacro file -->
-<xacro:include filename="$(find icclab_summit_xl)/urdf/Danfoa_140_2f_robotiq/robotiq_arg2f.gazebo.xacro" />
-
-<!-- Use it in the last xacro block -->
-<xacro:macro name="robotiq_arg2f_140" params="prefix">
-    <xacro:robotiq_arg2f_base_link prefix="${prefix}"/>
-    <xacro:finger_links prefix="${prefix}" fingerprefix="left" stroke="140"/>
-    <xacro:finger_links prefix="${prefix}" fingerprefix="right" stroke="140"/>
-    <xacro:finger_joint prefix="${prefix}"/>
-    <xacro:right_outer_knuckle_joint prefix="${prefix}"/>
-    <xacro:robotiq_arg2f_transmission prefix="${prefix}"/>
-    <xacro:robotiq_arg2f_gazebo prefix="${prefix}"/>
-</xacro:macro><mimic joint="${prefix}finger_joint" multiplier="-1" offset="0" />
+      <limit lower="-0.857" upper="0" velocity="2.0" effort="1000" />
+      <mimic joint="${prefix}finger_joint" multiplier="-1" offset="0" />
     </joint>
   </xacro:macro>
 
@@ -222,7 +210,7 @@
       <parent link="${prefix}robotiq_arg2f_base_link" />
       <child link="${prefix}right_outer_knuckle" />
       <axis xyz="1 0 0" />
-      <limit lower="0" upper="0.725" velocity="2.0" effort="1000" />
+      <limit lower="0" upper="-0.725" velocity="2.0" effort="1000" />
     <mimic joint="${prefix}finger_joint" multiplier="-1" offset="0" />
     </joint>
     <xacro:finger_joints prefix="${prefix}" fingerprefix="right" reflect="-1.0"/>
