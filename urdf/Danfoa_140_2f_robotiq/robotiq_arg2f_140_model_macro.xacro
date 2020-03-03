@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<robot name="ur5" xmlns:xacro="http://ros.org/wiki/xacro">
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
   <xacro:include filename="$(find icclab_summit_xl)/urdf/Danfoa_140_2f_robotiq/robotiq_arg2f_transmission.xacro" />
  <!-- import the xacro file -->
  <xacro:include filename="$(find icclab_summit_xl)/urdf/Danfoa_140_2f_robotiq/robotiq_arg2f.gazebo.xacro" />
