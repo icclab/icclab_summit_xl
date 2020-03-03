@@ -1,4 +1,5 @@
-# Gripper controller
+# Gripper controller 
+# with the mimic joint plugin we also close the other finger
 gripper_left_controller:
     type: effort_controllers/JointEffortController
     joint: gripper_finger_joint

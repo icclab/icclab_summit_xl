@@ -77,15 +77,13 @@
 			<arg name="debug" value="$(arg debug)"/>
 		</include>
 
-		<!-- Controller parameters with Schunk gripper-->
-		<rosparam file="$(find icclab_summit_xl)/config/controllers.yaml" unless="$(arg robotiq_gripper)"/>
-		<!-- Controller parameters with Robotiq gripper-->
-		<rosparam file="$(find icclab_summit_xl)/config/controllers_robotiqgripper.yaml" if="$(arg robotiq_gripper)"/>
-		
-		 
+		<!-- Arm controllers -->
+		<rosparam file="$(find icclab_summit_xl)/config/controllers.yaml" command="load" />
+				 
 		<!--	The semantic description that corresponds to the URDF -->
-		<!--	<arg name="robot_description" default="robot_description"/>-->
-		<!--	<param name="$(arg robot_description)_semantic" textfile="$(find icclab_summit_xl)/config/summit_xl.srdf" />-->
+			<arg name="robot_description" default="robot_description"/>
+			<param unless="$(arg robotiq_gripper)" name="$(arg robot_description)_semantic" textfile="$(find icclab_summit_xl)/config/summit_xl.srdf" />
+			<param if="$(arg robotiq_gripper)" name="$(arg robot_description)_semantic" textfile="$(find icclab_summit_xl)/config/summit_xl_robotiqgripper.srdf" />
 
 		<!-- run point cloud filtering--> 
 		<node name="pointcloud_filtering" pkg="irlab_point_cloud_filtering" type="point_cloud_filtering_server" respawn="false" args="/summit_xl/arm_camera/depth_registered/points" output="screen"/>

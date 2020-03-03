@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <launch>
   <!-- GRIPPER PARAMS -->
   <arg name="robotiq_gripper"   default="false"/>
@@ -16,7 +17,7 @@
 
   <!-- The semantic description that corresponds to the URDF -->
   <param name="$(arg robot_description)_semantic" textfile="$(find icclab_summit_xl)/config/summit_xl.srdf" unless="$(arg robotiq_gripper)" />
-  <param name="$(arg robot_description)_semantic" textfile="$(find icclab_summit_xl)/config/summit_xl_robotiqgripper.srdf" if="$(arg robotiq_gripper)" />
+  <param name="$(arg robot_description)_semantic" textfile="$(find icclab_summit_xl)/config/summit_xl.srdf" if="$(arg robotiq_gripper)" />
 
   <!-- Load updated joint limits (override information from URDF) -->
   <group ns="$(arg robot_description)_planning">
