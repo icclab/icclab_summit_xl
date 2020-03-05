@@ -86,12 +86,12 @@
 		<!-- start laser nodes -->
 		<include file="$(find icclab_summit_xl)/launch/real/irlab_hokuyo_lidar.launch">
 			<arg name="type" value="front"/>
-			<arg name="serial_port" value="/dev/ttyACM0"/>
+			<arg name="serial_port" value="/dev/lidar_front"/>
 		</include>
 		
 		<include file="$(find icclab_summit_xl)/launch/real/irlab_hokuyo_lidar.launch">
 			<arg name="type" value="rear"/>
-			<arg name="serial_port" value="/dev/ttyACM1"/>
+			<arg name="serial_port" value="/dev/lidar_rear"/>
 		</include>
 		
 		<!-- start rgbd camera node -->
