@@ -77,9 +77,11 @@
 			<arg name="debug" value="$(arg debug)"/>
 		</include>
 
-		<!-- Arm controllers -->
-		<rosparam file="$(find icclab_summit_xl)/config/controllers.yaml" command="load" />
-				 
+		<!-- Controller parameters with Schunk gripper-->
+		<rosparam file="$(find icclab_summit_xl)/config/controllers.yaml" unless="$(arg robotiq_gripper)"/>
+		<!-- Controller parameters with Robotiq gripper-->
+		<rosparam file="$(find icclab_summit_xl)/config/controllers_robotiqgripper.yaml" if="$(arg robotiq_gripper)"/>
+
 		<!--	The semantic description that corresponds to the URDF -->
 			<arg name="robot_description" default="robot_description"/>
 			<param unless="$(arg robotiq_gripper)" name="$(arg robot_description)_semantic" textfile="$(find icclab_summit_xl)/config/summit_xl.srdf" />
