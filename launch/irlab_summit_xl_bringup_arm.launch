@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <launch>
 
-<arg name="id_robot" default="$(optenv ROBOT_ID summit_xl)"/>
+  <arg name="id_robot" default="$(optenv ROBOT_ID summit_xl)"/>
+  <arg name="comport" default="/dev/ttyUSB_gripper"/>
 
   <!-- GDB functionality -->
   <arg name="debug" default="false" />
@@ -27,8 +28,6 @@
   <arg name="base_frame" default="$(arg prefix)base" />
   <arg name="tool_frame" default="$(arg prefix)tool0_controller" />
   <arg name="shutdown_on_disconnect" default="true" /> 
-
-
 
   <!-- Load hardware interface -->
   <node name="$(arg prefix)hardware_interface" pkg="ur_modern_driver" type="ur_driver" output="screen" launch-prefix="$(arg launch_prefix)">
@@ -56,6 +55,16 @@
 
   <include file="$(find summit_xls_ur5_bringup)/launch/ur5_controllers.launch">
         <arg name="prefix" value="arm_"/>
+  </include>
+
+  <!-- Launch action server for gripper -->
+  <include file="$(find robotiq_2f_gripper_control)/launch/robotiq_action_server.launch">
+        <arg name="comport" value="$(arg comport)"/>
+        <arg name="baud" value="115200"/>
+        <arg name="stroke" value="0.140"/>
+        <arg name="joint_name" value="gripper_finger_joint"/>
+        <arg name="verbose" value="true"/>
+        <arg name="sim" value="false"/>
   </include>
 
 
