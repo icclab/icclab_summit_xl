@@ -110,7 +110,7 @@
 
 	</group>
 
-	<!-- run grasp detection -->
-	<include if="$(arg enable_arm)" file="$(find icclab_summit_xl)/launch/include/grasp_generation.launch.xml"/>
+	<!-- run grasp detection 
+	<include if="$(arg enable_arm)" file="$(find icclab_summit_xl)/launch/include/grasp_generation.launch.xml"/> -->
 
 </launch>
