@@ -150,7 +150,7 @@ include_directories(
 add_executable(dock_arm_no_constraints src/dock_arm_no_constraints.cpp)
 add_executable(dock_arm_with_constraints src/dock_arm_with_constraints.cpp)
 add_executable(move_arm_to_pose src/move_arm_to_pose.cpp)
-
+add_executable(move_arm_to_pose_lab02 src/move_arm_to_pose_lab02.cpp)
 ## Add cmake target dependencies of the executable
 ## same as for the library above
 # add_dependencies(icclab_summit_xl_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
@@ -165,6 +165,10 @@ target_link_libraries(dock_arm_with_constraints
  )
  
 target_link_libraries(move_arm_to_pose
+   ${catkin_LIBRARIES}
+ )
+
+target_link_libraries(move_arm_to_pose_lab02
    ${catkin_LIBRARIES}
  )
 
