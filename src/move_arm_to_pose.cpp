@@ -83,7 +83,7 @@ int main(int argc, char** argv)
   // The :move_group_interface:`MoveGroup` class can be easily
   // setup using just the name of the planning group you would like to control and plan for.
   ros::WallDuration timeout_duration = ros::WallDuration(60);
-  moveit::planning_interface::MoveGroupInterface move_group(CONFIG_OPTIONS, boost::shared_ptr<tf::Transformer>(), timeout_duration);
+  moveit::planning_interface::MoveGroupInterface move_group(CONFIG_OPTIONS);
 
   // We will use the :planning_scene_interface:`PlanningSceneInterface`
   // class to add and remove collision objects in our "virtual world" scene
@@ -206,9 +206,9 @@ int main(int argc, char** argv)
   move_group.setMaxVelocityScalingFactor(0.5);
   
   // RViz provides many types of markers, in this demo we will use text, cylinders, and spheres
-  Eigen::Affine3d text_pose = Eigen::Affine3d::Identity();
+  Eigen::Isometry3d text_pose = Eigen::Isometry3d::Identity();
   text_pose.translation().z() = 1.75;
-  visual_tools.publishText(text_pose, "Move arm to pose", rvt::WHITE, rvt::XLARGE);
+  visual_tools.publishText(text_pose, "Move arm to pose", rvt::WHITE, rvt::XLARGE, false);
 
   // Batch publishing is used to reduce the number of messages being sent to RViz for large visualizations
   visual_tools.trigger();
@@ -218,7 +218,7 @@ int main(int argc, char** argv)
   // We can also visualize the plan as a line with markers in RViz.
   ROS_INFO_NAMED(NODE_NAME, "Visualizing pose goal");
   visual_tools.publishAxisLabeled(target_pose, "Pose Goal");
-  visual_tools.publishText(text_pose, "Visualizing Pose Goal", rvt::WHITE, rvt::XLARGE);
+  visual_tools.publishText(text_pose, "Visualizing Pose Goal", rvt::WHITE, rvt::XLARGE, false);
   visual_tools.trigger();
   visual_tools.prompt("Press 'next' in the RvizVisualToolsGui window to plan to the pose");
    

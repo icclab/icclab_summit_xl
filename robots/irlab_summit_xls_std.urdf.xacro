@@ -191,10 +191,10 @@
 			<origin xyz="-0.0036 0.045 0.1" rpy="${PI/2} 0 ${PI}" /><!-- camera on bot  -->
 		</xacro:camera_mount>
 
-		<!-- Collision box camera cable -->
+		<!-- Collision box camera cable 
 		<xacro:collision_box_camera_cable prefix="arm" parent="arm_camera_link">
 			 <origin xyz="-0.02 -0.08 0" rpy="0 0 0" />
-		</xacro:collision_box_camera_cable>
+		</xacro:collision_box_camera_cable> -->
 		
 		<!-- Collision box wrist 3 -->
 		<xacro:collision_box_wrist3 prefix="arm" parent="arm_wrist_3_link">
