@@ -58,7 +58,7 @@ aluminum peripherial evaluation case.
       <origin xyz="0 ${-d435_cam_mount_from_center_offset} 0" rpy="0 0 0"/>
         <geometry>
           <!-- <box size="${d435_cam_width} ${d435_cam_height} ${d435_cam_depth}"/> -->
-	  <mesh filename="package://robotnik_sensors/meshes/intel_realsense_depth_camera_d435.dae" />
+	  <mesh filename="package://robotnik_sensors/meshes/intel_d435.dae" />
           <!--<mesh filename="package://realsense2_camera/meshes/d435/d435.dae" />-->
 
         </geometry>
@@ -141,7 +141,7 @@ aluminum peripherial evaluation case.
  
   
   <!-- RGBD sensor for simulation, same as Kinect -->
-  <sensor_d435_icclab_gazebo/>
+  <xacro:sensor_d435_icclab_gazebo/>
   
   </xacro:macro>
   
