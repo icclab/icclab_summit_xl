@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <launch>
         <!-- GRIPPER PARAM -->
-        <arg name="robotiq_gripper"   default="false"/>
+        <arg name="robotiq_gripper"   default="true"/>
 
         <!-- COLLISION WALLS PARAM -->
         <arg name="collision_walls"   default="false"/>

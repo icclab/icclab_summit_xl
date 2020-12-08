@@ -14,7 +14,7 @@
         <arg name="simulation"             default="true"/>
 
         <!-- GRIPPER PARAMS -->
-        <arg name="robotiq_gripper"        default="false"/>
+        <arg name="robotiq_gripper"        default="true"/>
 
         <!-- DISABLE NAV STACK PARAMS -->
         <arg name="launch_rviz_nav"        default="false"/>
