@@ -57,8 +57,10 @@ int main(int argc, char** argv)
   // We can plan a motion for this group to a desired pose for the
   // end-effector.
   geometry_msgs::Pose target_pose;
+  std::string skip_safety_flag ("--skip-safety");
+  bool skip_safety = false;
   
-  if (argc == 8)
+  if (argc >= 8)
   {
     target_pose.position.x = atof(argv[1]);
     target_pose.position.y = atof(argv[2]);
@@ -67,6 +69,10 @@ int main(int argc, char** argv)
     target_pose.orientation.y = atof(argv[5]);
     target_pose.orientation.z = atof(argv[6]);
     target_pose.orientation.w = atof(argv[7]);
+    if (argc == 9 && skip_safety_flag.compare(argv[8]) == 0)
+    {
+      skip_safety = true;
+    }
   } else {
     ROS_INFO("Usage: move_arm_to_pose_goal position.x position.y position.z orientation.x orientation.y orientation.z orientation.w");
     return -1;  
@@ -189,7 +195,7 @@ int main(int argc, char** argv)
 //  constraints.position_constraints.push_back(pcm);
 //  constraints.joint_constraints.push_back(jcm);
 //  move_group.setPathConstraints(constraints);
-  move_group.setPlanningTime(10.0);
+  move_group.setPlanningTime(20.0);
   
   std::vector<double> joint_group_positions;
   std::vector<string> joint_names = joint_model_group->getActiveJointModelNames();
@@ -220,7 +226,9 @@ int main(int argc, char** argv)
   visual_tools.publishAxisLabeled(target_pose, "Pose Goal");
   visual_tools.publishText(text_pose, "Visualizing Pose Goal", rvt::WHITE, rvt::XLARGE, false);
   visual_tools.trigger();
-  visual_tools.prompt("Press 'next' in the RvizVisualToolsGui window to plan to the pose");
+  if (!skip_safety){
+    visual_tools.prompt("Press 'next' in the RvizVisualToolsGui window to plan to the pose");
+  }
    
   ROS_INFO_NAMED(NODE_NAME, "Invoking planner");
 
@@ -229,16 +237,20 @@ int main(int argc, char** argv)
   visual_tools.trigger();
   ROS_INFO_NAMED(NODE_NAME, "Visualizing plan (joint space goal) %s", success ? "" : "FAILED");
   if (success){
-    cout << "Please verify that the plan will not hit any objects uisng rviz.\n";
-    cout << "Do you want to proceed with the planned movement? (y/N): ";
-    string reply;
-    getline (cin, reply);
-    if (reply.compare("y") == 0){
-      move_group.execute(my_plan);
+    if (!skip_safety){
+      cout << "Please verify that the plan will not hit any objects uisng rviz.\n";
+      cout << "Do you want to proceed with the planned movement? (y/N): ";
+      string reply;
+      getline (cin, reply);
+      if (reply.compare("y") == 0){
+        move_group.execute(my_plan);
+      }
+    } else {
+        move_group.execute(my_plan);
     }
   }
 
-  //  // When done with the path constraint be sure to clear it.
+  // When done with the path constraint be sure to clear it.
   move_group.clearPathConstraints();
 
   // Since we set the start state we have to clear it before planning other paths
