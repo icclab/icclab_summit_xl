@@ -47,7 +47,7 @@
     </joint>
 
     <!-- simulation -->
-    <sensor_scanse_gazebo/>
+    <xacro:sensor_scanse_gazebo/>
 
   </xacro:macro>
 
