@@ -50,7 +50,7 @@
     </joint>
 
     <!-- simulation -->
-    <sensor_hokuyo_gazebo/>
+    <xacro:sensor_hokuyo_gazebo/>
 
   </xacro:macro>
 

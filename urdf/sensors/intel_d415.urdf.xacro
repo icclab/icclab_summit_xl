@@ -140,7 +140,7 @@ aluminum peripherial evaluation case.
  
   
   <!-- RGBD sensor for simulation, same as Kinect -->
-  <sensor_d415_icclab_gazebo/>
+  <xacro:sensor_d415_icclab_gazebo/>
   
   </xacro:macro>
   
