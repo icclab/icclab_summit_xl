@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<launch>
+
+        <arg name="x"           default="0.0"/>
+        <arg name="y"           default="0.5"/>
+        <arg name="z"           default="0.5"/>
+        <arg name="roll"        default="1.57"/>
+        <arg name="pitch"       default="0"/>
+        <arg name="yaw"         default="0"/>
+
+        <arg name="urdf_ar_file" default="$(find icclab_summit_xl)/urdf/ar_tags/ar_1234.urdf.xacro"/>
+        <arg name="ar_name"      default="ar_1234"/> 
+
+        <!--======================== LAUNCH SIM COMPLETE ==================================-->
+        <include file="$(find icclab_summit_xl)/launch/spawn_ar_urdf.launch">
+                <arg name="x"           value="$(arg x)"/>
+                <arg name="y"           value="$(arg y)"/>
+                <arg name="z"           value="$(arg z)"/>
+                <arg name="roll"        value="$(arg roll)"/>
+                <arg name="pitch"       value="$(arg pitch)"/>
+                <arg name="yaw"         value="$(arg yaw)"/>
+
+                <arg name="urdf_ar_file"   value="$(arg urdf_ar_file)"/>
+                <arg name="ar_name"        value="$(arg ar_name)"/>
+        </include>
+
+</launch>

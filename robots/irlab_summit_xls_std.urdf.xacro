@@ -8,6 +8,7 @@
 
 	<!-- First we import all posible elements defined in the urdf.xacro files. All these elements are defined as macro:xacros -->
 
+
 	<!-- Import summit XL base elements -->
 	<xacro:include filename="$(find summit_xl_description)/urdf/bases/summit_xl_hls_base.urdf.xacro" />
 
@@ -205,6 +206,7 @@
 		<xacro:collision_box_wrist2 prefix="arm" parent="arm_wrist_2_link">
 			 <origin xyz="0 0 -0.06" rpy="${PI/2} 0 0" />
 		</xacro:collision_box_wrist2> 
+
 
 		<!-- Collision walls right/left-->
 		<xacro:if value="$(arg collision_walls)">
