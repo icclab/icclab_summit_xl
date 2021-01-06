@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+
+<robot name="ar_8">
+
+
+    <link name="ar_8_link">
+      <visual>
+        <origin rpy="0.0 0 0" xyz="0 0 0"/> 
+        <geometry>
+		<mesh filename="package://icclab_summit_xl/meshes/ar_tags/Marker8.dae" scale=" 0.1 0.1 0.1"/>
+        </geometry>
+      </visual>
+      <collision>
+	<origin rpy="0.0 0 0" xyz="0 0 0"/>
+        <geometry>
+          <box size="0.2 0.2 0.2"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="1.0" />
+        <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+        <inertia ixx = "0.07416666667" ixy = "0.000000" ixz = "0.000000"
+             iyx = "0.000000" iyy = "0.058541666667" iyz = "0.000000"
+             izx = "0.000000" izy = "0.000000" izz = "0.02640416666667" />
+      </inertial>
+    </link>
+
+    <gazebo reference="ar_8_link">
+      <kp>100000.0</kp>
+      <kd>100000.0</kd>
+      <mu1>0.1</mu1>
+      <mu2>0.1</mu2>
+      <fdir>1 0 0</fdir>
+    </gazebo>
+
+</robot>
