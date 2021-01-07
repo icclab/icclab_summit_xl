@@ -1,11 +1,10 @@
 <launch>
 	<arg name="marker_size" default="5" />
-	<arg name="max_new_marker_error" default="0.08" />
-	<arg name="max_track_error" default="0.01" />
+	<arg name="max_new_marker_error" default="0.2" />
+	<arg name="max_track_error" default="0.2" />
 	<arg name="cam_image_topic" default="/summit_xl/arm_camera/rgb/image_raw" />
 	<arg name="cam_info_topic" default="/summit_xl/arm_camera/rgb/camera_info" />
-	<arg name="output_frame" default="/arm_camera_color_optical_frame" />
-
+	<arg name="output_frame" default="summit_xl_base_footprint" />
 
 
 

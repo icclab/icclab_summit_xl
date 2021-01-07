@@ -35,10 +35,6 @@
 
 		<!-- Spawner model into gazebo -->
 		<node name="urdf_spawner_summit_model" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-x $(arg x_init_pose) -y $(arg y_init_pose) -z $(arg z_init_pose) -urdf -param robot_description -model $(arg id_robot)" />
-		
-		<node name="urdf_spawner_ar_6" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-file $(find icclab_summit_xl)/urdf/ar_tags/ar_6.urdf -urdf -x -1.0 -y -0.1 -z 1 -R 0 -P 0 -Y 0 -model ar_6" /> 
-		
-                <node name="urdf_spawner_ar_8" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-file $(find icclab_summit_xl)/urdf/ar_tags/ar_8.urdf -urdf -x -1.0 -y -0.1 -z 1.2 -R 0 -P 0 -Y 0 -model ar_8" />
 
 
 		<!-- start summit_xl_control nodes -->
