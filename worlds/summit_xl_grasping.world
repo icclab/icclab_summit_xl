@@ -43,7 +43,7 @@
     <include>
 	    <uri>model://marker2</uri>
       <name>marker2</name>
-      <pose>-0.8 0.01 0.0 -0.0 -0.0 -0.0</pose>
+      <pose>-1.0 0.01 0.0 -0.0 -0.0 -0.0</pose>
     </include>
     <include>
 	    <uri>model://marker12</uri>
@@ -53,7 +53,7 @@
     <include>
 	    <uri>model://marker7</uri>
       <name>marker7</name>
-      <pose>-1.0 0.31 0.0 -0.0 -0.0 -0.0</pose>
+      <pose>-1.1 0.31 0.0 -0.0 -0.0 -0.0</pose>
     </include>
 
   </world>
