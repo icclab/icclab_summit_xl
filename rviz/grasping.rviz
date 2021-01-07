@@ -14,7 +14,7 @@ Panels:
         - /TF1/Frames1
         - /Grasps_Markers1/Namespaces1
       Splitter Ratio: 0.504792333
-    Tree Height: 203
+    Tree Height: 195
   - Class: rviz/Help
     Name: Help
   - Class: rviz/Views
@@ -189,57 +189,27 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-          gripper_left_inner_finger:
+          gripper_base_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          gripper_left_inner_finger_pad:
+          gripper_left_finger_base_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          gripper_left_inner_knuckle:
+          gripper_left_finger_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          gripper_left_outer_finger:
+          gripper_right_finger_base_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          gripper_left_outer_knuckle:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          gripper_right_inner_finger:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          gripper_right_inner_finger_pad:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          gripper_right_inner_knuckle:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          gripper_right_outer_finger:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          gripper_right_outer_knuckle:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          gripper_robotiq_arg2f_base_link:
+          gripper_right_finger_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -476,57 +446,27 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-          gripper_left_inner_finger:
+          gripper_base_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          gripper_left_inner_finger_pad:
+          gripper_left_finger_base_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          gripper_left_inner_knuckle:
+          gripper_left_finger_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          gripper_left_outer_finger:
+          gripper_right_finger_base_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          gripper_left_outer_knuckle:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          gripper_right_inner_finger:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          gripper_right_inner_finger_pad:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          gripper_right_inner_knuckle:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          gripper_right_outer_finger:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          gripper_right_outer_knuckle:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          gripper_robotiq_arg2f_base_link:
+          gripper_right_finger_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -615,7 +555,7 @@ Visualization Manager:
       Value: true
       Velocity_Scaling_Factor: 1
     - Class: rviz/Image
-      Enabled: false
+      Enabled: true
       Image Topic: /summit_xl/arm_camera/rgb/image_raw
       Max Value: 1
       Median window: 5
@@ -625,7 +565,7 @@ Visualization Manager:
       Queue Size: 2
       Transport Hint: raw
       Unreliable: false
-      Value: false
+      Value: true
     - Class: rviz/TF
       Enabled: false
       Frame Timeout: 15
@@ -668,7 +608,7 @@ Visualization Manager:
       Color: 255; 255; 255
       Color Transformer: RGB8
       Decay Time: 0
-      Enabled: false
+      Enabled: true
       Invert Rainbow: false
       Max Color: 255; 255; 255
       Max Intensity: 4096
@@ -685,7 +625,7 @@ Visualization Manager:
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
-      Value: false
+      Value: true
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
@@ -782,7 +722,7 @@ Window Geometry:
     collapsed: false
   MotionPlanning - Trajectory Slider:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd00000001000000000000028e000003b2fc0200000009fb000000100044006900730070006c006100790073010000003c00000106000000c900fffffffb0000000800480065006c00700000000342000000bb0000006f00fffffffb0000000a0056006900650077007300000003b0000000b0000000a100fffffffb0000000c00430061006d00650072006100000002ff000001610000000000000000fb0000001e004d006f00740069006f006e00200050006c0061006e006e0069006e00670100000374000001890000000000000000fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000003f00fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e00670100000148000002450000017500fffffffb0000000a0049006d006100670065000000038f000000160000001600fffffffb00000024005200760069007a00560069007300750061006c0054006f006f006c007300470075006901000003930000005b0000003f00ffffff000004ec000003b200000001000000020000000100000002fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd00000001000000000000028e000003b2fc0200000009fb000000100044006900730070006c006100790073010000003c000000fe000000c900fffffffb0000000800480065006c00700000000342000000bb0000006f00fffffffb0000000a0056006900650077007300000003b0000000b0000000a100fffffffb0000000c00430061006d00650072006100000002ff000001610000000000000000fb0000001e004d006f00740069006f006e00200050006c0061006e006e0069006e00670100000374000001890000000000000000fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000003f00fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e00670100000140000001810000017500fffffffb0000000a0049006d00610067006501000002c7000000e20000001600fffffffb00000024005200760069007a00560069007300750061006c0054006f006f006c007300470075006901000003af0000003f0000003f00ffffff000004ec000003b200000001000000020000000100000002fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   RvizVisualToolsGui:
     collapsed: false
   Views:
