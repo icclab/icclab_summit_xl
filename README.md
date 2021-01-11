@@ -1,6 +1,3 @@
-For using ar_track_alvar with noetic you need to clone the following repository selecting the kinetic-devel branch:
-
-https://github.com/ros-perception/ar_track_alvar
 
 To use the aruco tag models in gazebo you need to set the right path:
 
