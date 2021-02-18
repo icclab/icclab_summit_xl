@@ -16,7 +16,7 @@
 	<arg name="slam" default="false"/>
 
 	<!-- Run move_base -->
-	<node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+	<node pkg="move_base" type="move_base" respawn="true" name="move_base">
 		<rosparam file="$(find icclab_summit_xl)/config/move_base_params.yaml" command="load" />
 		<rosparam file="$(find icclab_summit_xl)/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
 		<rosparam file="$(find icclab_summit_xl)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
@@ -24,7 +24,7 @@
 		<rosparam if="$(arg slam)" file="$(find icclab_summit_xl)/config/global_costmap_params_no_map.yaml" command="load" />
 		<rosparam unless="$(arg slam)" file="$(find icclab_summit_xl)/config/global_costmap_params_map.yaml" command="load" />
 		<rosparam file="$(find icclab_summit_xl)/config/global_planner_params.yaml" command="load" />
-		<rosparam file="$(find icclab_summit_xl)/config/teb_local_planner_steel_params.yaml" command="load" />
+			<!--<rosparam file="$(find icclab_summit_xl)/config/teb_local_planner_steel_params.yaml" command="load" />-->
 
 		<!-- reset frame_id parameters using user input data -->
 		<!-- front laser -->

@@ -23,7 +23,6 @@
     <param name="use_map_topic" value="true"/>
     <param name="odom_model_type" value="$(arg odom_model_type)"/>
     <param name="odom_alpha5" value="0.1"/>
-    <param name="transform_tolerance" value="0.2" />
     <param name="gui_publish_rate" value="10.0"/>
     <param name="laser_max_beams" value="60"/>
     <param name="laser_max_range" value="-1.0"/>
@@ -52,7 +51,7 @@
     <param name="base_frame_id" value="$(arg base_frame)"/>
     <param name="global_frame_id" value="$(arg global_frame)"/>
     <param name="resample_interval" value="1"/>
-    <param name="transform_tolerance" value="0.1"/>
+    <param name="transform_tolerance" value="0.5"/>
     <param name="recovery_alpha_slow" value="0.0"/>
     <param name="recovery_alpha_fast" value="0.0"/>
 

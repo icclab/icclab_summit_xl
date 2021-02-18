@@ -62,7 +62,7 @@ int main(int argc, char** argv)
   // The :move_group_interface:`MoveGroup` class can be easily
   // setup using just the name of the planning group you would like to control and plan for.
   ros::WallDuration timeout_duration = ros::WallDuration(60);
-  moveit::planning_interface::MoveGroupInterface move_group(CONFIG_OPTIONS, boost::shared_ptr<tf::Transformer>(), timeout_duration);
+  moveit::planning_interface::MoveGroupInterface move_group(CONFIG_OPTIONS);
 
   // We will use the :planning_scene_interface:`PlanningSceneInterface`
   // class to add and remove collision objects in our "virtual world" scene
