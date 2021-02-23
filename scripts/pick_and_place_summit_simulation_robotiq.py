@@ -114,7 +114,8 @@ class GpdPickPlace(object):
                     continue
                 tf_listener_.waitForTransform('/arm_camera_depth_optical_frame', '/summit_xl_base_footprint',
                                               rospy.Time(), rospy.Duration(2.0))
-		g = Grasp()
+
+                g = Grasp()
                 g.id = "dupa"
                 gp = PoseStamped()
                 gp.header.frame_id = "arm_camera_depth_optical_frame"
@@ -129,8 +130,8 @@ class GpdPickPlace(object):
                 gp.pose.orientation.y = float(quat.elements[2])
                 gp.pose.orientation.z = float(quat.elements[3])
                 gp.pose.orientation.w = float(quat.elements[0])
-		
-		translated_pose = tf_listener_.transformPose("summit_xl_base_footprint", gp)
+
+                translated_pose = tf_listener_.transformPose("summit_xl_base_footprint", gp)
 			
                 g.grasp_pose = translated_pose
                 g.pre_grasp_approach.direction.header.frame_id = "arm_ee_link"
@@ -154,7 +155,7 @@ class GpdPickPlace(object):
                 gp_cartesian.pose.orientation.z = float(quat.elements[3])
                 gp_cartesian.pose.orientation.w = float(quat.elements[0])
 
-		translated_pose = tf_listener_.transformPose("summit_xl_base_footprint", gp_cartesian)
+                translated_pose = tf_listener_.transformPose("summit_xl_base_footprint", gp_cartesian)
 
                 g_cartesian = Grasp ()
                 g_cartesian.id = "cart"
@@ -179,8 +180,8 @@ class GpdPickPlace(object):
         
 	# Add object mesh to planning scene
         self.add_object_mesh()
-        
-	group.set_goal_tolerance(0.02)
+
+        group.set_goal_tolerance(0.02)
         for single_grasp in grasps_list:
             if self.mark_pose:
                 self.show_grasp_pose(self.marker_publisher, single_grasp.grasp_pose)
@@ -241,8 +242,8 @@ class GpdPickPlace(object):
         
 	# Add object mesh to planning scene
         self.add_object_mesh()
-        
-	group.set_goal_tolerance(0.01)
+
+        group.set_goal_tolerance(0.01)
         cont_c = 0
         for single_grasp in grasps_list_cartesian:
             if self.mark_pose:

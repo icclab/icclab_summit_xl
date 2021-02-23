@@ -1,12 +1,12 @@
 def pevent(text):
-    print str('\033[33m' + '\033[1m' + text + '\033[0m')
+    print ('\033[33m' + '\033[1m' + text + '\033[0m')
 
 
 def pinfo(text):
-    print str('\033[94m' + '\033[1m' + text + '\033[0m')
+    print ('\033[94m' + '\033[1m' + text + '\033[0m')
 
 def perror(text):
-    print str('\033[91m' + '\033[1m' + text + '\033[0m')
+    print ('\033[91m' + '\033[1m' + text + '\033[0m')
 
 def get_moveit_error_code(error_val):
     codes = {'SUCCESS': 1, 'FAILURE': 99999, 'PLANNING_FAILED': -1, 'INVALID_MOTION_PLAN': -2,
