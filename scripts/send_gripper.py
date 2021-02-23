@@ -59,8 +59,8 @@ def close_gripper_summit():
         send_request = rospy.ServiceProxy('/summit_xl/ur_driver/set_io', SetIO)
         resp = send_request(1,17,0.0)
         resp = send_request(1,16,1.0)
-    except rospy.ServiceException, e:
-        print "Service call failed: %s"%e
+    except rospy.ServiceException as e:
+        print ("Service call failed: %s" %e)
 
 def open_gripper_summit():
     rospy.wait_for_service('/summit_xl/ur_driver/set_io')
@@ -68,8 +68,8 @@ def open_gripper_summit():
         send_request = rospy.ServiceProxy('/summit_xl/ur_driver/set_io', SetIO)
         resp = send_request(1,16,0.0)
         resp = send_request(1,17,1.0)
-    except rospy.ServiceException, e:
-        print "Service call failed: %s"%e
+    except rospy.ServiceException as e:
+        print ("Service call failed: %s" %e)
 
 if __name__ == '__main__':
     try:

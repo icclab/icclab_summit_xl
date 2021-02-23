@@ -7,7 +7,7 @@ import gc
 from tools import *
 from pprint import pprint
 from pyquaternion import Quaternion
-from gpd.msg import GraspConfigList
+from gpd_ros.msg import GraspConfigList
 from moveit_python import *
 from moveit_msgs.msg import Grasp, PlaceLocation
 from geometry_msgs.msg import PoseStamped, Vector3, Pose
@@ -734,7 +734,7 @@ if __name__ == "__main__":
         print("--- Move Arm to Initial Position---")
         pnp.remove_pose_constraints()
         pnp.start_con_setup()
-        pnp.set_pose_constraints(1.57, 3.14, 3.14)
+        #pnp.set_pose_constraints(1.57, 3.14, 3.14)
         pnp.stop_con_setup()
         while (pnp.initial_pose() == False):
             print("Initial arm positioning failed!")
