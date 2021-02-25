@@ -622,7 +622,8 @@ class GpdPickPlace(object):
         plan = group.plan()
         rospy.sleep(1)
         cont_plan = 0
-        while ((len(plan.joint_trajectory.points) == 0) and (cont_plan < 10)):
+        #while ((len(plan.joint_trajectory.points) == 0) and (cont_plan < 10)):
+        while (cont_plan < 10):
             plan = group.plan()
             rospy.sleep(1)
             cont_plan += 1
@@ -711,11 +712,12 @@ if __name__ == "__main__":
     group_name = "manipulator"
     group = moveit_commander.MoveGroupCommander(group_name, robot_description="/summit_xl/robot_description", ns="/summit_xl")
     
-    group.set_planner_id("BiTRRT")
+    #group.set_planner_id("BiTRRT")
     #group.set_max_velocity_scaling_factor(0.05)
-    #group.set_goal_orientation_tolerance(0.01)
-    group.set_planning_time(5)
-    #group.allow_replanning(True)
+    group.set_goal_orientation_tolerance(0.01)
+    group.set_goal_tolerance(0.1)
+    group.set_planning_time(10)
+    group.allow_replanning(True)
     planning = PlanningSceneInterface("summit_xl_base_footprint", ns="/summit_xl/")
     planning.clear()
     rospy.sleep(1)
@@ -736,8 +738,8 @@ if __name__ == "__main__":
         pnp.start_con_setup()
         #pnp.set_pose_constraints(1.57, 3.14, 3.14)
         pnp.stop_con_setup()
-        while (pnp.initial_pose() == False):
-            print("Initial arm positioning failed!")
+        #while (pnp.initial_pose() == False):
+        print("Initial arm positioning failed!")
         print("Initial arm positioning performed")
         clear_octomap()
         # We have to add a check, so that this is called only if the initial_pose was successful
