@@ -123,9 +123,9 @@ class GpdPickPlace(object):
 
                 quat = org_q
 
-                gp.pose.position.x = selected_grasps[i].surface.x + self.grasp_offset * selected_grasps[i].approach.x
-                gp.pose.position.y = selected_grasps[i].surface.y + self.grasp_offset * selected_grasps[i].approach.y
-                gp.pose.position.z = selected_grasps[i].surface.z + self.grasp_offset * selected_grasps[i].approach.z
+                gp.pose.position.x = selected_grasps[i].position.x + self.grasp_offset * selected_grasps[i].approach.x
+                gp.pose.position.y = selected_grasps[i].position.y + self.grasp_offset * selected_grasps[i].approach.y
+                gp.pose.position.z = selected_grasps[i].position.z + self.grasp_offset * selected_grasps[i].approach.z
                 gp.pose.orientation.x = float(quat.elements[1])
                 gp.pose.orientation.y = float(quat.elements[2])
                 gp.pose.orientation.z = float(quat.elements[3])
@@ -147,9 +147,9 @@ class GpdPickPlace(object):
                 # Add config for cartesian pick
                 gp_cartesian = PoseStamped()
                 gp_cartesian.header.frame_id = "arm_camera_depth_optical_frame"
-                gp_cartesian.pose.position.x = selected_grasps[i].surface.x + self.grasp_offset_cartesian * selected_grasps[i].approach.x
-                gp_cartesian.pose.position.y = selected_grasps[i].surface.y + self.grasp_offset_cartesian * selected_grasps[i].approach.y
-                gp_cartesian.pose.position.z = selected_grasps[i].surface.z + self.grasp_offset_cartesian * selected_grasps[i].approach.z
+                gp_cartesian.pose.position.x = selected_grasps[i].position.x + self.grasp_offset_cartesian * selected_grasps[i].approach.x
+                gp_cartesian.pose.position.y = selected_grasps[i].position.y + self.grasp_offset_cartesian * selected_grasps[i].approach.y
+                gp_cartesian.pose.position.z = selected_grasps[i].position.z + self.grasp_offset_cartesian * selected_grasps[i].approach.z
                 gp_cartesian.pose.orientation.x = float(quat.elements[1])
                 gp_cartesian.pose.orientation.y = float(quat.elements[2])
                 gp_cartesian.pose.orientation.z = float(quat.elements[3])
