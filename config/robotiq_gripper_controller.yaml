@@ -1,7 +1,7 @@
 # Gripper controller 
 # with the mimic joint plugin we also close the other finger
 gripper_left_controller:
-    type: effort_controllers/JointEffortController
+    type: position_controllers/JointPositionController
     joint: gripper_finger_joint
     action_monitor_rate: 20
     goal_tolerance: 0.002
