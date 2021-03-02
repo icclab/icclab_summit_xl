@@ -7,7 +7,7 @@ import gc
 from tools import *
 from pprint import pprint
 from pyquaternion import Quaternion
-from gpd.msg import GraspConfigList
+from gpd_ros.msg import GraspConfigList
 from moveit_python import *
 from moveit_msgs.msg import Grasp, PlaceLocation
 from geometry_msgs.msg import PoseStamped, Vector3, Pose
@@ -78,16 +78,16 @@ class GpdPickPlace(object):
         self.p = PickPlaceInterface(group="manipulator", ee_group="endeffector", verbose=True, ns="/summit_xl/")
         self.tf = tf.TransformListener()
 	
-	argument_len = len(sys.argv) - 1
-		
-	if argument_len > 0 and sys.argv[1] == "robotiq":
-	    self.gripper_type = "robotiq"
-	    self.attach_link = "robotiq_85_base_link"
-	    self.touch_links = ["robotiq_base_link","robotiq_85_left_finger_link","robotiq_85_left_finger_tip_link","robotiq_85_right_finger_link","robotiq_85_right_finger_tip_link","r    obotiq_85_left_knuckle_link", "robotiq_85_left_inner_knuckle_link","robotiq_85_right_knuckle_link", "robotiq_85_right_inner_knuckle_link"]
-	else:
-	    self.gripper_type = "schunk" # By default we use schunk gripper
-	    self.attach_link = "arm_ee_link"
-	    self.touch_links = ["gripper_base_link","gripper_left_finger_base_link","gripper_left_finger_link","gripper_right_finger_base_link","gripper_right_finger_link"]
+        argument_len = len(sys.argv) - 1
+
+        if argument_len > 0 and sys.argv[1] == "robotiq":
+            self.gripper_type = "robotiq"
+            self.attach_link = "robotiq_85_base_link"
+            self.touch_links = ["robotiq_base_link","robotiq_85_left_finger_link","robotiq_85_left_finger_tip_link","robotiq_85_right_finger_link","robotiq_85_right_finger_tip_link","r    obotiq_85_left_knuckle_link", "robotiq_85_left_inner_knuckle_link","robotiq_85_right_knuckle_link", "robotiq_85_right_inner_knuckle_link"]
+        else:
+            self.gripper_type = "schunk" # By default we use schunk gripper
+            self.attach_link = "arm_ee_link"
+            self.touch_links = ["gripper_base_link","gripper_left_finger_base_link","gripper_left_finger_link","gripper_right_finger_base_link","gripper_right_finger_link"]
 	
     
     def grasp_callback(self, msg):
@@ -127,7 +127,7 @@ class GpdPickPlace(object):
                     continue
                 tf_listener_.waitForTransform('/arm_camera_depth_optical_frame', '/summit_xl_base_footprint',
                                               rospy.Time(), rospy.Duration(2.0))
-		g = Grasp()
+                g = Grasp()
                 g.id = "dupa"
                 gp = PoseStamped()
                 gp.header.frame_id = "arm_camera_depth_optical_frame"
@@ -135,15 +135,15 @@ class GpdPickPlace(object):
 
                 quat = org_q
 
-                gp.pose.position.x = selected_grasps[i].surface.x + self.grasp_offset * selected_grasps[i].approach.x
-                gp.pose.position.y = selected_grasps[i].surface.y + self.grasp_offset * selected_grasps[i].approach.y
-                gp.pose.position.z = selected_grasps[i].surface.z + self.grasp_offset * selected_grasps[i].approach.z
+                gp.pose.position.x = selected_grasps[i].position.x + self.grasp_offset * selected_grasps[i].approach.x
+                gp.pose.position.y = selected_grasps[i].position.y + self.grasp_offset * selected_grasps[i].approach.y
+                gp.pose.position.z = selected_grasps[i].position.z + self.grasp_offset * selected_grasps[i].approach.z
                 gp.pose.orientation.x = float(quat.elements[1])
                 gp.pose.orientation.y = float(quat.elements[2])
                 gp.pose.orientation.z = float(quat.elements[3])
                 gp.pose.orientation.w = float(quat.elements[0])
-		
-		translated_pose = tf_listener_.transformPose("summit_xl_base_footprint", gp)
+
+                translated_pose = tf_listener_.transformPose("summit_xl_base_footprint", gp)
 			
                 g.grasp_pose = translated_pose #gp
                 g.pre_grasp_approach.direction.header.frame_id = "arm_ee_link"
@@ -159,15 +159,15 @@ class GpdPickPlace(object):
                 # Add config for cartesian pick
                 gp_cartesian = PoseStamped()
                 gp_cartesian.header.frame_id = "arm_camera_depth_optical_frame"
-                gp_cartesian.pose.position.x = selected_grasps[i].surface.x + self.grasp_offset_cartesian * selected_grasps[i].approach.x
-                gp_cartesian.pose.position.y = selected_grasps[i].surface.y + self.grasp_offset_cartesian * selected_grasps[i].approach.y
-                gp_cartesian.pose.position.z = selected_grasps[i].surface.z + self.grasp_offset_cartesian * selected_grasps[i].approach.z
+                gp_cartesian.pose.position.x = selected_grasps[i].position.x + self.grasp_offset_cartesian * selected_grasps[i].approach.x
+                gp_cartesian.pose.position.y = selected_grasps[i].position.y + self.grasp_offset_cartesian * selected_grasps[i].approach.y
+		gp_cartesian.pose.position.z = selected_grasps[i].position.z + self.grasp_offset_cartesian * selected_grasps[i].approach.z
                 gp_cartesian.pose.orientation.x = float(quat.elements[1])
                 gp_cartesian.pose.orientation.y = float(quat.elements[2])
                 gp_cartesian.pose.orientation.z = float(quat.elements[3])
                 gp_cartesian.pose.orientation.w = float(quat.elements[0])
 
-		translated_pose = tf_listener_.transformPose("summit_xl_base_footprint", gp_cartesian)
+                translated_pose = tf_listener_.transformPose("summit_xl_base_footprint", gp_cartesian)
 
                 g_cartesian = Grasp ()
                 g_cartesian.id = "cart"
@@ -192,8 +192,8 @@ class GpdPickPlace(object):
         
 	# Add object mesh to planning scene
         self.add_object_mesh()
-        
-	group.set_goal_tolerance(0.02)
+
+        group.set_goal_tolerance(0.02)
         for single_grasp in grasps_list:
             if self.mark_pose:
                 self.show_grasp_pose(self.marker_publisher, single_grasp.grasp_pose)
@@ -254,8 +254,8 @@ class GpdPickPlace(object):
         
 	# Add object mesh to planning scene
         self.add_object_mesh()
-        
-	group.set_goal_tolerance(0.01)
+
+        group.set_goal_tolerance(0.01)
         cont_c = 0
         for single_grasp in grasps_list_cartesian:
             if self.mark_pose:
@@ -324,8 +324,8 @@ class GpdPickPlace(object):
         
 	# Add object mesh to planning scene
         self.add_object_mesh()
-        
-	group.set_goal_tolerance(0.01)
+
+        group.set_goal_tolerance(0.01)
         group.set_planning_time(5)
         cont_c = 0
         for single_grasp in grasps_list_cartesian:
@@ -591,13 +591,13 @@ class GpdPickPlace(object):
             rospy.sleep(1)
             if result == True:
                 pinfo("Dropping successful!")
-                
-		if self.gripper_type == "robotiq":
-		    robotiq_client_2(0.1)
-		else:
-		    schunk_client_2(8)	
-                
-		pinfo("Gripper opened")
+
+                if self.gripper_type == "robotiq":
+                    robotiq_client_2(0.1)
+                else:
+                    schunk_client_2(8)	
+
+                pinfo("Gripper opened")
                 group.detach_object("obj")
                 group.stop()
                 group.clear_pose_targets()
@@ -632,7 +632,8 @@ class GpdPickPlace(object):
         plan = group.plan()
         rospy.sleep(1)
         cont_plan = 0
-        while ((len(plan.joint_trajectory.points) == 0) and (cont_plan < 10)):
+        #while ((len(plan.joint_trajectory.points) == 0) and (cont_plan < 10)):
+        while (cont_plan < 10):
             plan = group.plan()
             rospy.sleep(1)
             cont_plan += 1
@@ -722,8 +723,9 @@ if __name__ == "__main__":
     group = moveit_commander.MoveGroupCommander(group_name, robot_description="/summit_xl/robot_description", ns="/summit_xl")
     #group.set_planner_id("BiTRRT")
     #group.set_max_velocity_scaling_factor(0.05)
-    #group.set_goal_orientation_tolerance(0.01)
-    group.set_planning_time(5)
+    group.set_goal_orientation_tolerance(0.05)
+    group.set_goal_position_tolerance(0.1)
+    group.set_planning_time(10)
     #group.allow_replanning(True)
     planning = PlanningSceneInterface("summit_xl_base_footprint", ns="/summit_xl/")
     planning.clear()
@@ -742,11 +744,11 @@ if __name__ == "__main__":
         
 	# Subscribe for grasps
         pevent("--- Move Arm to Initial Position---")
-	if pnp.gripper_type == "robotiq":
-	    pevent("Using robotiq gripper")
-	pnp.remove_pose_constraints()
+        if pnp.gripper_type == "robotiq":
+            pevent("Using robotiq gripper")
+        pnp.remove_pose_constraints()
         pnp.start_con_setup()
-        pnp.set_pose_constraints(1.57, 3.14, 3.14)
+        #pnp.set_pose_constraints(1.57, 3.14, 3.14)
         pnp.stop_con_setup()
         while (pnp.initial_pose() == False):
             perror("Initial arm positioning failed!")
@@ -761,13 +763,13 @@ if __name__ == "__main__":
         pnp.grasps_received = False
         selected_grasps = pnp.get_gpd_grasps()
         [formatted_grasps, formatted_grasps_cartesian] = pnp.generate_grasp_msgs(selected_grasps)
-        
-	if pnp.gripper_type == "robotiq":
+
+        if pnp.gripper_type == "robotiq":
             robotiq_client_2(0.1)
         else:
             schunk_client_2(8)
-        
-	pinfo("Gripper opened")
+
+        pinfo("Gripper opened")
         pnp.remove_pose_constraints()
         #pnp.start_con_setup()
         #pnp.set_pose_constraints(1.57, 1.57, 1.57)
@@ -780,8 +782,8 @@ if __name__ == "__main__":
                 robotiq_client_2(0.71)
             else:
                 schunk_client_2(-8)
-            
-	    pinfo("Gripper closed")
+
+            pinfo("Gripper closed")
             pnp.start_grasp_check()
             pnp.remove_pose_constraints()
             #pnp.start_con_setup()
