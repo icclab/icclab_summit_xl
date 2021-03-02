@@ -47,32 +47,42 @@
 #include <iostream>
 using namespace std;
 
+geometry_msgs::Pose target_pose;
+bool pose_received=false;
+
+void tf_callback(const geometry_msgs::PoseStamped::ConstPtr& msg) {
+    ROS_INFO_STREAM("Received pose: " << msg->pose);
+ //   x_current = msg->pose.pose.position.x;
+//    ROS_INFO_STREAM(x_current);
+ //   target_pose.push_back(msg);
+    target_pose.position.x = msg->pose.position.x;
+    target_pose.position.y = msg->pose.position.y;
+    target_pose.position.z = msg->pose.position.z;
+    target_pose.orientation.x = msg->pose.orientation.x;
+    target_pose.orientation.y = msg->pose.orientation.y;
+    target_pose.orientation.z = msg->pose.orientation.z;
+    target_pose.orientation.w = msg->pose.orientation.w;
+    pose_received=true;	
+}
+
+
 int main(int argc, char** argv)
 {
-  static const std::string NODE_NAME = "move_arm_to_pose_goal"; 
+  static const std::string NODE_NAME = "move_arm_to_pose_lab"; 
   ros::init(argc, argv, NODE_NAME);
   
-  // Planning to a Pose goal
-  // ^^^^^^^^^^^^^^^^^^^^^^^
-  // We can plan a motion for this group to a desired pose for the
-  // end-effector.
-  geometry_msgs::Pose target_pose;
-  
-  if (argc == 8)
-  {
-    target_pose.position.x = atof(argv[1]);
-    target_pose.position.y = atof(argv[2]);
-    target_pose.position.z = atof(argv[3]);
-    target_pose.orientation.x = atof(argv[4]);
-    target_pose.orientation.y = atof(argv[5]);
-    target_pose.orientation.z = atof(argv[6]);
-    target_pose.orientation.w = atof(argv[7]);
-  } else {
-    ROS_INFO("Usage: move_arm_to_pose_goal position.x position.y position.z orientation.x orientation.y orientation.z orientation.w");
-    return -1;  
-  }
-  
   ros::NodeHandle node_handle;
+  ros::Subscriber subscribetf = node_handle.subscribe("/summit_xl/goal_position_lab", 1000, tf_callback);
+  ros::Rate loop_rate(10);
+  while (ros::ok)
+  {
+  ros::spinOnce();
+  loop_rate.sleep();
+
+  if (pose_received)
+    break;
+  }
+
   ros::AsyncSpinner spinner(1);
   spinner.start();
 
@@ -134,61 +144,6 @@ int main(int argc, char** argv)
   // To start, we'll create an pointer that references the current robot's state.
   // RobotState is the object that contains all the current position/velocity/acceleration data.
   moveit::core::RobotStatePtr current_state = move_group.getCurrentState();
-  //
-  // Next get the current set of joint values for the group.
-  //  ROS_INFO_NAMED(NODE_NAME, "RobotState: %s", *current_state);
-  //  current_state->printStateInfo();
-
-  // Planning with Path Constraints
-  // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  //
-  // Path constraints can easily be specified for a link on the robot.
-  // Let's specify a path constraint and a pose goal for our group.
-  // First define the path constraint.
-  
-//  // position constraint
-//  moveit_msgs::PositionConstraint pcm;
-//  moveit_msgs::BoundingVolume volume;
-//  shape_msgs::SolidPrimitive bounding_box;
-//  bounding_box.type = bounding_box.BOX;
-//  std::vector<double> dim;
-//  dim.push_back(2); // x
-//  dim.push_back(1); // y
-//  dim.push_back(2); // z
-//  bounding_box.dimensions = dim;
-//  pcm.constraint_region.primitives.push_back(bounding_box);
-//  geometry_msgs::Pose box_pose;
-//  geometry_msgs::Point position;
-//  position.x = 0;
-//  position.y = 0;
-//  position.z = 0;
-//  geometry_msgs::Quaternion orientation;
-//  orientation.w = 1;
-//  box_pose.position = position;
-//  box_pose.orientation = orientation;
-//  pcm.constraint_region.primitive_poses.push_back(box_pose);
-//  pcm.link_name = "arm_tool0";
-//  pcm.header.frame_id = "summit_xl_base_footprint";
-//  geometry_msgs::Vector3 offset;
-//  pcm.target_point_offset.x = 0;
-//  pcm.target_point_offset.y = 0;
-//  pcm.target_point_offset.z = 0.3;
-//  pcm.constraint_region = volume;
-//  pcm.weight = 1.0;
-  
-//  // joint constraint
-//  moveit_msgs::JointConstraint jcm;
-//  jcm.joint_name = "arm_shoulder_pan_joint";
-//  jcm.position = 0;
-//  jcm.tolerance_above = 0.3;
-//  jcm.tolerance_below = 0.3;
-//  jcm.weight = 20;
-
-  // Now, set it as the path constraint for the group.
-  moveit_msgs::Constraints constraints;
-//  constraints.position_constraints.push_back(pcm);
-//  constraints.joint_constraints.push_back(jcm);
-//  move_group.setPathConstraints(constraints);
   move_group.setPlanningTime(10.0);
   
   std::vector<double> joint_group_positions;
@@ -237,9 +192,6 @@ int main(int argc, char** argv)
       move_group.execute(my_plan);
     }
   }
-
-  //  // When done with the path constraint be sure to clear it.
-  move_group.clearPathConstraints();
 
   // Since we set the start state we have to clear it before planning other paths
   move_group.setStartStateToCurrentState();
