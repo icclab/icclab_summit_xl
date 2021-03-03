@@ -13,11 +13,10 @@ controller_list:
     action_ns: follow_joint_trajectory
     type: FollowJointTrajectory
     joints:
-      # - robotiq_85_left_knuckle_joint
       - gripper_right_inner_knuckle_joint
-  - name: gripper_action_controller
-    action_ns: gripper_cmd
-    type: GripperCommand
-    joints:
-      - robotiq_85_left_knuckle_joint
+#  - name: gripper_action_controller
+#    action_ns: gripper_cmd
+#    type: GripperCommand
+#    joints:
+#      - robotiq_85_left_knuckle_joint
 
