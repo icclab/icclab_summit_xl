@@ -32,6 +32,9 @@
 		<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen">
 			<remap from="/joint_states" to="joint_states" />
 		</node>
+		
+		<!--include gazebo_ros_control pid configuration for controllers, need this for PositionJointInterface! -->
+		<rosparam file="$(find icclab_summit_xl)/config/gazebo_control.yaml" command="load" />
 
 		<!-- Spawner model into gazebo -->
 		<node name="urdf_spawner_summit_model" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-x $(arg x_init_pose) -y $(arg y_init_pose) -z $(arg z_init_pose) -urdf -param robot_description -model $(arg id_robot)" />
