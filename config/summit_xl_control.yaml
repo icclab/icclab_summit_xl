@@ -64,17 +64,17 @@
 
 #Gripper controller settings for the schunk gripper. For the robotiq being the default now, we have a separate controller file config/robotiq_gripper_controller.yaml
   # Gripper controller
-#  gripper_left_controller:
-#    type: effort_controllers/JointEffortController
-#    joint: gripper_left_finger_base_joint
-#    action_monitor_rate: 20
-#    goal_tolerance: 0.002
-#    max_effort: 10
-#    stall_velocity_threshold: 0.041
-#    stall_timeout: 1.0
-#    lower: -0.001
-#    upper: 0.0301
-#    velocity: 0.041
+  # gripper_left_controller:
+  #  type: effort_controllers/JointEffortController
+  #  joint: gripper_left_finger_base_joint
+  #  action_monitor_rate: 20
+  #  goal_tolerance: 0.002
+  #  max_effort: 10
+  #  stall_velocity_threshold: 0.041
+  #  stall_timeout: 1.0
+  #  lower: -0.001
+  #  upper: 0.0301
+  #  velocity: 0.041
     
   # mimic tag in urdf does not seem to work in gazebo, I make another controller
 #  gripper_right_controller:
