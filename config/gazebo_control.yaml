@@ -1,0 +1,28 @@
+gazebo_ros_control:
+  pid_gains:
+          #   arm_shoulder_pan_joint:
+          # p: 2.0
+          # i: 0.05
+          # d: 0.0001
+          # i_clamp: 1
+
+          #arm_shoulder_lift_joint:
+          #p: 2.0
+          # i: 0.05
+          # d: 0.0001
+          # i_clamp: 1
+    gripper_finger_joint:
+      p: 20.0
+      i: 0.1
+      d: 0.0
+      i_clamp: 0.2
+      antiwindup: false
+      publish_state: true
+
+    gripper_left_inner_knuckle_joint:
+      p: 20.0
+      i: 0.1
+      d: 0.0
+      i_clamp: 0.2
+      antiwindup: false
+      publish_state: true
