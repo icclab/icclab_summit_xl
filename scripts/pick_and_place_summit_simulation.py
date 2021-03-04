@@ -86,8 +86,11 @@ class GpdPickPlace(object):
             self.touch_links = ["gripper_base_link","gripper_left_finger_base_link","gripper_left_finger_link","gripper_right_finger_base_link","gripper_right_finger_link"]
         else:
             self.gripper_type = "robotiq"
-            self.attach_link = "robotiq_85_base_link"
-            self.touch_links = ["robotiq_base_link","robotiq_85_left_finger_link","robotiq_85_left_finger_tip_link","robotiq_85_right_finger_link","robotiq_85_right_finger_tip_link","r    obotiq_85_left_knuckle_link", "robotiq_85_left_inner_knuckle_link","robotiq_85_right_knuckle_link", "robotiq_85_right_inner_knuckle_link"]
+            self.attach_link = "gripper_robotiq_arg2f_base_link"
+            self.touch_links = ["gripper_right_outer_knuckle","gripper_right_outer_finger","gripper_right_inner_knuckle","gripper_right_innger_finger","gripper_right_inner_finger_pad","gripper_left_outer_knuckle","gripper_left_outer_finger","gripper_left_inner_knuckle","gripper_left_innger_finger","gripper_left_inner_finger_pad"]
+        
+        #    self.attach_link = "robotiq_85_base_link"
+        #    self.touch_links = ["robotiq_base_link","robotiq_85_left_finger_link","robotiq_85_left_finger_tip_link","robotiq_85_right_finger_link","robotiq_85_right_finger_tip_link","r    obotiq_85_left_knuckle_link", "robotiq_85_left_inner_knuckle_link","robotiq_85_right_knuckle_link", "robotiq_85_right_inner_knuckle_link"]
 
     
     def grasp_callback(self, msg):
@@ -698,8 +701,8 @@ class GpdPickPlace(object):
     def gripper_callback(self, data):
         if (self.finger_indexes == None):
             names = data.name
-            lf_index = names.index("gripper_left_finger_base_joint")
-            rf_index = names.index("gripper_right_finger_base_joint")
+            lf_index = names.index("gripper_left_inner_finger")
+            rf_index = names.index("gripper_right_inner_finger")
             self.finger_indexes = (lf_index, rf_index)
 
         lf_joint = data.position[self.finger_indexes[0]]
