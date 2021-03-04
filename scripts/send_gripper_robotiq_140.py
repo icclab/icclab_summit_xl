@@ -11,11 +11,11 @@ from robotiq_2f_gripper_control.robotiq_2f_gripper_driver import Robotiq2FingerG
 
 def gripper_client(value):
     if value > 0.14:
-	print "value over the limits value becomes 0.14"
-	value = 0.14
+        print ("value over the limits value becomes 0.14")
+        value = 0.14
     if value < 0.0:
-	print "value negative it becomes 0"
-	value = 0.0
+        print ("value negative it becomes 0")
+        value = 0.0
 
     robotiq_client = actionlib.SimpleActionClient('summit_xl/command_robotiq_action', CommandRobotiqGripperAction)
 
@@ -24,7 +24,7 @@ def gripper_client(value):
 
     # Create a goal to send (to the action server)
     goal = CommandRobotiqGripperGoal()
-    print value
+    print (value)
     goal.position = value   # From 0.0 to 0.14
     goal.speed= 0.1  
     goal.force= 5.0  

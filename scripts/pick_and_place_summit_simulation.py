@@ -28,7 +28,7 @@ from moveit_commander.conversions import pose_to_list
 from tf.msg import tfMessage
 import time
 from send_gripper import gripper_client_2 as schunk_client_2
-from send_gripper_robotiq import gripper_client_2 as robotiq_client_2
+from send_gripper_robotiq import gripper_client_3 as robotiq_client_2
 from tf import TransformListener
 import copy
 from control_msgs.msg import *
@@ -59,8 +59,8 @@ class GpdPickPlace(object):
     grasps = []
     grasps_cartesian = []
     mark_pose = False
-    grasp_offset = -0.08
-    grasp_offset_cartesian = -0.25
+    grasp_offset = -0.0
+    grasp_offset_cartesian = -0.1
     finger_indexes = None
     con_joints_indexes = None
     joint1_con = 0
@@ -269,7 +269,7 @@ class GpdPickPlace(object):
             #plan = group.plan()
             plan_success, plan, planning_time, error_code = group.plan()
             if (len(plan.joint_trajectory.points) != 0):
-                inp = raw_input("Have a look at the planned motion. Do you want to proceed? y/n/exit: ")
+                inp = input("Have a look at the planned motion. Do you want to proceed? y/n/exit: ")
                 if (inp == 'y'):
                     pevent("Executing grasp")
                     pick_result = group.execute(plan, wait=True)
@@ -341,7 +341,7 @@ class GpdPickPlace(object):
 #            plan = group.plan()
             plan_success, plan, planning_time, error_code = group.plan()
             if (len(plan.joint_trajectory.points) != 0):
-                inp = raw_input("Have a look at the planned motion. Do you want to proceed? y/n/exit: ")
+                inp = input("Have a look at the planned motion. Do you want to proceed? y/n/exit: ")
                 if (inp == 'y'):
                     pevent("Executing grasp")
                     pick_result = group.execute(plan, wait=True)
@@ -406,7 +406,7 @@ class GpdPickPlace(object):
             rospy.sleep(1)
             cont_plan_place+=1
         if (len(plan.joint_trajectory.points) != 0):
-            inp = raw_input("Have a look at the planned motion. Do you want to proceed? y/n/exit: ")[0]
+            inp = input("Have a look at the planned motion. Do you want to proceed? y/n/exit: ")[0]
             if (inp == 'y'):
                 pevent("Executing pick&place ")
                 pick_result = group.execute(plan, wait=True)
@@ -598,7 +598,7 @@ class GpdPickPlace(object):
                 pinfo("Dropping successful!")
 
                 if self.gripper_type == "robotiq":
-                    robotiq_client_2(0.1)
+                    robotiq_client_2(-0.5)
                 else:
                     schunk_client_2(8)	
 
@@ -621,15 +621,15 @@ class GpdPickPlace(object):
         pose_goal = geometry_msgs.msg.Pose()
         pose_goal.position.x = 1.001
         pose_goal.position.y = -0.003
-        pose_goal.position.z = 0.797
+        pose_goal.position.z = 0.597
         pose_goal.orientation.x = 0.002
         pose_goal.orientation.y = 0.693
         pose_goal.orientation.z = 0.001
         pose_goal.orientation.w = 0.721
         group.set_start_state_to_current_state()
-        group.set_goal_tolerance(0.05)
+        group.set_goal_tolerance(0.1)
         group.set_pose_target(pose_goal)
-        group.set_planning_time(5)
+        group.set_planning_time(10)
 
         # The go command can be called with joint values, poses, or without any
         # parameters if you have already set the pose or joint target for the group
@@ -772,7 +772,7 @@ if __name__ == "__main__":
         [formatted_grasps, formatted_grasps_cartesian] = pnp.generate_grasp_msgs(selected_grasps)
 
         if pnp.gripper_type == "robotiq":
-            robotiq_client_2(0.1)
+            robotiq_client_2(-0.5)
         else:
             schunk_client_2(8)
 
@@ -786,7 +786,7 @@ if __name__ == "__main__":
         successful_grasp = pnp.pick_two_steps(formatted_grasps, formatted_grasps_cartesian, verbose=True)
         if successful_grasp is not None:
             if self.gripper_type == "robotiq":
-                robotiq_client_2(0.71)
+                robotiq_client_2(0.65)
             else:
                 schunk_client_2(-8)
 

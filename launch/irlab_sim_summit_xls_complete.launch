@@ -109,7 +109,8 @@
 		<node name="foo_throttler_arm" type="throttle" pkg="topic_tools" args="messages /summit_xl/arm_camera/depth_registered/points 1 /summit_xl/arm_camera/depth_registered/points_throttled" />
 
 	</group>
-
+	<!-- run grasp detection on gpd_ros -->
+	<include if="$(arg enable_arm)" file="$(find gpd_ros)/launch/robotiq_grasp_generation.launch"/>
 	<!-- run grasp detection 
 	<include if="$(arg enable_arm)" file="$(find icclab_summit_xl)/launch/include/grasp_generation.launch.xml"/> -->
 

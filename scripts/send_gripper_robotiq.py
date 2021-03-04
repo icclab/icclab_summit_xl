@@ -42,7 +42,11 @@ def gripper_client(value):
     client.wait_for_result()
     return client.get_result()
 
+def gripper_client_3(value):
 
+    p1 = rospy.Publisher('/summit_xl/gripper_left_controller/command', Float64, queue_size=1)
+    rospy.sleep(0.5)
+    p1.publish(value)
 if __name__ == '__main__':
     try:
         # Get the angle from the command line
