@@ -161,7 +161,7 @@ class GpdPickPlace(object):
                 gp_cartesian.header.frame_id = "arm_camera_depth_optical_frame"
                 gp_cartesian.pose.position.x = selected_grasps[i].position.x + self.grasp_offset_cartesian * selected_grasps[i].approach.x
                 gp_cartesian.pose.position.y = selected_grasps[i].position.y + self.grasp_offset_cartesian * selected_grasps[i].approach.y
-		gp_cartesian.pose.position.z = selected_grasps[i].position.z + self.grasp_offset_cartesian * selected_grasps[i].approach.z
+                gp_cartesian.pose.position.z = selected_grasps[i].position.z + self.grasp_offset_cartesian * selected_grasps[i].approach.z
                 gp_cartesian.pose.orientation.x = float(quat.elements[1])
                 gp_cartesian.pose.orientation.y = float(quat.elements[2])
                 gp_cartesian.pose.orientation.z = float(quat.elements[3])
@@ -266,7 +266,8 @@ class GpdPickPlace(object):
             group.set_start_state_to_current_state()
             group.detach_object("obj")
             group.set_pose_target(single_grasp.grasp_pose.pose)
-            plan = group.plan()
+            #plan = group.plan()
+            plan_success, plan, planning_time, error_code = group.plan()
             if (len(plan.joint_trajectory.points) != 0):
                 inp = raw_input("Have a look at the planned motion. Do you want to proceed? y/n/exit: ")
                 if (inp == 'y'):
@@ -337,7 +338,8 @@ class GpdPickPlace(object):
             group.set_start_state_to_current_state()
             group.detach_object("obj")
             group.set_pose_target(single_grasp.grasp_pose.pose)
-            plan = group.plan()
+#            plan = group.plan()
+            plan_success, plan, planning_time, error_code = group.plan()
             if (len(plan.joint_trajectory.points) != 0):
                 inp = raw_input("Have a look at the planned motion. Do you want to proceed? y/n/exit: ")
                 if (inp == 'y'):
@@ -394,12 +396,13 @@ class GpdPickPlace(object):
         pinfo("Planning pose:")
         pprint(pose_goal)
         group.set_pose_target(pose_goal)
-        plan = group.plan()
+ #       plan = group.plan()
         rospy.sleep(1)
         cont_plan_place=0
         place_successful=False
         while ((len(plan.joint_trajectory.points) == 0) and (cont_plan_place <10)):
-            plan = group.plan()
+#            plan = group.plan()
+            plan_success, plan, planning_time, error_code = group.plan()
             rospy.sleep(1)
             cont_plan_place+=1
         if (len(plan.joint_trajectory.points) != 0):
@@ -579,11 +582,13 @@ class GpdPickPlace(object):
         # group.stop()
         # return success
 
-        plan = group.plan()
+#        plan = group.plan()
+        plan_success, plan, planning_time, error_code = group.plan()
         rospy.sleep(1)
         cont_plan_drop = 0
         while ((len(plan.joint_trajectory.points) == 0) and (cont_plan_drop < 10)):
-            plan = group.plan()
+#            plan = group.plan()
+            plan_success, plan, planning_time, error_code = group.plan()
             rospy.sleep(1)
             cont_plan_drop += 1
         if (len(plan.joint_trajectory.points) != 0):
@@ -614,13 +619,13 @@ class GpdPickPlace(object):
     def initial_pose(self):
         pevent("Initial constrained pose sequence started")
         pose_goal = geometry_msgs.msg.Pose()
-        pose_goal.position.x = 1.069
-        pose_goal.position.y = -0.012
-        pose_goal.position.z = 0.831
-        pose_goal.orientation.x = -0.534
-        pose_goal.orientation.y = 0.445
-        pose_goal.orientation.z = 0.478
-        pose_goal.orientation.w = 0.536
+        pose_goal.position.x = 1.001
+        pose_goal.position.y = -0.003
+        pose_goal.position.z = 0.797
+        pose_goal.orientation.x = 0.002
+        pose_goal.orientation.y = 0.693
+        pose_goal.orientation.z = 0.001
+        pose_goal.orientation.w = 0.721
         group.set_start_state_to_current_state()
         group.set_goal_tolerance(0.05)
         group.set_pose_target(pose_goal)
@@ -629,14 +634,16 @@ class GpdPickPlace(object):
         # The go command can be called with joint values, poses, or without any
         # parameters if you have already set the pose or joint target for the group
         # group.go(joint_goal, wait=True)
-        plan = group.plan()
+        # now a tuple is given
+        #plan = group.plan()
+        plan_success, plan, planning_time, error_code = group.plan()
         rospy.sleep(1)
         cont_plan = 0
-        #while ((len(plan.joint_trajectory.points) == 0) and (cont_plan < 10)):
-        while (cont_plan < 10):
-            plan = group.plan()
-            rospy.sleep(1)
-            cont_plan += 1
+        while ((len(plan.joint_trajectory.points) == 0) and (cont_plan < 10)):
+            while (cont_plan < 10):
+                plan = group.plan()
+                rospy.sleep(1)
+                cont_plan += 1
         group.clear_path_constraints()
         if (len(plan.joint_trajectory.points) != 0):
             pevent("Executing pick&place: ")

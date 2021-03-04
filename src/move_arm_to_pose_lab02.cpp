@@ -186,8 +186,8 @@ int main(int argc, char** argv)
   ROS_INFO_NAMED(NODE_NAME, "Visualizing pose goal");
   visual_tools.publishAxisLabeled(target_pose, "Pose Goal");
   visual_tools.publishText(text_pose, "Visualizing Pose Goal", rvt::WHITE, rvt::XLARGE, false);
-  visual_tools.trigger();
-  visual_tools.prompt("Press 'next' in the RvizVisualToolsGui window to plan to the pose");
+//visual_tools.trigger();
+ // visual_tools.prompt("Press 'next' in the RvizVisualToolsGui window to plan to the pose");
    
   ROS_INFO_NAMED(NODE_NAME, "Invoking planner");
 

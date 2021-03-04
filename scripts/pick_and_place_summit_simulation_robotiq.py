@@ -604,17 +604,17 @@ class GpdPickPlace(object):
     def initial_pose(self):
         pevent("Initial constrained pose sequence started")
         pose_goal = geometry_msgs.msg.Pose()
-        pose_goal.position.x = 1.069
-        pose_goal.position.y = -0.012
-        pose_goal.position.z = 0.831
-        pose_goal.orientation.x = -0.534
-        pose_goal.orientation.y = 0.445
-        pose_goal.orientation.z = 0.478
-        pose_goal.orientation.w = 0.536
+        pose_goal.position.x = 1.001
+        pose_goal.position.y = -0.003
+        pose_goal.position.z = 0.797
+        pose_goal.orientation.x = 0.002
+        pose_goal.orientation.y = 0.693
+        pose_goal.orientation.z = 0.001
+        pose_goal.orientation.w = 0.721
         group.set_start_state_to_current_state()
         group.set_goal_tolerance(0.05)
         group.set_pose_target(pose_goal)
-        group.set_planning_time(5)
+        group.set_planning_time(10)
 
         # The go command can be called with joint values, poses, or without any
         # parameters if you have already set the pose or joint target for the group
@@ -713,9 +713,9 @@ if __name__ == "__main__":
     group = moveit_commander.MoveGroupCommander(group_name, robot_description="/summit_xl/robot_description", ns="/summit_xl")
     
     #group.set_planner_id("BiTRRT")
-    #group.set_max_velocity_scaling_factor(0.05)
-    group.set_goal_orientation_tolerance(0.01)
-    group.set_goal_tolerance(0.1)
+    group.set_max_velocity_scaling_factor(0.05)
+    #group.set_goal_orientation_tolerance(0.01)
+    group.set_goal_tolerance(0.005)
     group.set_planning_time(10)
     group.allow_replanning(True)
     planning = PlanningSceneInterface("summit_xl_base_footprint", ns="/summit_xl/")
@@ -735,11 +735,11 @@ if __name__ == "__main__":
         # Subscribe for grasps
         print("--- Move Arm to Initial Position---")
         pnp.remove_pose_constraints()
-        pnp.start_con_setup()
+        #pnp.start_con_setup()
         #pnp.set_pose_constraints(1.57, 3.14, 3.14)
-        pnp.stop_con_setup()
-        #while (pnp.initial_pose() == False):
-        print("Initial arm positioning failed!")
+        #pnp.stop_con_setup()
+        while (pnp.initial_pose() == False):
+            print("Initial arm positioning failed!")
         print("Initial arm positioning performed")
         clear_octomap()
         # We have to add a check, so that this is called only if the initial_pose was successful
