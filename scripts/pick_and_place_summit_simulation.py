@@ -59,8 +59,8 @@ class GpdPickPlace(object):
     grasps = []
     grasps_cartesian = []
     mark_pose = False
-    grasp_offset = -0.0
-    grasp_offset_cartesian = -0.1
+    grasp_offset = -0.02
+    grasp_offset_cartesian = -0.15
     finger_indexes = None
     con_joints_indexes = None
     joint1_con = 0
@@ -80,15 +80,15 @@ class GpdPickPlace(object):
 	
         argument_len = len(sys.argv) - 1
 
-        if argument_len > 0 and sys.argv[1] == "robotiq":
+        if argument_len > 0 and sys.argv[1] == "schunk":
+            self.gripper_type = "schunk" # By default we use robotiq gripper
+            self.attach_link = "arm_ee_link"
+            self.touch_links = ["gripper_base_link","gripper_left_finger_base_link","gripper_left_finger_link","gripper_right_finger_base_link","gripper_right_finger_link"]
+        else:
             self.gripper_type = "robotiq"
             self.attach_link = "robotiq_85_base_link"
             self.touch_links = ["robotiq_base_link","robotiq_85_left_finger_link","robotiq_85_left_finger_tip_link","robotiq_85_right_finger_link","robotiq_85_right_finger_tip_link","r    obotiq_85_left_knuckle_link", "robotiq_85_left_inner_knuckle_link","robotiq_85_right_knuckle_link", "robotiq_85_right_inner_knuckle_link"]
-        else:
-            self.gripper_type = "schunk" # By default we use schunk gripper
-            self.attach_link = "arm_ee_link"
-            self.touch_links = ["gripper_base_link","gripper_left_finger_base_link","gripper_left_finger_link","gripper_right_finger_base_link","gripper_right_finger_link"]
-	
+
     
     def grasp_callback(self, msg):
         self.grasps = msg.grasps
@@ -598,7 +598,7 @@ class GpdPickPlace(object):
                 pinfo("Dropping successful!")
 
                 if self.gripper_type == "robotiq":
-                    robotiq_client_2(-0.5)
+                    robotiq_client_2(0.1)
                 else:
                     schunk_client_2(8)	
 
@@ -772,7 +772,7 @@ if __name__ == "__main__":
         [formatted_grasps, formatted_grasps_cartesian] = pnp.generate_grasp_msgs(selected_grasps)
 
         if pnp.gripper_type == "robotiq":
-            robotiq_client_2(-0.5)
+            robotiq_client_2(0.1)
         else:
             schunk_client_2(8)
 
@@ -782,10 +782,10 @@ if __name__ == "__main__":
         #pnp.set_pose_constraints(1.57, 1.57, 1.57)
         #        pnp.stop_con_setup()
         #successful_grasp = pnp.pick(formatted_grasps, verbose=True)
-        #successful_grasp = pnp.pick_cartesian(formatted_grasps, formatted_grasps_cartesian, verbose=True)
-        successful_grasp = pnp.pick_two_steps(formatted_grasps, formatted_grasps_cartesian, verbose=True)
+        successful_grasp = pnp.pick_cartesian(formatted_grasps, formatted_grasps_cartesian, verbose=True)
+        #successful_grasp = pnp.pick_two_steps(formatted_grasps, formatted_grasps_cartesian, verbose=True)
         if successful_grasp is not None:
-            if self.gripper_type == "robotiq":
+            if pnp.gripper_type == "robotiq":
                 robotiq_client_2(0.65)
             else:
                 schunk_client_2(-8)
