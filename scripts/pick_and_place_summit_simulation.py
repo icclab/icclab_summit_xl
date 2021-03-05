@@ -701,8 +701,8 @@ class GpdPickPlace(object):
     def gripper_callback(self, data):
         if (self.finger_indexes == None):
             names = data.name
-            lf_index = names.index("gripper_left_inner_finger")
-            rf_index = names.index("gripper_right_inner_finger")
+            lf_index = names.index("gripper_left_inner_finger_pad")
+            rf_index = names.index("gripper_right_inner_finger_pad")
             self.finger_indexes = (lf_index, rf_index)
 
         lf_joint = data.position[self.finger_indexes[0]]
