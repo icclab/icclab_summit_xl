@@ -701,7 +701,8 @@ class GpdPickPlace(object):
     def gripper_callback(self, data):
         if (self.finger_indexes == None):
             names = data.name
-            lf_index = names.index("gripper_left_inner_finger_pad")
+	    # the only joint is gripper_finger_joint, so this doesn't work! we need two joints right and left to be compared
+            lf_index = names.index("gripper_finger_joint")
             rf_index = names.index("gripper_right_inner_finger_pad")
             self.finger_indexes = (lf_index, rf_index)
 
