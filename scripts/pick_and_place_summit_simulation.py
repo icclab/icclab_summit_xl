@@ -703,15 +703,16 @@ class GpdPickPlace(object):
             names = data.name
 	    # the only joint is gripper_finger_joint, so this doesn't work! we need two joints right and left to be compared
             lf_index = names.index("gripper_finger_joint")
-            rf_index = names.index("gripper_right_inner_finger_pad")
+            rf_index = names.index("gripper_finger_joint")
             self.finger_indexes = (lf_index, rf_index)
 
         lf_joint = data.position[self.finger_indexes[0]]
         rf_joint = data.position[self.finger_indexes[1]]
 
-        closed_range = 0.003
+        closed_range = 0.064
 
-        if (lf_joint < closed_range and rf_joint < closed_range):
+        #if (lf_joint < closed_range and rf_joint < closed_range):
+	if (lf_joint > closed_range):
             if (not self.gripper_closed):
                 perror("Gripper closed, we probably lost the grip")
             self.gripper_closed = True
