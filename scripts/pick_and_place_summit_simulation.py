@@ -712,7 +712,7 @@ class GpdPickPlace(object):
         closed_range = 0.064
 
         #if (lf_joint < closed_range and rf_joint < closed_range):
-	if (lf_joint > closed_range):
+        if (lf_joint > closed_range):
             if (not self.gripper_closed):
                 perror("Gripper closed, we probably lost the grip")
             self.gripper_closed = True
