@@ -36,7 +36,7 @@
          <inertial>
             <mass value="0.25" />
             <origin xyz="0 0 0" />
-            <cylinder_inertia m="0.20" r="0.05" h="0.05" />
+            <xacro:cylinder_inertia m="0.20" r="0.05" h="0.05" />
          </inertial>
 
          <visual>
@@ -79,7 +79,7 @@
          <inertial>
             <mass value="0.02" />
             <origin xyz="0 0 0" />
-            <cylinder_inertia m="0.02" r="0.01" h="0.01" />
+            <xacro:cylinder_inertia m="0.02" r="0.01" h="0.01" />
          </inertial>
 
          <visual>
@@ -110,7 +110,7 @@
          <inertial>
             <mass value="0.02" />
             <origin xyz="0 0 0" />
-            <cylinder_inertia m="0.02" r="0.01" h="0.01" />
+            <xacro:cylinder_inertia m="0.02" r="0.01" h="0.01" />
          </inertial>
 
          <visual>
@@ -157,7 +157,7 @@
          <inertial>
             <mass value="0.02" />
             <origin xyz="0 0 0" />
-            <cylinder_inertia m="0.02" r="0.01" h="0.01" />
+            <xacro:cylinder_inertia m="0.02" r="0.01" h="0.01" />
          </inertial>
 
          <visual>
@@ -188,7 +188,7 @@
          <inertial>
             <mass value="0.02" />
             <origin xyz="0 0 0" />
-            <cylinder_inertia m="0.02" r="0.01" h="0.01" />
+            <xacro:cylinder_inertia m="0.02" r="0.01" h="0.01" />
          </inertial>
 
          <visual>
