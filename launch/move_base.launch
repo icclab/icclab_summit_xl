@@ -45,7 +45,7 @@
 		<param name="TebLocalPlannerROS/map_frame" value="$(arg global_frame)"/>
 	        <param name="TebLocalPlannerROS/odom_topic" value="$(arg odom_topic)"/>
 		<param if="$(arg omni)" name="TebLocalPlannerROS/weight_kinematics_nh" value="10"/>
-		<param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" />
+		<!-- <param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" /> -->
 		<param name="controller_frequency" value="10.0" />
 		<param name="controller_patience" value="15.0" />
 		<param name="local_costmap/obstacle_3d_layer/publish_voxel_map" value="$(arg publish_voxel_map)"/>
