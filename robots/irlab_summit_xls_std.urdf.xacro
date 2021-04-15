@@ -131,7 +131,7 @@
 		<!-- front camera -->
 		<xacro:sensor_orbbec_astra prefix="$(arg prefix)front_rgbd_camera" parent="$(arg prefix)base_link" prefix_topic="front_rgbd_camera">
 			<origin xyz="${front_rgbd_camera_offset_x} ${front_rgbd_camera_offset_y} ${front_rgbd_camera_offset_z}" rpy="0 0 0"/>
-		</xacro:sensor_orbbec_astra>
+		</xacro:sensor_orbbec_astra> 
 
 		<!-- Hokuyo front lidar -->
 		<xacro:hokuyo prefix="$(arg prefix)front_laser" parent="$(arg prefix)base_link" prefix_topic="scan_front">
