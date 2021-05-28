@@ -5,7 +5,7 @@ NOTE: timed_laserscan_multi_merger.launch fixes subscribing issue when merger + 
 	<arg name="cloud_destination_topic" default="merged_cloud"/>
         <arg name="scan_destination_topic" default="scan_combined"/>
 
-        <node pkg="ira_laser_tools" name="laserscan_multi_merger" type="laserscan_multi_merger" output="screen">
+        <node pkg="ira_laser_tools" name="laserscan_multi_merger" type="laserscan_multi_merger" output="screen" respawn="true">
                 <param name="destination_frame" value="summit_xl_base_link"/>
                 <param name="cloud_destination_topic" value="$(arg cloud_destination_topic)"/>
                 <param name="scan_destination_topic" value="$(arg scan_destination_topic)"/>
