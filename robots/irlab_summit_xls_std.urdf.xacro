@@ -9,6 +9,7 @@
 	<!-- First we import all posible elements defined in the urdf.xacro files. All these elements are defined as macro:xacros -->
 
 	<!-- Import summit XL base elements -->
+	<xacro:property name="wheel_radius" value="0.1025" />
 	<xacro:include filename="$(find summit_xl_description)/urdf/bases/summit_xl_hls_base.urdf.xacro" />
 
 	<!-- Import summit XL wheels -->
