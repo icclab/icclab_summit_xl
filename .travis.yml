@@ -13,10 +13,12 @@ before_script:
 
 script:
 - ./.ci/docker_build.sh
-- ./.ci/nav_test_bash.sh
 
 deploy:
   provider: script
   script: bash ./.ci/docker_push.sh
   on:
     branch: noetic
+
+after_deploy:
+- ./.ci/nav_test_bash.sh 
