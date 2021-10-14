@@ -1,4 +1,4 @@
-dist: xenial
+dist: focal
 
 language: generic
 
@@ -6,7 +6,7 @@ services:
 - docker
 
 install:
-- git clone --depth=1 https://github.com/icclab/rosdocked-irlab --branch=master ~/rosdocked-irlab
+- git clone --depth=1 https://github.com/icclab/rosdocked-irlab --branch=noetic ~/rosdocked-irlab
 
 before_script:
 #- docker pull robopaas/rosdocked-kinetic-workspace-included:latest
