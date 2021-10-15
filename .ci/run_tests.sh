@@ -3,15 +3,6 @@ export TAG=auto
 export BASE_IMAGE=robopaas/rosdocked-noetic-workspace-included
 export IMAGE_NAME=$BASE_IMAGE:$TAG
 
-local_image=$(docker images | grep $BASE_IMAGE | grep $TAG)
-if ! [[ -z "$local_image" ]] ; then
-  read -p "Do you wish to delete local $IMAGE_NAME image and pull an updated version? (y/n) " yn
-  case $yn in
-    [Yy]* ) echo "Deleting $IMAGE_NAME locally"; docker rmi -f $IMAGE_NAME;;
-   [Nn]* ) echo "Using local image $IMAGE_NAME";;
-  esac
-fi
-
 docker run\
   -h `hostname`\
  # --privileged\
