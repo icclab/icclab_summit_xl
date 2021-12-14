@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import rospy
 import numpy as np
 import copy
@@ -242,7 +243,7 @@ class GpdPickPlace(object):
 	# Add object mesh to planning scene
         self.add_object_mesh()
 
-        group.set_goal_tolerance(0.01)
+        group.set_goal_tolerance(0.05)
         cont_c = 0
         for single_grasp in grasps_list_cartesian:
             if self.mark_pose:
@@ -267,7 +268,7 @@ class GpdPickPlace(object):
                         if self.mark_pose:
                             self.show_grasp_pose(self.marker_publisher, grasps_list[cont_c].grasp_pose)
                             rospy.sleep(1)
-                        group.set_goal_tolerance(0.01)
+                        group.set_goal_tolerance(0.05)
                         waypoints = []
                         wpose = grasps_list[cont_c].grasp_pose.pose
                         waypoints.append(copy.deepcopy(wpose))
@@ -312,7 +313,7 @@ class GpdPickPlace(object):
 	# Add object mesh to planning scene
         self.add_object_mesh()
         
-        group.set_goal_tolerance(0.01)
+        group.set_goal_tolerance(0.05)
         group.set_planning_time(5)
         cont_c = 0
         for single_grasp in grasps_list_cartesian:
@@ -706,7 +707,7 @@ if __name__ == "__main__":
     #group.set_planner_id("BiTRRT")
     group.set_max_velocity_scaling_factor(1)
     #group.set_goal_orientation_tolerance(0.01)
-    group.set_goal_tolerance(0.005)
+    group.set_goal_tolerance(0.02)
     group.set_planning_time(10)
     group.allow_replanning(True)
     planning = PlanningSceneInterface("summit_xl_base_footprint", ns="/summit_xl/")

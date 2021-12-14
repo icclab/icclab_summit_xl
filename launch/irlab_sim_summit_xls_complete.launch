@@ -37,7 +37,7 @@
 	<arg name="nav_test" default="false"/>
 
 	<!-- GRASP GENERATION -->
-	<arg name="generate_grasps" default="false"/>
+	<arg name="generate_grasps" default="true"/>
 
 	<!--======================== GAZEBO + NAV STACK ==================================-->
 	<include file="$(find icclab_summit_xl)/launch/sim/irlab_summit_xl_gazebo.launch">
