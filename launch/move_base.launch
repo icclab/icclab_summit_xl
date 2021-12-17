@@ -15,9 +15,9 @@
 	<arg name="publish_voxel_map" default="false"/>
 	<arg name="slam" default="false"/>
 	<!-- This solves the issue in https://github.com/SteveMacenski/spatio_temporal_voxel_layer/issues/167 -->
-        <env name="LD_PRELOAD" value="/usr/lib/x86_64-linux-gnu/libjemalloc.so.2"/>
+    <env name="LD_PRELOAD" value="/usr/lib/x86_64-linux-gnu/libjemalloc.so.2"/>
 	<!-- Run move_base -->
-	<node pkg="move_base" type="move_base" respawn="true" name="move_base">
+	<node pkg="move_base" type="move_base" respawn="false" name="move_base" output="log">
 		<rosparam file="$(find icclab_summit_xl)/config/move_base_params.yaml" command="load" />
 		<rosparam file="$(find icclab_summit_xl)/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
 		<rosparam file="$(find icclab_summit_xl)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
@@ -25,7 +25,7 @@
 		<rosparam if="$(arg slam)" file="$(find icclab_summit_xl)/config/global_costmap_params_no_map.yaml" command="load" />
 		<rosparam unless="$(arg slam)" file="$(find icclab_summit_xl)/config/global_costmap_params_map.yaml" command="load" />
 		<rosparam file="$(find icclab_summit_xl)/config/global_planner_params.yaml" command="load" />
-			<!--<rosparam file="$(find icclab_summit_xl)/config/teb_local_planner_steel_params.yaml" command="load" />-->
+		<!--<rosparam file="$(find icclab_summit_xl)/config/teb_local_planner_steel_params.yaml" command="load" />-->
 
 		<!-- reset frame_id parameters using user input data -->
 		<!-- front laser -->
@@ -44,7 +44,7 @@
 		<param name="global_costmap/global_frame" value="$(arg global_frame)"/>
 		<param name="global_costmap/robot_base_frame" value="$(arg base_frame)"/>
 		<param name="TebLocalPlannerROS/map_frame" value="$(arg global_frame)"/>
-	        <param name="TebLocalPlannerROS/odom_topic" value="$(arg odom_topic)"/>
+	    <param name="TebLocalPlannerROS/odom_topic" value="$(arg odom_topic)"/>
 		<param if="$(arg omni)" name="TebLocalPlannerROS/weight_kinematics_nh" value="10"/>
 		<param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" />
 		<param name="controller_frequency" value="10.0" />
