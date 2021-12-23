@@ -14,8 +14,7 @@
 	<arg name="sim" default="false"/>
 	<arg name="publish_voxel_map" default="false"/>
 	<arg name="slam" default="false"/>
-	<!-- This solves the issue in https://github.com/SteveMacenski/spatio_temporal_voxel_layer/issues/167 -->
-        <env name="LD_PRELOAD" value="/usr/lib/x86_64-linux-gnu/libjemalloc.so.2"/>
+		
 	<!-- Run move_base -->
 	<node pkg="move_base" type="move_base" respawn="true" name="move_base">
 		<rosparam file="$(find icclab_summit_xl)/config/move_base_params.yaml" command="load" />
