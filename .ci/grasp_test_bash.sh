@@ -13,7 +13,7 @@ roslaunch icclab_summit_xl irlab_sim_summit_xls_grasping.launch launch_rviz_gras
 # save PID of roslaunch
 ROSLAUNCH_PID=$!
 
-sleep 60
+sleep 120
 
 RES=`timeout -k 120s 120s rostopic echo -n 1 "/summit_xl/move_group/status" | grep -c "header"`
 
