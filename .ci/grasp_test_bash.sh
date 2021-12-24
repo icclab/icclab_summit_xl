@@ -11,7 +11,11 @@ ROSLAUNCH_PID=$!
 . /opt/ros/noetic/setup.bash
 
 . ~/catkin_ws/devel/setup.bash
-RES=`timeout -k 5m 5m roslaunch icclab_summit_xl irlab_sim_summit_xls_grasping.launch launch_rviz_grasping:=false gazebo_gui:=false | grep -c "You can start planning now!"`
+
+roslaunch icclab_summit_xl irlab_sim_summit_xls_grasping.launch launch_rviz_grasping:=false gazebo_gui:=false &
+
+
+RES='timeout -k 180s 180s rostopic echo -n 1 "/summit_xl/move_group/status" | grep -c "header"'
 
 
 # kill roslaunch
