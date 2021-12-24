@@ -13,9 +13,8 @@ roslaunch icclab_summit_xl irlab_sim_summit_xls_grasping.launch launch_rviz_gras
 # save PID of roslaunch
 ROSLAUNCH_PID=$!
 
-sleep 120
 
-RES=`timeout -k 120s 120s rostopic echo -n 1 "/summit_xl/move_group/status" | grep -c "header"`
+RES=`timeout -k 180s 180s rostopic echo -n 1 "/summit_xl/move_group/status" | grep -c "header"`
 
 
 # kill roslaunch
