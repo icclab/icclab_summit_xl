@@ -2,7 +2,7 @@
 #
 # bringup grasping in sim
 
-#set -e
+set +e
 
 . /opt/ros/noetic/setup.bash
 
