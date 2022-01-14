@@ -4,7 +4,7 @@
 . ~/catkin_ws/devel/setup.bash
 
 # start complete in headless mode 
-roslaunch icclab_summit_xl irlab_sim_summit_xls_complete.launch gazebo_gui:=false launch_rviz_nav:=false launch_rviz_grasping:=false & 
+roslaunch icclab_summit_xl irlab_sim_summit_xls_complete.launch gazebo_gui:=true launch_rviz_nav:=false launch_rviz_grasping:=false & 
 
 # save PID of roslaunch
 ROSLAUNCH_PID=$!
