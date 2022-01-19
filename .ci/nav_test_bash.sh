@@ -44,7 +44,7 @@ goal:
         w: 1.0"
 
 # wait for result publication or timeout
-RES=`timeout -k 300s 300s rostopic echo -n 1 /summit_xl/move_base/result | grep -c "Goal reached."`
+RES=`timeout -k 180s 180s rostopic echo -n 1 /summit_xl/move_base/result | grep -c "Goal reached."`
 
 # kill roslaunch
 kill -15 $ROSLAUNCH_PID
