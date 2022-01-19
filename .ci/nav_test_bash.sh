@@ -34,8 +34,8 @@ goal:
       frame_id: 'summit_xl_map'
     pose:
       position:
-        x: 25.0
-        y: 4.0
+        x: 1.0
+        y: 1.0
         z: 0.0
       orientation:
         x: 0.0
