@@ -16,6 +16,6 @@ local_costmap:
 
 # execute `rospack plugins --attrib=plugin costmap_2d` to look at all available costmap plugins
   plugins:
-    - {name: obstacle_3d_layer,   type: "spatio_temporal_voxel_layer/SpatioTemporalVoxelLayer"}
+#    - {name: obstacle_3d_layer,   type: "spatio_temporal_voxel_layer/SpatioTemporalVoxelLayer"}
     - {name: obstacle_2d_layer,   type: "costmap_2d::ObstacleLayer"}
     - {name: inflation_layer,     type: "costmap_2d::InflationLayer"}
