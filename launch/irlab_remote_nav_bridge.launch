@@ -1,0 +1,50 @@
+<launch>
+
+  <!-- By default, we are not in debug mode -->
+  <arg name="debug" default="false" />
+  <arg name="robotiq_gripper"   default="true"/>
+  <arg name="collision_walls"   default="false"/>
+  <arg name="ros_planar_move_plugin" default="false"/>
+  <arg name="launch_map_server" default="true"/>
+	<arg name="map_file" default="icclab/icclab_latest_map.yaml"/>
+
+  <!--
+  By default, hide joint_state_publisher's GUI
+
+  MoveIt!'s "demo" mode replaces the real robot driver with the joint_state_publisher.
+  The latter one maintains and publishes the current joint configuration of the simulated robot.
+  It also provides a GUI to move the simulated robot around "manually".
+  This corresponds to moving around the real robot without the use of MoveIt.
+  -->
+  <arg name="xacro_robot_a" default="irlab_summit_xls_std.urdf.xacro"/>
+
+  <arg name="id_robot" default="summit_xl"/>
+  <group ns="$(arg id_robot)">
+    <arg name="prefix" value="$(arg id_robot)_"/>
+
+    <!-- Run Rviz and load the default config to see the state of the move_group node -->
+    <arg name="command_args" value="-d $(find icclab_summit_xl)/rviz/navigation_remote.rviz" />
+    <node name="rviz_nav" pkg="rviz" type="rviz" args="$(arg command_args)" respawn="false" output="screen">
+      <rosparam command="load" file="$(find icclab_summit_xl)/config/kinematics.yaml"/>
+    </node>
+
+    <!-- Load the URDF into the ROS Parameter Server -->
+    <param name="robot_description" command="$(find xacro)/xacro '$(find icclab_summit_xl)/robots/$(arg xacro_robot_a)' prefix:=$(arg prefix) ros_planar_move_plugin:=$(arg ros_planar_move_plugin) robotiq_gripper:=$(arg robotiq_gripper) collision_walls:=$(arg collision_walls) --inorder"/>
+
+    <!-- The semantic description that corresponds to the URDF -->
+    <arg name="robot_description" default="robot_description"/>
+    <param name="$(arg robot_description)_semantic" textfile="$(find icclab_summit_xl)/config/summit_xl.srdf" />
+
+    <!-- run point robot state publisher to turn joint positions + URDF into tf -->
+    <!-- <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen">
+			<remap from="/joint_states" to="joint_states" />
+		</node> -->
+
+    <include if="$(arg launch_map_server)" file="$(find icclab_summit_xl)/launch/sim/map_server.launch">
+			<arg name="prefix" value="$(arg prefix)"/>
+			<arg name="map_file" value="$(arg map_file)"/>
+		</include>
+
+  </group>
+
+</launch>

@@ -1,36 +1,40 @@
 <?xml version="1.0"?>
 <launch>
-        <!-- GRIPPER PARAM -->
-        <arg name="robotiq_gripper"   default="true"/>
+	<!-- GRIPPER PARAM -->
+	<arg name="robotiq_gripper" default="true"/>
 
-        <!-- COLLISION WALLS PARAM -->
-        <arg name="collision_walls"   default="false"/>
+	<!-- COLLISION WALLS PARAM -->
+	<arg name="collision_walls" default="false"/>
 
 	<!-- SUMMIT XL STEEL-->
 	<arg name="id_robot" default="summit_xl"/>
 	<arg name="xacro_robot_a" default="irlab_summit_xls_std.urdf.xacro" />
 
 	<!-- GAZEBO -->
-	<arg name="ros_planar_move_plugin" default="true"/> <!-- disables gazebo ros_control plugin -->
+	<arg name="ros_planar_move_plugin" default="true"/>
+	<!-- disables gazebo ros_control plugin -->
 	<arg name="gazebo_world" default="$(find icclab_summit_xl)/worlds/summit_xl_office.world"/>
 	<arg name="gazebo_gui" default="true"/>
 
-        <!-- NAV STACK PARAMS -->
-        <arg name="launch_rviz_nav" default="true"/>
-        <arg name="map_file_a" default="willow_garage/willow_garage.yaml"/>
-        <arg name="localization_robot_a" default="false"/>
-        <arg name="gmapping_robot_a" default="false"/>
-        <arg name="move_base_robot_a" default="true"/>
-        <arg name="amcl_and_mapserver_a" default="true"/>
-        <arg name="slam" default="false"/>
-        <arg name="omni" default="true"/>
+	<!-- NAV STACK PARAMS -->
+	<arg name="launch_rviz_nav" default="true"/>
+	<arg name="map_file_a" default="willow_garage/willow_garage.yaml"/>
+	<arg name="localization_robot_a" default="false"/>
+	<arg name="gmapping_robot_a" default="false"/>
+	<arg name="move_base_robot_a" default="true"/>
+	<arg name="amcl_and_mapserver_a" default="true"/>
+	<arg name="slam" default="false"/>
+	<arg name="omni" default="true"/>
 
 	<!-- ARM CONTROL PARAMS -->
 	<arg name="launch_rviz_grasping" default="true"/>
 	<arg name="enable_arm" default="true"/>
-	<arg name="db" default="false"/> <!-- By default, we do not start a database (it can be large) -->
-	<arg name="db_path" default="$(find icclab_summit_xl)/default_warehouse_mongo_db"/> <!-- Allow user to specify database location -->
-	<arg name="debug" default="false"/> <!-- By default, we are not in debug mode -->
+	<arg name="db" default="false"/>
+	<!-- By default, we do not start a database (it can be large) -->
+	<arg name="db_path" default="$(find icclab_summit_xl)/default_warehouse_mongo_db"/>
+	<!-- Allow user to specify database location -->
+	<arg name="debug" default="false"/>
+	<!-- By default, we are not in debug mode -->
 	<arg name="simulation" default="true"/>
 
 	<!-- TESTING -->
@@ -56,10 +60,10 @@
 		<arg name="nav_test" value="$(arg nav_test)"/>
 		<arg name="slam" value="$(arg slam)"/>
 		<arg name="omni" value="$(arg omni)"/>
-		<arg name="robotiq_gripper"        value="$(arg robotiq_gripper)"/>
-		<arg name="collision_walls"        value="$(arg collision_walls)"/>
+		<arg name="robotiq_gripper" value="$(arg robotiq_gripper)"/>
+		<arg name="collision_walls" value="$(arg collision_walls)"/>
 	</include>
-	
+
 
 	<!--============================= ARM CONTROL =============================-->
 	<group if="$(arg enable_arm)" ns="$(arg id_robot)">
@@ -85,15 +89,15 @@
 		<rosparam file="$(find icclab_summit_xl)/config/controllers_robotiqgripper.yaml" if="$(arg robotiq_gripper)"/>
 
 		<!--	The semantic description that corresponds to the URDF -->
-			<arg name="robot_description" default="robot_description"/>
-			<param unless="$(arg robotiq_gripper)" name="$(arg robot_description)_semantic" textfile="$(find icclab_summit_xl)/config/summit_xl.srdf" />
-			<param if="$(arg robotiq_gripper)" name="$(arg robot_description)_semantic" textfile="$(find icclab_summit_xl)/config/summit_xl_robotiqgripper.srdf" />
+		<arg name="robot_description" default="robot_description"/>
+		<param unless="$(arg robotiq_gripper)" name="$(arg robot_description)_semantic" textfile="$(find icclab_summit_xl)/config/summit_xl.srdf" />
+		<param if="$(arg robotiq_gripper)" name="$(arg robot_description)_semantic" textfile="$(find icclab_summit_xl)/config/summit_xl_robotiqgripper.srdf" />
 
-		<!-- run point cloud filtering--> 
+		<!-- run point cloud filtering-->
 		<node name="pointcloud_filtering" pkg="irlab_point_cloud_filtering" type="point_cloud_filtering_server" respawn="false" args="/summit_xl/arm_camera/depth_registered/points" output="screen"/>
 
 		<!-- import octomap sensors -->
-		<include ns="move_group"  file="$(find icclab_summit_xl)/launch/include/sensor_manager.launch.xml"/>
+		<include ns="move_group" file="$(find icclab_summit_xl)/launch/include/sensor_manager.launch.xml"/>
 
 		<!-- Run Rviz and load the default config to see the state of the move_group node -->
 		<arg name="command_args" value="-d $(find icclab_summit_xl)/rviz/grasping.rviz" />
