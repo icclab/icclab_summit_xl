@@ -41,20 +41,6 @@
         <joint name="arm_wrist_2_joint" value="-1.4071092678447217" />
         <joint name="arm_wrist_3_joint" value="0" />
      </group_state>
-
-      - arm_elbow_joint
-  - arm_shoulder_lift_joint
-  - arm_shoulder_pan_joint
-  - arm_wrist_1_joint
-  - arm_wrist_2_joint
-  - arm_wrist_3_joint
-  - gripper_finger_joint
-  - summit_xl_back_left_wheel_joint
-  - summit_xl_back_right_wheel_joint
-  - summit_xl_front_left_wheel_joint
-  - summit_xl_front_right_wheel_joint
-position: [-1.9881816168856243, -0.00014143826115198266, 0.0012822853226612807, 1.9181252804564655, -1.4071092678447217, 0.00835289221707658, 38.064405162484704, -0.02423576281453066, -0.03459027991693464, -0.04784468900295824, -0.01808930797524866]
-
     
     <!--group_state name="open" group="gripper">
         <joint name="gripper_right_outer_knuckle_joint" value="0" />
