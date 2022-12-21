@@ -18,7 +18,7 @@
 	<xacro:include filename="$(find summit_xl_description)/urdf/structures/structure_hokuyo.urdf.xacro" />
 
 	<!-- Import arm description -->
-	<xacro:include filename="$(find ur_description)/urdf/ur5.urdf.xacro" />
+	<xacro:include filename="$(find ur_description)/urdf/inc/ur5_macro.xacro" />
 
 	<!-- Import all available robotnik sensors -->
 	<xacro:include filename="$(find robotnik_sensors)/urdf/all_sensors.urdf.xacro" />
@@ -145,8 +145,7 @@
 		</xacro:hokuyo>
 
 		<!-- UR5 Arm -->
-		<xacro:ur5_robot prefix="arm_" joint_limited="true">
-		</xacro:ur5_robot>
+		<xacro:ur5_robot prefix="arm_"/>
 
 		<joint name="$(arg prefix)arm_base_joint" type="fixed">
 			<origin xyz="0.255 0 0.275" rpy="0 0 ${PI}" />
@@ -172,12 +171,12 @@
 		
 		<!-- Camera on gripper  --> 
 		<!-- had to copy and modidy camera to avoid name clash with robotnik defined sensors -->
-		<xacro:sensor_d435_icclab prefix="arm" prefix_topic="arm_camera" parent="arm_wrist_2_link">
+		<xacro:sensor_d435_icclab prefix="arm" prefix_topic="arm_camera" parent="gripper_robotiq_arg2f_base_link">
      		<!-- <origin xyz="0 0.07 0.145" rpy="0 0 ${PI/2}"/> -->
 			<!-- origin xyz="-0.05 0.071 0.095" rpy="${-PI/2} 0 ${PI/2}"/ -->  <!-- camera on the one side -->
 			<!--origin xyz="0.075 0.07 0.1" rpy="${-PI/2} 0 ${PI/2}"/--> <!-- camera on the other oner side -->
 			<!--origin xyz="-0.001 0.07 0.045" rpy="${-PI} 0 ${PI/2}"/--> <!-- camera on top -->
-			<origin xyz="-0.001 0.07 0.175" rpy="${-PI} 0 ${PI/2}"/> <!-- camera on bot -->
+			<origin xyz="0.07 0.0 0.03" rpy="0 ${-PI/2} 0"/> <!-- camera on bot -->
    		</xacro:sensor_d435_icclab> 
 
 <!--		<sensor_d415_icclab prefix="arm" prefix_topic="arm_camera" parent="arm_wrist_2_link">
@@ -185,11 +184,11 @@
    		<!--</sensor_d415_icclab>-->
 
 		<!-- Camera mount -->
-		<xacro:camera_mount prefix="arm" parent="arm_wrist_2_link">
+		<xacro:camera_mount prefix="arm" parent="gripper_robotiq_arg2f_base_link">
 			<!-- <origin xyz="-0.005 0.04 0.095" rpy="${PI/2} 0 ${PI}" /> -->
 			 <!--origin xyz="0 0.041 0.09" rpy=" ${PI/2} ${PI/2} ${PI}" /-->  <!-- camera on the one side -->
 			<!--origin xyz="0.005 0.045 0.09" rpy="${PI/2} ${PI} ${PI}" /--><!-- camera on top  -->
-			<origin xyz="-0.0036 0.045 0.1" rpy="${PI/2} 0 ${PI}" /><!-- camera on bot  -->
+			<origin xyz="0 0 0" rpy="0 0 ${-PI/2}" /><!-- camera on bot  -->
 		</xacro:camera_mount>
 
 		<!-- Collision box camera cable -->
