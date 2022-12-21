@@ -145,7 +145,7 @@
 		</xacro:hokuyo>
 
 		<!-- UR5 Arm -->
-		<xacro:ur5_robot prefix="arm_"/>
+		<xacro:ur5_robot prefix="arm_" joint_limits_parameters_file="$(find icclab_summit_xl)/config/joint_limits.yaml"/>
 
 		<joint name="$(arg prefix)arm_base_joint" type="fixed">
 			<origin xyz="0.255 0 0.275" rpy="0 0 ${PI}" />
@@ -202,9 +202,9 @@
 		</xacro:collision_box_wrist3> 
 
 		<!-- Collision box wrist 2 -->
-		<xacro:collision_box_wrist2 prefix="arm" parent="arm_wrist_2_link">
+		<!-- <xacro:collision_box_wrist2 prefix="arm" parent="arm_wrist_2_link">
 			 <origin xyz="0 0 -0.06" rpy="${PI/2} 0 0" />
-		</xacro:collision_box_wrist2> 
+		</xacro:collision_box_wrist2>  -->
 
 		<!-- Collision walls right/left-->
 		<xacro:if value="$(arg collision_walls)">
