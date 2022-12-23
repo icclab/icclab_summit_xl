@@ -74,7 +74,7 @@ class GpdPickPlace(object):
         if mark_pose:
             self.mark_pose = True
             self.marker_publisher = rospy.Publisher('visualization_marker_array', MarkerArray, queue_size=1)
-        self.p = PickPlaceInterface(group="manipulator", ee_group="endeffector", verbose=True, ns="/summit_xl/")
+        self.p = PickPlaceInterface(group="manipulator", ee_group="endeffector", verbose=True)
         self.tf = tf.TransformListener()
 
     def grasp_callback(self, msg):
