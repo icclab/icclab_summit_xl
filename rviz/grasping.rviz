@@ -111,11 +111,19 @@ Visualization Manager:
             Alpha: 1
             Show Axes: false
             Show Trail: false
-          arm_camera_left_ir_frame:
+          arm_camera_infra1_frame:
             Alpha: 1
             Show Axes: false
             Show Trail: false
-          arm_camera_left_ir_optical_frame:
+          arm_camera_infra1_optical_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          arm_camera_infra2_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          arm_camera_infra2_optical_frame:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -129,20 +137,12 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-          arm_camera_right_ir_frame:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-          arm_camera_right_ir_optical_frame:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
           arm_collision_box_camera_cable_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          arm_collision_box_wrist2_link:
+          arm_collision_box_wrist3_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -397,11 +397,19 @@ Visualization Manager:
             Alpha: 1
             Show Axes: false
             Show Trail: false
-          arm_camera_left_ir_frame:
+          arm_camera_infra1_frame:
             Alpha: 1
             Show Axes: false
             Show Trail: false
-          arm_camera_left_ir_optical_frame:
+          arm_camera_infra1_optical_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          arm_camera_infra2_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          arm_camera_infra2_optical_frame:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -415,20 +423,12 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-          arm_camera_right_ir_frame:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-          arm_camera_right_ir_optical_frame:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
           arm_collision_box_camera_cable_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          arm_collision_box_wrist2_link:
+          arm_collision_box_wrist3_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -745,7 +745,7 @@ Visualization Manager:
     Background Color: 48; 48; 48
     Default Light: true
     Fixed Frame: summit_xl_base_footprint
-    Frame Rate: 25
+    Frame Rate: 10
   Name: root
   Tools:
     - Class: rviz/Interact
@@ -796,5 +796,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1872
-  X: 33
+  X: 28
   Y: 27

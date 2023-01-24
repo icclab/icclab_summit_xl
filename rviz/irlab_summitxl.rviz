@@ -8,8 +8,8 @@ Panels:
         - /Robot1
         - /Global Planner1
         - /Local Planner1
-      Splitter Ratio: 0.657060504
-    Tree Height: 819
+      Splitter Ratio: 0.6570605039596558
+    Tree Height: 816
   - Class: rviz/Selection
     Name: Selection
   - Class: rviz/Tool Properties
@@ -18,17 +18,18 @@ Panels:
       - /2D Nav Goal1
       - /Publish Point1
     Name: Tool Properties
-    Splitter Ratio: 0.588679016
+    Splitter Ratio: 0.5886790156364441
   - Class: rviz/Views
     Expanded:
       - /Current View1
     Name: Views
     Splitter Ratio: 0.5
   - Class: rviz/Time
-    Experimental: false
     Name: Time
     SyncMode: 0
     SyncSource: ""
+Preferences:
+  PromptSaveOnExit: true
 Toolbars:
   toolButtonStyle: 2
 Visualization Manager:
@@ -40,7 +41,7 @@ Visualization Manager:
       Color: 160; 160; 164
       Enabled: true
       Line Style:
-        Line Width: 0.0299999993
+        Line Width: 0.029999999329447746
         Value: Lines
       Name: Grid
       Normal Cell Count: 0
@@ -52,7 +53,7 @@ Visualization Manager:
       Plane Cell Count: 10
       Reference Frame: <Fixed Frame>
       Value: true
-    - Alpha: 0.699999988
+    - Alpha: 0.699999988079071
       Class: rviz/Map
       Color Scheme: map
       Draw Behind: false
@@ -82,6 +83,10 @@ Visualization Manager:
               Alpha: 1
               Show Axes: false
               Show Trail: false
+            arm_base_link_inertia:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
               Value: true
             arm_camera_bottom_screw_frame:
               Alpha: 1
@@ -103,11 +108,19 @@ Visualization Manager:
               Alpha: 1
               Show Axes: false
               Show Trail: false
-            arm_camera_left_ir_frame:
+            arm_camera_infra1_frame:
               Alpha: 1
               Show Axes: false
               Show Trail: false
-            arm_camera_left_ir_optical_frame:
+            arm_camera_infra1_optical_frame:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+            arm_camera_infra2_frame:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+            arm_camera_infra2_optical_frame:
               Alpha: 1
               Show Axes: false
               Show Trail: false
@@ -121,20 +134,7 @@ Visualization Manager:
               Show Axes: false
               Show Trail: false
               Value: true
-            arm_camera_right_ir_frame:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-            arm_camera_right_ir_optical_frame:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
             arm_collision_box_camera_cable_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            arm_collision_box_wrist2_link:
               Alpha: 1
               Show Axes: false
               Show Trail: false
@@ -144,11 +144,10 @@ Visualization Manager:
               Show Axes: false
               Show Trail: false
               Value: true
-            arm_ee_link:
+            arm_flange:
               Alpha: 1
               Show Axes: false
               Show Trail: false
-              Value: true
             arm_forearm_link:
               Alpha: 1
               Show Axes: false
@@ -183,27 +182,57 @@ Visualization Manager:
               Show Axes: false
               Show Trail: false
               Value: true
-            gripper_base_link:
+            gripper_left_inner_finger:
               Alpha: 1
               Show Axes: false
               Show Trail: false
               Value: true
-            gripper_left_finger_base_link:
+            gripper_left_inner_finger_pad:
               Alpha: 1
               Show Axes: false
               Show Trail: false
               Value: true
-            gripper_left_finger_link:
+            gripper_left_inner_knuckle:
               Alpha: 1
               Show Axes: false
               Show Trail: false
               Value: true
-            gripper_right_finger_base_link:
+            gripper_left_outer_finger:
               Alpha: 1
               Show Axes: false
               Show Trail: false
               Value: true
-            gripper_right_finger_link:
+            gripper_left_outer_knuckle:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+              Value: true
+            gripper_right_inner_finger:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+              Value: true
+            gripper_right_inner_finger_pad:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+              Value: true
+            gripper_right_inner_knuckle:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+              Value: true
+            gripper_right_outer_finger:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+              Value: true
+            gripper_right_outer_knuckle:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+              Value: true
+            gripper_robotiq_arg2f_base_link:
               Alpha: 1
               Show Axes: false
               Show Trail: false
@@ -297,6 +326,7 @@ Visualization Manager:
           Frame Timeout: 15
           Frames:
             All Enabled: true
+          Marker Alpha: 1
           Marker Scale: 1
           Name: TF
           Show Arrows: true
@@ -309,8 +339,8 @@ Visualization Manager:
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
-            Max Value: 3.4460988
-            Min Value: -0.731759548
+            Max Value: 3.446098804473877
+            Min Value: -0.7317595481872559
             Value: true
           Axis: X
           Channel Name: x
@@ -321,15 +351,13 @@ Visualization Manager:
           Enabled: false
           Invert Rainbow: false
           Max Color: 255; 255; 255
-          Max Intensity: -14.6177893
           Min Color: 0; 0; 0
-          Min Intensity: -18.2555351
           Name: Front LaserScan
           Position Transformer: XYZ
           Queue Size: 10
           Selectable: true
           Size (Pixels): 3
-          Size (m): 0.0299999993
+          Size (m): 0.029999999329447746
           Style: Flat Squares
           Topic: /summit_xl/scan_front
           Unreliable: false
@@ -339,8 +367,8 @@ Visualization Manager:
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
-            Max Value: 2.26658273
-            Min Value: -4.77707863
+            Max Value: 2.266582727432251
+            Min Value: -4.777078628540039
             Value: true
           Axis: X
           Channel Name: x
@@ -351,15 +379,13 @@ Visualization Manager:
           Enabled: false
           Invert Rainbow: false
           Max Color: 85; 255; 0
-          Max Intensity: -10.6083097
           Min Color: 85; 255; 0
-          Min Intensity: -19.4684982
           Name: Rear LaserScan
           Position Transformer: XYZ
           Queue Size: 10
           Selectable: false
           Size (Pixels): 3
-          Size (m): 0.0299999993
+          Size (m): 0.029999999329447746
           Style: Flat Squares
           Topic: /summit_xl/scan_rear
           Unreliable: false
@@ -369,8 +395,8 @@ Visualization Manager:
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
-            Max Value: 2.26658273
-            Min Value: -4.77707863
+            Max Value: 2.266582727432251
+            Min Value: -4.777078628540039
             Value: true
           Axis: X
           Channel Name: x
@@ -381,15 +407,13 @@ Visualization Manager:
           Enabled: false
           Invert Rainbow: false
           Max Color: 85; 255; 0
-          Max Intensity: -15.628787
           Min Color: 85; 255; 0
-          Min Intensity: -16.9874115
           Name: Camera LaserScan
           Position Transformer: XYZ
           Queue Size: 10
           Selectable: false
           Size (Pixels): 3
-          Size (m): 0.0299999993
+          Size (m): 0.029999999329447746
           Style: Flat Squares
           Topic: /summit_xl/front_rgbd_camera/scan
           Unreliable: false
@@ -411,15 +435,13 @@ Visualization Manager:
           Enabled: false
           Invert Rainbow: false
           Max Color: 255; 255; 255
-          Max Intensity: 4096
           Min Color: 0; 0; 0
-          Min Intensity: 0
           Name: Front Cam PointCloud2
           Position Transformer: XYZ
           Queue Size: 10
           Selectable: true
           Size (Pixels): 3
-          Size (m): 0.00999999978
+          Size (m): 0.009999999776482582
           Style: Flat Squares
           Topic: /summit_xl/front_rgbd_camera/depth/points
           Unreliable: false
@@ -427,17 +449,18 @@ Visualization Manager:
           Use rainbow: true
           Value: false
         - Alpha: 1
-          Arrow Length: 0.300000012
-          Axes Length: 0.300000012
-          Axes Radius: 0.00999999978
+          Arrow Length: 0.30000001192092896
+          Axes Length: 0.30000001192092896
+          Axes Radius: 0.009999999776482582
           Class: rviz/PoseArray
           Color: 255; 25; 0
           Enabled: false
-          Head Length: 0.0700000003
-          Head Radius: 0.0299999993
+          Head Length: 0.07000000029802322
+          Head Radius: 0.029999999329447746
           Name: AMCL Particles
-          Shaft Length: 0.230000004
-          Shaft Radius: 0.00999999978
+          Queue Size: 10
+          Shaft Length: 0.23000000417232513
+          Shaft Radius: 0.009999999776482582
           Shape: Arrow (Flat)
           Topic: /summit_xl/particlecloud
           Unreliable: false
@@ -447,6 +470,7 @@ Visualization Manager:
           Color: 25; 255; 0
           Enabled: true
           Name: Robot Footprint
+          Queue Size: 10
           Topic: /summit_xl/move_base/local_costmap/footprint
           Unreliable: false
           Value: true
@@ -459,11 +483,11 @@ Visualization Manager:
           Class: rviz/Path
           Color: 25; 255; 0
           Enabled: true
-          Head Diameter: 0.300000012
-          Head Length: 0.200000003
-          Length: 0.300000012
+          Head Diameter: 0.30000001192092896
+          Head Length: 0.20000000298023224
+          Length: 0.30000001192092896
           Line Style: Lines
-          Line Width: 0.0299999993
+          Line Width: 0.029999999329447746
           Name: GlobalPath
           Offset:
             X: 0
@@ -471,13 +495,14 @@ Visualization Manager:
             Z: 0
           Pose Color: 255; 85; 255
           Pose Style: None
-          Radius: 0.0299999993
-          Shaft Diameter: 0.100000001
-          Shaft Length: 0.100000001
+          Queue Size: 10
+          Radius: 0.029999999329447746
+          Shaft Diameter: 0.10000000149011612
+          Shaft Length: 0.10000000149011612
           Topic: /summit_xl/move_base/TebLocalPlannerROS/global_plan
           Unreliable: false
           Value: true
-        - Alpha: 0.699999988
+        - Alpha: 0.699999988079071
           Class: rviz/Map
           Color Scheme: costmap
           Draw Behind: true
@@ -487,7 +512,7 @@ Visualization Manager:
           Unreliable: false
           Use Timestamp: false
           Value: true
-        - Alpha: 0.699999988
+        - Alpha: 0.699999988079071
           Class: rviz/Map
           Color Scheme: costmap
           Draw Behind: false
@@ -502,17 +527,18 @@ Visualization Manager:
     - Class: rviz/Group
       Displays:
         - Alpha: 1
-          Arrow Length: 0.300000012
-          Axes Length: 0.300000012
-          Axes Radius: 0.00999999978
+          Arrow Length: 0.30000001192092896
+          Axes Length: 0.30000001192092896
+          Axes Radius: 0.009999999776482582
           Class: rviz/PoseArray
           Color: 255; 25; 0
           Enabled: true
-          Head Length: 0.0700000003
-          Head Radius: 0.0299999993
+          Head Length: 0.07000000029802322
+          Head Radius: 0.029999999329447746
           Name: TebPoses
-          Shaft Length: 0.230000004
-          Shaft Radius: 0.00999999978
+          Queue Size: 10
+          Shaft Length: 0.23000000417232513
+          Shaft Radius: 0.009999999776482582
           Shape: Arrow (Flat)
           Topic: /summit_xl/move_base/TebLocalPlannerROS/teb_poses
           Unreliable: false
@@ -530,11 +556,11 @@ Visualization Manager:
           Class: rviz/Path
           Color: 255; 0; 0
           Enabled: true
-          Head Diameter: 0.300000012
-          Head Length: 0.200000003
-          Length: 0.300000012
+          Head Diameter: 0.30000001192092896
+          Head Length: 0.20000000298023224
+          Length: 0.30000001192092896
           Line Style: Lines
-          Line Width: 0.0299999993
+          Line Width: 0.029999999329447746
           Name: LocalPath
           Offset:
             X: 0
@@ -542,13 +568,14 @@ Visualization Manager:
             Z: 0
           Pose Color: 255; 85; 255
           Pose Style: None
-          Radius: 0.0299999993
-          Shaft Diameter: 0.100000001
-          Shaft Length: 0.100000001
+          Queue Size: 10
+          Radius: 0.029999999329447746
+          Shaft Diameter: 0.10000000149011612
+          Shaft Length: 0.10000000149011612
           Topic: /summit_xl/move_base/TebLocalPlannerROS/local_plan
           Unreliable: false
           Value: true
-        - Alpha: 0.699999988
+        - Alpha: 0.699999988079071
           Class: rviz/Map
           Color Scheme: costmap
           Draw Behind: false
@@ -573,15 +600,13 @@ Visualization Manager:
           Enabled: false
           Invert Rainbow: false
           Max Color: 255; 255; 255
-          Max Intensity: 1.5
           Min Color: 0; 0; 0
-          Min Intensity: 0
           Name: Voxel Grid
           Position Transformer: XYZ
           Queue Size: 10
           Selectable: true
           Size (Pixels): 3
-          Size (m): 0.0500000007
+          Size (m): 0.05000000074505806
           Style: Squares
           Topic: /summit_xl/move_base/local_costmap/obstacle_3d_layer/voxel_grid
           Unreliable: false
@@ -595,7 +620,7 @@ Visualization Manager:
     Background Color: 48; 48; 48
     Default Light: true
     Fixed Frame: summit_xl_map
-    Frame Rate: 30
+    Frame Rate: 10
   Name: root
   Tools:
     - Class: rviz/Interact
@@ -605,7 +630,10 @@ Visualization Manager:
     - Class: rviz/FocusCamera
     - Class: rviz/Measure
     - Class: rviz/SetInitialPose
+      Theta std deviation: 0.2617993950843811
       Topic: /summit_xl/initialpose
+      X std deviation: 0.5
+      Y std deviation: 0.5
     - Class: rviz/SetGoal
       Topic: /summit_xl/move_base_simple/goal
     - Class: rviz/PublishPoint
@@ -617,26 +645,25 @@ Visualization Manager:
       Angle: 0
       Class: rviz/TopDownOrtho
       Enable Stereo Rendering:
-        Stereo Eye Separation: 0.0599999987
+        Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Invert Z Axis: false
       Name: Current View
-      Near Clip Distance: 0.00999999978
+      Near Clip Distance: 0.009999999776482582
       Scale: 30
       Target Frame: summit_xl_base_footprint
-      Value: TopDownOrtho (rviz)
       X: 0
       Y: 0
     Saved: ~
 Window Geometry:
   Displays:
     collapsed: false
-  Height: 1033
+  Height: 1029
   Hide Left Dock: false
   Hide Right Dock: false
-  QMainWindow State: 000000ff00000000fd00000004000000000000016a0000036efc020000000cfb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005d00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000003c0000036e000000c900fffffffb0000000c00430061006d00650072006100000002dd000000160000000000000000fb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000001800500054005a002000430061006d0065007200610020004101000002dc000000c40000000000000000fb0000000c00430061006d00650072006100000002ed000000160000000000000000fb0000000c00430061006d00650072006100000002fd0000011d0000000000000000000000010000010f0000036efc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073010000003c0000036e000000a100fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000007800000003efc0100000002fb0000000800540069006d00650100000000000007800000026c00fffffffb0000000800540069006d00650100000000000004500000000000000000000004fb0000036e00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd00000004000000000000016a0000036bfc020000000cfb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000003b0000036b000000c700fffffffb0000000c00430061006d00650072006100000002dd000000160000000000000000fb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000001800500054005a002000430061006d0065007200610020004101000002dc000000c40000000000000000fb0000000c00430061006d00650072006100000002ed000000160000000000000000fb0000000c00430061006d00650072006100000002fd0000011d0000000000000000000000010000010f0000036bfc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073010000003b0000036b000000a000fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000007800000003efc0100000002fb0000000800540069006d00650100000000000007800000030700fffffffb0000000800540069006d00650100000000000004500000000000000000000004fb0000036b00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
     collapsed: false
   Time:
@@ -647,4 +674,4 @@ Window Geometry:
     collapsed: false
   Width: 1920
   X: 0
-  Y: 0
+  Y: 27
