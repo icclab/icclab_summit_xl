@@ -745,7 +745,7 @@ Visualization Manager:
     Background Color: 48; 48; 48
     Default Light: true
     Fixed Frame: summit_xl_base_footprint
-    Frame Rate: 10
+    Frame Rate: 5
   Name: root
   Tools:
     - Class: rviz/Interact
@@ -796,5 +796,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1872
-  X: 28
+  X: 23
   Y: 27
