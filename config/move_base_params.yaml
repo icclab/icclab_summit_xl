@@ -5,7 +5,7 @@ controller_frequency: 20.0
 controller_patience: 30.0
 
 # Global planner
-planner_frequency: 0.5 # 0.0, global planner only run when new goal or path blocked
+planner_frequency: 0.1 # 0.0, global planner only run when new goal or path blocked
 planner_patience: 30.0
 
 # Oscillation
@@ -41,10 +41,10 @@ recovery_behaviors:
 
 aggressive_reset_1:
   reset_distance: 0.0 # distance from robot beyond which obstacles will be cleared from costmap
-  layer_names: ["obstacle_3d_layer"] # layers that recovery behavior will clear
+  layer_names: ["obstacle_2d_layer", "obstacle_3d_layer"] # layers that recovery behavior will clear
 aggressive_reset_2:
   reset_distance: 0.0
-  layer_names: ["obstacle_3d_layer"]
+  layer_names: ["obstacle_2d_layer", "obstacle_3d_layer"]
 aggressive_reset_3:
   reset_distance: 0.0
-  layer_names: ["obstacle_3d_layer"]
+  layer_names: ["obstacle_2d_layer", "obstacle_3d_layer"]

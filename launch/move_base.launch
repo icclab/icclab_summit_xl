@@ -16,7 +16,7 @@
 	<arg name="slam" default="false"/>
 		
 	<!-- Run move_base -->
-	<node pkg="move_base" type="move_base" respawn="true" name="move_base">
+	<node pkg="move_base" type="move_base" respawn="false" name="move_base">
 		<rosparam file="$(find icclab_summit_xl)/config/move_base_params.yaml" command="load" />
 		<rosparam file="$(find icclab_summit_xl)/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
 		<rosparam file="$(find icclab_summit_xl)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
@@ -43,7 +43,7 @@
 		<param name="global_costmap/global_frame" value="$(arg global_frame)"/>
 		<param name="global_costmap/robot_base_frame" value="$(arg base_frame)"/>
 		<param name="TebLocalPlannerROS/map_frame" value="$(arg global_frame)"/>
-	        <param name="TebLocalPlannerROS/odom_topic" value="$(arg odom_topic)"/>
+	    <param name="TebLocalPlannerROS/odom_topic" value="$(arg odom_topic)"/>
 		<param if="$(arg omni)" name="TebLocalPlannerROS/weight_kinematics_nh" value="10"/>
 		<param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" />
 		<param name="controller_frequency" value="10.0" />
@@ -57,13 +57,14 @@
 	
 	<!-- params for sim -->
 	<group if="$(arg sim)">
-		<param name="move_base/TebLocalPlannerROS/max_vel_x" value="0.7"/>
+		<param name="move_base/TebLocalPlannerROS/max_vel_x" value="0.5"/>
 		<param name="move_base/TebLocalPlannerROS/max_vel_x_backwards" value="0.3"/>
-		<param name="move_base/TebLocalPlannerROS/max_vel_theta" value="1.0"/>
-		<param name="move_base/TebLocalPlannerROS/max_vel_y" value="0.7"/>
+		<param name="move_base/TebLocalPlannerROS/max_vel_theta" value="0.7"/>
+		<param name="move_base/TebLocalPlannerROS/max_vel_y" value="0.5"/>
 		<param name="move_base/TebLocalPlannerROS/acc_lim_y" value="0.5"/>
 		<param name="move_base/TebLocalPlannerROS/acc_lim_x" value="0.5"/>
-		<param name="move_base/TebLocalPlannerROS/acc_lim_theta" value="1.0"/>
+		<param name="move_base/TebLocalPlannerROS/acc_lim_theta" value="0.7"/>
+		<param if="$(arg omni)" name="TebLocalPlannerROS/weight_kinematics_nh" value="1"/>
 	</group>
 
 </launch>

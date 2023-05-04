@@ -2,13 +2,12 @@
 global_costmap:
   global_frame: /summit_xl_map
   robot_base_frame: /summit_xl_base_footprint
-  update_frequency: 5.0
-  publish_frequency: 2.0
-  static_map: false
+  update_frequency: 1.0
+  publish_frequency: 1.0
   rolling_window: true
   width: 30.0
   height: 30.0
-  resolution: 0.05
+  resolution: 0.02
   origin_x: 0.0
   origin_y: 0.0
   footprint_padding: 0.0 # helps with passing through narrow passages
@@ -16,6 +15,6 @@ global_costmap:
 # execute `rospack plugins --attrib=plugin costmap_2d` to look at all available costmap plugins
   plugins:
     - {name: static_layer,            type: "costmap_2d::StaticLayer"}
-    - {name: obstacle_3d_layer,       type: "spatio_temporal_voxel_layer/SpatioTemporalVoxelLayer"}
-    #- {name: obstacle_2d_layer,       type: "costmap_2d::ObstacleLayer"}
+    # - {name: obstacle_3d_layer,       type: "spatio_temporal_voxel_layer/SpatioTemporalVoxelLayer"}
+    - {name: obstacle_2d_layer,       type: "costmap_2d::ObstacleLayer"}
     - {name: inflation_layer,         type: "costmap_2d::InflationLayer"}
