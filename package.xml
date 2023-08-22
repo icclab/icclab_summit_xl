@@ -42,8 +42,10 @@
   <!--   <run_depend>message_runtime</run_depend> -->
   <!-- Use test_depend for packages you need only for testing: -->
   <!--   <test_depend>gtest</test_depend> -->
-  <buildtool_depend>catkin</buildtool_depend>
-  <build_depend>roscpp</build_depend>
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <build_depend>ur</build_depend>
+  <build_depend>summit_xl_description</build_depend>
+  <!-- <build_depend>roscpp</build_depend>
   <build_depend>rospy</build_depend>
   <build_depend>std_msgs</build_depend>
   <build_depend>pluginlib</build_depend>
@@ -59,11 +61,11 @@
   <build_depend>rosbag</build_depend>
   <build_depend>tf2_ros</build_depend>
   <build_depend>tf2_eigen</build_depend>
-  <build_depend>tf2_geometry_msgs</build_depend>
+  <build_depend>tf2_geometry_msgs</build_depend> -->
 
   <build_export_depend>std_msgs</build_export_depend>
   
-  <exec_depend>roscpp</exec_depend>
+  <!-- <exec_depend>roscpp</exec_depend>
   <exec_depend>rospy</exec_depend>
   <exec_depend>std_msgs</exec_depend>
   <exec_depend>pluginlib</exec_depend>
@@ -99,15 +101,16 @@
   <exec_depend>xacro</exec_depend>
   <exec_depend>hls_lfcd_lds_driver</exec_depend>
   <exec_depend>depthimage_to_laserscan</exec_depend>
-  <exec_depend>laser_filters</exec_depend>
+  <exec_depend>laser_filters</exec_depend> -->
   <!-- This package is referenced in the warehouse launch files, but does not build out of the box at the moment. Commented the dependency until this works. -->
   <!-- <run_depend>warehouse_ros_mongo</run_depend> -->
-  <build_depend>summit_xl_description</build_depend>
+  
   <exec_depend>summit_xl_description</exec_depend>
+  <exec_depend>ur</exec_depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>
-    <!-- Other tools can request additional information be placed here -->
-
+    <build_type>ament_cmake</build_type>
   </export>
+
 </package>
