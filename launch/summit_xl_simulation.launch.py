@@ -44,7 +44,15 @@ def generate_launch_description():
       'namespace': robot_id,
       'robot_xacro': robot_xacro,
       'world' : world,
+      'controllers_file': [launch_ros.substitutions.FindPackageShare('icclab_summit_xl'), '/config/', 'ur_controllers.yaml']
       }.items(),
   ))
+
+  arm_controller = launch_ros.actions.Node(
+    package="controller_manager",
+    executable="spawner",
+    arguments=["joint_trajectory_controller", "--controller-manager", ["/", robot_id, "/controller_manager"]],
+  )
+  ld.add_action(arm_controller)
 
   return ld

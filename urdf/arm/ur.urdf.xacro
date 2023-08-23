@@ -40,11 +40,11 @@
    <xacro:arg name="tool_tcp_port" default="54321" />
 
      <!-- Simulation parameters -->
-   <xacro:arg name="use_fake_hardware" default="true" />
+   <xacro:arg name="use_fake_hardware" default="false" />
    <xacro:arg name="fake_sensor_commands" default="false" />
-   <xacro:arg name="sim_gazebo" default="true" />
+   <xacro:arg name="sim_gazebo" default="true" /> 
    <xacro:arg name="sim_ignition" default="false" />
-   <xacro:arg name="simulation_controllers" default="" />
+   <xacro:arg name="simulation_controllers" default="$(find icclab_summit_xl)/config/ur_controllers.yaml" />
 
    <!-- initial position for simulations (Fake Hardware, Gazebo, Ignition) -->
    <xacro:arg name="initial_positions_file" default="$(find ur_description)/config/initial_positions.yaml"/>
@@ -92,20 +92,21 @@
      <origin xyz="0.255 0 0.275" rpy="0 0 ${PI}" />  <!-- position robot in the world -->
    </xacro:ur_robot>
 
-   <xacro:if value="$(arg sim_gazebo)">
-    <!-- Gazebo plugins -->
-    <gazebo reference="world">
+   <!-- Commented: we use a single controller manager and it's included by the robot base-->
+   <!-- <xacro:if value="$(arg sim_gazebo)">
+    <gazebo reference="$(arg tf_prefix)base_link">
     </gazebo>
     <gazebo>
-      <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
+      <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control_arm">
+        <namespace>$(arg robot_id)</namespace>
         <parameters>$(arg simulation_controllers)</parameters>
       </plugin>
     </gazebo>
-  </xacro:if>
+  </xacro:if> -->
 
   <xacro:if value="$(arg sim_ignition)">
     <!-- Gazebo plugins -->
-    <gazebo reference="world">
+    <gazebo reference="$(arg tf_prefix)base_link">
     </gazebo>
     <gazebo>
       <plugin filename="libign_ros2_control-system.so" name="ign_ros2_control::IgnitionROS2ControlPlugin">
