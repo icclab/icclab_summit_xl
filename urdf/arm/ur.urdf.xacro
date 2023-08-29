@@ -52,8 +52,6 @@
    <!-- convert to property to use substitution in function -->
    <xacro:property name="initial_positions_file" default="$(arg initial_positions_file)"/>
 
-   
-
    <!-- arm -->
    <xacro:ur_robot
      name="$(arg name)"

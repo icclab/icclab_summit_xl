@@ -65,7 +65,8 @@
 	<xacro:arg name="prefix" default=""/> <!-- was: summit_xl_-->
 	<xacro:arg name="ros_planar_move_plugin" default="true"/>
 	<xacro:arg name="gpu" default="false"/>
-	<xacro:arg name="robot_ns" default=""/>
+	<xacro:arg name="robot_id" default="summit"/>
+	<xacro:arg name="robot_ns" default="$(arg robot_id)"/>
 
 
     <xacro:macro name="summit_xl" params="prefix publish_bf hq">

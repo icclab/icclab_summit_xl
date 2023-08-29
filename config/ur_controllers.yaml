@@ -18,7 +18,7 @@ controller_manager: # merged from: https://github.com/UniversalRobots/Universal_
     # force_torque_sensor_broadcaster:
     #   type: ur_controllers/ForceTorqueStateBroadcaster
 
-    joint_trajectory_controller:
+    arm_controller:
       type: joint_trajectory_controller/JointTrajectoryController
 
     # scaled_joint_trajectory_controller:
@@ -89,7 +89,7 @@ robotnik_base_control:
 #     frame_id: tool0
 #     topic_name: ft_data
 
-joint_trajectory_controller:
+arm_controller:
   ros__parameters:
     joints:
       - arm_shoulder_pan_joint
