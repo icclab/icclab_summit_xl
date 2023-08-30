@@ -55,5 +55,12 @@ def generate_launch_description():
   )
   ld.add_action(arm_controller)
 
+  gripper_controller = launch_ros.actions.Node(
+    package="controller_manager",
+    executable="spawner",
+    arguments=["robotiq_gripper_controller", "--controller-manager", ["/", robot_id, "/controller_manager"]],
+  )
+  ld.add_action(gripper_controller)
+
   
   return ld

@@ -107,6 +107,7 @@
   
   <exec_depend>summit_xl_description</exec_depend>
   <exec_depend>ur</exec_depend>
+  <exec_depend>robotiq_description</exec_depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>

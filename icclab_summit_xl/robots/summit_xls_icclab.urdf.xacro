@@ -20,8 +20,10 @@
 	<xacro:include filename="$(find robotnik_sensors)/urdf/all_sensors.urdf.xacro" />
 	<!-- Import our modified sensor -->
 	<xacro:include filename="$(find summit_xl_description)/urdf/sensors/hokuyo_ust20lx_no_frame_prefix.urdf.xacro" />
-	<!-- import arm -->
+	<!-- Import arm -->
 	<xacro:include filename="$(find icclab_summit_xl)/urdf/arm/ur.urdf.xacro" />
+	<!-- Import gripper -->
+    <xacro:include filename="$(find icclab_summit_xl)/urdf/robotiq_gripper/robotiq_2f_85_macro.urdf.xacro" />
 
 	<xacro:property name="PI" value="3.1415926535897931"/>
 
@@ -127,6 +129,10 @@
 		<!--xacro:sensor_gps prefix="$(arg prefix)gps" parent="$(arg prefix)base_link">
 			<origin xyz="${gps_offset_x} ${gps_offset_y} ${gps_offset_z}" rpy="0 0 0"/>
 		</xacro:sensor_gps-->
+
+		<xacro:robotiq_gripper name="RobotiqGripperHardwareInterface" prefix="" parent="arm_flange" use_fake_hardware="true">
+        	<origin xyz="0 0 0" rpy="${-1/2*PI} 0 ${-1/2*PI}" />
+    	</xacro:robotiq_gripper>
 
    </xacro:macro>
 

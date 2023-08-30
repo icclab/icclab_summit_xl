@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<launch>
-<!-- Load the URDF into the ROS Parameter Server -->
-<param name="robot_description" command="xacro '$(find icclab_summit_xl)/robots/irlab_summit_xls_std.urdf.xacro' robotiq_gripper:=true" />
-<node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" />
-<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
-<node name="rviz" pkg="rviz" type="rviz" args="-d $( find icclab_summit_xl)/rviz/model.rviz" />
-</launch>

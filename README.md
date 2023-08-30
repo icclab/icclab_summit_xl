@@ -18,3 +18,4 @@ Quick Start:
 3. Launch arm control:
 
     ros2 launch icclab_summit_xl summit_xl_move_it.launch.py
+
