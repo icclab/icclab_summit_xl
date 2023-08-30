@@ -1,0 +1,25 @@
+moveit_setup_assistant_config:
+  urdf:
+    package: icclab_summit_xl
+    relative_path: robots/summit_xls_icclab.urdf.xacro
+  srdf:
+    relative_path: config/summit_xl.srdf
+  package_settings:
+    author_name: Giovanni Toffetti
+    author_email: toff@zhaw.ch
+    generated_timestamp: 1692788891
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity
+  modified_urdf:
+    xacros:
+      - control_xacro
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity

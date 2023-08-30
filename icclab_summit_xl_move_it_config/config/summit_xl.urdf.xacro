@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="summit_xl">
+    <xacro:arg name="initial_positions_file_move_it" default="$(find icclab_summit_xl_move_it_config)/config/initial_positions.yaml" />
+
+    <!-- Import summit_xl urdf file -->
+    <xacro:include filename="$(find icclab_summit_xl)/robots/summit_xls_icclab.urdf.xacro" />
+
+    <!-- Import control_xacro - Commented: ros_gazebo HW definitions already provided -->
+    <!-- <xacro:include filename="summit_xl.ros2_control.xacro" /> 
+    <xacro:summit_xl_ros2_control name="FakeSystem" initial_positions_file="$(arg initial_positions_file_move_it)"/> -->
+
+</robot>
