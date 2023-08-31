@@ -7,7 +7,7 @@ moveit_setup_assistant_config:
   package_settings:
     author_name: Giovanni Toffetti
     author_email: toff@zhaw.ch
-    generated_timestamp: 1692788891
+    generated_timestamp: 1693411183
   control_xacro:
     command:
       - position
