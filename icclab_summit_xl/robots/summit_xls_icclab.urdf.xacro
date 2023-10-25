@@ -20,6 +20,7 @@
 	<xacro:include filename="$(find robotnik_sensors)/urdf/all_sensors.urdf.xacro" />
 	<!-- Import our modified sensor -->
 	<xacro:include filename="$(find summit_xl_description)/urdf/sensors/hokuyo_ust20lx_no_frame_prefix.urdf.xacro" />
+	<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/orbbec_astra.urdf.xacro" />
 	<!-- Import arm -->
 	<xacro:include filename="$(find icclab_summit_xl)/urdf/arm/ur.urdf.xacro" />
 	<!-- Import gripper -->
@@ -122,9 +123,9 @@
 		</xacro:sensor_axis_m5013-->
 
 
-		<xacro:sensor_orbbec_astra prefix="$(arg prefix)front_rgbd_camera" parent="$(arg prefix)base_link" ns="$(arg robot_ns)">
+		<xacro:sensor_orbbec_astra_icclab prefix="$(arg prefix)front_rgbd_camera" parent="$(arg prefix)base_link" ns="$(arg robot_ns)">
 			<origin xyz="${front_rgbd_camera_offset_x} ${front_rgbd_camera_offset_y} ${front_rgbd_camera_offset_z}" rpy="0 0 0"/>
-		</xacro:sensor_orbbec_astra>
+		</xacro:sensor_orbbec_astra_icclab>
 
 		<!--xacro:sensor_gps prefix="$(arg prefix)gps" parent="$(arg prefix)base_link">
 			<origin xyz="${gps_offset_x} ${gps_offset_y} ${gps_offset_z}" rpy="0 0 0"/>
