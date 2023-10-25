@@ -9,13 +9,17 @@ Quick Start:
 
 1. Launch the simulation:
 
-    ros2 launch icclab_summit_xl summit_xl_simulation.launch.py
+        ros2 launch icclab_summit_xl summit_xl_simulation.launch.py
 
 2. Launch Nav2:
 
-    ros2 launch summit_xl_navigation nav2_bringup_launch.py
+        ros2 launch summit_xl_navigation nav2_bringup_launch.py
 
 3. Launch arm control:
 
-    ros2 launch icclab_summit_xl summit_xl_move_it.launch.py
+        ros2 launch icclab_summit_xl summit_xl_move_it.launch.py
+
+For Mapping + Nav2:
+
+        ros2 launch summit_xl_navigation nav2_bringup_launch.py slam:=True
 
