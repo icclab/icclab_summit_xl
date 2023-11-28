@@ -115,10 +115,10 @@
                 </include>
 
 		<node name="foo_throttler_front" type="throttle" pkg="topic_tools"
-                        args="messages /summit_xl/front_rgbd_camera/depth/points 1 /summit_xl/front_rgbd_camera/depth/points_throttled" />
+                        args="messages /summit_xl/front_rgbd_camera/depth/points 0.1 /summit_xl/front_rgbd_camera/depth/points_throttled lazy:=true" />
 
 		<node name="foo_throttler_arm" type="throttle" pkg="topic_tools"
-                        args="messages /summit_xl/arm_camera/depth_registered/points 1 /summit_xl/arm_camera/depth_registered/points_throttled" />
+                        args="messages /summit_xl/arm_camera/depth_registered/points 0.1 /summit_xl/arm_camera/depth_registered/points_throttled lazy:=true" />
 
 		<!--================================== NAV STACK ==================================-->
 		<!-- teleop - manually control robot with keyboard -->

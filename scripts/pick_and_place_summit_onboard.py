@@ -27,7 +27,8 @@ from std_msgs.msg import String
 from moveit_commander.conversions import pose_to_list
 from tf.msg import tfMessage
 import time
-from send_gripper import open_gripper_summit, close_gripper_summit
+#from send_gripper import open_gripper_summit, close_gripper_summit
+from send_gripper_robotiq_140 import gripper_client
 
 from tf import TransformListener
 import copy
@@ -594,7 +595,8 @@ class GpdPickPlace(object):
                     group.detach_object("obj")
                     group.stop()
                     group.clear_pose_targets()
-                    open_gripper_summit()
+                    #open_gripper_summit()
+		    gripper_client(0.14) # open gripper
                     print("Gripper opened")
                     return True
                 else:
@@ -704,7 +706,8 @@ class GpdPickPlace(object):
 if __name__ == "__main__":
     start_time = datetime.datetime.now()
     rospy.init_node("gpd_pick_and_place",anonymous=True)
-    close_gripper_summit()
+    #close_gripper_summit()
+    gripper_client(0.01) # close gripper
     tf_listener_ = TransformListener()
     pnp = GpdPickPlace(mark_pose=True)
     group_name = "manipulator"
@@ -748,7 +751,8 @@ if __name__ == "__main__":
         pnp.grasps_received = False
         selected_grasps = pnp.get_gpd_grasps()
         [formatted_grasps, formatted_grasps_cartesian] = pnp.generate_grasp_msgs(selected_grasps)
-        open_gripper_summit()
+        #open_gripper_summit()
+	gripper_client(0.14) # open gripper
         print("Gripper opened")
         pnp.remove_pose_constraints()
        # pnp.start_con_setup()
@@ -758,7 +762,8 @@ if __name__ == "__main__":
       #  successful_grasp = pnp.pick_cartesian(formatted_grasps, formatted_grasps_cartesian, verbose=True)
       #  successful_grasp = pnp.pick_two_steps(formatted_grasps, formatted_grasps_cartesian, verbose=True)
         if successful_grasp is not None:
-            close_gripper_summit()
+            #close_gripper_summit()
+	    gripper_client(0.01) # close gripper
             print("Gripper closed")
             pnp.remove_pose_constraints()
          #   pnp.start_con_setup()

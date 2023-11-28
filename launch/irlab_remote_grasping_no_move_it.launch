@@ -32,7 +32,7 @@
 <!--    <param name="$(arg robot_description)_semantic" textfile="$(find icclab_summit_xl)/config/summit_xl.srdf" />-->
     
     <!-- run point cloud filtering--> 
-    <node name="pointcloud_filtering" pkg="irlab_point_cloud_filtering" type="point_cloud_filtering_server" respawn="false" output="screen"/>
+    <!--<node name="pointcloud_filtering" pkg="irlab_point_cloud_filtering" type="point_cloud_filtering_server" respawn="false" output="screen"/>-->
     
 <!--    <rosparam command="delete" param="move_group/sensors" />-->
 <!--    <include ns="move_group"  file="$(find gpd)/launch/include/sensor_manager.launch.xml"/>-->
@@ -45,6 +45,6 @@
   </group>
   
   <!-- run grasp detection -->
-  <include file="$(find icclab_summit_xl)/launch/include/grasp_generation.launch.xml"/>
+  <!--  <include file="$(find icclab_summit_xl)/launch/include/grasp_generation.launch.xml"/>-->
 
 </launch>
