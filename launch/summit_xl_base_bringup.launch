@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<launch>
+	<!-- valid for summitxl - summitxl hl - summitxl hls -->
+	<!-- The environment variables should be set in a file or .bashrc -->
+
+	<arg name="id_robot" default="summit_xl"/>
+	<arg name="xacro_robot_a" default="irlab_summit_xls_std.urdf.xacro"/>
+
+	<!-- RGBD CAMERAS -->
+	<arg name="has_front_rgbd_camera" default="$(optenv ROBOT_HAS_FRONT_RGBD_CAMERA false)"/>
+	<arg name="front_rgbd_camera_node" default="front_rgbd_camera"/>
+	<arg name="front_rgbd_camera_id" default="$(optenv ROBOT_FRONT_RGBD_CAMERA_ID #1)"/>
+
+	<!-- Other devices -->
+	<arg name="pad_model" default="$(optenv ROBOT_PAD_MODEL ps4)"/>
+
+	<!-- Nav/Map Stack -->
+	<arg name="teleop" default="false"/>
+	<arg name="launch_robot_localization" default="false"/> <!-- TODO: to fix, currently not working due to bad imu data -->
+	<arg name="omni" default="true"/>
+	<arg name="launch_move_base" default="true"/>
+	<arg name="launch_gmapping" default="false"/>
+	<arg name="launch_amcl" default="true"/>
+	<arg name="launch_map_server" default="true"/>
+	<arg name="map_file" default="icclab/icclab_latest_map.yaml"/>
+	<arg name="x_init_pose" default="-16.910"/>
+	<arg name="y_init_pose" default="-0.777"/>
+	<arg name="z_init_pose" default="0.0"/>
+	<arg name="a_init_pose" default="-1.597"/>
+	<arg name="publish_voxel_map" default="false"/>
+	<arg name="slam" default="false"/>
+
+	<!-- Optional -->
+	<arg name="launch_web_server" default="false"/>
+
+	<group ns="$(arg id_robot)">
+
+		<arg name="prefix" value="$(arg id_robot)_"/>		
+
+		<!-- start robot_state_publisher - publish fixed transforms, load robot model to param server. Robotnik base HW needs it  -->
+		<include file="$(find icclab_summit_xl)/launch/real/irlab_summit_xl_state_robot.launch">
+			<arg name="prefix" value="$(arg prefix)"/>
+			<arg name ="robot_model" value ="$(arg xacro_robot_a)"/>
+		</include>
+
+		<!-- start summit_xl_pad nodes -->
+		<include file="$(find summit_xl_bringup)/launch/summit_xl_pad.launch">
+			<arg name="pad_model" value="$(arg pad_model)"/>
+		</include>
+
+		<!-- start robotnik_base_hw nodes -->
+		<include file="$(find summit_xl_bringup)/launch/robotnik_base_hw.launch">
+			<arg name="prefix" value="$(arg prefix)"/>
+		</include>
+
+		<!-- start summit_xl_control nodes -->
+		<include file="$(find summit_xl_control)/launch/summit_xl_control.launch">
+			<arg name="prefix" value="$(arg prefix)"/>
+		</include>
+
+		<!-- if ekf_loc_odom node is launched base controller must not publish the odom -> base_footprint transform-->
+		<param if="$(arg launch_robot_localization)" name="robotnik_base_control/odom_broadcast_tf" value="false"/>
+		<param unless="$(arg omni)" name="robotnik_base_control/kinematic_mode" value="diff"/>
+
+		<!-- start complementary_filter (imu filter) -->
+		<!-- start px4 an open source flight control software -->
+		<!-- start mavros node -->
+		<include file="$(find summit_xl_bringup)/launch/pixhawk.launch"/>
+
+		<!-- the  mavros node generates unconnected frames in tf -->
+		<!-- with a crappy workaround we publish some dummy transforms -->
+		<!-- <node pkg="tf" type="static_transform_publisher" name="fcu_static_trafo_pub" args="0 0 0 0 0 0 $(arg id_robot)_odom fcu 1000" />
+		<node pkg="tf" type="static_transform_publisher" name="local_origin_static_trafo_pub" args="0 0 0 0 0 0 $(arg id_robot)_odom local_origin 1000" /> -->
+
+		<include file="$(find summit_xl_localization)/launch/rl_utils.launch"/>
+
+		<!-- start summit_xl_web server -->
+		<include if="$(arg launch_web_server)" file="$(find summit_xl_web)/launch/summit_xl_web.launch"/>
+
+                <!-- start system monitor node-->
+                <include file="$(find system_monitor)/launch/system_monitor.launch">
+                </include>
+	
+
+	</group>
+
+</launch>
+
