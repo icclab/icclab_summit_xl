@@ -1,0 +1,18 @@
+/summit/lidar_front:
+  ros__parameters:
+    angle_max: 2.2689
+    angle_min: -2.2689
+    ip_port: 10940
+    serial_port: "/dev/lidar_front"
+    serial_baud: 115200
+    laser_frame_id: "front_laser_base_link"
+    calibrate_time: false
+    default_user_latency: 0.0
+    diagnostics_tolerance: 0.05
+    diagnostics_window_time: 5.0
+    error_limit: 4
+    get_detailed_status: false
+    publish_intensity: false
+    publish_multiecho: false
+    cluster: 1
+    skip: 0

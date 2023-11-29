@@ -23,3 +23,7 @@ For Mapping + Nav2:
 
         ros2 launch summit_xl_navigation nav2_bringup_launch.py slam:=True
 
+
+Visualizing Nav2 Rviz config launched manually (notice the namespacing):
+
+	rviz2 -d colcon_ws/src/summit_xl_common/summit_xl_navigation/config_rviz/nav2.rviz __ns:=/summit --ros-args --remap /tf:=tf --remap /tf_static:=tf_static
