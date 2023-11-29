@@ -1,7 +1,6 @@
 
-To use the aruco tag models in gazebo you need to set the right path:
-
-export GAZEBO_MODEL_PATH=$HOME/catkin_ws/src/icclab_summit_xl/worlds/models:$GAZEBO_MODEL_PATH
+The master branch is the one we use on the physical robot.
+For simulation and remote control see humble / noetic branches
 
 
 # icclab_summit_xl
