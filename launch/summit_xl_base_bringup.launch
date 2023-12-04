@@ -3,8 +3,8 @@
 	<!-- valid for summitxl - summitxl hl - summitxl hls -->
 	<!-- The environment variables should be set in a file or .bashrc -->
 
-	<arg name="id_robot" default="summit_xl"/>
-	<arg name="xacro_robot_a" default="irlab_summit_xls_std.urdf.xacro"/>
+	<arg name="id_robot" default="summit"/>
+	<arg name="xacro_robot_a" default="irlab_summit_base.urdf.xacro"/>
 
 	<!-- RGBD CAMERAS -->
 	<arg name="has_front_rgbd_camera" default="$(optenv ROBOT_HAS_FRONT_RGBD_CAMERA false)"/>
@@ -49,13 +49,13 @@
 		</include>
 
 		<!-- start robotnik_base_hw nodes -->
-		<include file="$(find summit_xl_bringup)/launch/robotnik_base_hw.launch">
+		<include file="$(find icclab_summit_xl)/launch/real/robotnik_base_hw.launch">
 			<arg name="prefix" value="$(arg prefix)"/>
 		</include>
 
 		<!-- start summit_xl_control nodes -->
-		<include file="$(find summit_xl_control)/launch/summit_xl_control.launch">
-			<arg name="prefix" value="$(arg prefix)"/>
+		<include file="$(find icclab_summit_xl)/launch/real/summit_xl_control.launch">
+			<arg name="prefix" value=""/>
 		</include>
 
 		<!-- if ekf_loc_odom node is launched base controller must not publish the odom -> base_footprint transform-->
