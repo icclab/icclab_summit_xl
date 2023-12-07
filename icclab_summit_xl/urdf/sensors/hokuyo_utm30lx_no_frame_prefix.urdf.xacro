@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<robot name="sensor_hokuyo_utm30lx" xmlns:xacro="http://wiki.ros.org/xacro">
+  <xacro:property name="PI" value="3.1415926535897931"/>
+
+  <xacro:macro name="sensor_hokuyo_utm30lx_no_frame_prefix" params="ns prefix parent *origin min_angle:=-2.35 max_angle:=2.35 gpu:=^|true">
+
+    <joint name="${prefix}_base_joint" type="fixed">
+      <!-- FRONT MOUNT  -->
+      <!-- origin xyz="0.29 0 0.1" -->
+      <!-- TOP MOUNT -->
+      <!-- origin xyz="0.0 0.0 0.325"-->
+      <xacro:insert_block name="origin" />
+      <parent link="${parent}"/>
+      <child link="${prefix}_base_link"/>
+    </joint>
+
+
+    <link name="${prefix}_base_link">
+      <visual>
+        <origin xyz="0 0 0.055" rpy="0 0 0"/>
+        <geometry>
+            <mesh filename="package://robotnik_sensors/meshes/hokuyo_utm_30lx.dae"/>
+        </geometry>
+      </visual>
+
+      <inertial>
+        <origin xyz="0.0 0 0.0435" rpy="0 0 0" />
+        <mass value="0.370" />
+        <xacro:solid_cuboid_inertia m="0.370" w="0.06" h="0.06" d="0.087" />
+      </inertial>
+    </link>
+
+	<link name="${prefix}_link">
+	</link>
+    <joint name="${prefix}_joint" type="fixed">
+      <parent link="${prefix}_base_link"/>
+      <child link="${prefix}_link"/>
+      <origin xyz="0.00 0 0.055" rpy="0 0 0"/>
+	</joint>
+
+    <!-- Hokuyo sensor for simulation -->
+    <xacro:sensor_hokuyo_utm_gazebo_no_frame_prefix/>
+
+  </xacro:macro>
+
+
+  <xacro:macro name="sensor_hokuyo_utm_gazebo_no_frame_prefix">
+    <gazebo reference="${prefix}_link">
+			<xacro:if value="${gpu}">
+        <xacro:property name="ray_type" value="gpu_ray" />
+        <xacro:property name="plugin_lib" value="libgazebo_ros_gpu_laser.so" />
+      </xacro:if>
+      <xacro:unless value="${gpu}">
+        <xacro:property name="ray_type" value="ray" />
+        <xacro:property name="plugin_lib" value="libgazebo_ros_ray_sensor.so" />
+      </xacro:unless>
+			<sensor type="${ray_type}" name="${prefix}_sensor">
+				<pose>0 0 0 0 0 0</pose>
+				<visualize>false</visualize>
+				<update_rate>30</update_rate>
+				<ray>
+					<scan>
+						<horizontal>
+							<samples>1081</samples>
+							<resolution>1</resolution>
+							<min_angle>${min_angle}</min_angle>
+							<max_angle>${max_angle}</max_angle>
+						</horizontal>
+					</scan>
+					<range>
+						<min>0.10</min>
+						<max>30.0</max>
+						<resolution>0.01</resolution>
+					</range>
+					<noise>
+						<type>gaussian</type>
+						<mean>0.0</mean>
+						<stddev>0.01</stddev>
+					</noise>
+				</ray>
+				<plugin name="${prefix}" filename="${plugin_lib}">
+          <ros>
+            <namespace>${ns}</namespace>
+            <remapping>~/out:=~/scan</remapping>
+          </ros>
+          <output_type>sensor_msgs/LaserScan</output_type>
+					<frame_name>${prefix}_link</frame_name>
+				</plugin>
+			</sensor>
+		</gazebo>
+  </xacro:macro>
+
+</robot>

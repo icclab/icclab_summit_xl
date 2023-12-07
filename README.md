@@ -26,4 +26,4 @@ For Mapping + Nav2:
 
 Visualizing Nav2 Rviz config launched manually (notice the namespacing):
 
-	rviz2 -d colcon_ws/src/summit_xl_common/summit_xl_navigation/config_rviz/nav2.rviz __ns:=/summit --ros-args --remap /tf:=tf --remap /tf_static:=tf_static
+	rviz2 -d colcon_ws/src/icclab_summit_xl/icclab_summit_xl/rviz/robot.rviz __ns:=/summit --ros-args --remap /tf:=tf --remap /tf_static:=tf_static

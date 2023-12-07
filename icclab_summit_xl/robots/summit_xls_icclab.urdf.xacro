@@ -19,9 +19,9 @@
 	<!-- Import all available sensors -->
 	<xacro:include filename="$(find robotnik_sensors)/urdf/all_sensors.urdf.xacro" />
 	<!-- Import our modified sensor -->
-	<xacro:include filename="$(find summit_xl_description)/urdf/sensors/hokuyo_ust20lx_no_frame_prefix.urdf.xacro" />
+	<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/hokuyo_utm30lx_no_frame_prefix.urdf.xacro" />
 	<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/orbbec_astra.urdf.xacro" />
-	<!-- Import arm -->
+	<!-- Import and create arm -->
 	<xacro:include filename="$(find icclab_summit_xl)/urdf/arm/ur.urdf.xacro" />
 	<!-- Import gripper -->
     <xacro:include filename="$(find icclab_summit_xl)/urdf/robotiq_gripper/robotiq_2f_85_macro.urdf.xacro" />
@@ -105,14 +105,13 @@
 
 
 		<!-- SENSORS -->
-		<xacro:sensor_hokuyo_ust20lx_no_frame_prefix ns="$(arg robot_ns)" prefix="front_laser" parent="base_link">
-			<origin xyz="${front_laser_offset_x} ${front_laser_offset_y} ${front_laser_offset_z}" rpy="0 ${-PI} ${3/4*PI}" />
-  		</xacro:sensor_hokuyo_ust20lx_no_frame_prefix>
+		<xacro:sensor_hokuyo_utm30lx_no_frame_prefix ns="$(arg robot_ns)" prefix="front_laser" parent="base_link" min_angle="${-3/4*PI}" max_angle="${3/4*PI}" gpu="false">
+			<origin xyz="${front_laser_offset_x} ${front_laser_offset_y} ${front_laser_offset_z}" rpy="0 0 ${-1/4*PI}" />
+  		</xacro:sensor_hokuyo_utm30lx_no_frame_prefix>
 
-        <xacro:sensor_hokuyo_ust20lx_no_frame_prefix ns="$(arg robot_ns)" prefix="rear_laser" parent="base_link">
-			<origin xyz="${rear_laser_offset_x} ${rear_laser_offset_y} ${rear_laser_offset_z}" rpy="0 ${-PI} ${-1/4*PI}" />
-  		</xacro:sensor_hokuyo_ust20lx_no_frame_prefix>
-
+        <xacro:sensor_hokuyo_utm30lx_no_frame_prefix ns="$(arg robot_ns)" prefix="rear_laser" parent="base_link" min_angle="${-3/4*PI}" max_angle="${3/4*PI}" gpu="false">
+			<origin xyz="${rear_laser_offset_x} ${rear_laser_offset_y} ${rear_laser_offset_z}" rpy="0 0 ${3/4*PI}" />
+  		</xacro:sensor_hokuyo_utm30lx_no_frame_prefix>
 
 		<!--xacro:sensor_axis_m5013 prefix="$(arg prefix)front_ptz_camera" parent="$(arg prefix)base_link">
 			<origin xyz="${front_ptz_camera_offset_x} ${front_ptz_camera_offset_y} ${front_ptz_camera_offset_z}" rpy="${-PI/2} 0 0"/>
