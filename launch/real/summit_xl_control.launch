@@ -13,8 +13,8 @@
   <!-- Robot - Load joint controller configurations from YAML file to parameter server -->
   <group unless="$(arg sim)">	  
 	  <rosparam file="$(find icclab_summit_xl)/config/summit_xl_$(arg kinematics)_control.yaml" command="load"/>
-	  <param name="robotnik_base_control/joint/back_left_wheel_joint/name" value="$(arg prefix)back_left_wheel_joint"/>
-	  <param name="robotnik_base_control/joint/back_right_wheel_joint/name" value="$(arg prefix)back_right_wheel_joint"/>
+	  <param name="robotnik_base_control/joint/back_left_wheel_joint/name" value="$(arg prefix)rear_left_wheel_joint"/>
+	  <param name="robotnik_base_control/joint/back_right_wheel_joint/name" value="$(arg prefix)rear_right_wheel_joint"/>
 	  <param name="robotnik_base_control/joint/front_right_wheel_joint/name" value="$(arg prefix)front_right_wheel_joint"/>
 	  <param name="robotnik_base_control/joint/front_left_wheel_joint/name" value="$(arg prefix)front_left_wheel_joint"/>
 	  <param name="robotnik_base_control/odom_frame" value="$(arg prefix)odom"/>

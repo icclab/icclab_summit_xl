@@ -20,10 +20,10 @@ robotnik_base_control:
     front_left_wheel_joint:
       name: front_left_wheel_joint
       max_speed: 27.27 # rad/s
-    back_right_wheel_joint:
+    rear_right_wheel_joint:
       name: rear_right_wheel_joint
       max_speed: 27.27 # rad/s
-    back_left_wheel_joint:
+    rear_left_wheel_joint:
       name: rear_left_wheel_joint
       max_speed: 27.27 # rad/s
   linear_speed_limit: 1.5 # m/s

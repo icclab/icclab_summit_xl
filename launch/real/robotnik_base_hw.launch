@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 <launch>
 
-    <arg name="prefix" default="summit_xl_"/>
+    <arg name="prefix" default="summit"/>
     <!-- GDB functionality -->
     <arg name="debug" default="false" />
     <arg unless="$(arg debug)" name="launch_prefix" value="" />
     <arg     if="$(arg debug)" name="launch_prefix" value="terminator -m -x gdb --args" /> <!-- local debug -->
     <!--arg     if="$(arg debug)" name="launch_prefix" value="screen -d -m gdb - -args" / --> <!-- ssh/screen debug -->
 
-    <rosparam file="$(find icclab_summit_xl)/config/robotnik_base_hw/$(arg prefix)robotnik_base_hw_limits.yaml" command="load" />    
-    <rosparam file="$(find icclab_summit_xl)/config/robotnik_base_hw/$(arg prefix)robotnik_base_hw.yaml" command="load" />   
+    <rosparam file="$(find icclab_summit_xl)/config/robotnik_base_hw/$(arg prefix)_robotnik_base_hw_limits.yaml" command="load" />    
+    <rosparam file="$(find icclab_summit_xl)/config/robotnik_base_hw/$(arg prefix)_robotnik_base_hw.yaml" command="load" />   
 
     <arg name="robot_gearbox" default="$(optenv ROBOT_GEARBOX 12.52)"/>
     <arg name="has_encoder" default="$(optenv ROBOT_HAS_ENCODER false)"/> 
@@ -17,6 +17,8 @@
     <node name="robotnik_base_hw" pkg="robotnik_base_hw" type="robotnik_base_hw_node" output="screen" launch-prefix="$(arg launch_prefix)">
     	<param name="gearbox_ratio" value="$(arg robot_gearbox)"/>
 	<param name="motors_encoder" value="$(arg has_encoder)"/>
+	<remap from="/tf" to="/$(arg prefix)/tf"/>
+	<remap from="robotnik_base_control/odom" to="odom" />
     </node>
     
 

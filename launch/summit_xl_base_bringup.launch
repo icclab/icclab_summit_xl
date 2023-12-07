@@ -35,11 +35,11 @@
 
 	<group ns="$(arg id_robot)">
 
-		<arg name="prefix" value="$(arg id_robot)_"/>		
+		<arg name="prefix" value="$(arg id_robot)"/>		
 
 		<!-- start robot_state_publisher - publish fixed transforms, load robot model to param server. Robotnik base HW needs it  -->
 		<include file="$(find icclab_summit_xl)/launch/real/irlab_summit_xl_state_robot.launch">
-			<arg name="prefix" value="$(arg prefix)"/>
+			<arg name="prefix" value=""/>
 			<arg name ="robot_model" value ="$(arg xacro_robot_a)"/>
 		</include>
 

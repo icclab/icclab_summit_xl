@@ -66,7 +66,7 @@
 	<!-- Flag to select the high or low quality model -->
 	<xacro:property name="hq" value="true" />
 
-	<xacro:arg name="prefix" default="summit_xl_"/>
+	<xacro:arg name="prefix" default=""/>
 	<xacro:arg name="ros_planar_move_plugin" default="false"/>
 
 

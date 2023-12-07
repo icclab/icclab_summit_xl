@@ -23,8 +23,9 @@ screen -S summit -p ros2 -X exec docker run --rm -it --privileged --network=host
 #screen -r summit
 
 #Echo help
-echo "Attach to screen with: screen -r summit / Detach with ctrl-a ctrl-d"
-echo "Kill screen with : screen -S summit -X quit"
+echo "1) Stop this script (ctrl-z) and put it in background (bg)"
+echo "2) Attach to screen with: screen -r summit / Detach with ctrl-a ctrl-d"
+echo "3) Kill screen with : screen -S summit -X quit"
 
 #Wait fo screen to end
 wait $PID
