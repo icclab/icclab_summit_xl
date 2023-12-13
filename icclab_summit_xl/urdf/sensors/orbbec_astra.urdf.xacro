@@ -68,7 +68,7 @@
           </image>
           <clip>
             <near>0.05</near>
-            <far>100.0</far>
+            <far>20.0</far>
           </clip>
         </camera>
         <plugin name="${prefix}" filename="libgazebo_ros_camera.so">
@@ -76,7 +76,7 @@
             <namespace>${ns}</namespace>
           </ros>
           <frame_name>${prefix}_rgb_optical_frame</frame_name>
-          <min_depth>0.4</min_depth>
+          <min_depth>0.2</min_depth>
           <max_depth>6.5</max_depth>
         </plugin>
       </sensor>
