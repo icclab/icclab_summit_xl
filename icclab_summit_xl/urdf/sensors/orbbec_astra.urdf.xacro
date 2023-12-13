@@ -74,6 +74,9 @@
         <plugin name="${prefix}" filename="libgazebo_ros_camera.so">
           <ros>
             <namespace>${ns}</namespace>
+            <remapping>~/image_raw:=~/color/image_raw</remapping>
+            <remapping>~/camera_info:=~/color/camera_info</remapping>
+            <remapping>~/image_raw/compressed:=~/color/image_raw/compressed</remapping>
           </ros>
           <frame_name>${prefix}_rgb_optical_frame</frame_name>
           <min_depth>0.2</min_depth>
