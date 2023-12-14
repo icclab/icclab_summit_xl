@@ -13,7 +13,7 @@ Quick Start:
 
 2. Launch Nav2:
 
-        ros2 launch summit_xl_navigation nav2_bringup_launch.py
+        ros2 launch icclab_summit_xl summit_xl_nav2.launch.py
 
 3. Launch arm control:
 
@@ -26,4 +26,4 @@ For Mapping + Nav2:
 
 Visualizing Nav2 Rviz config launched manually (notice the namespacing):
 
-	rviz2 -d colcon_ws/src/icclab_summit_xl/icclab_summit_xl/rviz/robot.rviz __ns:=/summit --ros-args --remap /tf:=tf --remap /tf_static:=tf_static
+	ros2 launch icclab_summit_xl rviz.launch.py rviz_config:=navigation.rviz
