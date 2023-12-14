@@ -109,6 +109,7 @@
   <exec_depend>ur</exec_depend>
   <exec_depend>robotiq_description</exec_depend>
   <exec_depend>navigation2</exec_depend>
+  <exec_depend>nav2_bringup</exec_depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>
