@@ -10,7 +10,7 @@ Panels:
         - /Controller1/Trajectories1/Topic1
         - /Camera1
       Splitter Ratio: 0.4583333432674408
-    Tree Height: 217
+    Tree Height: 215
   - Class: rviz_common/Selection
     Name: Selection
   - Class: rviz_common/Tool Properties
@@ -264,9 +264,19 @@ Visualization Manager:
           Value: true
         arm_flange:
           Value: true
+        arm_forearm_link:
+          Value: true
         arm_ft_frame:
           Value: true
+        arm_shoulder_link:
+          Value: true
         arm_tool0:
+          Value: true
+        arm_upper_arm_link:
+          Value: true
+        arm_wrist_1_link:
+          Value: true
+        arm_wrist_2_link:
           Value: true
         arm_wrist_3_link:
           Value: true
@@ -296,6 +306,8 @@ Visualization Manager:
           Value: true
         imu_link:
           Value: true
+        map:
+          Value: true
         odom:
           Value: true
         rear_laser_base_link:
@@ -310,9 +322,17 @@ Visualization Manager:
           Value: true
         robotiq_85_left_finger_link:
           Value: true
+        robotiq_85_left_finger_tip_link:
+          Value: true
+        robotiq_85_left_inner_knuckle_link:
+          Value: true
         robotiq_85_left_knuckle_link:
           Value: true
         robotiq_85_right_finger_link:
+          Value: true
+        robotiq_85_right_finger_tip_link:
+          Value: true
+        robotiq_85_right_inner_knuckle_link:
           Value: true
         robotiq_85_right_knuckle_link:
           Value: true
@@ -322,7 +342,63 @@ Visualization Manager:
       Show Axes: true
       Show Names: false
       Tree:
-        {}
+        map:
+          odom:
+            base_footprint:
+              base_link:
+                arm_base_link:
+                  arm_base:
+                    {}
+                  arm_base_link_inertia:
+                    arm_shoulder_link:
+                      arm_upper_arm_link:
+                        arm_forearm_link:
+                          arm_wrist_1_link:
+                            arm_wrist_2_link:
+                              arm_wrist_3_link:
+                                arm_flange:
+                                  arm_tool0:
+                                    {}
+                                  robotiq_85_base_link:
+                                    robotiq_85_left_inner_knuckle_link:
+                                      {}
+                                    robotiq_85_left_knuckle_link:
+                                      robotiq_85_left_finger_link:
+                                        robotiq_85_left_finger_tip_link:
+                                          {}
+                                    robotiq_85_right_inner_knuckle_link:
+                                      {}
+                                    robotiq_85_right_knuckle_link:
+                                      robotiq_85_right_finger_link:
+                                        robotiq_85_right_finger_tip_link:
+                                          {}
+                                arm_ft_frame:
+                                  {}
+                base_docking_contact:
+                  {}
+                front_laser_base_link:
+                  front_laser_link:
+                    {}
+                front_left_wheel_link:
+                  {}
+                front_rgbd_camera_link:
+                  front_rgbd_camera_depth_frame:
+                    front_rgbd_camera_depth_optical_frame:
+                      {}
+                  front_rgbd_camera_rgb_frame:
+                    front_rgbd_camera_rgb_optical_frame:
+                      {}
+                front_right_wheel_link:
+                  {}
+                imu_link:
+                  {}
+                rear_laser_base_link:
+                  rear_laser_link:
+                    {}
+                rear_left_wheel_link:
+                  {}
+                rear_right_wheel_link:
+                  {}
       Update Interval: 0
       Value: true
     - Alpha: 1
@@ -784,7 +860,7 @@ Visualization Manager:
   Value: true
   Views:
     Current:
-      Angle: -1.5600001811981201
+      Angle: -1.5950003862380981
       Class: rviz_default_plugins/TopDownOrtho
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
@@ -794,11 +870,11 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Scale: 32.12104797363281
+      Scale: 30.31045913696289
       Target Frame: <Fixed Frame>
       Value: TopDownOrtho (rviz_default_plugins)
-      X: -13.969658851623535
-      Y: -1.724648356437683
+      X: -0.8979001641273499
+      Y: 2.578237771987915
     Saved: ~
 Window Geometry:
   Color:
@@ -807,18 +883,18 @@ Window Geometry:
     collapsed: false
   Displays:
     collapsed: false
-  Height: 762
+  Height: 757
   Hide Left Dock: false
   Hide Right Dock: false
   Navigation 2:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd000000040000000000000156000002a4fc0200000009fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df0000018500000168fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000003b00000114000000c700fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb00000018004e0061007600690067006100740069006f006e0020003201000001550000018a0000012300ffffff000000010000010f000002a4fc0200000005fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a0043006f006c006f0072000000003b000000930000002800fffffffb0000000a00440065007000740068000000003b000000700000002800fffffffb0000000a00560069006500770073010000003b000002a4000000a000fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000004420000003efc0100000002fb0000000800540069006d00650100000000000004420000000000000000fb0000000800540069006d006501000000000000045000000000000000000000013d000002a400000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd0000000400000000000001560000029ffc0200000009fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df0000018500000168fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000003b00000112000000c700fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb00000018004e0061007600690067006100740069006f006e002000320100000153000001870000011200ffffff000000010000010f0000029ffc0200000005fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a0043006f006c006f0072000000003b000000930000002800fffffffb0000000a00440065007000740068000000003b000000700000002800fffffffb0000000a00560069006500770073010000003b0000029f000000a000fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000004420000003efc0100000002fb0000000800540069006d00650100000000000004420000000000000000fb0000000800540069006d00650100000000000004500000000000000000000001be0000029f00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
     collapsed: false
   Tool Properties:
     collapsed: false
   Views:
     collapsed: false
-  Width: 942
+  Width: 1071
   X: 14
   Y: 97
