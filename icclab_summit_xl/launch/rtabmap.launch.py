@@ -35,13 +35,14 @@ def generate_launch_description():
           'use_action_for_goal':True,
           'qos_image':qos,
           'qos_imu':qos,
+          #'queue_size': 20,
           'Reg/Force3DoF':'true',
           'Optimizer/GravitySigma':'0' # Disable imu constraints (we are already in 2D)
     }
 
     remappings=[
-          ('rgb/image', 'front_rgbd_camera/image_raw'),
-          ('rgb/camera_info', 'front_rgbd_camera/camera_info'),
+          ('rgb/image', 'front_rgbd_camera/color/image_raw'),
+          ('rgb/camera_info', 'front_rgbd_camera/color/camera_info'),
           ('depth/image', 'front_rgbd_camera/depth/image_raw'),
           ('/tf','tf'),
           ('/tf_static', 'tf_static')

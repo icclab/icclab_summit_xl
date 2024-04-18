@@ -21,6 +21,8 @@
 	<!-- Import our modified sensor -->
 	<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/hokuyo_utm30lx_no_frame_prefix.urdf.xacro" />
 	<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/orbbec_astra.urdf.xacro" />
+	<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/intel_d435.urdf.xacro" />
+	<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/intel_camera_mount.urdf.xacro" />
 	<!-- Import and create arm -->
 	<xacro:include filename="$(find icclab_summit_xl)/urdf/arm/ur.urdf.xacro" />
 	<!-- Import gripper -->
@@ -56,7 +58,7 @@
 
 	<xacro:property name="front_rgbd_camera_offset_x" value="0.35850"/>
 	<xacro:property name="front_rgbd_camera_offset_y" value="0.0"/>
-	<xacro:property name="front_rgbd_camera_offset_z" value="0.25062"/>
+	<xacro:property name="front_rgbd_camera_offset_z" value="0.22062"/>
 
 	<xacro:property name="gps_offset_x" value="-0.365"/>
 	<xacro:property name="gps_offset_y" value="-0.167"/>
@@ -133,6 +135,17 @@
 		<xacro:robotiq_gripper name="RobotiqGripperHardwareInterface" prefix="" parent="arm_flange" use_fake_hardware="true">
         	<origin xyz="0 0 0" rpy="${-1/2*PI} 0 ${-1/2*PI}" />
     	</xacro:robotiq_gripper>
+
+		<!-- Camera mount -->
+		<xacro:camera_mount prefix="arm" parent="arm_flange">
+			<origin xyz="0 0 0" rpy="${-PI/2} 0 ${-PI/2}" />
+		</xacro:camera_mount>
+
+		<!-- Camera on gripper  --> 
+		<!-- had to copy and modidy camera to avoid name clash with robotnik defined sensors -->
+		<xacro:sensor_d435_icclab prefix="arm" prefix_topic="summit_xl/arm_camera" parent="arm_camera_mount_link">
+     		  <origin xyz="0.0 0.06 0.01" rpy="${PI} ${-PI/2} ${PI/2}"/> <!-- camera on gripper -->
+   		</xacro:sensor_d435_icclab> 
 
    </xacro:macro>
 

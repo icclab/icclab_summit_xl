@@ -98,6 +98,7 @@
   <exec_depend>moveit_ros_visualization</exec_depend>
   <exec_depend>joint_state_publisher</exec_depend>
   <exec_depend>robot_state_publisher</exec_depend>
+  
   <exec_depend>xacro</exec_depend>
   <exec_depend>hls_lfcd_lds_driver</exec_depend>
   <exec_depend>depthimage_to_laserscan</exec_depend>
@@ -110,6 +111,7 @@
   <exec_depend>robotiq_description</exec_depend>
   <exec_depend>navigation2</exec_depend>
   <exec_depend>nav2_bringup</exec_depend>
+  <exec_depend>realsense2_description</exec_depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>

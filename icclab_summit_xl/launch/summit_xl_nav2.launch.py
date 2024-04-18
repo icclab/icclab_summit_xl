@@ -7,6 +7,7 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node
 from launch.actions import DeclareLaunchArgument
 from launch.conditions import IfCondition
+from launch.substitutions import PythonExpression
 
 def generate_launch_description():
   
@@ -25,7 +26,7 @@ def generate_launch_description():
   ld.add_action(launch.actions.DeclareLaunchArgument(
     name='rviz',
     description='Start rviz',
-    default_value='False',
+    default_value='True',
   ))
 
   declare_map_yaml_cmd = DeclareLaunchArgument(
@@ -45,6 +46,7 @@ def generate_launch_description():
     launch_arguments={
       'namespace': namespace,
       'map': map,
+      'start_rviz': PythonExpression(['not ', rviz]),
       }.items(),
   ))
   

@@ -40,33 +40,74 @@
         <joint name="arm_wrist_2_joint" value="0"/>
         <joint name="arm_wrist_3_joint" value="0"/>
     </group_state>
+    <group_state name="look_forward" group="arm">
+        <joint name="arm_elbow_joint" value="-2.8291"/>
+        <joint name="arm_shoulder_lift_joint" value="-0.243"/>
+        <joint name="arm_shoulder_pan_joint" value="0"/>
+        <joint name="arm_wrist_1_joint" value="-0.7984"/>
+        <joint name="arm_wrist_2_joint" value="1.5621"/>
+        <joint name="arm_wrist_3_joint" value="0"/>
+    </group_state>
     <!--END EFFECTOR: Purpose: Represent information about an end effector.-->
     <end_effector name="gripper" parent_link="arm_flange" group="gripper"/>
     <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
     <disable_collisions link1="arm_base_link_inertia" link2="arm_shoulder_link" reason="Adjacent"/>
     <disable_collisions link1="arm_base_link_inertia" link2="base_link" reason="Adjacent"/>
-    <disable_collisions link1="arm_base_link_inertia" link2="front_laser_base_link" reason="Never"/>
     <disable_collisions link1="arm_base_link_inertia" link2="front_left_wheel_link" reason="Never"/>
-    <disable_collisions link1="arm_base_link_inertia" link2="front_rgbd_camera_link" reason="Default"/>
+    <disable_collisions link1="arm_base_link_inertia" link2="front_rgbd_camera_link" reason="Never"/>
     <disable_collisions link1="arm_base_link_inertia" link2="front_right_wheel_link" reason="Never"/>
     <disable_collisions link1="arm_base_link_inertia" link2="imu_link" reason="Never"/>
-    <disable_collisions link1="arm_base_link_inertia" link2="rear_laser_base_link" reason="Never"/>
     <disable_collisions link1="arm_base_link_inertia" link2="rear_left_wheel_link" reason="Never"/>
     <disable_collisions link1="arm_base_link_inertia" link2="rear_right_wheel_link" reason="Never"/>
+    <disable_collisions link1="arm_camera_link" link2="arm_camera_mount_link" reason="Adjacent"/>
+    <disable_collisions link1="arm_camera_link" link2="arm_camera_usb_plug_link" reason="Adjacent"/>
+    <disable_collisions link1="arm_camera_link" link2="arm_wrist_1_link" reason="Never"/>
+    <disable_collisions link1="arm_camera_link" link2="arm_wrist_2_link" reason="Never"/>
+    <disable_collisions link1="arm_camera_link" link2="arm_wrist_3_link" reason="Never"/>
+    <disable_collisions link1="arm_camera_link" link2="robotiq_85_base_link" reason="Never"/>
+    <disable_collisions link1="arm_camera_link" link2="robotiq_85_left_finger_link" reason="Never"/>
+    <disable_collisions link1="arm_camera_link" link2="robotiq_85_left_finger_tip_link" reason="Never"/>
+    <disable_collisions link1="arm_camera_link" link2="robotiq_85_left_inner_knuckle_link" reason="Never"/>
+    <disable_collisions link1="arm_camera_link" link2="robotiq_85_left_knuckle_link" reason="Never"/>
+    <disable_collisions link1="arm_camera_link" link2="robotiq_85_right_finger_link" reason="Never"/>
+    <disable_collisions link1="arm_camera_link" link2="robotiq_85_right_finger_tip_link" reason="Never"/>
+    <disable_collisions link1="arm_camera_link" link2="robotiq_85_right_inner_knuckle_link" reason="Never"/>
+    <disable_collisions link1="arm_camera_link" link2="robotiq_85_right_knuckle_link" reason="Never"/>
+    <disable_collisions link1="arm_camera_mount_link" link2="arm_camera_usb_plug_link" reason="Never"/>
+    <disable_collisions link1="arm_camera_mount_link" link2="arm_wrist_1_link" reason="Never"/>
+    <disable_collisions link1="arm_camera_mount_link" link2="arm_wrist_2_link" reason="Never"/>
+    <disable_collisions link1="arm_camera_mount_link" link2="arm_wrist_3_link" reason="Adjacent"/>
+    <disable_collisions link1="arm_camera_mount_link" link2="robotiq_85_base_link" reason="Adjacent"/>
+    <disable_collisions link1="arm_camera_mount_link" link2="robotiq_85_left_finger_link" reason="Never"/>
+    <disable_collisions link1="arm_camera_mount_link" link2="robotiq_85_left_finger_tip_link" reason="Never"/>
+    <disable_collisions link1="arm_camera_mount_link" link2="robotiq_85_left_inner_knuckle_link" reason="Never"/>
+    <disable_collisions link1="arm_camera_mount_link" link2="robotiq_85_left_knuckle_link" reason="Never"/>
+    <disable_collisions link1="arm_camera_mount_link" link2="robotiq_85_right_finger_link" reason="Never"/>
+    <disable_collisions link1="arm_camera_mount_link" link2="robotiq_85_right_finger_tip_link" reason="Never"/>
+    <disable_collisions link1="arm_camera_mount_link" link2="robotiq_85_right_inner_knuckle_link" reason="Never"/>
+    <disable_collisions link1="arm_camera_mount_link" link2="robotiq_85_right_knuckle_link" reason="Never"/>
+    <disable_collisions link1="arm_camera_usb_plug_link" link2="arm_wrist_1_link" reason="Never"/>
+    <disable_collisions link1="arm_camera_usb_plug_link" link2="arm_wrist_2_link" reason="Never"/>
+    <disable_collisions link1="arm_camera_usb_plug_link" link2="arm_wrist_3_link" reason="Never"/>
+    <disable_collisions link1="arm_camera_usb_plug_link" link2="robotiq_85_base_link" reason="Never"/>
+    <disable_collisions link1="arm_camera_usb_plug_link" link2="robotiq_85_left_finger_link" reason="Never"/>
+    <disable_collisions link1="arm_camera_usb_plug_link" link2="robotiq_85_left_finger_tip_link" reason="Never"/>
+    <disable_collisions link1="arm_camera_usb_plug_link" link2="robotiq_85_left_inner_knuckle_link" reason="Never"/>
+    <disable_collisions link1="arm_camera_usb_plug_link" link2="robotiq_85_left_knuckle_link" reason="Never"/>
+    <disable_collisions link1="arm_camera_usb_plug_link" link2="robotiq_85_right_finger_link" reason="Never"/>
+    <disable_collisions link1="arm_camera_usb_plug_link" link2="robotiq_85_right_finger_tip_link" reason="Never"/>
+    <disable_collisions link1="arm_camera_usb_plug_link" link2="robotiq_85_right_inner_knuckle_link" reason="Never"/>
+    <disable_collisions link1="arm_camera_usb_plug_link" link2="robotiq_85_right_knuckle_link" reason="Never"/>
     <disable_collisions link1="arm_forearm_link" link2="arm_upper_arm_link" reason="Adjacent"/>
     <disable_collisions link1="arm_forearm_link" link2="arm_wrist_1_link" reason="Adjacent"/>
-    <disable_collisions link1="arm_forearm_link" link2="imu_link" reason="Never"/>
     <disable_collisions link1="arm_shoulder_link" link2="arm_upper_arm_link" reason="Adjacent"/>
     <disable_collisions link1="arm_shoulder_link" link2="base_link" reason="Never"/>
-    <disable_collisions link1="arm_shoulder_link" link2="front_laser_base_link" reason="Never"/>
     <disable_collisions link1="arm_shoulder_link" link2="front_left_wheel_link" reason="Never"/>
     <disable_collisions link1="arm_shoulder_link" link2="front_rgbd_camera_link" reason="Never"/>
     <disable_collisions link1="arm_shoulder_link" link2="front_right_wheel_link" reason="Never"/>
     <disable_collisions link1="arm_shoulder_link" link2="imu_link" reason="Never"/>
-    <disable_collisions link1="arm_shoulder_link" link2="rear_laser_base_link" reason="Never"/>
     <disable_collisions link1="arm_shoulder_link" link2="rear_left_wheel_link" reason="Never"/>
     <disable_collisions link1="arm_shoulder_link" link2="rear_right_wheel_link" reason="Never"/>
-    <disable_collisions link1="arm_upper_arm_link" link2="rear_laser_base_link" reason="Never"/>
     <disable_collisions link1="arm_wrist_1_link" link2="arm_wrist_2_link" reason="Adjacent"/>
     <disable_collisions link1="arm_wrist_1_link" link2="arm_wrist_3_link" reason="Never"/>
     <disable_collisions link1="arm_wrist_1_link" link2="robotiq_85_base_link" reason="Never"/>
@@ -79,7 +120,6 @@
     <disable_collisions link1="arm_wrist_1_link" link2="robotiq_85_right_inner_knuckle_link" reason="Never"/>
     <disable_collisions link1="arm_wrist_1_link" link2="robotiq_85_right_knuckle_link" reason="Never"/>
     <disable_collisions link1="arm_wrist_2_link" link2="arm_wrist_3_link" reason="Adjacent"/>
-    <disable_collisions link1="arm_wrist_2_link" link2="imu_link" reason="Never"/>
     <disable_collisions link1="arm_wrist_2_link" link2="robotiq_85_base_link" reason="Never"/>
     <disable_collisions link1="arm_wrist_2_link" link2="robotiq_85_left_finger_link" reason="Never"/>
     <disable_collisions link1="arm_wrist_2_link" link2="robotiq_85_left_finger_tip_link" reason="Never"/>
@@ -98,46 +138,28 @@
     <disable_collisions link1="arm_wrist_3_link" link2="robotiq_85_right_finger_tip_link" reason="Never"/>
     <disable_collisions link1="arm_wrist_3_link" link2="robotiq_85_right_inner_knuckle_link" reason="Never"/>
     <disable_collisions link1="arm_wrist_3_link" link2="robotiq_85_right_knuckle_link" reason="Never"/>
-    <disable_collisions link1="base_link" link2="front_laser_base_link" reason="Adjacent"/>
     <disable_collisions link1="base_link" link2="front_left_wheel_link" reason="Adjacent"/>
     <disable_collisions link1="base_link" link2="front_rgbd_camera_link" reason="Adjacent"/>
     <disable_collisions link1="base_link" link2="front_right_wheel_link" reason="Adjacent"/>
     <disable_collisions link1="base_link" link2="imu_link" reason="Adjacent"/>
-    <disable_collisions link1="base_link" link2="rear_laser_base_link" reason="Adjacent"/>
     <disable_collisions link1="base_link" link2="rear_left_wheel_link" reason="Adjacent"/>
     <disable_collisions link1="base_link" link2="rear_right_wheel_link" reason="Adjacent"/>
-    <disable_collisions link1="front_laser_base_link" link2="front_left_wheel_link" reason="Never"/>
-    <disable_collisions link1="front_laser_base_link" link2="front_rgbd_camera_link" reason="Never"/>
-    <disable_collisions link1="front_laser_base_link" link2="front_right_wheel_link" reason="Never"/>
-    <disable_collisions link1="front_laser_base_link" link2="imu_link" reason="Never"/>
-    <disable_collisions link1="front_laser_base_link" link2="rear_laser_base_link" reason="Never"/>
-    <disable_collisions link1="front_laser_base_link" link2="rear_left_wheel_link" reason="Never"/>
-    <disable_collisions link1="front_laser_base_link" link2="rear_right_wheel_link" reason="Never"/>
     <disable_collisions link1="front_left_wheel_link" link2="front_rgbd_camera_link" reason="Never"/>
     <disable_collisions link1="front_left_wheel_link" link2="front_right_wheel_link" reason="Never"/>
     <disable_collisions link1="front_left_wheel_link" link2="imu_link" reason="Never"/>
-    <disable_collisions link1="front_left_wheel_link" link2="rear_laser_base_link" reason="Never"/>
     <disable_collisions link1="front_left_wheel_link" link2="rear_left_wheel_link" reason="Never"/>
     <disable_collisions link1="front_left_wheel_link" link2="rear_right_wheel_link" reason="Never"/>
     <disable_collisions link1="front_rgbd_camera_link" link2="front_right_wheel_link" reason="Never"/>
     <disable_collisions link1="front_rgbd_camera_link" link2="imu_link" reason="Never"/>
-    <disable_collisions link1="front_rgbd_camera_link" link2="rear_laser_base_link" reason="Never"/>
     <disable_collisions link1="front_rgbd_camera_link" link2="rear_left_wheel_link" reason="Never"/>
     <disable_collisions link1="front_rgbd_camera_link" link2="rear_right_wheel_link" reason="Never"/>
     <disable_collisions link1="front_right_wheel_link" link2="imu_link" reason="Never"/>
-    <disable_collisions link1="front_right_wheel_link" link2="rear_laser_base_link" reason="Never"/>
     <disable_collisions link1="front_right_wheel_link" link2="rear_left_wheel_link" reason="Never"/>
     <disable_collisions link1="front_right_wheel_link" link2="rear_right_wheel_link" reason="Never"/>
-    <disable_collisions link1="imu_link" link2="rear_laser_base_link" reason="Never"/>
     <disable_collisions link1="imu_link" link2="rear_left_wheel_link" reason="Never"/>
     <disable_collisions link1="imu_link" link2="rear_right_wheel_link" reason="Never"/>
-    <disable_collisions link1="imu_link" link2="robotiq_85_left_finger_tip_link" reason="Never"/>
-    <disable_collisions link1="imu_link" link2="robotiq_85_left_inner_knuckle_link" reason="Never"/>
+    <disable_collisions link1="imu_link" link2="robotiq_85_base_link" reason="Never"/>
     <disable_collisions link1="imu_link" link2="robotiq_85_left_knuckle_link" reason="Never"/>
-    <disable_collisions link1="imu_link" link2="robotiq_85_right_finger_tip_link" reason="Never"/>
-    <disable_collisions link1="imu_link" link2="robotiq_85_right_knuckle_link" reason="Never"/>
-    <disable_collisions link1="rear_laser_base_link" link2="rear_left_wheel_link" reason="Never"/>
-    <disable_collisions link1="rear_laser_base_link" link2="rear_right_wheel_link" reason="Never"/>
     <disable_collisions link1="rear_left_wheel_link" link2="rear_right_wheel_link" reason="Never"/>
     <disable_collisions link1="robotiq_85_base_link" link2="robotiq_85_left_finger_link" reason="Never"/>
     <disable_collisions link1="robotiq_85_base_link" link2="robotiq_85_left_finger_tip_link" reason="Never"/>

@@ -1,11 +1,13 @@
 Panels:
   - Class: rviz_common/Displays
-    Help Height: 70
+    Help Height: 159
     Name: Displays
     Property Tree Widget:
-      Expanded: ~
+      Expanded:
+        - /MotionPlanning1/Planned Path1
+        - /TF1/Frames1
       Splitter Ratio: 0.5
-    Tree Height: 276
+    Tree Height: 230
   - Class: rviz_common/Help
     Name: Help
   - Class: rviz_common/Views
@@ -74,6 +76,57 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
           arm_base_link_inertia:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          arm_camera_bottom_screw_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          arm_camera_color_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          arm_camera_color_optical_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          arm_camera_depth_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          arm_camera_depth_optical_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          arm_camera_infra1_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          arm_camera_infra1_optical_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          arm_camera_infra2_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          arm_camera_infra2_optical_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          arm_camera_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          arm_camera_mount_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          arm_camera_usb_plug_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -243,7 +296,7 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-        Loop Animation: true
+        Loop Animation: false
         Robot Alpha: 0.5
         Robot Color: 150; 50; 150
         Show Robot Collision: false
@@ -298,6 +351,57 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
           arm_base_link_inertia:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          arm_camera_bottom_screw_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          arm_camera_color_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          arm_camera_color_optical_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          arm_camera_depth_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          arm_camera_depth_optical_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          arm_camera_infra1_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          arm_camera_infra1_optical_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          arm_camera_infra2_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          arm_camera_infra2_optical_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          arm_camera_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          arm_camera_mount_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          arm_camera_usb_plug_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -472,6 +576,449 @@ Visualization Manager:
         Show Robot Visual: true
       Value: true
       Velocity_Scaling_Factor: 1
+    - Class: rviz_default_plugins/TF
+      Enabled: true
+      Frame Timeout: 15
+      Frames:
+        All Enabled: false
+        arm_base:
+          Value: false
+        arm_base_link:
+          Value: false
+        arm_base_link_inertia:
+          Value: false
+        arm_camera_bottom_screw_frame:
+          Value: false
+        arm_camera_color_frame:
+          Value: false
+        arm_camera_color_optical_frame:
+          Value: false
+        arm_camera_depth_frame:
+          Value: false
+        arm_camera_depth_optical_frame:
+          Value: false
+        arm_camera_infra1_frame:
+          Value: false
+        arm_camera_infra1_optical_frame:
+          Value: false
+        arm_camera_infra2_frame:
+          Value: false
+        arm_camera_infra2_optical_frame:
+          Value: false
+        arm_camera_link:
+          Value: false
+        arm_camera_mount_link:
+          Value: true
+        arm_camera_usb_plug_link:
+          Value: false
+        arm_flange:
+          Value: false
+        arm_forearm_link:
+          Value: false
+        arm_ft_frame:
+          Value: false
+        arm_shoulder_link:
+          Value: false
+        arm_tool0:
+          Value: false
+        arm_upper_arm_link:
+          Value: false
+        arm_wrist_1_link:
+          Value: false
+        arm_wrist_2_link:
+          Value: false
+        arm_wrist_3_link:
+          Value: false
+        base_docking_contact:
+          Value: false
+        base_footprint:
+          Value: false
+        base_link:
+          Value: false
+        front_laser_base_link:
+          Value: false
+        front_laser_link:
+          Value: false
+        front_left_wheel_link:
+          Value: false
+        front_rgbd_camera_depth_frame:
+          Value: false
+        front_rgbd_camera_depth_optical_frame:
+          Value: false
+        front_rgbd_camera_link:
+          Value: false
+        front_rgbd_camera_rgb_frame:
+          Value: false
+        front_rgbd_camera_rgb_optical_frame:
+          Value: false
+        front_right_wheel_link:
+          Value: false
+        imu_link:
+          Value: false
+        odom:
+          Value: false
+        rear_laser_base_link:
+          Value: false
+        rear_laser_link:
+          Value: false
+        rear_left_wheel_link:
+          Value: false
+        rear_right_wheel_link:
+          Value: false
+        robotiq_85_base_link:
+          Value: false
+        robotiq_85_left_finger_link:
+          Value: false
+        robotiq_85_left_finger_tip_link:
+          Value: false
+        robotiq_85_left_inner_knuckle_link:
+          Value: false
+        robotiq_85_left_knuckle_link:
+          Value: false
+        robotiq_85_right_finger_link:
+          Value: false
+        robotiq_85_right_finger_tip_link:
+          Value: false
+        robotiq_85_right_inner_knuckle_link:
+          Value: false
+        robotiq_85_right_knuckle_link:
+          Value: false
+      Marker Scale: 0.20000000298023224
+      Name: TF
+      Show Arrows: true
+      Show Axes: true
+      Show Names: false
+      Tree:
+        odom:
+          base_footprint:
+            base_link:
+              arm_base_link:
+                arm_base:
+                  {}
+                arm_base_link_inertia:
+                  arm_shoulder_link:
+                    arm_upper_arm_link:
+                      arm_forearm_link:
+                        arm_wrist_1_link:
+                          arm_wrist_2_link:
+                            arm_wrist_3_link:
+                              arm_flange:
+                                arm_camera_mount_link:
+                                  arm_camera_bottom_screw_frame:
+                                    arm_camera_link:
+                                      arm_camera_color_frame:
+                                        arm_camera_color_optical_frame:
+                                          {}
+                                      arm_camera_depth_frame:
+                                        arm_camera_depth_optical_frame:
+                                          {}
+                                      arm_camera_infra1_frame:
+                                        arm_camera_infra1_optical_frame:
+                                          {}
+                                      arm_camera_infra2_frame:
+                                        arm_camera_infra2_optical_frame:
+                                          {}
+                                      arm_camera_usb_plug_link:
+                                        {}
+                                arm_tool0:
+                                  {}
+                                robotiq_85_base_link:
+                                  robotiq_85_left_inner_knuckle_link:
+                                    {}
+                                  robotiq_85_left_knuckle_link:
+                                    robotiq_85_left_finger_link:
+                                      robotiq_85_left_finger_tip_link:
+                                        {}
+                                  robotiq_85_right_inner_knuckle_link:
+                                    {}
+                                  robotiq_85_right_knuckle_link:
+                                    robotiq_85_right_finger_link:
+                                      robotiq_85_right_finger_tip_link:
+                                        {}
+                              arm_ft_frame:
+                                {}
+              base_docking_contact:
+                {}
+              front_laser_base_link:
+                front_laser_link:
+                  {}
+              front_left_wheel_link:
+                {}
+              front_rgbd_camera_link:
+                front_rgbd_camera_depth_frame:
+                  front_rgbd_camera_depth_optical_frame:
+                    {}
+                front_rgbd_camera_rgb_frame:
+                  front_rgbd_camera_rgb_optical_frame:
+                    {}
+              front_right_wheel_link:
+                {}
+              imu_link:
+                {}
+              rear_laser_base_link:
+                rear_laser_link:
+                  {}
+              rear_left_wheel_link:
+                {}
+              rear_right_wheel_link:
+                {}
+      Update Interval: 0
+      Value: true
+    - Alpha: 0.30000001192092896
+      Class: rviz_default_plugins/RobotModel
+      Collision Enabled: false
+      Description File: ""
+      Description Source: Topic
+      Description Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /summit/robot_description
+      Enabled: true
+      Links:
+        All Links Enabled: true
+        Expand Joint Details: false
+        Expand Link Details: false
+        Expand Tree: false
+        Link Tree Style: Links in Alphabetic Order
+        arm_base:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        arm_base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        arm_base_link_inertia:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        arm_camera_bottom_screw_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        arm_camera_color_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        arm_camera_color_optical_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        arm_camera_depth_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        arm_camera_depth_optical_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        arm_camera_infra1_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        arm_camera_infra1_optical_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        arm_camera_infra2_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        arm_camera_infra2_optical_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        arm_camera_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        arm_camera_mount_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        arm_camera_usb_plug_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        arm_flange:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        arm_forearm_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        arm_ft_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        arm_shoulder_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        arm_tool0:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        arm_upper_arm_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        arm_wrist_1_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        arm_wrist_2_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        arm_wrist_3_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        base_docking_contact:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        base_footprint:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        front_laser_base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        front_laser_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        front_left_wheel_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        front_rgbd_camera_depth_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        front_rgbd_camera_depth_optical_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        front_rgbd_camera_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        front_rgbd_camera_rgb_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        front_rgbd_camera_rgb_optical_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        front_right_wheel_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        imu_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rear_laser_base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rear_laser_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        rear_left_wheel_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rear_right_wheel_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        robotiq_85_base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        robotiq_85_left_finger_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        robotiq_85_left_finger_tip_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        robotiq_85_left_inner_knuckle_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        robotiq_85_left_knuckle_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        robotiq_85_right_finger_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        robotiq_85_right_finger_tip_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        robotiq_85_right_inner_knuckle_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        robotiq_85_right_knuckle_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+      Mass Properties:
+        Inertia: false
+        Mass: false
+      Name: RobotModel
+      TF Prefix: ""
+      Update Interval: 0
+      Value: true
+      Visual Enabled: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -490,25 +1037,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 2.926884651184082
+      Distance: 2.911071300506592
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: -0.17458119988441467
-        Y: 0.2080588936805725
-        Z: 0.36607736349105835
+        X: 0.17144794762134552
+        Y: 0.31564319133758545
+        Z: 0.7426965832710266
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.5
+      Pitch: 0.03500012680888176
       Target Frame: base_footprint
       Value: Orbit (rviz_default_plugins)
-      Yaw: -0.6230000257492065
+      Yaw: 4.350183010101318
     Saved: ~
 Window Geometry:
   Displays:
@@ -522,7 +1069,7 @@ Window Geometry:
     collapsed: false
   MotionPlanning - Trajectory Slider:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd0000000100000000000001c90000033afc0200000005fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000003f00fffffffb000000100044006900730070006c006100790073010000003b00000195000000c700fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e006701000001d60000019f0000016900fffffffb0000000800480065006c0070000000029a0000006e0000006e00fffffffb0000000a005600690065007700730000000282000000a0000000a000ffffff0000033f0000033a00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd0000000100000000000001c90000033afc0200000005fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000003f00fffffffb000000100044006900730070006c006100790073010000003b000001c0000000c700fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e00670100000201000001740000016900fffffffb0000000800480065006c0070000000029a0000006e0000006e00fffffffb0000000a005600690065007700730000000282000000a0000000a000ffffff0000033f0000033a00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Views:
     collapsed: false
   Width: 1294
