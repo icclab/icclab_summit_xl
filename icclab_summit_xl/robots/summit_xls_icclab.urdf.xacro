@@ -26,7 +26,7 @@
 	<!-- Import and create arm -->
 	<xacro:include filename="$(find icclab_summit_xl)/urdf/arm/ur.urdf.xacro" />
 	<!-- Import gripper -->
-    <xacro:include filename="$(find robotiq_description)/urdf/robotiq_2f_140_macro.urdf.xacro" />
+    <xacro:include filename="$(find icclab_summit_xl)/urdf/robotiq_gripper/robotiq_2f_140_macro.urdf.xacro" />
 
 	<xacro:property name="PI" value="3.1415926535897931"/>
 
