@@ -1,13 +1,13 @@
 Panels:
   - Class: rviz_common/Displays
-    Help Height: 159
+    Help Height: 70
     Name: Displays
     Property Tree Widget:
       Expanded:
         - /MotionPlanning1/Planned Path1
         - /TF1/Frames1
       Splitter Ratio: 0.5
-    Tree Height: 136
+    Tree Height: 126
   - Class: rviz_common/Help
     Name: Help
   - Class: rviz_common/Views
@@ -1069,6 +1069,61 @@ Visualization Manager:
       Update Interval: 0
       Value: true
       Visual Enabled: true
+    - Class: rviz_default_plugins/Camera
+      Enabled: true
+      Far Plane Distance: 100
+      Image Rendering: background and overlay
+      Name: Camera
+      Overlay Alpha: 0.5
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /summit/arm_camera/color/image_raw
+      Value: true
+      Visibility:
+        Grid: true
+        MotionPlanning: true
+        PointCloud2: true
+        RobotModel: true
+        TF: true
+        Value: true
+      Zoom Factor: 1
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz_default_plugins/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: RGB8
+      Decay Time: 0
+      Enabled: true
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4096
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: PointCloud2
+      Position Transformer: XYZ
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.009999999776482582
+      Style: Flat Squares
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /summit/arm_camera/points
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -1102,15 +1157,17 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.03500012680888176
+      Pitch: 0.2000001221895218
       Target Frame: base_footprint
       Value: Orbit (rviz_default_plugins)
-      Yaw: 4.350183010101318
+      Yaw: 1.306997537612915
     Saved: ~
 Window Geometry:
+  Camera:
+    collapsed: false
   Displays:
     collapsed: false
-  Height: 807
+  Height: 825
   Help:
     collapsed: false
   Hide Left Dock: false
@@ -1119,9 +1176,9 @@ Window Geometry:
     collapsed: false
   MotionPlanning - Trajectory Slider:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd0000000100000000000001c9000002d1fc0200000005fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000003f00fffffffb000000100044006900730070006c006100790073010000003b00000162000000c700fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e006701000001a3000001690000016900fffffffb0000000800480065006c0070000000029a0000006e0000006e00fffffffb0000000a005600690065007700730000000282000000a0000000a000ffffff000002ea000002d100000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd0000000200000000000001c9000002e3fc0200000005fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000003f00fffffffb000000100044006900730070006c006100790073010000003b000000ff000000c700fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e00670100000140000001de0000016900fffffffb0000000800480065006c0070000000029a0000006e0000006e00fffffffb0000000a005600690065007700730000000282000000a0000000a000ffffff0000000100000140000002e3fc0200000001fb0000000c00430061006d006500720061010000003b000002e30000002800ffffff0000020d000002e300000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Views:
     collapsed: false
-  Width: 1209
-  X: 13
-  Y: 27
+  Width: 1314
+  X: 55
+  Y: 65

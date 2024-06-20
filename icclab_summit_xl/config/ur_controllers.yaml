@@ -1,7 +1,7 @@
 controller_manager: # merged from: https://github.com/UniversalRobots/Universal_Robots_ROS2_Gazebo_Simulation/tree/ros2
   ros__parameters:
     use_sim_time: true
-    update_rate: 200
+    update_rate: 1000
 
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster

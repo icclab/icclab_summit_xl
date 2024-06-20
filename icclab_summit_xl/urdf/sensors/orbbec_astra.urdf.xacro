@@ -49,9 +49,9 @@
       <child link="${prefix}_depth_optical_frame" />
     </joint>
     <link name="${prefix}_depth_optical_frame"/>
-    <xacro:sensor_orbbec_astra_gazebo_icclab ns="${ns}" prefix="${prefix}"/>
+    <xacro:sensor_orbbec_astra_gazebo_icclab ns="${ns}" prefix="${prefix}" frame="${prefix}_rgb_optical_frame"/>
   </xacro:macro>
-  <xacro:macro name="sensor_orbbec_astra_gazebo_icclab" params="ns prefix">
+  <xacro:macro name="sensor_orbbec_astra_gazebo_icclab" params="ns prefix frame">
     <xacro:property name="deg_to_rad" value="0.01745329251994329577"/>
     <gazebo reference="${prefix}_link">
       <sensor name="${prefix}" type="depth">
@@ -71,14 +71,18 @@
             <far>20.0</far>
           </clip>
         </camera>
+        <!-- plugin https://docs.ros.org/en/ros2_packages/rolling/api/gazebo_plugins/generated/classgazebo__plugins_1_1GazeboRosCamera.html -->
         <plugin name="${prefix}" filename="libgazebo_ros_camera.so">
           <ros>
             <namespace>${ns}</namespace>
             <remapping>~/image_raw:=~/color/image_raw</remapping>
             <remapping>~/camera_info:=~/color/camera_info</remapping>
             <remapping>~/image_raw/compressed:=~/color/image_raw/compressed</remapping>
+            <remapping>~/image_raw/compressedDepth:=~/color/image_raw/compressedDepth</remapping>
+            <remapping>~/image_raw/theora:=~/color/image_raw/theora</remapping>
           </ros>
-          <frame_name>${prefix}_rgb_optical_frame</frame_name>
+          <camera_name>${prefix}</camera_name>
+          <frame_name>${frame}</frame_name>
           <min_depth>0.05</min_depth>
           <max_depth>20.0</max_depth>
         </plugin>

@@ -27,3 +27,10 @@ For Mapping + Nav2:
 Visualizing Nav2 Rviz config launched manually (notice the namespacing):
 
 	ros2 launch icclab_summit_xl rviz.launch.py rviz_config:=navigation.rviz
+
+
+Debug: 
+
+We're using namespaced tf, so if you want to use rqt to debug and see the frames please launch it like this:
+
+        rqt --ros-args -r __ns:=/summit -r /tf:=tf -r /tf_static:=tf_static
