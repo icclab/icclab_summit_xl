@@ -71,9 +71,9 @@
   <exec_depend>pluginlib</exec_depend>
   <exec_depend>moveit_core</exec_depend>
   <exec_depend>moveit_commander</exec_depend>
-  <exec_depend>moveit_ros_planning_interface</exec_depend>
+  <exec_depend>moveit_ros_planning_interface</exec_depend>-->
   <exec_depend>moveit_ros_perception</exec_depend>
-  <exec_depend>interactive_markers</exec_depend>
+  <!--<exec_depend>interactive_markers</exec_depend>
   <exec_depend>moveit_visual_tools</exec_depend>
   <exec_depend>joy</exec_depend>
   <exec_depend>pcl_ros</exec_depend>
