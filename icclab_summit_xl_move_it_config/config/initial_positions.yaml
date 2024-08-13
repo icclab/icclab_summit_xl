@@ -7,4 +7,4 @@ initial_positions:
   arm_wrist_1_joint: 0
   arm_wrist_2_joint: 0
   arm_wrist_3_joint: 0
-  robotiq_85_left_knuckle_joint: 0
+  finger_joint: 0

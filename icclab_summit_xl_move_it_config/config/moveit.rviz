@@ -1,13 +1,14 @@
 Panels:
   - Class: rviz_common/Displays
-    Help Height: 159
+    Help Height: 70
     Name: Displays
     Property Tree Widget:
       Expanded:
         - /MotionPlanning1/Planned Path1
         - /TF1/Frames1
+        - /PointCloud21/Topic1
       Splitter Ratio: 0.5
-    Tree Height: 230
+    Tree Height: 126
   - Class: rviz_common/Help
     Name: Help
   - Class: rviz_common/Views
@@ -232,6 +233,31 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          left_inner_finger:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          left_inner_finger_pad:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          left_inner_knuckle:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          left_outer_finger:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          left_outer_knuckle:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
           rear_laser_base_link:
             Alpha: 1
             Show Axes: false
@@ -251,51 +277,40 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-          robotiq_85_base_link:
+          right_inner_finger:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          robotiq_85_left_finger_link:
+          right_inner_finger_pad:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          robotiq_85_left_finger_tip_link:
+          right_inner_knuckle:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          robotiq_85_left_inner_knuckle_link:
+          right_outer_finger:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          robotiq_85_left_knuckle_link:
+          right_outer_knuckle:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          robotiq_85_right_finger_link:
+          robotiq_140_base_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          robotiq_85_right_finger_tip_link:
+          robotiq_base_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
-            Value: true
-          robotiq_85_right_inner_knuckle_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          robotiq_85_right_knuckle_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
         Loop Animation: false
         Robot Alpha: 0.5
         Robot Color: 150; 50; 150
@@ -507,6 +522,31 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          left_inner_finger:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          left_inner_finger_pad:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          left_inner_knuckle:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          left_outer_finger:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          left_outer_knuckle:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
           rear_laser_base_link:
             Alpha: 1
             Show Axes: false
@@ -526,51 +566,40 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-          robotiq_85_base_link:
+          right_inner_finger:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          robotiq_85_left_finger_link:
+          right_inner_finger_pad:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          robotiq_85_left_finger_tip_link:
+          right_inner_knuckle:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          robotiq_85_left_inner_knuckle_link:
+          right_outer_finger:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          robotiq_85_left_knuckle_link:
+          right_outer_knuckle:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          robotiq_85_right_finger_link:
+          robotiq_140_base_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          robotiq_85_right_finger_tip_link:
+          robotiq_base_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
-            Value: true
-          robotiq_85_right_inner_knuckle_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          robotiq_85_right_knuckle_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
         Robot Alpha: 0.5
         Show Robot Collision: false
         Show Robot Visual: true
@@ -608,7 +637,7 @@ Visualization Manager:
         arm_camera_link:
           Value: false
         arm_camera_mount_link:
-          Value: true
+          Value: false
         arm_camera_usb_plug_link:
           Value: false
         arm_flange:
@@ -620,7 +649,7 @@ Visualization Manager:
         arm_shoulder_link:
           Value: false
         arm_tool0:
-          Value: false
+          Value: true
         arm_upper_arm_link:
           Value: false
         arm_wrist_1_link:
@@ -655,6 +684,16 @@ Visualization Manager:
           Value: false
         imu_link:
           Value: false
+        left_inner_finger:
+          Value: false
+        left_inner_finger_pad:
+          Value: false
+        left_inner_knuckle:
+          Value: false
+        left_outer_finger:
+          Value: false
+        left_outer_knuckle:
+          Value: false
         odom:
           Value: false
         rear_laser_base_link:
@@ -665,23 +704,19 @@ Visualization Manager:
           Value: false
         rear_right_wheel_link:
           Value: false
-        robotiq_85_base_link:
+        right_inner_finger:
           Value: false
-        robotiq_85_left_finger_link:
+        right_inner_finger_pad:
           Value: false
-        robotiq_85_left_finger_tip_link:
+        right_inner_knuckle:
           Value: false
-        robotiq_85_left_inner_knuckle_link:
+        right_outer_finger:
           Value: false
-        robotiq_85_left_knuckle_link:
+        right_outer_knuckle:
           Value: false
-        robotiq_85_right_finger_link:
+        robotiq_140_base_link:
           Value: false
-        robotiq_85_right_finger_tip_link:
-          Value: false
-        robotiq_85_right_inner_knuckle_link:
-          Value: false
-        robotiq_85_right_knuckle_link:
+        robotiq_base_link:
           Value: false
       Marker Scale: 0.20000000298023224
       Name: TF
@@ -721,20 +756,22 @@ Visualization Manager:
                                       arm_camera_usb_plug_link:
                                         {}
                                 arm_tool0:
-                                  {}
-                                robotiq_85_base_link:
-                                  robotiq_85_left_inner_knuckle_link:
-                                    {}
-                                  robotiq_85_left_knuckle_link:
-                                    robotiq_85_left_finger_link:
-                                      robotiq_85_left_finger_tip_link:
+                                  robotiq_base_link:
+                                    robotiq_140_base_link:
+                                      left_inner_knuckle:
                                         {}
-                                  robotiq_85_right_inner_knuckle_link:
-                                    {}
-                                  robotiq_85_right_knuckle_link:
-                                    robotiq_85_right_finger_link:
-                                      robotiq_85_right_finger_tip_link:
+                                      left_outer_knuckle:
+                                        left_outer_finger:
+                                          left_inner_finger:
+                                            left_inner_finger_pad:
+                                              {}
+                                      right_inner_knuckle:
                                         {}
+                                      right_outer_knuckle:
+                                        right_outer_finger:
+                                          right_inner_finger:
+                                            right_inner_finger_pad:
+                                              {}
                               arm_ft_frame:
                                 {}
               base_docking_contact:
@@ -947,6 +984,31 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        left_inner_finger:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        left_inner_finger_pad:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        left_inner_knuckle:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        left_outer_finger:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        left_outer_knuckle:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         rear_laser_base_link:
           Alpha: 1
           Show Axes: false
@@ -966,51 +1028,40 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        robotiq_85_base_link:
+        right_inner_finger:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        robotiq_85_left_finger_link:
+        right_inner_finger_pad:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        robotiq_85_left_finger_tip_link:
+        right_inner_knuckle:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        robotiq_85_left_inner_knuckle_link:
+        right_outer_finger:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        robotiq_85_left_knuckle_link:
+        right_outer_knuckle:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        robotiq_85_right_finger_link:
+        robotiq_140_base_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        robotiq_85_right_finger_tip_link:
+        robotiq_base_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
-        robotiq_85_right_inner_knuckle_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        robotiq_85_right_knuckle_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
       Mass Properties:
         Inertia: false
         Mass: false
@@ -1019,6 +1070,61 @@ Visualization Manager:
       Update Interval: 0
       Value: true
       Visual Enabled: true
+    - Class: rviz_default_plugins/Camera
+      Enabled: true
+      Far Plane Distance: 100
+      Image Rendering: background and overlay
+      Name: Camera
+      Overlay Alpha: 0.5
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /summit/arm_camera/color/image_raw
+      Value: true
+      Visibility:
+        Grid: true
+        MotionPlanning: true
+        PointCloud2: true
+        RobotModel: true
+        TF: true
+        Value: true
+      Zoom Factor: 1
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz_default_plugins/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: RGB8
+      Decay Time: 0
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4096
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: PointCloud2
+      Position Transformer: XYZ
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.009999999776482582
+      Style: Flat Squares
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /summit/arm_camera/points
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: false
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -1044,23 +1150,25 @@ Visualization Manager:
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.17144794762134552
-        Y: 0.31564319133758545
-        Z: 0.7426965832710266
+        X: 0.3303248882293701
+        Y: -0.0692792683839798
+        Z: 0.679206132888794
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.03500012680888176
+      Pitch: 0.30000051856040955
       Target Frame: base_footprint
       Value: Orbit (rviz_default_plugins)
-      Yaw: 4.350183010101318
+      Yaw: 4.980185031890869
     Saved: ~
 Window Geometry:
+  Camera:
+    collapsed: false
   Displays:
     collapsed: false
-  Height: 912
+  Height: 825
   Help:
     collapsed: false
   Hide Left Dock: false
@@ -1069,9 +1177,9 @@ Window Geometry:
     collapsed: false
   MotionPlanning - Trajectory Slider:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd0000000100000000000001c90000033afc0200000005fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000003f00fffffffb000000100044006900730070006c006100790073010000003b000001c0000000c700fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e00670100000201000001740000016900fffffffb0000000800480065006c0070000000029a0000006e0000006e00fffffffb0000000a005600690065007700730000000282000000a0000000a000ffffff0000033f0000033a00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd0000000200000000000001c9000002e3fc0200000005fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000003f00fffffffb000000100044006900730070006c006100790073010000003b000000ff000000c700fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e00670100000140000001de0000016900fffffffb0000000800480065006c0070000000029a0000006e0000006e00fffffffb0000000a005600690065007700730000000282000000a0000000a000ffffff0000000100000140000002e3fc0200000001fb0000000c00430061006d006500720061010000003b000002e30000002800ffffff0000020d000002e300000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Views:
     collapsed: false
-  Width: 1294
-  X: 21
-  Y: 105
+  Width: 1314
+  X: 55
+  Y: 65

@@ -5,6 +5,7 @@ moveit_controller_manager: moveit_simple_controller_manager/MoveItSimpleControll
 moveit_simple_controller_manager:
   controller_names:
     - arm_controller
+    - robotiq_gripper_controller
 
   arm_controller:
     type: FollowJointTrajectory
@@ -17,5 +18,12 @@ moveit_simple_controller_manager:
       - arm_wrist_1_joint
       - arm_wrist_2_joint
       - arm_wrist_3_joint
-    action_ns: follow_joint_trajectory
     default: true
+
+  robotiq_gripper_controller:
+    type: GripperCommand
+    action_ns: gripper_cmd
+    default: true
+    joints: 
+      - finger_joint
+    

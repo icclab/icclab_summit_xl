@@ -2,21 +2,17 @@
 
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="realsense">
 <xacro:include filename="$(find realsense2_description)/urdf/_d435.urdf.xacro" />
-<!-- <xacro:include filename="$(find icclab_grasping_niryo)/urdf/_d435.gazebo.kinect.xacro"/> -->
+<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/orbbec_astra.urdf.xacro"/>
 
-<xacro:macro name="sensor_d435_icclab" params="parent *origin prefix:=arm prefix_topic:=arm_camera use_nominal_extrinsics:=true add_plug:=true use_mesh:=true">
+<xacro:macro name="sensor_d435_icclab" params="parent *origin prefix:=arm_camera use_nominal_extrinsics:=true add_plug:=true use_mesh:=true ns:=summit">
 	
-	<xacro:sensor_d435 parent="${parent}" name="${prefix}_camera" use_nominal_extrinsics="${use_nominal_extrinsics}" add_plug="${add_plug}" use_mesh="${use_mesh}">  
+	<xacro:sensor_d435 parent="${parent}" name="${prefix}" use_nominal_extrinsics="${use_nominal_extrinsics}" add_plug="${add_plug}" use_mesh="${use_mesh}">  
 	  <xacro:insert_block name="origin" />
 	</xacro:sensor_d435>
 
-	<!-- <xacro:gazebo_d435 camera_name="${prefix}_camera"/> -->
-	<!-- Realsense Gazebo Plugin -->
-	<!-- <xacro:include filename="$(find icclab_grasping_niryo)/urdf/_d435.gazebo.xacro"/>
-	<xacro:gazebo_d435 camera_name="${prefix}_camera_" reference_link="${prefix}_camera_link" topics_ns="${prefix_topic}" 
-	depth_optical_frame="${prefix}_camera_depth_optical_frame" color_optical_frame="${prefix}_camera_color_optical_frame" 
-infrared1_optical_frame="${prefix}_camera_left_ir_optical_frame" infrared2_optical_frame="${prefix}_camera_right_ir_optical_frame"/>-->
+	<!-- reuse gazebo camera for orbec -->
+	<xacro:sensor_orbbec_astra_gazebo_icclab ns="${ns}" prefix="${prefix}" frame="${prefix}_color_optical_frame"/>
+</xacro:macro>	
 
-</xacro:macro>
 </robot>
 
