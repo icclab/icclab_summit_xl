@@ -19,13 +19,13 @@ screen -S summit -p ros1_bridge -X exec docker run --rm -it --privileged --netwo
 
 #In another window we have the ros2 container that will start the robot base
 screen -S summit -X screen -t ros2
-screen -S summit -p ros2 -X exec docker run --rm -it --privileged --network=host --ipc=host --pid=host --name ros2 --env UID=$(id -u) --env GID=$(id -g) -v /home/summit:/home/summit -v /dev/lidar_front:/dev/lidar_front -v /dev/lidar_rear:/dev/lidar_rear -v /dev/astra_s:/dev/astra_s robopaas/rosdocked-humble-summit:latest bash -c "export ROS_DISTRO=humble; export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp; export CYCLONEDDS_URI=file:////home/summit/cyclonedds-mc.xml; source /home/ros/colcon_ws/install/setup.bash; ros2 launch icclab_summit_xl summit_xl_real.launch.py"
+screen -S summit -p ros2 -X exec docker run --rm -it --privileged --network=host --ipc=host --pid=host --name ros2 --env UID=$(id -u) --env GID=$(id -g) -v /home/summit:/home/summit -v /dev/lidar_front:/dev/lidar_front -v /dev/lidar_rear:/dev/lidar_rear -v /dev/astra_s:/dev/astra_s -v /dev/ttyUSB_gripper:/dev/ttyUSB_gripper robopaas/rosdocked-humble-summit:latest bash -c "export ROS_DISTRO=humble; export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp; export CYCLONEDDS_URI=file:////home/summit/cyclonedds-mc.xml; source /home/ros/colcon_ws/install/setup.bash; ros2 launch icclab_summit_xl summit_xl_real.launch.py"
 # wait for container to start
 sleep 1s
 
 #In the same container we will also start nav2
 screen -S summit -X screen -t nav2
-screen -S summit -p nav2 -X exec docker exec -it ros2 bash -c "export ROS_DISTRO=humble; export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp; export CYCLONEDDS_URI=file:////home/summit/cyclonedds-mc.xml; source /home/ros/colcon_ws/install/setup.bash; ros2 launch summit_xl_navigation nav2_bringup_launch.py use_sim_time:=false map:=/home/ros/colcon_ws/src/icclab_summit_xl/icclab_summit_xl/maps/icclab/icclab_latest_map.yaml"
+screen -S summit -p nav2 -X exec docker exec -it ros2 bash -c "export ROS_DISTRO=humble; export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp; export CYCLONEDDS_URI=file:////home/summit/cyclonedds-mc.xml; source /home/ros/colcon_ws/install/setup.bash; ros2 launch summit_xl_navigation nav2_bringup_launch.py use_sim_time:=false slam:=True"
 
 #Attach to screen
 #screen -r summit

@@ -4,7 +4,8 @@
 	<!-- The environment variables should be set in a file or .bashrc -->
 
 	<arg name="id_robot" default="summit"/>
-	<arg name="xacro_robot_a" default="irlab_summit_base.urdf.xacro"/>
+	<arg name="xacro_robot_a" default="irlab_summit_base_omni.urdf.xacro"/>
+
 
 	<!-- RGBD CAMERAS -->
 	<arg name="has_front_rgbd_camera" default="$(optenv ROBOT_HAS_FRONT_RGBD_CAMERA false)"/>
