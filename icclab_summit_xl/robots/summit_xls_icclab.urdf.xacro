@@ -72,6 +72,7 @@
 	<xacro:arg name="gpu" default="false"/>
 	<xacro:arg name="robot_id" default="summit"/>
 	<xacro:arg name="robot_ns" default="$(arg robot_id)"/>
+	<xacro:arg name="use_fake_hardware" default="true"/>
 
 
     <xacro:macro name="summit_xl" params="prefix publish_bf hq">
@@ -132,7 +133,7 @@
 			<origin xyz="${gps_offset_x} ${gps_offset_y} ${gps_offset_z}" rpy="0 0 0"/>
 		</xacro:sensor_gps-->
 
-		<xacro:robotiq_gripper name="RobotiqGripperHardwareInterface" prefix="" parent="arm_tool0" use_fake_hardware="true">
+		<xacro:robotiq_gripper name="RobotiqGripperHardwareInterface" prefix="" parent="arm_tool0" use_fake_hardware="$(arg use_fake_hardware)">
         	<origin xyz="0 0 0" rpy="0 0 0" />
     	</xacro:robotiq_gripper>
 

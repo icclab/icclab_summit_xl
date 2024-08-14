@@ -369,6 +369,19 @@ def launch_setup(context, *args, **kwargs):
         condition=UnlessCondition(activate_joint_controller),
     )
 
+    robotiq_gripper_controller_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["robotiq_gripper_controller", "-c", "/summit/controller_manager"],
+    )
+
+    robotiq_activation_controller_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["robotiq_activation_controller", "-c", "/summit/controller_manager"],
+    )
+
+
     nodes_to_start = [
         control_node,
         ur_control_node,
@@ -380,6 +393,8 @@ def launch_setup(context, *args, **kwargs):
         rviz_node,
         initial_joint_controller_spawner_stopped,
         initial_joint_controller_spawner_started,
+        robotiq_gripper_controller_spawner,
+        robotiq_activation_controller_spawner,
     ] + controller_spawners
 
     return nodes_to_start
@@ -633,3 +648,4 @@ def generate_launch_description():
         )
     )
     return LaunchDescription(declared_arguments + [OpaqueFunction(function=launch_setup)])
+

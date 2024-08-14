@@ -37,6 +37,7 @@ def generate_launch_description():
       'robot_id': robot_id,
       'robot_ns': namespace,
       'robot_description_path': robot_xacro,
+      'use_fake_harware': 'false',
       }.items(),
   ))
 
