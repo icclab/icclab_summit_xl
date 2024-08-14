@@ -13,7 +13,7 @@
         use_fake_hardware:=false
         fake_sensor_commands:=false
         include_ros2_control:=true
-        com_port:=/dev/ttyUSB0">
+        com_port:=/dev/ttyUSB_gripper">
 
         <!-- ros2 control include -->
         <xacro:include filename="$(find icclab_summit_xl)/urdf/robotiq_gripper/2f_140.ros2_control.xacro" />
