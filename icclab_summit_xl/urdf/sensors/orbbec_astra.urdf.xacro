@@ -54,12 +54,14 @@
   <xacro:macro name="sensor_orbbec_astra_gazebo_icclab" params="ns prefix frame">
     <xacro:property name="deg_to_rad" value="0.01745329251994329577"/>
     <gazebo reference="${prefix}_link">
-      <sensor name="${prefix}" type="depth">
+      <sensor name="${prefix}" type="camera">
         <pose>0 0 0 0 0 0</pose>
         <visualize>true</visualize>
+        <always_on>true</always_on>
         <update_rate>15</update_rate>
-        <camera>
-          <horizontal_fov>1,04719755</horizontal_fov>
+        <camera name="orbbec">
+          <camera_info_topic>${ns}/${prefix}/color/camera_info</camera_info_topic>
+          <horizontal_fov>1.04719755</horizontal_fov>
           <vertical_fov>0.86393798</vertical_fov>
           <image>
             <format>B8G8R8</format>
@@ -72,7 +74,7 @@
           </clip>
         </camera>
         <!-- plugin https://docs.ros.org/en/ros2_packages/rolling/api/gazebo_plugins/generated/classgazebo__plugins_1_1GazeboRosCamera.html -->
-        <plugin name="${prefix}" filename="libgazebo_ros_camera.so">
+        <!-- <plugin name="${prefix}" filename="libignition-gazebo-sensors-system.so"> -->
           <ros>
             <namespace>${ns}</namespace>
             <remapping>~/image_raw:=~/color/image_raw</remapping>
@@ -81,11 +83,12 @@
             <remapping>~/image_raw/compressedDepth:=~/color/image_raw/compressedDepth</remapping>
             <remapping>~/image_raw/theora:=~/color/image_raw/theora</remapping>
           </ros>
-          <camera_name>${prefix}</camera_name>
-          <frame_name>${frame}</frame_name>
+          <camera name="${prefix}"/>
+          <gz_frame_id>${frame}</gz_frame_id>
           <min_depth>0.05</min_depth>
           <max_depth>20.0</max_depth>
-        </plugin>
+        <!-- </plugin>  -->
+        <topic>${ns}/${prefix}/color/image_raw</topic>
       </sensor>
     </gazebo>
   </xacro:macro>
