@@ -4,7 +4,7 @@ project(icclab_summit_xl)
 find_package(ament_cmake REQUIRED)
 
 install(
-  DIRECTORY launch worlds config maps robots urdf rviz meshes
+  DIRECTORY launch worlds config maps robots urdf rviz meshes models
   DESTINATION share/${PROJECT_NAME}
 )
 
@@ -101,5 +101,7 @@ ament_target_dependencies(move_arm_to_pose rclcpp moveit_ros_planning_interface)
 #    ${catkin_LIBRARIES}
 #  )
 
+ament_export_dependencies(ros_gz_bridge)
+ament_export_dependencies(ros_gz_sim)
 
 ament_package()

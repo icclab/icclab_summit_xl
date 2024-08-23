@@ -5,7 +5,7 @@
     tf_prefix:=arm_ 
     parent:=base_link
     simulation:=true
-    sim_ignition:=false"
+    sim_ignition:=true"
     >
 
     <!-- arm name  -->
@@ -48,7 +48,7 @@
       kinematics_parameters_file="${kinematics_params}"
       physical_parameters_file="${physical_params}"
       visual_parameters_file="${visual_params}"
-      use_fake_hardware="false"
+      use_fake_hardware="true"
       sim_gazebo="${sim_gazebo}"
       sim_ignition="${sim_ignition}"
       headless_mode="${headless_mode}"

@@ -48,17 +48,18 @@
     <gazebo reference="${prefix}_link">
 			<xacro:if value="${gpu}">
         <xacro:property name="ray_type" value="gpu_ray" />
-        <xacro:property name="plugin_lib" value="libgazebo_ros_gpu_laser.so" />
+        <xacro:property name="plugin_lib" value="libignition-gazebo-sensors-system.so" />
       </xacro:if>
       <xacro:unless value="${gpu}">
         <xacro:property name="ray_type" value="ray" />
-        <xacro:property name="plugin_lib" value="libgazebo_ros_ray_sensor.so" />
+        <xacro:property name="plugin_lib" value="libignition-gazebo-sensors-system.so" />
       </xacro:unless>
-			<sensor type="${ray_type}" name="${prefix}_sensor">
+			<sensor type="gpu_lidar" name="${prefix}_sensor">
 				<pose>0 0 0 0 0 0</pose>
-				<visualize>false</visualize>
-				<update_rate>30</update_rate>
-				<ray>
+        <topic>${ns}/${prefix}/scan</topic>
+				<update_rate>5</update_rate>
+				<lidar>
+        <!-- <ray> -->
 					<scan>
 						<horizontal>
 							<samples>1081</samples>
@@ -77,15 +78,20 @@
 						<mean>0.0</mean>
 						<stddev>0.01</stddev>
 					</noise>
-				</ray>
-				<plugin name="${prefix}" filename="${plugin_lib}">
-          <ros>
+        <!-- </ray> -->
+				</lidar>  
+        <always_on>true</always_on>
+        <visualize>true</visualize>
+        
+				<!-- <plugin name="${prefix}" filename="${plugin_lib}"> -->
+          <!-- <ros>
             <namespace>${ns}</namespace>
             <remapping>~/out:=~/scan</remapping>
           </ros>
-          <output_type>sensor_msgs/LaserScan</output_type>
-					<frame_name>${prefix}_link</frame_name>
-				</plugin>
+          <output_type>sensor_msgs/LaserScan</output_type> -->
+					<gz_frame_id>${prefix}_link</gz_frame_id>
+          <render_engine>ogre2</render_engine>
+			  <!-- </plugin> -->
 			</sensor>
 		</gazebo>
   </xacro:macro>

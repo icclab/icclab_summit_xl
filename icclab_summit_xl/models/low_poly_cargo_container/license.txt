@@ -1,0 +1,11 @@
+Model Information:
+* title:	Low Poly Cargo Container
+* source:	https://sketchfab.com/3d-models/low-poly-cargo-container-27a114c8a5a7476fb28c54a0177ee6c7
+* author:	yxungsauce2 (https://sketchfab.com/yxungsauce2)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Low Poly Cargo Container" (https://sketchfab.com/3d-models/low-poly-cargo-container-27a114c8a5a7476fb28c54a0177ee6c7) by yxungsauce2 (https://sketchfab.com/yxungsauce2) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

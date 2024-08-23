@@ -1,3 +1,4 @@
+<?xml version="1.0" ?>
 <sdf version='1.7'>
   <world name='default'>
     <model name='ground_plane'>
@@ -36,10 +37,9 @@
             </plane>
           </geometry>
           <material>
-            <script>
-              <uri>file://media/materials/scripts/gazebo.material</uri>
-              <name>Gazebo/Grey</name>
-            </script>
+            <ambient>0 0 0 1</ambient>
+            <diffuse>0 0 0 1</diffuse>
+            <specular>1 1 1 1</specular>
           </material>
         </visual>
         <self_collide>0</self_collide>
@@ -298,7 +298,27 @@
           <wrench>-0.014446 -0 0 0 -0 0</wrench>
         </link>
       </model>
-      <model name='Mecanum lift'>
+      <model name='low_poly_cargo_container'>
+        <pose>-1.26838 0.102899 -0.075008 7e-06 -1e-06 -0.000116</pose>
+        <scale>1 1 1</scale>
+        <link name='low_poly_cargo_container'>
+          <pose>-1.26838 0.102899 -0.075008 7e-06 -1e-06 -0.000116</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>-0.114598 0.114903 -1.15632 2.09969 1.01893 3.06707</acceleration>
+          <wrench>-343.793 344.709 -3468.96 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='low_poly_cargo_container_0'>
+        <pose>2.539 -3.95218 -0.075008 -7e-06 -1e-06 -0.007284</pose>
+        <scale>1 1 1</scale>
+        <link name='low_poly_cargo_container'>
+          <pose>2.539 -3.95218 -0.075008 -7e-06 -1e-06 -0.007284</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>-0.115359 -0.114979 -1.15774 -2.08114 0.971255 -3.06658</acceleration>
+          <wrench>-346.077 -344.936 -3473.23 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='MecanumLift'>
         <pose>13.754 3.71968 -0.006003 -2e-06 2e-06 0.003095</pose>
         <scale>1 1 1</scale>
         <link name='chassis'>
@@ -332,7 +352,7 @@
           <wrench>0.114355 -0.2367 -0.012958 0 -0 0</wrench>
         </link>
       </model>
-      <model name='Mecanum lift_0'>
+      <model name='MecanumLift_0'>
         <pose>17.8681 3.75476 -0.006005 -2e-05 -6e-06 0.003209</pose>
         <scale>1 1 1</scale>
         <link name='chassis'>
@@ -990,7 +1010,7 @@
           <geometry>
             <mesh>
               <scale>1.5 1.5 1.5</scale>
-              <uri>model://dumpster/meshes/dumpster.dae</uri>
+              <uri>model://Dumpster/meshes/dumpster.dae</uri>
             </mesh>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -1011,15 +1031,15 @@
           <geometry>
             <mesh>
               <scale>1.5 1.5 1.5</scale>
-              <uri>model://dumpster/meshes/dumpster.dae</uri>
+              <uri>
+              model://Dumpster/meshes/dumpster.dae
+              </uri>
             </mesh>
           </geometry>
           <material>
-            <script>
-              <uri>model://dumpster/materials/scripts</uri>
-              <uri>model://dumpster/materials/textures</uri>
-              <name>Dumpster/Diffuse</name>
-            </script>
+            <ambient>0 1 0 1</ambient>
+            <diffuse>0 1 0 1</diffuse>
+            <specular>1.0 1.0 1.0 1</specular>
           </material>
         </visual>
         <self_collide>0</self_collide>
@@ -1439,7 +1459,7 @@
           <geometry>
             <mesh>
               <scale>1.5 1.5 1.5</scale>
-              <uri>model://dumpster/meshes/dumpster.dae</uri>
+              <uri>model://Dumpster/meshes/dumpster.dae</uri>
             </mesh>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -1460,15 +1480,13 @@
           <geometry>
             <mesh>
               <scale>1.5 1.5 1.5</scale>
-              <uri>model://dumpster/meshes/dumpster.dae</uri>
+              <uri>model://Dumpster/meshes/dumpster.dae</uri>
             </mesh>
           </geometry>
           <material>
-            <script>
-              <uri>model://dumpster/materials/scripts</uri>
-              <uri>model://dumpster/materials/textures</uri>
-              <name>Dumpster/Diffuse</name>
-            </script>
+            <ambient>0 1 0 1</ambient>
+            <diffuse>0 1 0 1</diffuse>
+            <specular>1.0 1.0 1.0 1</specular>
           </material>
         </visual>
         <self_collide>0</self_collide>
@@ -1488,6 +1506,104 @@
         <kinematic>0</kinematic>
       </link>
       <pose>23.6824 7.17166 0 0 -0 0</pose>
+    </model>
+    <model name='low_poly_cargo_container'>
+      <pose>-1.26968 0.102778 0 0 -0 0</pose>
+      <static>0</static>
+      <link name='low_poly_cargo_container'>
+        <inertial>
+          <mass>3000</mass>
+          <inertia>
+            <ixx>100</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>100</iyy>
+            <iyz>0</iyz>
+            <izz>100</izz>
+          </inertia>
+          <pose>0 0 0 0 -0 0</pose>
+        </inertial>
+        <collision name='collision'>
+          <pose>0 0 1.5 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>7.2 3 2.85</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://low_poly_cargo_container/low_poly_cargo_container.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+    </model>
+    <model name='low_poly_cargo_container_0'>
+      <pose>-0.328274 -3.63098 0 0 -0 0</pose>
+      <static>0</static>
+      <link name='low_poly_cargo_container'>
+        <inertial>
+          <mass>3000</mass>
+          <inertia>
+            <ixx>100</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>100</iyy>
+            <iyz>0</iyz>
+            <izz>100</izz>
+          </inertia>
+          <pose>0 0 0 0 -0 0</pose>
+        </inertial>
+        <collision name='collision'>
+          <pose>0 0 1.5 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>7.2 3 2.85</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://low_poly_cargo_container/low_poly_cargo_container.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
     </model>
     <model name='jersey_barrier_3'>
       <static>1</static>
@@ -1985,7 +2101,7 @@
       </link>
       <pose>30.7452 -10.6884 0 0 -0 0</pose>
     </model>
-    <model name='Mecanum lift' xmlns:ignition='https://ignitionrobotics.org/schema'>
+    <model name='MecanumLift' xmlns:ignition='https://ignitionrobotics.org/schema'>
       <link name='chassis'>
         <inertial>
           <mass>1.14395</mass>
@@ -2113,7 +2229,7 @@
           <geometry>
             <mesh>
               <scale>0.6 0.6 0.6</scale>
-              <uri>/home/ros/.ignition/fuel/fuel.ignitionrobotics.org/openrobotics/models/mecanum lift/5/meshes/MecanumLift.dae</uri>
+              <uri>model://MecanumLift/meshes/MecanumLift.dae</uri>
             </mesh>
           </geometry>
           <material>
@@ -2128,11 +2244,11 @@
                 <environment_map>https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Reflective table/1/files/materials/textures/DepotEnvMap.dds</environment_map>
               </metal>
             </pbr>
-            <script>
+            <!-- <script>
               <uri>/home/ros/.ignition/fuel/fuel.ignitionrobotics.org/openrobotics/models/mecanum lift/5/materials/scripts/</uri>
               <uri>/home/ros/.ignition/fuel/fuel.ignitionrobotics.org/openrobotics/models/mecanum lift/5/materials/textures/</uri>
               <name>UrbanTile/Forklift_Diffuse</name>
-            </script>
+            </script> -->
           </material>
         </visual>
         <self_collide>0</self_collide>
@@ -2180,7 +2296,7 @@
         <visual name='visual'>
           <geometry>
             <mesh>
-              <uri>/home/ros/.ignition/fuel/fuel.ignitionrobotics.org/openrobotics/models/mecanum lift/5/meshes/mecanum_wheel_right.STL</uri>
+              <uri>model://MecanumLift/meshes/mecanum_wheel_right.STL</uri>
               <scale>0.0036 0.0036 0.0036</scale>
             </mesh>
           </geometry>
@@ -2235,7 +2351,7 @@
         <visual name='visual'>
           <geometry>
             <mesh>
-              <uri>/home/ros/.ignition/fuel/fuel.ignitionrobotics.org/openrobotics/models/mecanum lift/5/meshes/mecanum_wheel_left.STL</uri>
+              <uri>model://MecanumLift/meshes/mecanum_wheel_left.STL</uri>
               <scale>0.0036 0.0036 0.0036</scale>
             </mesh>
           </geometry>
@@ -2290,7 +2406,7 @@
         <visual name='visual'>
           <geometry>
             <mesh>
-              <uri>/home/ros/.ignition/fuel/fuel.ignitionrobotics.org/openrobotics/models/mecanum lift/5/meshes/mecanum_wheel_left.STL</uri>
+              <uri>model://MecanumLift/meshes/mecanum_wheel_left.STL</uri>
               <scale>0.0036 0.0036 0.0036</scale>
             </mesh>
           </geometry>
@@ -2345,7 +2461,7 @@
         <visual name='visual'>
           <geometry>
             <mesh>
-              <uri>/home/ros/.ignition/fuel/fuel.ignitionrobotics.org/openrobotics/models/mecanum lift/5/meshes/mecanum_wheel_right.STL</uri>
+              <uri>model://MecanumLift/meshes/mecanum_wheel_right.STL</uri>
               <scale>0.0036 0.0036 0.0036</scale>
             </mesh>
           </geometry>
@@ -2430,7 +2546,7 @@
       </plugin>
       <pose>13.7524 3.71819 0 0 -0 0</pose>
     </model>
-    <model name='Mecanum lift_0' xmlns:ignition='https://ignitionrobotics.org/schema'>
+    <model name='MecanumLift_0' xmlns:ignition='https://ignitionrobotics.org/schema'>
       <link name='chassis'>
         <inertial>
           <mass>1.14395</mass>
@@ -2558,7 +2674,7 @@
           <geometry>
             <mesh>
               <scale>0.6 0.6 0.6</scale>
-              <uri>/home/ros/.ignition/fuel/fuel.ignitionrobotics.org/openrobotics/models/mecanum lift/5/meshes/MecanumLift.dae</uri>
+              <uri>model://MecanumLift/meshes/MecanumLift.dae</uri>
             </mesh>
           </geometry>
           <material>
@@ -2573,11 +2689,6 @@
                 <environment_map>https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Reflective table/1/files/materials/textures/DepotEnvMap.dds</environment_map>
               </metal>
             </pbr>
-            <script>
-              <uri>/home/ros/.ignition/fuel/fuel.ignitionrobotics.org/openrobotics/models/mecanum lift/5/materials/scripts/</uri>
-              <uri>/home/ros/.ignition/fuel/fuel.ignitionrobotics.org/openrobotics/models/mecanum lift/5/materials/textures/</uri>
-              <name>UrbanTile/Forklift_Diffuse</name>
-            </script>
           </material>
         </visual>
         <self_collide>0</self_collide>
@@ -2625,7 +2736,7 @@
         <visual name='visual'>
           <geometry>
             <mesh>
-              <uri>/home/ros/.ignition/fuel/fuel.ignitionrobotics.org/openrobotics/models/mecanum lift/5/meshes/mecanum_wheel_right.STL</uri>
+              <uri>model://MecanumLift/meshes/mecanum_wheel_right.STL</uri>
               <scale>0.0036 0.0036 0.0036</scale>
             </mesh>
           </geometry>
@@ -2680,7 +2791,7 @@
         <visual name='visual'>
           <geometry>
             <mesh>
-              <uri>/home/ros/.ignition/fuel/fuel.ignitionrobotics.org/openrobotics/models/mecanum lift/5/meshes/mecanum_wheel_left.STL</uri>
+              <uri>model://MecanumLift/meshes/mecanum_wheel_left.STL</uri>
               <scale>0.0036 0.0036 0.0036</scale>
             </mesh>
           </geometry>
@@ -2735,7 +2846,7 @@
         <visual name='visual'>
           <geometry>
             <mesh>
-              <uri>/home/ros/.ignition/fuel/fuel.ignitionrobotics.org/openrobotics/models/mecanum lift/5/meshes/mecanum_wheel_left.STL</uri>
+              <uri>model://MecanumLift/meshes/mecanum_wheel_left.STL</uri>
               <scale>0.0036 0.0036 0.0036</scale>
             </mesh>
           </geometry>
@@ -2790,7 +2901,7 @@
         <visual name='visual'>
           <geometry>
             <mesh>
-              <uri>/home/ros/.ignition/fuel/fuel.ignitionrobotics.org/openrobotics/models/mecanum lift/5/meshes/mecanum_wheel_right.STL</uri>
+              <uri>model://MecanumLift/meshes/mecanum_wheel_right.STL</uri>
               <scale>0.0036 0.0036 0.0036</scale>
             </mesh>
           </geometry>

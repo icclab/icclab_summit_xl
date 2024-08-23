@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<sdf version="1.4">
+  <model name="low_poly_cargo_container">
+    <pose>0 0 0 0 0 0</pose>
+    <static>false</static>
+    <link name="low_poly_cargo_container">
+      <inertial>
+        <mass>3000</mass>
+        <inertia>
+            <ixx>100</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>100</iyy>
+            <iyz>0</iyz>
+            <izz>100</izz>
+          </inertia>
+      </inertial>
+      <collision name="collision">
+        <pose>0 0 1.5 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>7.2 3 2.85</size>
+          </box>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://low_poly_cargo_container/low_poly_cargo_container.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+  </model>
+</sdf>

@@ -90,7 +90,7 @@ def generate_launch_description():
     PythonLaunchDescriptionSource(
       os.path.join(ros_gz_sim, 'launch', 'gz_sim.launch.py')
     ),
-    launch_arguments={'gz_args': ['-v1 ', world]}.items()
+    launch_arguments={'gz_args': ['-v4 ', world]}.items()
   ))
 
   robot_spawner = launch_ros.actions.Node(
@@ -116,5 +116,23 @@ def generate_launch_description():
   # )
   # ld.add_action(gripper_controller)
 
-  
+  bridge_params = os.path.join(
+        get_package_share_directory('icclab_summit_xl'),
+        'config',
+        'ign_gazebo_bridge.yaml'
+    )
+
+  start_gazebo_ros_bridge_cmd = launch_ros.actions.Node(
+        package='ros_gz_bridge',
+        executable='parameter_bridge',
+        arguments=[
+            '--ros-args',
+            '-p',
+            f'config_file:={bridge_params}',
+        ],
+        output='screen',
+    )
+
+  ld.add_action(start_gazebo_ros_bridge_cmd)
+
   return ld
