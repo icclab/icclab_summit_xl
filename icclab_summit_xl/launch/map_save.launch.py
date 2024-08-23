@@ -7,6 +7,7 @@ def generate_launch_description():
         package="nav2_map_server",
         executable="map_saver_cli",
         arguments=['-f', 'my_map'],
+        remappings=[('/summit/map','/map')],
     )
  
     ld.add_action(map_saver)
