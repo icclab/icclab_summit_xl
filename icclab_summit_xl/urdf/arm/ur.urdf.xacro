@@ -32,7 +32,9 @@
         <xacro:property name="robot_ip" default="0.0.0.0" />
     </xacro:if>
     <xacro:unless value="${simulation}">
-      <xacro:property name="robot_ip" default="192.168.0.210" />
+	<xacro:property name="robot_ip" default="192.168.0.210" />
+        <xacro:property name="sim_gazebo" default="false" />
+	<xacro:property name="sim_ignition" default="false" />
     </xacro:unless>
 
     <!-- import ur macro -->
@@ -53,6 +55,9 @@
       sim_ignition="${sim_ignition}"
       headless_mode="${headless_mode}"
       robot_ip="${robot_ip}"
+      script_filename="/opt/ros/humble/share/ur_client_library/resources/external_control.urscript"
+      output_recipe_filename="/opt/ros/humble/share/ur_robot_driver/resources/rtde_output_recipe.txt"
+      input_recipe_filename="/opt/ros/humble/share/ur_robot_driver/resources/rtde_input_recipe.txt"
     >
       <xacro:insert_block name="origin" />  <!-- position robot in the world -->
     </xacro:ur_robot>

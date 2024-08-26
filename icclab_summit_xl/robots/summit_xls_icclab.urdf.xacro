@@ -164,7 +164,9 @@
 
    <!-- Gazebo ros control plugins -->
   <xacro:arg name="config_controllers" default=""/>
-  <xacro:include filename="$(find summit_xl_description)/urdf/ros2_control.urdf.xacro"/>
-  <xacro:ros2_control/>
+  <xacro:if value="$(arg use_fake_hardware)">
+    <xacro:include filename="$(find summit_xl_description)/urdf/ros2_control.urdf.xacro"/>
+    <xacro:ros2_control/>
+  </xacro:if>
 
 </robot>

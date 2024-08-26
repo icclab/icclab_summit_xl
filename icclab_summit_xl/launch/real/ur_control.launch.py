@@ -223,7 +223,6 @@ def launch_setup(context, *args, **kwargs):
         package="controller_manager",
         executable="ros2_control_node",
         parameters=[
-            robot_description,
             update_rate_config_file,
             ParameterFile(initial_joint_controllers, allow_substs=True),
         ],
@@ -235,10 +234,10 @@ def launch_setup(context, *args, **kwargs):
         package="ur_robot_driver",
         executable="ur_ros2_control_node",
         parameters=[
-            robot_description,
             update_rate_config_file,
             ParameterFile(initial_joint_controllers, allow_substs=True),
         ],
+        remappings=[('~/robot_description','/summit/robot_description')],
         output="screen",
         condition=UnlessCondition(use_fake_hardware),
     )
@@ -394,7 +393,7 @@ def launch_setup(context, *args, **kwargs):
         initial_joint_controller_spawner_stopped,
         initial_joint_controller_spawner_started,
         robotiq_gripper_controller_spawner,
-        robotiq_activation_controller_spawner,
+        #robotiq_activation_controller_spawner,
     ] + controller_spawners
 
     return nodes_to_start
