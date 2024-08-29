@@ -20,6 +20,14 @@ def generate_launch_description():
     description='Id of the robot',
     default_value='summit',
   ))
+
+  use_sim_time = launch.substitutions.LaunchConfiguration('use_sim_time')
+ 
+  ld.add_action(launch.actions.DeclareLaunchArgument(
+    name='use_sim_time',
+    description='Whether simulation or not',
+    default_value='true',
+  ))
  
   # push namespace
   namespace = launch_ros.actions.PushRosNamespace(namespace=robot_id)
@@ -35,7 +43,7 @@ def generate_launch_description():
     PythonLaunchDescriptionSource(
       os.path.join(get_package_share_directory('icclab_summit_xl_move_it_config'), 'launch', 'move_group.launch.py')
     ),
-    launch_arguments={'use_sim_time': 'true'}.items(), # the included launchfile unfortunately doesn't allow setting any arguments
+    launch_arguments={'use_sim_time': use_sim_time}.items(), # the included launchfile unfortunately doesn't allow setting any arguments
     # we modified it directly
   )
   ld.add_action(move_group_include)  
@@ -45,7 +53,7 @@ def generate_launch_description():
     PythonLaunchDescriptionSource(
       os.path.join(get_package_share_directory('icclab_summit_xl_move_it_config'), 'launch', 'moveit_rviz.launch.py')
     ),
-    launch_arguments={'use_sim_time': 'true'}.items(),
+    launch_arguments={'use_sim_time': use_sim_time}.items(),
   ))
  
   # ld.add_action(Node(        

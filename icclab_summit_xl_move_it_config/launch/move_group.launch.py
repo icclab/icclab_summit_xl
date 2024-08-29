@@ -28,6 +28,9 @@ def generate_move_group_launch(moveit_config):
 
     should_publish = LaunchConfiguration("publish_monitored_planning_scene")
 
+    ld.add_action(DeclareBooleanLaunchArg("use_sim_time", default_value=True))
+    use_sim_time = LaunchConfiguration("use_sim_time")
+
     move_group_configuration = {
         "publish_robot_description_semantic": True,
         "allow_trajectory_execution": LaunchConfiguration("allow_trajectory_execution"),
@@ -44,7 +47,7 @@ def generate_move_group_launch(moveit_config):
         "publish_state_updates": should_publish,
         "publish_transforms_updates": should_publish,
         "monitor_dynamics": False,
-        "use_sim_time": True,
+        "use_sim_time": use_sim_time,
     }
 
     move_group_params = [
