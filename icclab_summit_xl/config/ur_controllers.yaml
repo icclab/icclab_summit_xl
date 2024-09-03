@@ -9,26 +9,26 @@ controller_manager: # merged from: https://github.com/UniversalRobots/Universal_
     robotnik_base_control:
       type: diff_drive_controller/DiffDriveController
     
-    # io_and_status_controller:
-    #   type: ur_controllers/GPIOController
+#     # io_and_status_controller:
+#     #   type: ur_controllers/GPIOController
 
-    # speed_scaling_state_broadcaster:
-    #   type: ur_controllers/SpeedScalingStateBroadcaster
+#     # speed_scaling_state_broadcaster:
+#     #   type: ur_controllers/SpeedScalingStateBroadcaster
 
-    # force_torque_sensor_broadcaster:
-    #   type: ur_controllers/ForceTorqueStateBroadcaster
+#     # force_torque_sensor_broadcaster:
+#     #   type: ur_controllers/ForceTorqueStateBroadcaster
 
     arm_controller:
       type: joint_trajectory_controller/JointTrajectoryController
 
-    # scaled_joint_trajectory_controller:
-    #   type: ur_controllers/ScaledJointTrajectoryController
+#     # scaled_joint_trajectory_controller:
+#     #   type: ur_controllers/ScaledJointTrajectoryController
 
-    # forward_velocity_controller:
-    #   type: velocity_controllers/JointGroupVelocityController
+#     # forward_velocity_controller:
+#     #   type: velocity_controllers/JointGroupVelocityController
 
-    # forward_position_controller:
-    #   type: position_controllers/JointGroupPositionController
+#     # forward_position_controller:
+#     #   type: position_controllers/JointGroupPositionController
 
     robotiq_gripper_controller:
       type: position_controllers/GripperActionController
@@ -51,14 +51,19 @@ robotnik_base_control:
     right_wheel_names:
       - front_right_wheel_joint
       - rear_right_wheel_joint
+
+    wheels_per_side: 1  # actually 2, but both are controlled by 1 signal
+
     wheel_separation: 0.419
     wheel_radius: 0.11
+    tf_frame_prefix_enable: false
     wheel_separation_multiplier: 1.0
     left_wheel_radius_multiplier: 1.0
     right_wheel_radius_multiplier: 1.0
     odom_frame_id: odom
     base_frame_id: base_footprint
     enable_odom_tf: false
+    use_stamped_vel: false
     cmd_vel_timeout: 0.1
     publish_rate: 50.0
     linear:

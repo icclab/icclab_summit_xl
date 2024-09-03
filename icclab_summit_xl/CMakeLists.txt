@@ -29,6 +29,9 @@ find_package(tf2_ros REQUIRED)
 find_package(tf2_eigen REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
 
+find_package(geometry_msgs REQUIRED)
+find_package(nav_msgs REQUIRED)
+
 
 
 
@@ -92,7 +95,15 @@ add_executable(move_arm_to_pose src/move_arm_to_pose.cpp)
 #    ${catkin_LIBRARIES}
 #  )
 
-install(TARGETS move_arm_to_pose
+add_executable(odom_tf src/odom_tf_pub.cpp)
+
+ament_target_dependencies(odom_tf rclcpp geometry_msgs nav_msgs tf2_ros)
+
+add_executable(cmd_vel_topic_remap src/cmd_vel_topic_remap.cpp)
+
+ament_target_dependencies(cmd_vel_topic_remap rclcpp geometry_msgs)
+
+install(TARGETS move_arm_to_pose odom_tf cmd_vel_topic_remap
   DESTINATION lib/${PROJECT_NAME})
 
 ament_target_dependencies(move_arm_to_pose rclcpp moveit_ros_planning_interface)

@@ -94,3 +94,54 @@
 #   direction: BIDIRECTIONAL  # Default "BIDIRECTIONAL" - Bridge both directions
 #                             # "GZ_TO_ROS" - Bridge Ignition topic to ROS
 #                             # "ROS_TO_GZ" - Bridge ROS topic to Ignition
+
+# robotnik_base_control/odom
+# - ros_topic_name: "/robotnik_base_control/odom"
+- ros_topic_name: "/summit/odom"
+  gz_topic_name: "/model/summit/odometry_with_covariance"
+  ros_type_name: "nav_msgs/msg/Odometry"
+  gz_type_name: "ignition.msgs.OdometryWithCovariance"
+  subscriber_queue: 10       # Default 10
+  publisher_queue: 10        # Default 10
+  lazy: false                # Default "false"
+  direction: GZ_TO_ROS  # Default "BIDIRECTIONAL" - Bridge both directions
+                            # "GZ_TO_ROS" - Bridge Ignition topic to ROS
+                            # "ROS_TO_GZ" - Bridge ROS topic to Ignition
+
+# # /summit/joint_states
+# - ros_topic_name: "/summit/joint_states"
+#   gz_topic_name: "/world/default/model/summit/joint_state"
+#   ros_type_name: "sensor_msgs/msg/JointState"
+#   gz_type_name: "ignition.msgs.Model"
+#   subscriber_queue: 10       # Default 10
+#   publisher_queue: 10        # Default 10
+#   lazy: false                # Default "false"
+#   direction: GZ_TO_ROS  # Default "BIDIRECTIONAL" - Bridge both directions
+#                             # "GZ_TO_ROS" - Bridge Ignition topic to ROS
+#                             # "ROS_TO_GZ" - Bridge ROS topic to Ignition
+
+
+# /summit/robotnik_base_control/cmd_vel_unstamped
+# - ros_topic_name: "/summit/robotnik_base_control/cmd_vel_unstamped"
+- ros_topic_name: "/summit/cmd_vel"
+  gz_topic_name: "/model/summit/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "ignition.msgs.Twist"
+  subscriber_queue: 10       # Default 10
+  publisher_queue: 10        # Default 10
+  lazy: false                # Default "false"
+  direction: ROS_TO_GZ  # Default "BIDIRECTIONAL" - Bridge both directions
+                            # "GZ_TO_ROS" - Bridge Ignition topic to ROS
+                            # "ROS_TO_GZ" - Bridge ROS topic to Ignition
+
+# /summit/tf
+- ros_topic_name: "/summit/tf"
+  gz_topic_name: "/model/summit/pose"
+  ros_type_name: "tf2_msgs/msg/TFMessage"
+  gz_type_name: "ignition.msgs.Pose_V"
+  subscriber_queue: 10       # Default 10
+  publisher_queue: 10        # Default 10
+  lazy: false                # Default "false"
+  direction: GZ_TO_ROS  # Default "BIDIRECTIONAL" - Bridge both directions
+                            # "GZ_TO_ROS" - Bridge Ignition topic to ROS
+                            # "ROS_TO_GZ" - Bridge ROS topic to Ignition

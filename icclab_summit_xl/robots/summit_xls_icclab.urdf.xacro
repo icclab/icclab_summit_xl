@@ -71,6 +71,7 @@
 	<xacro:arg name="prefix" default=""/> <!-- was: summit_xl_-->
 	<xacro:arg name="use_fake_hardware" default="true"/>
 	<xacro:arg name="ros_planar_move_plugin" default="true"/>
+	<!-- <xacro:arg name="ros_planar_move_plugin" default="false"/> -->
 	<xacro:arg name="gpu" default="false"/>
 	<xacro:arg name="robot_id" default="summit"/>
 	<xacro:arg name="robot_ns" default="$(arg robot_id)"/>
@@ -101,6 +102,23 @@
 		<xacro:omni_wheel prefix="$(arg prefix)rear_right" parent="$(arg prefix)base_link" reflect="false" hq="${hq}">
 			<origin xyz="-${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
 		</xacro:omni_wheel>
+
+            <!-- <xacro:rubber_wheel prefix="$(arg prefix)front_right" parent="$(arg prefix)base_link" reflect="false" hq="${hq}">
+                <origin xyz="${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+            </xacro:rubber_wheel>
+
+            <xacro:rubber_wheel prefix="$(arg prefix)front_left" parent="$(arg prefix)base_link" reflect="true" hq="${hq}">
+                <origin xyz="${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+            </xacro:rubber_wheel>
+
+            <xacro:rubber_wheel prefix="$(arg prefix)rear_left" parent="$(arg prefix)base_link" reflect="true" hq="${hq}">
+                <origin xyz="-${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+            </xacro:rubber_wheel>
+
+            <xacro:rubber_wheel prefix="$(arg prefix)rear_right" parent="$(arg prefix)base_link" reflect="false" hq="${hq}">
+                <origin xyz="-${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+            </xacro:rubber_wheel> -->
+
         <!-- IMU -->
 		<xacro:sensor_imu_hector prefix="$(arg prefix)imu" ns="$(arg robot_ns)" parent="$(arg prefix)base_link">
 			<origin xyz="${imu_offset_x} ${imu_offset_y} ${imu_offset_z}" rpy="0 0 0"/>
@@ -150,15 +168,22 @@
 		<!-- Camera on gripper  --> 
 		<!-- had to copy and modidy camera to avoid name clash with robotnik defined sensors -->
 		<xacro:sensor_d435_icclab prefix="arm_camera" ns="$(arg robot_ns)" parent="arm_camera_mount_link">
-     		  <origin xyz="0.0 0.06 0.01" rpy="${PI} ${-PI/2} ${PI/2}"/> <!-- camera on gripper -->
+     		  <origin xyz="0.0 0.06 0.01" rpy="${PI} ${-PI/2} ${PI/2}"/> 
+			  camera on gripper
    		</xacro:sensor_d435_icclab> 
 
    </xacro:macro>
 
    
    <xacro:if value="$(arg ros_planar_move_plugin)">
-	   <xacro:omni_steering prefix="$(arg prefix)" publish_tf="true"/>
+	   <xacro:omni_steering prefix="$(arg prefix)" ns="$(arg robot_ns)"/>
+	   	<!-- <xacro:joint_state_publisher prefix="$(arg prefix)"/> -->
    </xacro:if>
+
+    <xacro:unless value="$(arg ros_planar_move_plugin)">
+	   <xacro:skid_steering prefix="$(arg prefix)" ns="$(arg robot_ns)"/>
+	    <!-- <xacro:joint_state_publisher prefix="$(arg prefix)"/> -->
+   </xacro:unless>
 
    <xacro:summit_xl prefix="$(arg prefix)" publish_bf="true" hq="true"/>
 
