@@ -9,7 +9,7 @@ Quick Start:
 
 1. Launch the simulation:
 
-        ros2 launch icclab_summit_xl summit_xl_simulation.launch.py
+        ros2 launch icclab_summit_xl summit_xl_simulation_ign.launch.py
 
 2. Launch Nav2:
 
