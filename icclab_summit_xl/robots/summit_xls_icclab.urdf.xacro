@@ -9,7 +9,8 @@
 	<!-- First we import all posible elements defined in the urdf.xacro files. All these elements are defined as macro:xacros -->
 
 	<!-- Import summit XL base elements -->
-	<xacro:include filename="$(find summit_xl_description)/urdf/bases/summit_xl_hls_base.urdf.xacro" />
+	<!-- <xacro:include filename="$(find summit_xl_description)/urdf/bases/summit_xl_hls_base.urdf.xacro" /> -->
+	<xacro:include filename="$(find icclab_summit_xl)/urdf/bases/summit_xl_hls_base.urdf.xacro" />
 
 	<!-- Import summit XL wheels -->
 	<xacro:include filename="$(find summit_xl_description)/urdf/wheels/omni_wheel.urdf.xacro" />
@@ -189,7 +190,9 @@
 
    <!-- Gazebo ros control plugins -->
   <xacro:arg name="config_controllers" default=""/>
-  <xacro:include filename="$(find summit_xl_description)/urdf/ros2_control.urdf.xacro"/>
-  <xacro:ros2_control/>
+  <xacro:if value="$(arg use_fake_hardware)">
+  	<xacro:include filename="$(find summit_xl_description)/urdf/ros2_control.urdf.xacro"/>
+  	<xacro:ros2_control/>
+  </xacro:if>
 
 </robot>
