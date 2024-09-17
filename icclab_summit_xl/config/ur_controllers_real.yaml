@@ -17,7 +17,7 @@ summit:
       joint_trajectory_controller:
         type: joint_trajectory_controller/JointTrajectoryController
 
-      scaled_joint_trajectory_controller:
+      arm_controller:
         type: ur_controllers/ScaledJointTrajectoryController
 
       forward_velocity_controller:
@@ -92,7 +92,7 @@ summit:
         $(var tf_prefix)wrist_3_joint: { trajectory: 0.2, goal: 0.1 }
 
 
-  scaled_joint_trajectory_controller:
+  arm_controller:
     ros__parameters:
       joints:
         - $(var tf_prefix)shoulder_pan_joint
