@@ -47,6 +47,7 @@ def generate_launch_description():
       'namespace': namespace,
       'map': map,
       'start_rviz': PythonExpression(['not ', rviz]),
+      'params_file': os.path.join(get_package_share_directory('icclab_summit_xl'), 'config', 'nav2_params.yaml'),
       }.items(),
   ))
   
