@@ -142,6 +142,14 @@ controller_server:
       plugin: "nav2_mppi_controller::MPPIController"
       model_dt: 0.05
       #motion_model: "Omni"
+      vx_max: 0.2
+      vx_min: -0.1
+      vy_max: 0.2
+      wz_max: 0.5
+      ax_max: 1.5
+      ax_min: -1.0
+      ay_max: 1.5
+      az_max: 1.5
       visualize: False
       TrajectoryVisualizer:
         trajectory_step: 5
@@ -442,10 +450,10 @@ velocity_smoother:
     smoothing_frequency: 20.0
     scale_velocities: False
     feedback: "OPEN_LOOP"
-    max_velocity: [0.26, 0.26, 1.0]
-    min_velocity: [-0.26, -0.26, -1.0]
-    max_accel: [2.5, 2.5, 3.2]
-    max_decel: [-2.5, -2.5, -3.2]
+    max_velocity: [0.2, 0.2, 0.5]
+    min_velocity: [-0.1, -0.1, -0.5]
+    max_accel: [1.5, 1.5, 1.5]
+    max_decel: [-1.0, -1.0, -1.5]
     odom_topic: "<robot_namespace>/odom"
     odom_duration: 0.1
     deadband_velocity: [0.0, 0.0, 0.0]

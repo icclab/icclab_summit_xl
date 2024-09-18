@@ -16,6 +16,7 @@ def generate_launch_description():
   namespace = launch.substitutions.LaunchConfiguration('namespace')
   rviz = launch.substitutions.LaunchConfiguration('rviz')
   map = launch.substitutions.LaunchConfiguration('map')
+  params_file = launch.substitutions.LaunchConfiguration('params_file')
 
   ld.add_action(launch.actions.DeclareLaunchArgument(
     name='namespace',
@@ -36,6 +37,13 @@ def generate_launch_description():
     description='Full path to map yaml file to load')
 
   ld.add_action(declare_map_yaml_cmd)
+
+  params_file_dir = DeclareLaunchArgument(
+    'params_file',
+    default_value=os.path.join(get_package_share_directory('icclab_summit_xl'), 'config', 'nav2_params_real.yaml'),
+    description='Full path to nav2 params yaml file to load')
+
+  ld.add_action(params_file_dir)
   
   # start nav2
 
@@ -47,7 +55,7 @@ def generate_launch_description():
       'namespace': namespace,
       'map': map,
       'start_rviz': PythonExpression(['not ', rviz]),
-      'params_file': os.path.join(get_package_share_directory('icclab_summit_xl'), 'config', 'nav2_params.yaml'),
+      'params_file': params_file,
       }.items(),
   ))
   
