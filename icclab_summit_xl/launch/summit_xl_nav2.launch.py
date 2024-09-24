@@ -32,7 +32,7 @@ def generate_launch_description():
 
   declare_map_yaml_cmd = DeclareLaunchArgument(
     'map',
-    default_value=os.path.join(get_package_share_directory('summit_xl_gazebo'), 'maps', 'turtlebot3_house.yaml'),
+    default_value=os.path.join(get_package_share_directory('icclab_summit_xl'), 'maps', 'tb3_house', 'turtlebot3_house.yaml'),
     # default_value=os.path.join(get_package_share_directory('nav2_bringup'), 'maps', 'turtlebot3_world.yaml'),
     description='Full path to map yaml file to load')
 
