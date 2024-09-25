@@ -5,7 +5,7 @@ screen -D -m -S summit &
 PID=$!
 
 #(Re)Start VPN, enable multicast
-screen -S summit -X exec bash -c "sudo wg-quick down wg0; sudo wg-quick up wg0; sudo ip link set dev wg0 multicast on; sudo wg show"
+screen -S summit -X exec bash -c "sudo wg-quick down wg0; sudo wg-quick up wg0; sudo ip link set dev wg0 multicast on; sudo wg show; bmon -p wg0"
 # wait 1s to be sure multicast is set
 sleep 1s
 
@@ -15,7 +15,7 @@ screen -S summit -p robot -X exec roslaunch icclab_summit_xl summit_xl_base_brin
 
 #In another window we have the ros1_bridge
 screen -S summit -X screen -t ros1_bridge
-screen -S summit -p ros1_bridge -X exec docker run --rm -it --privileged --network=host --ipc=host --pid=host --name ros1_bridge -v /home/summit:/home/summit ros:galactic-ros1-bridge bash -c "export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp; export CYCLONEDDS_URI=file:////home/summit/cyclonedds-mc-galactic.xml; ros2 run ros1_bridge dynamic_bridge --bridge-all-topics"
+screen -S summit -p ros1_bridge -X exec docker run --rm -it --privileged --network=host --ipc=host --pid=host --name ros1_bridge -v /home/summit:/home/summit ros:galactic-ros1-bridge bash -c "export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp; export CYCLONEDDS_URI=file:////home/summit/cyclonedds-mc-galactic.xml; rosparam load /home/summit/catkin_ws/src/icclab_summit_xl/scripts/ros1bridge.yaml; ros2 run ros1_bridge parameter_bridge"
 
 #In another window we have the ros2 container that will start the robot base
 screen -S summit -X screen -t ros2
@@ -25,7 +25,7 @@ sleep 1s
 
 #In the same container we will also start nav2
 screen -S summit -X screen -t nav2
-screen -S summit -p nav2 -X exec docker exec -it ros2 bash -c "export ROS_DISTRO=humble; export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp; export CYCLONEDDS_URI=file:////home/summit/cyclonedds-mc.xml; source /home/ros/colcon_ws/install/setup.bash; ros2 launch summit_xl_navigation nav2_bringup_launch.py use_sim_time:=false slam:=True"
+screen -S summit -p nav2 -X exec docker exec -it ros2 bash -c "export ROS_DISTRO=humble; export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp; export CYCLONEDDS_URI=file:////home/summit/cyclonedds-mc.xml; source /home/ros/colcon_ws/install/setup.bash; bash"
 
 #Attach to screen
 #screen -r summit
@@ -42,5 +42,6 @@ wait $PID
 #Kill docker containers
 docker kill ros1_bridge
 docker kill ros2
+
 
 

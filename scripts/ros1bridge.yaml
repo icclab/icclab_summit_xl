@@ -1,0 +1,16 @@
+topics:
+  - topic: /summit/joint_states  # Topic name on both ROS 1 and ROS 2
+    type:  sensor_msgs/JointState # Type of topic to bridge
+    queue_size: 1  # Queue size
+#  - topic: /summit/cmd_vel # TOF: removed in favour of the smoothed vel
+#    type: geometry_msgs/msg/Twist  
+#    queue_size: 1
+  - topic: /summit/cmd_vel_smoothed
+    type: geometry_msgs/msg/Twist
+    queue_size: 1
+  - topic: /summit/odom
+    type: nav_msgs/Odometry
+    queue_size: 1
+  - topic: /summit/imu/data
+    type: sensor_msgs/Imu
+    queue_size: 1
