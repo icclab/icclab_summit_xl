@@ -29,7 +29,7 @@ def generate_launch_description():
     executable='rviz2',
     namespace=robot_id,
     remappings= [('/tf', 'tf'), ('/tf_static', 'tf_static')],
-    arguments=['-d', [os.path.join(get_package_share_directory('icclab_summit_xl'), 'rviz/'), rviz_config]],
+    arguments=['-d', [os.path.join(get_package_share_directory('icclab_summit_xl'), 'rviz/'), rviz_config], '--ros-args', '--log-level', 'INFO'],
     output='screen'))
   
   return ld
