@@ -30,7 +30,7 @@
       ////               Note that this also applies to topics with absolute path such as "/rosout", "/tf" and "/tf_static".
       ////            Default: "/"
       ////
-     // namespace: "/bot1",
+      namespace: "/bot1",
 
       ////
       //// domain: The DDS Domain ID. By default set to 0, or to "$ROS_DOMAIN_ID" is this environment variable is defined.

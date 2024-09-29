@@ -14,7 +14,7 @@
       <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>		  
-          <mesh filename="$(find icclab_summit_xl)/meshes/camera_mount/RealSense_D435_UR5_camera_mount.stl" scale="0.00095 0.00095 0.00095"/>
+          <mesh filename="file://$(find icclab_summit_xl)/meshes/camera_mount/RealSense_D435_UR5_camera_mount.stl" scale="0.00095 0.00095 0.00095"/>
         </geometry>
         <material name="white">
 	  <color rgba="1 1 1 1"/>

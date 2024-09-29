@@ -1,0 +1,147 @@
+<?xml version="1.0"?>
+
+<robot name="luxonis" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:macro name="luxonis" params="parent *origin">
+    <xacro:property name="M_PI" value="3.1415926535897931" />
+
+    <xacro:property name="imu_offset_x" value="-0.008" />
+		<xacro:property name="imu_offset_y" value="-0.037945" />
+		<xacro:property name="imu_offset_z" value="-0.00079" />
+		<xacro:property name="imu_r" value="${M_PI}" />
+		<xacro:property name="imu_p" value="${M_PI/2.0}" />
+		<xacro:property name="imu_y" value="0.0" />
+    <xacro:property name="baseline" value="0.075" />
+
+    <!-- base_link of the sensor-->
+		<link name="oak-d_frame" />
+
+    <joint name="oak_center_joint" type="fixed">
+      <xacro:insert_block name="origin" />
+      <parent link="${parent}"/>
+      <child link="oak-d_frame" />
+    </joint>
+
+    <!-- <link name="oak_model_origin"> -->
+    <link name="arm_camera_link">
+				<visual>
+					<origin xyz="0 0 0" rpy="0 0 0" />
+					<geometry>
+						<mesh filename="file://$(find icclab_summit_xl)/meshes/sensors/OAK-D-PRO.stl" />
+					</geometry>
+					<material name="mat">
+						<color rgba="0.8 0.8 0.8 0.8" />
+					</material>
+				</visual>
+        <collision>
+          <origin xyz="0 0 0" rpy="0 0 0"/>
+          <geometry>
+            <box size="0.097 0.0295 0.0229"/>
+          </geometry>
+        </collision>
+        <inertial>
+          <mass value="0.072" />
+          <!-- <mass value="0.091" /> -->
+          <origin xyz="0 0 0" />
+          <inertia ixx="0.003881243" ixy="0.0" ixz="0.0" iyy="0.000498940" iyz="0.0" izz="0.003879257" />
+          <!-- <inertia ixx="0.000010576" ixy="0.0" ixz="0.0" iyy="0.000075328" iyz="0.0" izz="0.000077951" /> -->
+        </inertial>
+		</link>
+
+    <joint name="oak_model_origin_joint" type="fixed">
+			<parent link="oak-d_frame" />
+			<!-- <child link="oak_model_origin" /> -->
+      <child link="arm_camera_link" />
+			<origin xyz="0 0 0" rpy="1.5708 0 1.5708" />
+		</joint>
+
+    <link name="oak_imu_frame" />
+			<joint name="oak_imu_joint" type="fixed">
+				<parent link="oak-d_frame" />
+				<child link="oak_imu_frame" />
+				<origin xyz="${imu_offset_x} ${imu_offset_y} ${imu_offset_z}"
+					rpy="${imu_r} ${imu_p} ${imu_y}" />
+		</joint>
+
+    <link name="oak_rgb_camera_frame" />
+
+		<joint name="oak_rgb_camera_joint" type="fixed">
+		  	<parent link="oak-d_frame" />
+		  	<child link="oak_rgb_camera_frame" />
+		  	<origin xyz="0 0 0" rpy="0 0 0" />
+		</joint>
+
+		<!-- <link name="oak_rgb_camera_optical_frame" /> -->
+    <link name="arm_camera_color_optical_frame" />
+
+		<joint name="oak_rgb_camera_optical_joint" type="fixed">
+				<origin xyz="0 0 0" rpy="-${M_PI/2} 0.0 -${M_PI/2}" />
+				<parent link="oak_rgb_camera_frame" />
+				<!-- <child link="oak_rgb_camera_optical_frame" /> -->
+        <child link="arm_camera_color_optical_frame" />
+		</joint>
+
+    <!-- Left Camera -->
+		<link name="oak_left_camera_frame" />
+
+		<joint name="oak_left_camera_joint" type="fixed">
+				<parent link="oak-d_frame" />
+				<child link="oak_left_camera_frame" />
+				<origin xyz="0 ${baseline/2} 0" rpy="0 0 0" />
+		</joint>
+
+		<link name="oak_left_camera_optical_frame" />
+
+		<joint name="oak_left_camera_optical_joint" type="fixed">
+				<origin xyz="0 0 0" rpy="-${M_PI/2} 0.0 -${M_PI/2}" />
+				<parent link="oak_left_camera_frame" />
+				<child link="oak_left_camera_optical_frame" />
+		</joint>
+
+		<!-- right Camera -->
+		<link name="oak_right_camera_frame" />
+
+		<joint name="oak_right_camera_joint" type="fixed">
+				<parent link="oak-d_frame" />
+				<child link="oak_right_camera_frame" />
+				<origin xyz="0 -${baseline/2} 0" rpy="0 0 0" />
+		</joint>
+
+		<link name="oak_right_camera_optical_frame" />
+
+		<joint name="oak_right_camera_optical_joint" type="fixed">
+				<origin xyz="0 0 0" rpy="-${M_PI/2} 0.0 -${M_PI/2}" />
+				<parent link="oak_right_camera_frame" />
+				<child link="oak_right_camera_optical_frame" />
+		</joint>
+
+    <joint name="arm_camera_usb_plug_joint" type="fixed">
+      <!-- <origin xyz="0.0 -0.05 0" rpy="0 0 0"/> -->
+      <origin xyz="0.0 0.01 -0.01" rpy="0 ${M_PI/2} ${M_PI}"/>
+      <parent link="arm_camera_link" />
+      <child link="arm_camera_usb_plug_link" />
+    </joint>
+
+    <link name="arm_camera_usb_plug_link">
+      <visual>
+        <!-- 0.044850 0.008000 0.018500 -->
+        <origin xyz="0. -0.022425 0." rpy="0 0 ${M_PI/2}"/>
+        <geometry>
+          <!--box size="0.044850 0.008 0.0185" /-->          
+          <mesh filename="file://$(find icclab_summit_xl)/meshes/camera_plug/plug.stl" />
+        </geometry>
+        <material name="mat">
+					<color rgba="0.8 0.8 0.8 0.8" />
+				</material>
+      </visual>
+      <collision>
+        <origin xyz="0. -0.022425 0." rpy="0 0 ${M_PI/2}"/>
+        <geometry>
+          <!--box size="0.044850 0.008 0.0185" /-->
+          <mesh filename="file://$(find icclab_summit_xl)/meshes/camera_plug/plug_collision.stl" />
+        </geometry>
+      </collision>
+    </link>
+
+  </xacro:macro>
+</robot>
