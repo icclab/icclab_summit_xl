@@ -3,7 +3,7 @@
   <xacro:property name="deg_to_rad" value="0.01745329251994329577"/>
   <xacro:macro name="luxonis_camera_gazebo" params="ns prefix frame">
     <gazebo reference="${prefix}_link">
-      <sensor name="${prefix}" type="camera">
+      <sensor name="${prefix}" type="depth">
         <pose>0 0 0 0 0 0</pose>
         <!-- <visualize>true</visualize> -->
         <update_rate>15</update_rate>
