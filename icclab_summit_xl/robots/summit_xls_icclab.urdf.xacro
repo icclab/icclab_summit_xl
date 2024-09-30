@@ -23,6 +23,8 @@
 	<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/orbbec_astra.urdf.xacro" />
 	<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/intel_d435.urdf.xacro" />
 	<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/intel_camera_mount.urdf.xacro" />
+	<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/luxonis_oak_d_pro.urdf.xacro" />
+	<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/luxonis_camera_mount.urdf.xacro" />
 	<!-- Import arm macros -->
 	<xacro:include filename="$(find icclab_summit_xl)/urdf/arm/ur.urdf.xacro"/>
 	
@@ -143,15 +145,26 @@
     	</xacro:robotiq_gripper>
 
 		<!-- Camera mount -->
-		<xacro:camera_mount prefix="arm" parent="arm_flange">
-			<origin xyz="0 0 0" rpy="${-PI/2} 0 ${-PI/2}" />
-		</xacro:camera_mount>
+		<!-- <xacro:camera_mount prefix="arm" parent="arm_flange"> -->
+			<!-- <origin xyz="0 0 0" rpy="${-PI/2} 0 ${-PI/2}" /> -->
+		<!-- </xacro:camera_mount> -->
+
+		<!-- Luxonis Camera mount -->
+		<xacro:luxonis_camera_mount prefix="arm" parent="arm_flange">
+			<origin xyz="0 -0.04 0" rpy="${-PI/2} 0 ${-PI/2}" />
+		</xacro:luxonis_camera_mount>
 
 		<!-- Camera on gripper  --> 
 		<!-- had to copy and modidy camera to avoid name clash with robotnik defined sensors -->
-		<xacro:sensor_d435_icclab prefix="arm_camera" ns="$(arg robot_ns)" parent="arm_camera_mount_link">
-     		  <origin xyz="0.0 0.06 0.01" rpy="${PI} ${-PI/2} ${PI/2}"/> <!-- camera on gripper -->
-   		</xacro:sensor_d435_icclab> 
+		<!-- <xacro:sensor_d435_icclab prefix="arm_camera" ns="$(arg robot_ns)" parent="arm_camera_mount_link"> -->
+     		  <!-- <origin xyz="0.0 0.06 0.01" rpy="${PI} ${-PI/2} ${PI/2}"/>  -->
+			  <!-- camera on gripper -->
+   		<!-- </xacro:sensor_d435_icclab>  -->
+
+		<!-- Luxonis OAK_D_PRO -->
+		<xacro:luxonis_oak_icclab prefix="arm_camera" ns="$(arg robot_ns)" parent="arm_camera_mount_link">
+			   <origin xyz="-0.05 0.08 0.02" rpy="${PI} ${-PI/2} ${PI/2}"/> 
+		</xacro:luxonis_oak_icclab> 
 
    </xacro:macro>
 

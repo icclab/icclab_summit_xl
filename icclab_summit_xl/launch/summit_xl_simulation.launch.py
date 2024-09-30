@@ -62,5 +62,28 @@ def generate_launch_description():
   )
   ld.add_action(gripper_controller)
 
-  
+  # depthai_descriptions = get_package_share_directory('depthai_descriptions')
+
+  # ld.add_action(launch.actions.IncludeLaunchDescription(
+  #   PythonLaunchDescriptionSource(
+  #     os.path.join(depthai_descriptions, 'launch', 'urdf_launch.py')
+  #   ),
+  #   launch_arguments={
+  #               "namespace": robot_id,
+  #               "tf_prefix": "oak",
+  #               "camera_model": "OAK-D-PRO",
+  #               "base_frame": "oak",
+  #               "parent_frame": "arm_camera_mount_link",
+  #               "cam_pos_x": "0.0",
+  #               "cam_pos_y": "0.0",
+  #               "cam_pos_z": "0.05",
+  #               "cam_roll": "0.0",
+  #               "cam_pitch": "0.0",
+  #               "cam_yaw": "0.0",
+  #               "use_composition": "false",
+  #               "use_base_descr": "false",
+  #               "rs_compat": "false",
+  #     }.items(),
+  # ))
+
   return ld

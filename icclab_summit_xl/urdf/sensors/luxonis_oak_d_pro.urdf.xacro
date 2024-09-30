@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="luxonis">
+
+<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/luxonis_camera_gazebo.urdf.xacro"/>
+<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/luxonis_oak_d_pro_model.urdf.xacro" />
+
+<xacro:macro name="luxonis_oak_icclab" params="parent *origin prefix:=arm_camera ns:=summit">
+
+	<xacro:luxonis parent="${parent}">  
+	  <xacro:insert_block name="origin" />
+	</xacro:luxonis>
+
+	<xacro:luxonis_camera_gazebo ns="${ns}" prefix="${prefix}" frame="${prefix}_color_optical_frame"/>
+
+</xacro:macro>	
+
+</robot>
+
