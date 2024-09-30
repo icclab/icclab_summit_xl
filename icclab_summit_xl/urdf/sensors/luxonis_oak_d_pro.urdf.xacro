@@ -2,7 +2,7 @@
 
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="luxonis">
 
-<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/orbbec_astra.urdf.xacro"/>
+<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/luxonis_camera_gazebo.urdf.xacro"/>
 <xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/luxonis_oak_d_pro_model.urdf.xacro" />
 
 <xacro:macro name="luxonis_oak_icclab" params="parent *origin prefix:=arm_camera ns:=summit">
@@ -11,8 +11,7 @@
 	  <xacro:insert_block name="origin" />
 	</xacro:luxonis>
 
-	<!-- reuse gazebo camera for orbec -->
-	<xacro:sensor_orbbec_astra_gazebo_icclab ns="${ns}" prefix="${prefix}" frame="${prefix}_color_optical_frame"/>
+	<xacro:luxonis_camera_gazebo ns="${ns}" prefix="${prefix}" frame="${prefix}_color_optical_frame"/>
 
 </xacro:macro>	
 
