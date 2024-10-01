@@ -42,7 +42,7 @@
         <inertial>
           <mass value="0.072" />
           <!-- <mass value="0.091" /> -->
-          <origin xyz="0 0 0" rpy="${M_PI/2} 0 ${M_PI/2}" />
+		  <origin xyz="0 0 0" rpy="0 0 0" />
           <inertia ixx="0.003881243" ixy="0.0" ixz="0.0" iyy="0.000498940" iyz="0.0" izz="0.003879257" />
           <!-- <inertia ixx="0.000010576" ixy="0.0" ixz="0.0" iyy="0.000075328" iyz="0.0" izz="0.000077951" /> -->
         </inertial>
