@@ -91,7 +91,8 @@ Visualization Manager:
               Alpha: 1
               Show Axes: false
               Show Trail: false
-            arm_camera_color_optical_frame:
+            # arm_camera_color_optical_frame:
+            oak_rgb_camera_optical_frame:
               Alpha: 1
               Show Axes: false
               Show Trail: false

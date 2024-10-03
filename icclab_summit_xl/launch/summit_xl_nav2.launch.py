@@ -40,7 +40,8 @@ def generate_launch_description():
 
   params_file_dir = DeclareLaunchArgument(
     'params_file',
-    default_value=os.path.join(get_package_share_directory('icclab_summit_xl'), 'config', 'nav2_params_real.yaml'),
+    # default_value=os.path.join(get_package_share_directory('icclab_summit_xl'), 'config', 'nav2_params_real.yaml'),
+    default_value=os.path.join(get_package_share_directory('icclab_summit_xl'), 'config', 'nav2_params_sim.yaml'),
     description='Full path to nav2 params yaml file to load')
 
   ld.add_action(params_file_dir)

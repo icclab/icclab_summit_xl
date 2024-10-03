@@ -180,27 +180,27 @@ def launch_setup(context, *args, **kwargs):
             output="log",
             arguments=["-d", LaunchConfiguration("rviz_config")],
         ),
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(
-                os.path.join(urdf_launch_dir, "urdf_launch.py")
-            ),
-            launch_arguments={
-                "namespace": namespace,
-                "tf_prefix": name,
-                "camera_model": camera_model,
-                "base_frame": name,
-                "parent_frame": parent_frame,
-                "cam_pos_x": cam_pos_x,
-                "cam_pos_y": cam_pos_y,
-                "cam_pos_z": cam_pos_z,
-                "cam_roll": cam_roll,
-                "cam_pitch": cam_pitch,
-                "cam_yaw": cam_yaw,
-                "use_composition": use_composition,
-                "use_base_descr": publish_tf_from_calibration,
-                "rs_compat": rs_compat,
-            }.items(),
-        ),
+        # IncludeLaunchDescription(
+        #     PythonLaunchDescriptionSource(
+        #         os.path.join(urdf_launch_dir, "urdf_launch.py")
+        #     ),
+        #     launch_arguments={
+        #         "namespace": namespace,
+        #         "tf_prefix": name,
+        #         "camera_model": camera_model,
+        #         "base_frame": name,
+        #         "parent_frame": parent_frame,
+        #         "cam_pos_x": cam_pos_x,
+        #         "cam_pos_y": cam_pos_y,
+        #         "cam_pos_z": cam_pos_z,
+        #         "cam_roll": cam_roll,
+        #         "cam_pitch": cam_pitch,
+        #         "cam_yaw": cam_yaw,
+        #         "use_composition": use_composition,
+        #         "use_base_descr": publish_tf_from_calibration,
+        #         "rs_compat": rs_compat,
+        #     }.items(),
+        # ),
         ComposableNodeContainer(
             name=f"{name}_container",
             namespace=namespace,

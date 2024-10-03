@@ -11,7 +11,8 @@
 	  <xacro:insert_block name="origin" />
 	</xacro:luxonis>
 
-	<xacro:luxonis_camera_gazebo ns="${ns}" prefix="${prefix}" frame="${prefix}_color_optical_frame"/>
+	<!-- <xacro:luxonis_camera_gazebo ns="${ns}" prefix="${prefix}" frame="${prefix}_color_optical_frame"/> -->
+	<xacro:luxonis_camera_gazebo ns="${ns}" prefix="${prefix}" frame="oak_rgb_camera_optical_frame"/>
 
 </xacro:macro>	
 
