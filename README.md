@@ -40,12 +40,12 @@ We're using namespaced tf, so if you want to use rqt to debug and see the frames
 ## On robot
 1. Robot base:
 
-	ros2 launch icclab_summit_xl summit_xl_real.launch.py
+        ros2 launch icclab_summit_xl summit_xl_real.launch.py
 
 2. Arm controllers (press yellow button on arm board first):
 
- 	ros2 launch icclab_summit_xl arm_controller.launch.py
+        ros2 launch icclab_summit_xl arm_controller.launch.py
 
 3. Nav2:
 
-   	ros2 launch icclab_summit_xl summit_xl_nav2.launch.py slam:=True use_sim_time:=False
+        ros2 launch icclab_summit_xl summit_xl_nav2.launch.py slam:=True use_sim_time:=False
