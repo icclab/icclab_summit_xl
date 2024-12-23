@@ -73,6 +73,33 @@ def launch_setup(context, *args, **kwargs):
     parameter_overrides = {}
     color_sens_name = "rgb"
     stereo_sens_name = "stereo"
+
+    depth_profile = LaunchConfiguration("depth_module.depth_profile").perform(
+        context
+    )
+    color_profile = LaunchConfiguration("rgb_camera.color_profile").perform(context)
+
+    # split profile string (0,0,0 or 0x0x0 or 0X0X0) into with (int) height(int) and fps(double)
+    # find delimiter
+    delimiter = ","
+    if "x" in depth_profile:
+        delimiter = "x"
+    elif "X" in depth_profile:
+        delimiter = "X"
+    depth_profile = depth_profile.split(delimiter)
+    color_profile = color_profile.split(delimiter)
+
+    parameter_overrides = {
+        "rgb": {"i_width": int(color_profile[0]),
+                "i_height": int(color_profile[1]),
+                "i_fps": float(color_profile[2]),
+                },
+        "stereo": {"i_width": int(depth_profile[0]),
+                "i_height": int(depth_profile[1]),
+                "i_fps": float(depth_profile[2]),
+        },
+    }
+
     points_topic_name = f"{name}/points"
     if pointcloud_enable.perform(context) == "true":
         parameter_overrides = {
@@ -334,10 +361,10 @@ def generate_launch_description():
         DeclareLaunchArgument("enable_infra2", default_value="false"),
         # DeclareLaunchArgument("depth_module.depth_profile", default_value="1280,720,30"),
         # DeclareLaunchArgument("rgb_camera.color_profile", default_value="1280,720,30"),
-        # DeclareLaunchArgument("depth_module.infra_profile", default_value="1280,720,30"),
+        DeclareLaunchArgument("depth_module.infra_profile", default_value="1280,720,30"),
         DeclareLaunchArgument("depth_module.depth_profile", default_value="640,480,30"),
         DeclareLaunchArgument("rgb_camera.color_profile", default_value="640,480,30"),
-        DeclareLaunchArgument("depth_module.infra_profile", default_value="640,480,30"),
+        # DeclareLaunchArgument("depth_module.infra_profile", default_value="640,480,30"),
     ]
 
     return LaunchDescription(
