@@ -38,7 +38,8 @@ amcl:
     z_max: 0.05
     z_rand: 0.5
     z_short: 0.05
-    scan_topic: "<robot_namespace>/front_laser/scan"
+    # scan_topic: "<robot_namespace>/front_laser/scan"
+    scan_topic: "<robot_namespace>/merged_laser_scan"
     set_initial_pose: True
     initial_pose: {x: 0.572, y: 0.833, z: 0.0, yaw: 0.0}
 
