@@ -490,7 +490,8 @@ slam_toolbox:
     odom_frame: odom
     map_frame: map
     base_frame: base_footprint
-    scan_topic: "<robot_namespace>/front_laser/scan"
+    # scan_topic: "<robot_namespace>/front_laser/scan"
+    scan_topic: "<robot_namespace>/merged_laser_scan"
     mode: mapping #localization
 
     # if you'd like to immediately start continuing a map at a given pose
