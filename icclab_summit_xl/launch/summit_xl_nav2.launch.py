@@ -18,6 +18,12 @@ def generate_launch_description():
   map = launch.substitutions.LaunchConfiguration('map')
   params_file = launch.substitutions.LaunchConfiguration('params_file')
 
+  ld.add_action(launch.actions.IncludeLaunchDescription(
+    PythonLaunchDescriptionSource(
+      os.path.join(get_package_share_directory('ros2_laser_scan_merger'), 'launch', 'merge_2_scan.launch.py')
+    ),
+  ))
+
   ld.add_action(launch.actions.DeclareLaunchArgument(
     name='namespace',
     description='Namespace / Id of the robot',
