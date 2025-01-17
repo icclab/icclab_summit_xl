@@ -16,8 +16,6 @@
 	<xacro:include filename="$(find summit_xl_description)/urdf/wheels/rubber_wheel.urdf.xacro" />
 	<xacro:include filename="$(find summit_xl_description)/urdf/structures/structure_hokuyo.urdf.xacro" />
 
-	<!-- Import all available sensors -->
-	<xacro:include filename="$(find robotnik_sensors)/urdf/all_sensors.urdf.xacro" />
 	<!-- Import our modified sensor -->
 	<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/hokuyo_utm30lx_no_frame_prefix.urdf.xacro" />
 	<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/orbbec_astra.urdf.xacro" />
@@ -25,6 +23,8 @@
 	<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/intel_camera_mount.urdf.xacro" />
 	<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/luxonis_oak_d_pro.urdf.xacro" />
 	<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/luxonis_camera_mount.urdf.xacro" />
+	<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/imu_hector_plugin.urdf.xacro"/>
+
 	<!-- Import arm macros -->
 	<xacro:include filename="$(find icclab_summit_xl)/urdf/arm/ur.urdf.xacro"/>
 	
