@@ -5,7 +5,7 @@ import re
 from launch.actions import LogInfo, OpaqueFunction, SetEnvironmentVariable
 from ament_index_python.packages import get_package_share_directory
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from robotnik_common.launch import RewrittenYaml
+from nav2_common.launch import RewrittenYaml
 
 def launch_setup(context, *args, **kwargs):
 
