@@ -92,7 +92,11 @@ add_executable(move_arm_to_pose src/move_arm_to_pose.cpp)
 #    ${catkin_LIBRARIES}
 #  )
 
-install(TARGETS move_arm_to_pose
+add_executable(odom_tf src/odom_tf_pub.cpp)
+
+ament_target_dependencies(odom_tf rclcpp geometry_msgs nav_msgs tf2_ros)
+
+install(TARGETS move_arm_to_pose odom_tf
   DESTINATION lib/${PROJECT_NAME})
 
 ament_target_dependencies(move_arm_to_pose rclcpp moveit_ros_planning_interface)
@@ -101,5 +105,7 @@ ament_target_dependencies(move_arm_to_pose rclcpp moveit_ros_planning_interface)
 #    ${catkin_LIBRARIES}
 #  )
 
+ament_export_dependencies(ros_gz_bridge)
+ament_export_dependencies(ros_gz_sim)
 
 ament_package()

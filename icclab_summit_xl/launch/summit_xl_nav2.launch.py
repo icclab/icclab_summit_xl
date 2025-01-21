@@ -4,8 +4,8 @@ import os
 
 from ament_index_python.packages import get_package_share_directory
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch_ros.actions import Node
-from launch.actions import DeclareLaunchArgument
+from launch_ros.actions import Node, PushRosNamespace
+from launch.actions import DeclareLaunchArgument, LogInfo, GroupAction
 from launch.conditions import IfCondition
 from launch.substitutions import PythonExpression
 
@@ -17,12 +17,6 @@ def generate_launch_description():
   rviz = launch.substitutions.LaunchConfiguration('rviz')
   map = launch.substitutions.LaunchConfiguration('map')
   params_file = launch.substitutions.LaunchConfiguration('params_file')
-
-  ld.add_action(launch.actions.IncludeLaunchDescription(
-    PythonLaunchDescriptionSource(
-      os.path.join(get_package_share_directory('ros2_laser_scan_merger'), 'launch', 'merge_2_scan.launch.py')
-    ),
-  ))
 
   ld.add_action(launch.actions.DeclareLaunchArgument(
     name='namespace',
@@ -44,21 +38,22 @@ def generate_launch_description():
 
   ld.add_action(declare_map_yaml_cmd)
 
-  params_file_dir = DeclareLaunchArgument(
+  params_file_cmd = DeclareLaunchArgument(
     'params_file',
     # default_value=os.path.join(get_package_share_directory('icclab_summit_xl'), 'config', 'nav2_params_real.yaml'),
     default_value=os.path.join(get_package_share_directory('icclab_summit_xl'), 'config', 'nav2_params_sim.yaml'),
     description='Full path to nav2 params yaml file to load')
 
-  ld.add_action(params_file_dir)
+  ld.add_action(params_file_cmd)
   
-  # start nav2
-
+  # start nav2    
   ld.add_action(launch.actions.IncludeLaunchDescription(
     PythonLaunchDescriptionSource(
-      os.path.join(get_package_share_directory('summit_xl_navigation'), 'launch', 'nav2_bringup_launch.py')
+      os.path.join(get_package_share_directory('nav2_bringup'), 'launch', 'bringup_launch.py')
     ),
     launch_arguments={
+      'use_sim_time' : "true",
+      'use_namespace': "true",
       'namespace': namespace,
       'map': map,
       'start_rviz': PythonExpression(['not ', rviz]),
@@ -76,5 +71,17 @@ def generate_launch_description():
       'rviz_config': 'navigation.rviz',
       }.items(),
   ))
+
+  # start laserscan merger in the correct namespace
+  laser_scan_merger_action = launch.actions.IncludeLaunchDescription(
+    PythonLaunchDescriptionSource(
+      os.path.join(get_package_share_directory('ros2_laser_scan_merger'), 'launch', 'merge_2_scan.launch.py')
+    ),
+  )
+  ga = GroupAction(actions=[PushRosNamespace(namespace), laser_scan_merger_action])
+  ld.add_action(ga)
+
+  # log params used
+  ld.add_action(LogInfo(msg=["params_file:", params_file]))
 
   return ld

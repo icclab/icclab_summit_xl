@@ -9,7 +9,8 @@
 	<!-- First we import all posible elements defined in the urdf.xacro files. All these elements are defined as macro:xacros -->
 
 	<!-- Import summit XL base elements -->
-	<xacro:include filename="$(find summit_xl_description)/urdf/bases/summit_xl_hls_base.urdf.xacro" />
+	<!-- <xacro:include filename="$(find summit_xl_description)/urdf/bases/summit_xl_hls_base.urdf.xacro" /> -->
+	<xacro:include filename="$(find icclab_summit_xl)/urdf/bases/summit_xl_hls_base.urdf.xacro" />
 
 	<!-- Import summit XL wheels -->
 	<xacro:include filename="$(find summit_xl_description)/urdf/wheels/omni_wheel.urdf.xacro" />
@@ -73,6 +74,7 @@
 	<xacro:arg name="prefix" default=""/> <!-- was: summit_xl_-->
 	<xacro:arg name="use_fake_hardware" default="true"/>
 	<xacro:arg name="ros_planar_move_plugin" default="true"/>
+	<!-- <xacro:arg name="ros_planar_move_plugin" default="false"/> -->
 	<xacro:arg name="gpu" default="false"/>
 	<xacro:arg name="robot_id" default="summit"/>
 	<xacro:arg name="robot_ns" default="$(arg robot_id)"/>
@@ -136,13 +138,13 @@
 		</xacro:sensor_gps-->
 
 		<!-- Add arm -->
-		<xacro:icclab_summit_arm simulation="$(arg use_fake_hardware)">
+		<!-- <xacro:icclab_summit_arm simulation="$(arg use_fake_hardware)">
 			<origin xyz="0.255 0 0.275" rpy="0 0 ${pi}" />
-		</xacro:icclab_summit_arm>
+		</xacro:icclab_summit_arm> -->
 
-		<xacro:robotiq_gripper name="RobotiqGripperHardwareInterface" prefix="" parent="arm_tool0" use_fake_hardware="$(arg use_fake_hardware)">
+		<!-- <xacro:robotiq_gripper name="RobotiqGripperHardwareInterface" prefix="" parent="arm_tool0" use_fake_hardware="$(arg use_fake_hardware)">
         	<origin xyz="0 0 0" rpy="0 0 0" />
-    	</xacro:robotiq_gripper>
+    	</xacro:robotiq_gripper> -->
 
 		<!-- Camera mount -->
 		<!-- <xacro:camera_mount prefix="arm" parent="arm_flange"> -->
@@ -150,9 +152,9 @@
 		<!-- </xacro:camera_mount> -->
 
 		<!-- Luxonis Camera mount -->
-		<xacro:luxonis_camera_mount prefix="arm" parent="arm_flange">
+		<!-- <xacro:luxonis_camera_mount prefix="arm" parent="arm_flange">
 			<origin xyz="0 -0.04 0" rpy="${-PI/2} 0 ${-PI/2}" />
-		</xacro:luxonis_camera_mount>
+		</xacro:luxonis_camera_mount> -->
 
 		<!-- Camera on gripper  --> 
 		<!-- had to copy and modidy camera to avoid name clash with robotnik defined sensors -->
@@ -162,16 +164,22 @@
    		<!-- </xacro:sensor_d435_icclab>  -->
 
 		<!-- Luxonis OAK_D_PRO -->
-		<xacro:luxonis_oak_icclab prefix="arm_camera" ns="$(arg robot_ns)" parent="arm_camera_mount_link">
+		<!-- <xacro:luxonis_oak_icclab prefix="arm_camera" ns="$(arg robot_ns)" parent="arm_camera_mount_link">
 			   <origin xyz="-0.05 0.08 0.02" rpy="${PI} ${-PI/2} ${PI/2}"/> 
-		</xacro:luxonis_oak_icclab> 
+		</xacro:luxonis_oak_icclab>  -->
 
    </xacro:macro>
 
    
    <xacro:if value="$(arg ros_planar_move_plugin)">
-	   <xacro:omni_steering namespace="$(arg robot_ns)" publish_tf="true"/>
+	   <xacro:omni_steering prefix="$(arg prefix)" ns="$(arg robot_ns)"/>
+	   	<!-- <xacro:joint_state_publisher prefix="$(arg prefix)"/> -->
    </xacro:if>
+
+    <xacro:unless value="$(arg ros_planar_move_plugin)">
+	   <xacro:skid_steering prefix="$(arg prefix)" ns="$(arg robot_ns)"/>
+	    <!-- <xacro:joint_state_publisher prefix="$(arg prefix)"/> -->
+   </xacro:unless>
 
    <xacro:summit_xl prefix="$(arg prefix)" publish_bf="true" hq="true"/>
 

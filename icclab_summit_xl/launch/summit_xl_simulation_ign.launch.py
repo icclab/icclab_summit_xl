@@ -90,7 +90,7 @@ def generate_launch_description():
     PythonLaunchDescriptionSource(
       os.path.join(ros_gz_sim, 'launch', 'gz_sim.launch.py')
     ),
-    launch_arguments={'gz_args': ['-v1 ', world]}.items()
+    launch_arguments={'gz_args': ['-v 4 ', world]}.items()
   ))
 
   robot_spawner = launch_ros.actions.Node(
@@ -101,20 +101,68 @@ def generate_launch_description():
   ld.add_action(robot_spawner)
 
   ld.add_action(OpaqueFunction(function=launch_setup))
+  
+  arm_controller = launch_ros.actions.Node(
+    package="controller_manager",
+    executable="spawner",
+    arguments=["arm_controller", "--controller-manager", ["/", robot_id, "/controller_manager"]],
+  )
+  ld.add_action(arm_controller)
 
-  # arm_controller = launch_ros.actions.Node(
+  joint_broadcaster = launch_ros.actions.Node(
+    package="controller_manager",
+    executable="spawner",
+    arguments=["joint_state_broadcaster", "--controller-manager", ["/", robot_id, "/controller_manager"]],
+  )
+
+  ld.add_action(joint_broadcaster)
+
+  gripper_controller = launch_ros.actions.Node(
+    package="controller_manager",
+    executable="spawner",
+    arguments=["robotiq_gripper_controller", "--controller-manager", ["/", robot_id, "/controller_manager"]],
+  )
+  ld.add_action(gripper_controller)
+
+  # robotnik_base_control = launch_ros.actions.Node(
   #   package="controller_manager",
   #   executable="spawner",
-  #   arguments=["arm_controller", "--controller-manager", ["/", robot_id, "/controller_manager"]],
+  #   arguments=["robotnik_base_control", "--controller-manager", ["/", robot_id, "/controller_manager"]],
   # )
-  # ld.add_action(arm_controller)
+  # ld.add_action(robotnik_base_control)
 
-  # gripper_controller = launch_ros.actions.Node(
-  #   package="controller_manager",
-  #   executable="spawner",
-  #   arguments=["robotiq_gripper_controller", "--controller-manager", ["/", robot_id, "/controller_manager"]],
-  # )
-  # ld.add_action(gripper_controller)
+  bridge_params = os.path.join(
+        get_package_share_directory('icclab_summit_xl'),
+        'config',
+        'ign_gazebo_bridge.yaml'
+    )
 
+  start_gazebo_ros_bridge_cmd = launch_ros.actions.Node(
+        package='ros_gz_bridge',
+        executable='parameter_bridge',
+        arguments=[
+            '--ros-args',
+            '-p',
+            f'config_file:={bridge_params}',
+        ],
+        output='screen',
+    )
+
+  ld.add_action(start_gazebo_ros_bridge_cmd)
+
+  # odom_tf = launch_ros.actions.Node(
+  #       package='icclab_summit_xl',
+  #       executable='odom_tf',
+  #       name='odom_to_base_link_publisher',
+  #       remappings=[('/tf', '/summit/tf'), ('/tf_static', '/summit/tf_static')],
+  #   )
+  # ld.add_action(odom_tf)
+
+  # cmd_vel_topic_remap = launch_ros.actions.Node(
+  #       package='icclab_summit_xl',
+  #       executable='cmd_vel_topic_remap',
+  #       name='cmd_vel_topic_remap',
+  #   )
+  # ld.add_action(cmd_vel_topic_remap)
   
   return ld

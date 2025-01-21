@@ -5,11 +5,11 @@
     <xacro:macro name="robotiq_gripper_ros2_control" params="
         name
         prefix
-        sim_ignition:=false
+        sim_ignition:=true
         sim_isaac:=false
         isaac_joint_commands:=/isaac_joint_commands
         isaac_joint_states:=/isaac_joint_states
-        use_fake_hardware:=false
+        use_fake_hardware:=true
         fake_sensor_commands:=false
         com_port:=/dev/ttyUSB_gripper">
 
