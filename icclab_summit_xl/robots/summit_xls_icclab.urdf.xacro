@@ -138,9 +138,9 @@
 		</xacro:sensor_gps-->
 
 		<!-- Add arm -->
-		<!-- <xacro:icclab_summit_arm simulation="$(arg use_fake_hardware)">
+		<xacro:icclab_summit_arm simulation="$(arg use_fake_hardware)">
 			<origin xyz="0.255 0 0.275" rpy="0 0 ${pi}" />
-		</xacro:icclab_summit_arm> -->
+		</xacro:icclab_summit_arm>
 
 		<!-- <xacro:robotiq_gripper name="RobotiqGripperHardwareInterface" prefix="" parent="arm_tool0" use_fake_hardware="$(arg use_fake_hardware)">
         	<origin xyz="0 0 0" rpy="0 0 0" />

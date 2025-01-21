@@ -107,7 +107,8 @@
   <!-- <run_depend>warehouse_ros_mongo</run_depend> -->
   
   <exec_depend>summit_xl_description</exec_depend>
-  <exec_depend>ur</exec_depend>
+  <exec_depend>ur</exec_depend> 
+  <exec_depend>ur_simulation_gz</exec_depend>
   <exec_depend>robotiq_description</exec_depend>
   <exec_depend>navigation2</exec_depend>
   <exec_depend>nav2_bringup</exec_depend>
