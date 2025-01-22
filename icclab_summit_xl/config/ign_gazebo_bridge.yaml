@@ -2,7 +2,7 @@
 - ros_topic_name: "/summit/front_laser/scan"
   gz_topic_name: "/summit/front_laser/scan"
   ros_type_name: "sensor_msgs/msg/LaserScan"
-  gz_type_name: "ignition.msgs.LaserScan"
+  gz_type_name: "gz.msgs.LaserScan"
   subscriber_queue: 10       # Default 10
   publisher_queue: 10        # Default 10
   lazy: false                # Default "false"
@@ -14,7 +14,7 @@
 - ros_topic_name: "/summit/rear_laser/scan"
   gz_topic_name: "/summit/rear_laser/scan"
   ros_type_name: "sensor_msgs/msg/LaserScan"
-  gz_type_name: "ignition.msgs.LaserScan"
+  gz_type_name: "gz.msgs.LaserScan"
   subscriber_queue: 10       # Default 10
   publisher_queue: 10        # Default 10
   lazy: false                # Default "false"
@@ -26,7 +26,7 @@
 - ros_topic_name: "/summit/front_rgbd_camera/color/image_raw"
   gz_topic_name: "/summit/front_rgbd_camera/color/image_raw"
   ros_type_name: "sensor_msgs/msg/Image"
-  gz_type_name: "ignition.msgs.Image"
+  gz_type_name: "gz.msgs.Image"
   subscriber_queue: 10       # Default 10
   publisher_queue: 10        # Default 10
   lazy: false                # Default "false"
@@ -38,7 +38,7 @@
 - ros_topic_name: "/summit/front_rgbd_camera/color/camera_info"
   gz_topic_name: "/summit/front_rgbd_camera/color/camera_info"
   ros_type_name: "sensor_msgs/msg/CameraInfo"
-  gz_type_name: "ignition.msgs.CameraInfo"
+  gz_type_name: "gz.msgs.CameraInfo"
   subscriber_queue: 10       # Default 10
   publisher_queue: 10        # Default 10
   lazy: false                # Default "false"
@@ -50,7 +50,7 @@
 # - ros_topic_name: "/summit/front_rgbd_camera/depth/image_raw"
 #   gz_topic_name: "/ignition/front_rgbd_camera/depth/image_raw"
 #   ros_type_name: "sensor_msgs/msg/Image"
-#   gz_type_name: "ignition.msgs.Image"
+#   gz_type_name: "gz.msgs.Image"
 #   subscriber_queue: 5       # Default 10
 #   publisher_queue: 6        # Default 10
 #   lazy: true                # Default "false"
@@ -63,7 +63,7 @@
 - ros_topic_name: "/summit/arm_camera/color/camera_info"
   gz_topic_name: "/summit/arm_camera/color/camera_info"
   ros_type_name: "sensor_msgs/msg/CameraInfo"
-  gz_type_name: "ignition.msgs.CameraInfo"
+  gz_type_name: "gz.msgs.CameraInfo"
   subscriber_queue: 10       # Default 10
   publisher_queue: 10        # Default 10
   lazy: false                # Default "false"
@@ -75,7 +75,7 @@
 - ros_topic_name: "/summit/arm_camera/color/image_raw" 
   gz_topic_name: "/summit/arm_camera/color/image_raw"
   ros_type_name: "sensor_msgs/msg/Image"
-  gz_type_name: "ignition.msgs.Image"
+  gz_type_name: "gz.msgs.Image"
   subscriber_queue: 10       # Default 10
   publisher_queue: 10        # Default 10
   lazy: false                # Default "false"
@@ -87,7 +87,7 @@
 # - ros_topic_name: "/summit/arm_camera/depth/image_raw"
 #   gz_topic_name: "/ignition/arm_camera/depth/image_raw"
 #   ros_type_name: "sensor_msgs/msg/Image"
-#   gz_type_name: "ignition.msgs.Image"
+#   gz_type_name: "gz.msgs.Image"
 #   subscriber_queue: 5       # Default 10
 #   publisher_queue: 6        # Default 10
 #   lazy: true                # Default "false"
@@ -100,7 +100,7 @@
 - ros_topic_name: "/summit/odom"
   gz_topic_name: "/model/summit/odometry_with_covariance"
   ros_type_name: "nav_msgs/msg/Odometry"
-  gz_type_name: "ignition.msgs.OdometryWithCovariance"
+  gz_type_name: "gz.msgs.OdometryWithCovariance"
   subscriber_queue: 10       # Default 10
   publisher_queue: 10        # Default 10
   lazy: false                # Default "false"
@@ -112,7 +112,7 @@
 # - ros_topic_name: "/summit/joint_states"
 #   gz_topic_name: "/world/default/model/summit/joint_state"
 #   ros_type_name: "sensor_msgs/msg/JointState"
-#   gz_type_name: "ignition.msgs.Model"
+#   gz_type_name: "gz.msgs.Model"
 #   subscriber_queue: 10       # Default 10
 #   publisher_queue: 10        # Default 10
 #   lazy: false                # Default "false"
@@ -126,7 +126,7 @@
 - ros_topic_name: "/summit/cmd_vel"
   gz_topic_name: "/model/summit/cmd_vel"
   ros_type_name: "geometry_msgs/msg/Twist"
-  gz_type_name: "ignition.msgs.Twist"
+  gz_type_name: "gz.msgs.Twist"
   subscriber_queue: 10       # Default 10
   publisher_queue: 10        # Default 10
   lazy: false                # Default "false"
@@ -138,7 +138,7 @@
 - ros_topic_name: "/summit/tf"
   gz_topic_name: "/model/summit/pose"
   ros_type_name: "tf2_msgs/msg/TFMessage"
-  gz_type_name: "ignition.msgs.Pose_V"
+  gz_type_name: "gz.msgs.Pose_V"
   subscriber_queue: 10       # Default 10
   publisher_queue: 10        # Default 10
   lazy: false                # Default "false"

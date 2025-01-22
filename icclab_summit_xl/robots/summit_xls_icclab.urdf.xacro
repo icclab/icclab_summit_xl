@@ -196,10 +196,10 @@
 		</plugin>
 		
    </gazebo>
-  <!-- <xacro:arg name="config_controllers" default=""/>
-  <xacro:if value="$(arg use_fake_hardware)">
+  <!-- Macro for robot wheels. TODO: For gz ign is now managed by gz, we might want to FIX this  -->
+  <!-- <xacro:if value="$(arg use_fake_hardware)">
     <xacro:include filename="$(find summit_xl_description)/urdf/ros2_control.urdf.xacro"/>
     <xacro:ros2_control/>
-  </xacro:if> -->
+  </xacro:if>  -->
 
 </robot>

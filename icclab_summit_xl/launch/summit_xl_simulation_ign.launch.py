@@ -83,7 +83,7 @@ def generate_launch_description():
   ld.add_action(launch.actions.DeclareLaunchArgument(
     name='world',
     description='World to load',
-    default_value=['https://fuel.gazebosim.org/1.0/sonay/worlds/tugbot_depot']
+    default_value=['https://fuel.gazebosim.org/1.0/sonay/worlds/tugbot_depot'] #"empty.sdf"
   ))
 
   ros_gz_sim = get_package_share_directory('ros_gz_sim')
@@ -93,7 +93,7 @@ def generate_launch_description():
     PythonLaunchDescriptionSource(
       os.path.join(ros_gz_sim, 'launch', 'gz_sim.launch.py')
     ),
-    launch_arguments={'gz_args': ['-r -v 1 ', world]}.items()
+    launch_arguments={'gz_args': ['-v 1 ', world]}.items()
   ))
 
   robot_spawner = launch_ros.actions.Node(
@@ -108,24 +108,32 @@ def generate_launch_description():
   joint_broadcaster = launch_ros.actions.Node(
     package="controller_manager",
     executable="spawner",
-    arguments=["joint_state_broadcaster", "--controller-manager", ["/", robot_id, "/controller_manager"]],
+    arguments=["joint_state_broadcaster", "--switch-timeout", "600", "--controller-manager", ["/", robot_id, "/controller_manager"]],
   )
-  ld.add_action(joint_broadcaster)
+
+  # Delay joint_broadcaster start after `robot_spawner`
+  delay_joint_broadcaster_after_robot_spawner = RegisterEventHandler(
+      event_handler=OnProcessExit(
+          target_action=robot_spawner,
+          on_exit=[joint_broadcaster],
+      )
+  )
+  ld.add_action(delay_joint_broadcaster_after_robot_spawner)
 
   arm_controller = launch_ros.actions.Node(
     package="controller_manager",
     executable="spawner",
-    arguments=["arm_controller", "--controller-manager", ["/", robot_id, "/controller_manager"]],
+    arguments=["arm_controller", "--switch-timeout",  "600", "--controller-manager", ["/", robot_id, "/controller_manager"]],
   )
-  ld.add_action(arm_controller)
 
-  # Delay rviz start after `joint_state_broadcaster`
+  # Delay arm_controller start after `joint_state_broadcaster`
   delay_arm_controller_after_joint_state_broadcaster_spawner = RegisterEventHandler(
       event_handler=OnProcessExit(
           target_action=joint_broadcaster,
           on_exit=[arm_controller],
       )
   )
+  ld.add_action(delay_arm_controller_after_joint_state_broadcaster_spawner)
 
   # gripper_controller = launch_ros.actions.Node(
   #   package="controller_manager",
@@ -157,7 +165,15 @@ def generate_launch_description():
         ],
         output='screen',
     )
-  ld.add_action(start_gazebo_ros_bridge_cmd)
+
+  # Delay joint_broadcaster start after `robot_spawner`
+  delay_bridge_after_robot_spawner = RegisterEventHandler(
+      event_handler=OnProcessExit(
+          target_action=robot_spawner,
+          on_exit=[start_gazebo_ros_bridge_cmd],
+      )
+  )
+  ld.add_action(delay_bridge_after_robot_spawner)
 
 
   # odom_tf = launch_ros.actions.Node(
