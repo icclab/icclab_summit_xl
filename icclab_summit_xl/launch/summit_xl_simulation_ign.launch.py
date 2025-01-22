@@ -2,10 +2,11 @@ import launch
 import launch_ros
 import os
 import re
-from launch.actions import LogInfo, OpaqueFunction, SetEnvironmentVariable
+from launch.actions import LogInfo, OpaqueFunction, SetEnvironmentVariable, RegisterEventHandler
 from ament_index_python.packages import get_package_share_directory
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from nav2_common.launch import RewrittenYaml
+from launch.event_handlers import OnProcessExit
 
 def launch_setup(context, *args, **kwargs):
 
@@ -92,7 +93,7 @@ def generate_launch_description():
     PythonLaunchDescriptionSource(
       os.path.join(ros_gz_sim, 'launch', 'gz_sim.launch.py')
     ),
-    launch_arguments={'gz_args': ['-v 4 ', world]}.items()
+    launch_arguments={'gz_args': ['-r -v 1 ', world]}.items()
   ))
 
   robot_spawner = launch_ros.actions.Node(
@@ -104,6 +105,13 @@ def generate_launch_description():
 
   ld.add_action(OpaqueFunction(function=launch_setup))
   
+  joint_broadcaster = launch_ros.actions.Node(
+    package="controller_manager",
+    executable="spawner",
+    arguments=["joint_state_broadcaster", "--controller-manager", ["/", robot_id, "/controller_manager"]],
+  )
+  ld.add_action(joint_broadcaster)
+
   arm_controller = launch_ros.actions.Node(
     package="controller_manager",
     executable="spawner",
@@ -111,20 +119,20 @@ def generate_launch_description():
   )
   ld.add_action(arm_controller)
 
-  joint_broadcaster = launch_ros.actions.Node(
-    package="controller_manager",
-    executable="spawner",
-    arguments=["joint_state_broadcaster", "--controller-manager", ["/", robot_id, "/controller_manager"]],
+  # Delay rviz start after `joint_state_broadcaster`
+  delay_arm_controller_after_joint_state_broadcaster_spawner = RegisterEventHandler(
+      event_handler=OnProcessExit(
+          target_action=joint_broadcaster,
+          on_exit=[arm_controller],
+      )
   )
 
-  ld.add_action(joint_broadcaster)
-
-  gripper_controller = launch_ros.actions.Node(
-    package="controller_manager",
-    executable="spawner",
-    arguments=["robotiq_gripper_controller", "--controller-manager", ["/", robot_id, "/controller_manager"]],
-  )
-  ld.add_action(gripper_controller)
+  # gripper_controller = launch_ros.actions.Node(
+  #   package="controller_manager",
+  #   executable="spawner",
+  #   arguments=["robotiq_gripper_controller", "--controller-manager", ["/", robot_id, "/controller_manager"]],
+  # )
+  # ld.add_action(gripper_controller)
 
   # robotnik_base_control = launch_ros.actions.Node(
   #   package="controller_manager",
@@ -149,8 +157,8 @@ def generate_launch_description():
         ],
         output='screen',
     )
-
   ld.add_action(start_gazebo_ros_bridge_cmd)
+
 
   # odom_tf = launch_ros.actions.Node(
   #       package='icclab_summit_xl',
