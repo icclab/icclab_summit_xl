@@ -66,7 +66,9 @@ def generate_launch_description():
   robot_xacro = launch.substitutions.LaunchConfiguration('robot_xacro')
   world = launch.substitutions.LaunchConfiguration('world')
 
-  ld.add_action(launch.actions.SetEnvironmentVariable("GZ_SIM_RESOURCE_PATH", "/opt/ros/jazzy/share" + ":" + os.environ['COLCON_PREFIX_PATH'] + "/icclab_summit_xl/share"))
+  ld.add_action(launch.actions.SetEnvironmentVariable("GZ_SIM_RESOURCE_PATH", "/opt/ros/jazzy/share" + ":" 
+    + os.environ['COLCON_PREFIX_PATH'] + "/icclab_summit_xl/share" + ":"
+    + os.environ['COLCON_PREFIX_PATH'] + "/robotiq_description/share"))
 
   ld.add_action(launch.actions.DeclareLaunchArgument(
     name='robot_id',
@@ -127,20 +129,27 @@ def generate_launch_description():
   )
 
   # Delay arm_controller start after `joint_state_broadcaster`
-  delay_arm_controller_after_joint_state_broadcaster_spawner = RegisterEventHandler(
+  delay_arm_controller_after_joint_state_broadcaster = RegisterEventHandler(
       event_handler=OnProcessExit(
           target_action=joint_broadcaster,
           on_exit=[arm_controller],
       )
   )
-  ld.add_action(delay_arm_controller_after_joint_state_broadcaster_spawner)
+  ld.add_action(delay_arm_controller_after_joint_state_broadcaster)
 
-  # gripper_controller = launch_ros.actions.Node(
-  #   package="controller_manager",
-  #   executable="spawner",
-  #   arguments=["robotiq_gripper_controller", "--controller-manager", ["/", robot_id, "/controller_manager"]],
-  # )
-  # ld.add_action(gripper_controller)
+  gripper_controller = launch_ros.actions.Node(
+    package="controller_manager",
+    executable="spawner",
+    arguments=["robotiq_gripper_controller", "--controller-manager", ["/", robot_id, "/controller_manager"]],
+  )
+  # Delay gripper_controller start after `arm_controller`
+  delay_gripper_controller_after_arm_controller = RegisterEventHandler(
+      event_handler=OnProcessExit(
+          target_action=arm_controller,
+          on_exit=[gripper_controller],
+      )
+  )
+  ld.add_action(delay_gripper_controller_after_arm_controller)
 
   # robotnik_base_control = launch_ros.actions.Node(
   #   package="controller_manager",

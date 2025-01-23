@@ -142,9 +142,9 @@
 			<origin xyz="0.255 0 0.275" rpy="0 0 ${pi}" />
 		</xacro:icclab_summit_arm>
 
-		<!-- <xacro:robotiq_gripper name="RobotiqGripperHardwareInterface" prefix="" parent="arm_tool0" use_fake_hardware="$(arg use_fake_hardware)">
+		<xacro:robotiq_gripper name="RobotiqGripperHardwareInterface" prefix="" parent="arm_tool0" use_fake_hardware="$(arg use_fake_hardware)">
         	<origin xyz="0 0 0" rpy="0 0 0" />
-    	</xacro:robotiq_gripper> -->
+    	</xacro:robotiq_gripper>
 
 		<!-- Camera mount -->
 		<!-- <xacro:camera_mount prefix="arm" parent="arm_flange"> -->
@@ -152,9 +152,9 @@
 		<!-- </xacro:camera_mount> -->
 
 		<!-- Luxonis Camera mount -->
-		<!-- <xacro:luxonis_camera_mount prefix="arm" parent="arm_flange">
+		<xacro:luxonis_camera_mount prefix="arm" parent="arm_flange">
 			<origin xyz="0 -0.04 0" rpy="${-PI/2} 0 ${-PI/2}" />
-		</xacro:luxonis_camera_mount> -->
+		</xacro:luxonis_camera_mount>
 
 		<!-- Camera on gripper  --> 
 		<!-- had to copy and modidy camera to avoid name clash with robotnik defined sensors -->
@@ -164,9 +164,9 @@
    		<!-- </xacro:sensor_d435_icclab>  -->
 
 		<!-- Luxonis OAK_D_PRO -->
-		<!-- <xacro:luxonis_oak_icclab prefix="arm_camera" ns="$(arg robot_ns)" parent="arm_camera_mount_link">
+		<xacro:luxonis_oak_icclab prefix="arm_camera" ns="$(arg robot_ns)" parent="arm_camera_mount_link">
 			   <origin xyz="-0.05 0.08 0.02" rpy="${PI} ${-PI/2} ${PI/2}"/> 
-		</xacro:luxonis_oak_icclab>  -->
+		</xacro:luxonis_oak_icclab> 
 
    </xacro:macro>
 
