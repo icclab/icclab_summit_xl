@@ -2419,7 +2419,7 @@
           </dynamics>
         </axis>
       </joint>
-      <plugin name='ignition::gazebo::systems::MecanumDrive' filename='ignition-gazebo-mecanum-drive-system'>
+      <plugin name='gz::sim::systems::MecanumDrive' filename='ignition-gazebo-mecanum-drive-system'>
         <front_left_joint>front_left_wheel_joint</front_left_joint>
         <back_left_joint>rear_left_wheel_joint</back_left_joint>
         <front_right_joint>front_right_wheel_joint</front_right_joint>
@@ -2864,7 +2864,7 @@
           </dynamics>
         </axis>
       </joint>
-      <plugin name='ignition::gazebo::systems::MecanumDrive' filename='ignition-gazebo-mecanum-drive-system'>
+      <plugin name='gz::sim::systems::MecanumDrive' filename='ignition-gazebo-mecanum-drive-system'>
         <front_left_joint>front_left_wheel_joint</front_left_joint>
         <back_left_joint>rear_left_wheel_joint</back_left_joint>
         <front_right_joint>front_right_wheel_joint</front_right_joint>

@@ -14,24 +14,24 @@
     </gazebo>
 	</xacro:macro> -->
 
-	<!-- <xacro:macro name="joint_state_publisher" params="prefix"> -->
-    <!-- <gazebo> -->
-		<!-- <plugin filename="ignition-gazebo-joint-state-publisher-system" -->
-		<!-- name="ignition::gazebo::systems::JointStatePublisher"> -->
-		<!-- <topic>${prefix}joint_states</topic> -->
-		<!-- <update_rate>30</update_rate> -->
-		<!-- <joint_name>${prefix}front_left_wheel_joint</joint_name> -->
-		<!-- <joint_name>${prefix}front_right_wheel_joint</joint_name> -->
-		<!-- <joint_name>${prefix}rear_left_wheel_joint</joint_name> -->
-		<!-- <joint_name>${prefix}rear_right_wheel_joint</joint_name> -->
-		<!-- </plugin>     -->
-	<!-- </gazebo> -->
-  	<!-- </xacro:macro> -->
+	<xacro:macro name="joint_state_publisher" params="prefix"> 
+    <gazebo> 
+		<plugin filename="gz-sim-joint-state-publisher-system"
+		name="gz::sim::systems::JointStatePublisher">
+		<topic>${prefix}/joint_states</topic>
+		<update_rate>30</update_rate>
+		<joint_name>front_left_wheel_joint</joint_name>
+		<joint_name>front_right_wheel_joint</joint_name>
+		<joint_name>rear_left_wheel_joint</joint_name>
+		<joint_name>rear_right_wheel_joint</joint_name>
+		</plugin>    
+	 </gazebo>
+  	 </xacro:macro>
 
 	<!-- skid steering plugin -->
 	<xacro:macro name="skid_steering" params="ns prefix">
     <gazebo>
-	  <plugin filename="libignition-gazebo-diff-drive-system.so" name="ignition::gazebo::systems::DiffDrive">
+	  <plugin filename="libgz-diff-drive-system.so" name="gz::sim::systems::DiffDrive">
 		    <odom_publish_frequency>50</odom_publish_frequency>
 		    <left_joint>${prefix}front_left_wheel_joint</left_joint>
 		    <right_joint>${prefix}front_right_wheel_joint</right_joint>
@@ -51,7 +51,7 @@
 
   <xacro:macro name="omni_steering" params="ns prefix">
 		<gazebo>
-		<!-- <plugin filename="ignition-gazebo-mecanum-drive-system" name="ignition::gazebo::systems::MecanumDrive"> -->
+		<!-- <plugin filename="gz-sim-mecanum-drive-system" name="gz::sim::systems::MecanumDrive"> -->
 			<!-- <odom_publish_frequency>50.0</odom_publish_frequency> -->
 			<!-- <front_left_joint>${prefix}front_left_wheel_joint</front_left_joint> -->
 			<!-- <front_right_joint>${prefix}front_right_wheel_joint</front_right_joint> -->
@@ -69,16 +69,18 @@
       <!-- </plugin> -->
 
 	    <plugin
-        filename="ignition-gazebo-velocity-control-system"
-        name="ignition::gazebo::systems::VelocityControl">
+        filename="gz-sim-velocity-control-system"
+        name="gz::sim::systems::VelocityControl">
       	</plugin>
 
 		<plugin
-        filename="ignition-gazebo-odometry-publisher-system"
-        name="ignition::gazebo::systems::OdometryPublisher">
+        filename="gz-sim-odometry-publisher-system"
+        name="gz::sim::systems::OdometryPublisher">
 		<odom_frame>${prefix}odom</odom_frame>
 		<robot_base_frame>${prefix}base_footprint</robot_base_frame>
       	</plugin>
+
+	
 
 	  </gazebo>	
   </xacro:macro>
