@@ -108,13 +108,13 @@
             </z>
           </linear_acceleration>
         </imu>
-        <plugin name="imu" filename="libgazebo_ros_imu_sensor.so">
+        <!-- <plugin name="imu" filename="libgazebo_ros_imu_sensor.so">
           <ros>
             <namespace>${ns}</namespace>
             <remapping>~/out:=~/data</remapping>
           </ros>
           <initial_orientation_as_reference>initial_orientation_as_reference</initial_orientation_as_reference>
-        </plugin>
+        </plugin> -->
       </sensor>
     </gazebo>
   </xacro:macro>
