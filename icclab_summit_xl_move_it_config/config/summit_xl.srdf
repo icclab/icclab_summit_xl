@@ -237,4 +237,5 @@
     <disable_collisions link1="right_outer_finger" link2="right_outer_knuckle" reason="Adjacent"/>
     <disable_collisions link1="right_outer_finger" link2="robotiq_140_base_link" reason="Never"/>
     <disable_collisions link1="right_outer_knuckle" link2="robotiq_140_base_link" reason="Adjacent"/>
+    <disable_collisions link1="left_inner_finger_pad" link2="right_inner_finger_pad" reason="Default"/>
 </robot>

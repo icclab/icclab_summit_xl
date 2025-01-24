@@ -41,7 +41,7 @@ def generate_launch_description():
       }.items(),
   ))
 
-  # TODO: we're missing the controllers and joint positions
+  # Arm and gripper contollers launched separately in arm_controller.launch
 
   # start lidars
 
