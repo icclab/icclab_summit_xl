@@ -18,9 +18,7 @@
   subscriber_queue: 10       # Default 10
   publisher_queue: 10        # Default 10
   lazy: false                # Default "false"
-  direction: GZ_TO_ROS  # Default "BIDIRECTIONAL" - Bridge both directions
-                            # "GZ_TO_ROS" - Bridge Ignition topic to ROS
-                            # "ROS_TO_GZ" - Bridge ROS topic to Ignition
+  direction: GZ_TO_ROS
 
 # front_rgbd_camera/color
 - ros_topic_name: "/summit/front_rgbd_camera/color/image_raw"
@@ -30,9 +28,7 @@
   subscriber_queue: 10       # Default 10
   publisher_queue: 10        # Default 10
   lazy: false                # Default "false"
-  direction: GZ_TO_ROS  # Default "BIDIRECTIONAL" - Bridge both directions
-                            # "GZ_TO_ROS" - Bridge Ignition topic to ROS
-                            # "ROS_TO_GZ" - Bridge ROS topic to Ignition
+  direction: GZ_TO_ROS 
 
 # front_rgbd_camera/color/camera_info
 - ros_topic_name: "/summit/front_rgbd_camera/color/camera_info"
@@ -42,34 +38,27 @@
   subscriber_queue: 10       # Default 10
   publisher_queue: 10        # Default 10
   lazy: false                # Default "false"
-  direction: GZ_TO_ROS  # Default "BIDIRECTIONAL" - Bridge both directions
-                            # "GZ_TO_ROS" - Bridge Ignition topic to ROS
-                            # "ROS_TO_GZ" - Bridge ROS topic to Ignition
+  direction: GZ_TO_ROS
 
-# # front_rgbd_camera/depth
-# - ros_topic_name: "/summit/front_rgbd_camera/depth/image_raw"
-#   gz_topic_name: "/ignition/front_rgbd_camera/depth/image_raw"
-#   ros_type_name: "sensor_msgs/msg/Image"
-#   gz_type_name: "gz.msgs.Image"
-#   subscriber_queue: 5       # Default 10
-#   publisher_queue: 6        # Default 10
-#   lazy: true                # Default "false"
-#   direction: BIDIRECTIONAL  # Default "BIDIRECTIONAL" - Bridge both directions
-#                             # "GZ_TO_ROS" - Bridge Ignition topic to ROS
-#                             # "ROS_TO_GZ" - Bridge ROS topic to Ignition
+# front_rgbd_camera/depth
+- ros_topic_name: "/summit/front_rgbd_camera/depth/image_raw"
+  gz_topic_name: "/summit/front_rgbd_camera/depth/image_raw"
+  ros_type_name: "sensor_msgs/msg/Image"
+  gz_type_name: "gz.msgs.Image"
+  subscriber_queue: 10       # Default 10
+  publisher_queue: 10        # Default 10
+  lazy: true                # Default "false"
+  direction: GZ_TO_ROS
 
-
-# arm_camera/color/camera_info
-- ros_topic_name: "/summit/arm_camera/color/camera_info"
-  gz_topic_name: "/summit/arm_camera/color/camera_info"
+# front_rgbd_camera/depth/camera_info
+- ros_topic_name: "/summit/front_rgbd_camera/depth/camera_info"
+  gz_topic_name: "/summit/front_rgbd_camera/depth/camera_info"
   ros_type_name: "sensor_msgs/msg/CameraInfo"
   gz_type_name: "gz.msgs.CameraInfo"
   subscriber_queue: 10       # Default 10
   publisher_queue: 10        # Default 10
   lazy: false                # Default "false"
-  direction: GZ_TO_ROS  # Default "BIDIRECTIONAL" - Bridge both directions
-                            # "GZ_TO_ROS" - Bridge Ignition topic to ROS
-                            # "ROS_TO_GZ" - Bridge ROS topic to Ignition
+  direction: GZ_TO_ROS
 
 # arm_camera/color/image_raw
 - ros_topic_name: "/summit/arm_camera/color/image_raw" 
@@ -79,21 +68,38 @@
   subscriber_queue: 10       # Default 10
   publisher_queue: 10        # Default 10
   lazy: false                # Default "false"
-  direction: GZ_TO_ROS  # Default "BIDIRECTIONAL" - Bridge both directions
-                            # "GZ_TO_ROS" - Bridge Ignition topic to ROS
-                            # "ROS_TO_GZ" - Bridge ROS topic to Ignition
+  direction: GZ_TO_ROS  
 
-# # arm_camera/depth
-# - ros_topic_name: "/summit/arm_camera/depth/image_raw"
-#   gz_topic_name: "/ignition/arm_camera/depth/image_raw"
-#   ros_type_name: "sensor_msgs/msg/Image"
-#   gz_type_name: "gz.msgs.Image"
-#   subscriber_queue: 5       # Default 10
-#   publisher_queue: 6        # Default 10
-#   lazy: true                # Default "false"
-#   direction: BIDIRECTIONAL  # Default "BIDIRECTIONAL" - Bridge both directions
-#                             # "GZ_TO_ROS" - Bridge Ignition topic to ROS
-#                             # "ROS_TO_GZ" - Bridge ROS topic to Ignition
+# arm_camera/color/camera_info
+- ros_topic_name: "/summit/arm_camera/color/camera_info"
+  gz_topic_name: "/summit/arm_camera/color/camera_info"
+  ros_type_name: "sensor_msgs/msg/CameraInfo"
+  gz_type_name: "gz.msgs.CameraInfo"
+  subscriber_queue: 10       # Default 10
+  publisher_queue: 10        # Default 10
+  lazy: false                # Default "false"
+  direction: GZ_TO_ROS
+
+# arm_camera/depth
+- ros_topic_name: "/summit/arm_camera/depth/image_raw"
+  gz_topic_name: "/summit/arm_camera/depth/image_raw"
+  ros_type_name: "sensor_msgs/msg/Image"
+  gz_type_name: "gz.msgs.Image"
+  subscriber_queue: 5       # Default 10
+  publisher_queue: 6        # Default 10
+  lazy: true                # Default "false"
+  direction: GZ_TO_ROS  
+
+# arm_camera/color/camera_info
+- ros_topic_name: "/summit/arm_camera/depth/camera_info"
+  gz_topic_name: "/summit/arm_camera/depth/camera_info"
+  ros_type_name: "sensor_msgs/msg/CameraInfo"
+  gz_type_name: "gz.msgs.CameraInfo"
+  subscriber_queue: 10       # Default 10
+  publisher_queue: 10        # Default 10
+  lazy: false                # Default "false"
+  direction: GZ_TO_ROS
+
 
 # robotnik_base_control/odom
 # - ros_topic_name: "/robotnik_base_control/odom"
@@ -104,9 +110,7 @@
   subscriber_queue: 10       # Default 10
   publisher_queue: 10        # Default 10
   lazy: false                # Default "false"
-  direction: GZ_TO_ROS  # Default "BIDIRECTIONAL" - Bridge both directions
-                            # "GZ_TO_ROS" - Bridge Ignition topic to ROS
-                            # "ROS_TO_GZ" - Bridge ROS topic to Ignition
+  direction: GZ_TO_ROS  
 
 # /summit/joint_states
 - ros_topic_name: "/summit/joint_states"
@@ -116,10 +120,7 @@
   subscriber_queue: 10       # Default 10
   publisher_queue: 10        # Default 10
   lazy: false                # Default "false"
-  direction: GZ_TO_ROS  # Default "BIDIRECTIONAL" - Bridge both directions
-                            # "GZ_TO_ROS" - Bridge Ignition topic to ROS
-                            # "ROS_TO_GZ" - Bridge ROS topic to Ignition
-
+  direction: GZ_TO_ROS  
 
 # /summit/robotnik_base_control/cmd_vel_unstamped
 # - ros_topic_name: "/summit/robotnik_base_control/cmd_vel_unstamped"
@@ -130,9 +131,7 @@
   subscriber_queue: 10       # Default 10
   publisher_queue: 10        # Default 10
   lazy: false                # Default "false"
-  direction: ROS_TO_GZ  # Default "BIDIRECTIONAL" - Bridge both directions
-                            # "GZ_TO_ROS" - Bridge Ignition topic to ROS
-                            # "ROS_TO_GZ" - Bridge ROS topic to Ignition
+  direction: ROS_TO_GZ  
 
 # /summit/tf
 - ros_topic_name: "/summit/tf"
@@ -142,9 +141,7 @@
   subscriber_queue: 10       # Default 10
   publisher_queue: 10        # Default 10
   lazy: false                # Default "false"
-  direction: GZ_TO_ROS  # Default "BIDIRECTIONAL" - Bridge both directions
-                            # "GZ_TO_ROS" - Bridge Ignition topic to ROS
-                            # "ROS_TO_GZ" - Bridge ROS topic to Ignition
+  direction: GZ_TO_ROS
 
 # /clock
 - ros_topic_name: "/clock"
