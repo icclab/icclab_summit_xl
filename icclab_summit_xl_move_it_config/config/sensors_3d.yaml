@@ -1,5 +1,5 @@
 sensors:
-  - arm_camera
+  #- arm_camera
   - front_rgbd_camera
 arm_camera:
   far_clipping_plane_distance: 5.0
