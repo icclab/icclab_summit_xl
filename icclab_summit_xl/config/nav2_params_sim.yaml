@@ -279,10 +279,10 @@ local_costmap:
         plugin: "nav2_costmap_2d::StaticLayer"
         map_subscribe_transient_local: True
       add_obstacle_layer:
-        plugin: nav2_costmap_2d::AddObstacleLayer
+        plugin: "nav2_costmap_2d::AddObstacleLayer"
         enabled: True
-        update_window_height_m: 1.5
-        update_window_width_m: 0.5
+        update_window_height_m: 0.1
+        update_window_width_m: 0.1
       
       always_send_full_costmap: True
 
@@ -354,10 +354,10 @@ global_costmap:
         cost_scaling_factor: 3.0
         inflation_radius: 0.55
       add_obstacle_layer:
-        plugin: nav2_costmap_2d::AddObstacleLayer
+        plugin: "nav2_costmap_2d::AddObstacleLayer"
         enabled: True
-        update_window_height_m: 1.5
-        update_window_width_m: 0.5
+        update_window_height_m: 0.1
+        update_window_width_m: 0.1
 
       always_send_full_costmap: True
 

@@ -1,10 +1,10 @@
 sensors:
-  - arm_camera
+  #- arm_camera
   - front_rgbd_camera
 arm_camera:
   far_clipping_plane_distance: 5.0
   filtered_cloud_topic: filtered_cloud_arm
-  image_topic: /summit/arm_camera/depth/image_raw
+  image_topic: /summit/oak/stereo/image_raw
   max_update_rate: 1.0
   near_clipping_plane_distance: 0.3
   padding_offset: 0.03
