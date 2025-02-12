@@ -69,28 +69,28 @@ def generate_launch_description():
 
         # Nodes to launch
         
-        # SLAM mode:
-        Node(
-            condition=UnlessCondition(localization),
-            package='rtabmap_slam', executable='rtabmap', output='screen',
-            namespace=namespace,
-            parameters=[parameters],
-            remappings=remappings,
-            arguments=['-d']), # This will delete the previous database (~/.ros/rtabmap.db)
-            
-        # Localization mode:
-        Node(
-            condition=IfCondition(localization),
-            namespace=namespace,
-            package='rtabmap_slam', executable='rtabmap', output='screen',
-            parameters=[parameters,
-              {'Mem/IncrementalMemory':'False',
-               'Mem/InitWMWithAllNodes':'True'}],
-            remappings=remappings),
-
+        # # SLAM mode:
         # Node(
-        #     package='rtabmap_viz', executable='rtabmap_viz', output='screen',
+        #     condition=UnlessCondition(localization),
+        #     package='rtabmap_slam', executable='rtabmap', output='screen',
         #     namespace=namespace,
         #     parameters=[parameters],
+        #     remappings=remappings,
+        #     arguments=['-d']), # This will delete the previous database (~/.ros/rtabmap.db)
+            
+        # # Localization mode:
+        # Node(
+        #     condition=IfCondition(localization),
+        #     namespace=namespace,
+        #     package='rtabmap_slam', executable='rtabmap', output='screen',
+        #     parameters=[parameters,
+        #       {'Mem/IncrementalMemory':'False',
+        #        'Mem/InitWMWithAllNodes':'True'}],
         #     remappings=remappings),
+
+        Node(
+            package='rtabmap_viz', executable='rtabmap_viz', output='screen',
+            namespace=namespace,
+            parameters=[parameters],
+            remappings=remappings),
     ])

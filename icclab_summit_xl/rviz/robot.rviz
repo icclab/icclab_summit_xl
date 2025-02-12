@@ -165,7 +165,7 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        front_rgbd_camera_rgb_optical_frame:
+        front_rgbd_camera_color_optical_frame:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -281,7 +281,7 @@ Visualization Manager:
           Value: true
         front_rgbd_camera_rgb_frame:
           Value: true
-        front_rgbd_camera_rgb_optical_frame:
+        front_rgbd_camera_color_optical_frame:
           Value: true
         front_right_wheel_link:
           Value: true
@@ -333,7 +333,7 @@ Visualization Manager:
               front_rgbd_camera_depth_optical_frame:
                 {}
             front_rgbd_camera_rgb_frame:
-              front_rgbd_camera_rgb_optical_frame:
+              front_rgbd_camera_color_optical_frame:
                 {}
           front_right_wheel_link:
             {}

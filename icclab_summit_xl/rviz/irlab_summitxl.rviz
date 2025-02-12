@@ -293,7 +293,7 @@ Visualization Manager:
               Alpha: 1
               Show Axes: false
               Show Trail: false
-            summit_xl_front_rgbd_camera_rgb_optical_frame:
+            summit_xl_front_rgbd_camera_color_optical_frame:
               Alpha: 1
               Show Axes: false
               Show Trail: false
