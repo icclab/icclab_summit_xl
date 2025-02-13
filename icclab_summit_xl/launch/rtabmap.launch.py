@@ -45,7 +45,8 @@ def generate_launch_description():
           ('rgb/camera_info', 'front_rgbd_camera/color/camera_info'),
           ('depth/image', 'front_rgbd_camera/depth/image_raw'),
           ('/tf','tf'),
-          ('/tf_static', 'tf_static')
+          ('/tf_static', 'tf_static'),
+          ('map', 'map_rtab')
           ]
 
     return LaunchDescription([
