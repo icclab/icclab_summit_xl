@@ -1,9 +1,3 @@
-# joint_limits.yaml allows the dynamics properties specified in the URDF to be overwritten or augmented as needed
-
-# For beginners, we downscale velocity and acceleration limits.
-# You can always specify higher scaling factors (<= 1.0) in your motion requests.  # Increase the values below to 1.0 to always move at maximum speed.
-default_velocity_scaling_factor: 0.1
-default_acceleration_scaling_factor: 0.1
 # Joints limits
 #
 # Sources:
@@ -43,19 +37,9 @@ joint_limits:
     has_position_limits: true
     has_velocity_limits: true
     max_effort: 150.0
-    # we artificially limit this joint to half its actual joint position limit
-    # to avoid (MoveIt/OMPL) planning problems, as due to the physical
-    # construction of the robot, it's impossible to rotate the 'elbow_joint'
-    # over more than approx +- 1 pi (the shoulder lift joint gets in the way).
-    #
-    # This leads to planning problems as the search space will be divided into
-    # two sections, with no connections from one to the other.
-    #
-    # Refer to https://github.com/ros-industrial/universal_robot/issues/265 for
-    # more information.
-    max_position: 1.57079632679
+    max_position: 3.14159265359
     max_velocity: 1.57079632679
-    min_position: -1.57079632679
+    min_position: -3.14159265359
     max_acceleration: 3.49
   arm_wrist_1_joint:
     # acceleration limits are not publicly available
