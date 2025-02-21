@@ -7,6 +7,16 @@
 #  - Support > Articles > UR articles > Max. joint torques
 #    https://www.universal-robots.com/articles/ur-articles/max-joint-torques
 #    retrieved: 2020-06-16, last modified: 2020-06-09
+
+
+# For beginners, we downscale velocity and acceleration limits.
+# You can always specify higher scaling factors (<= 1.0) in your motion requests.  # Increase the values below to 1.0 to always move at maximum speed.
+default_velocity_scaling_factor: 0.05
+default_acceleration_scaling_factor: 0.05
+
+# Specific joint properties can be changed with the keys [max_position, min_position, max_velocity, max_acceleration]
+# Joint limits can be turned off with [has_velocity_limits, has_acceleration_limits]
+
 joint_limits:
   arm_shoulder_pan_joint:
     # acceleration limits are not publicly available
