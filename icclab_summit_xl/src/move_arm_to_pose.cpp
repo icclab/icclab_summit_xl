@@ -95,8 +95,8 @@ int main(int argc, char** argv)
     RCLCPP_INFO(node->get_logger(), "Current joint %s position: %f", joint_names[i].c_str(), joint_group_positions[i]);
   }
   
-  move_group.setGoalTolerance(0.005);
-  move_group.setMaxVelocityScalingFactor(0.5);
+  move_group.setGoalTolerance(0.05);
+  move_group.setMaxVelocityScalingFactor(0.1);
   
   Eigen::Isometry3d text_pose = Eigen::Isometry3d::Identity();
   text_pose.translation().z() = 1.75;
