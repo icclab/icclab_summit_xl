@@ -175,7 +175,7 @@ def generate_launch_description():
         output='screen',
     )
 
-  # Delay joint_broadcaster start after `robot_spawner`
+  # Delay bridge start after `robot_spawner`
   delay_bridge_after_robot_spawner = RegisterEventHandler(
       event_handler=OnProcessExit(
           target_action=robot_spawner,
