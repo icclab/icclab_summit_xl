@@ -175,13 +175,14 @@
     <disable_collisions link1="front_right_wheel_link" link2="imu_link" reason="Never"/>
     <disable_collisions link1="front_right_wheel_link" link2="rear_left_wheel_link" reason="Never"/>
     <disable_collisions link1="front_right_wheel_link" link2="rear_right_wheel_link" reason="Never"/>
-    <disable_collisions link1="imu_link" link2="left_inner_finger" reason="Never"/>
-    <disable_collisions link1="imu_link" link2="left_inner_finger_pad" reason="Never"/>
-    <disable_collisions link1="imu_link" link2="left_outer_finger" reason="Never"/>
     <disable_collisions link1="imu_link" link2="left_outer_knuckle" reason="Never"/>
     <disable_collisions link1="imu_link" link2="rear_left_wheel_link" reason="Never"/>
     <disable_collisions link1="imu_link" link2="rear_right_wheel_link" reason="Never"/>
     <disable_collisions link1="imu_link" link2="right_inner_finger" reason="Never"/>
+    <disable_collisions link1="imu_link" link2="right_outer_finger" reason="Never"/>
+    <disable_collisions link1="imu_link" link2="left_inner_finger" reason="Never"/>
+-   <disable_collisions link1="imu_link" link2="left_inner_finger_pad" reason="Never"/>
+-   <disable_collisions link1="imu_link" link2="left_outer_finger" reason="Never"/>
     <disable_collisions link1="left_inner_finger" link2="left_inner_finger_pad" reason="Adjacent"/>
     <disable_collisions link1="left_inner_finger" link2="left_inner_knuckle" reason="Default"/>
     <disable_collisions link1="left_inner_finger" link2="left_outer_finger" reason="Adjacent"/>
