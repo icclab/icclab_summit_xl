@@ -114,7 +114,7 @@
   <exec_depend>nav2_bringup</exec_depend>
   <exec_depend>realsense2_description</exec_depend>
 
-  <exec_depend>ign_ros2_control</exec_depend>
+  <!-- <exec_depend>ign_ros2_control</exec_depend> -->
   <exec_depend>joint_state_publisher</exec_depend>
   <exec_depend>launch</exec_depend>
   <exec_depend>launch_ros</exec_depend>
@@ -135,6 +135,8 @@
   <!-- The export tag contains other, unspecified, tags -->
   <export>
     <build_type>ament_cmake</build_type>
+    <gazebo_ros gazebo_model_path="${prefix}/../"/>
   </export>
+
 
 </package>

@@ -2,7 +2,7 @@ import launch
 import launch_ros
 import os
 import re
-from launch.actions import LogInfo, OpaqueFunction, SetEnvironmentVariable, RegisterEventHandler
+from launch.actions import LogInfo, OpaqueFunction, AppendEnvironmentVariable, RegisterEventHandler
 from ament_index_python.packages import get_package_share_directory
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from nav2_common.launch import RewrittenYaml
@@ -66,7 +66,7 @@ def generate_launch_description():
   robot_xacro = launch.substitutions.LaunchConfiguration('robot_xacro')
   world = launch.substitutions.LaunchConfiguration('world')
 
-  ld.add_action(launch.actions.SetEnvironmentVariable("GZ_SIM_RESOURCE_PATH", "/opt/ros/jazzy/share" + ":" 
+  ld.add_action(launch.actions.AppendEnvironmentVariable("GZ_SIM_RESOURCE_PATH", "/opt/ros/jazzy/share" + ":" 
     + os.environ['COLCON_PREFIX_PATH'] + "/icclab_summit_xl/share" + ":"
     + os.environ['COLCON_PREFIX_PATH'] + "/robotiq_description/share"))
 
@@ -175,7 +175,7 @@ def generate_launch_description():
         output='screen',
     )
 
-  # Delay bridge start after `robot_spawner`
+  # Delay joint_broadcaster start after `robot_spawner`
   delay_bridge_after_robot_spawner = RegisterEventHandler(
       event_handler=OnProcessExit(
           target_action=robot_spawner,
