@@ -25,6 +25,7 @@
 	<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/intel_camera_mount.urdf.xacro" />
 	<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/luxonis_oak_d_pro.urdf.xacro" />
 	<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/luxonis_camera_mount.urdf.xacro" />
+	<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/back_box.urdf.xacro" />
 	<!-- Import arm macros -->
 	<xacro:include filename="$(find icclab_summit_xl)/urdf/arm/ur.urdf.xacro"/>
 	
@@ -165,6 +166,11 @@
 		<xacro:luxonis_oak_icclab prefix="arm_camera" ns="$(arg robot_ns)" parent="arm_camera_mount_link">
 			   <origin xyz="-0.05 0.08 0.02" rpy="${PI} ${-PI/2} ${PI/2}"/> 
 		</xacro:luxonis_oak_icclab> 
+
+		<!-- Back Box -->
+		<xacro:back_box prefix="$(arg prefix)" parent="$(arg prefix)base_link">
+			<origin xyz="-0.08 0 0.4" rpy="0 0 0" />
+		</xacro:back_box>
 
    </xacro:macro>
 
