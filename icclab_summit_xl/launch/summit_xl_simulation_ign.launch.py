@@ -66,9 +66,9 @@ def generate_launch_description():
   robot_xacro = launch.substitutions.LaunchConfiguration('robot_xacro')
   world = launch.substitutions.LaunchConfiguration('world')
 
-  ld.add_action(launch.actions.AppendEnvironmentVariable("GZ_SIM_RESOURCE_PATH", "/opt/ros/jazzy/share" + ":" 
+  ld.add_action(launch.actions.AppendEnvironmentVariable(name="GZ_SIM_RESOURCE_PATH", value=("/opt/ros/jazzy/share" + ":" 
     + os.environ['COLCON_PREFIX_PATH'] + "/icclab_summit_xl/share" + ":"
-    + os.environ['COLCON_PREFIX_PATH'] + "/robotiq_description/share"))
+    + os.environ['COLCON_PREFIX_PATH'] + "/robotiq_description/share")))
 
   ld.add_action(launch.actions.DeclareLaunchArgument(
     name='robot_id',
