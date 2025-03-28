@@ -281,8 +281,9 @@ local_costmap:
       add_obstacle_layer:
         plugin: "nav2_costmap_2d::AddObstacleLayer"
         enabled: True
-        update_window_height_m: 0.1
-        update_window_width_m: 0.1
+        update_window_height_m: 2.0
+        update_window_width_m: 2.0
+        cost_scaling_factor: 0.05
       
       always_send_full_costmap: True
 
@@ -356,8 +357,9 @@ global_costmap:
       add_obstacle_layer:
         plugin: "nav2_costmap_2d::AddObstacleLayer"
         enabled: True
-        update_window_height_m: 0.1
-        update_window_width_m: 0.1
+        update_window_height_m: 2.0
+        update_window_width_m: 2.0
+        cost_scaling_factor: 0.05
 
       always_send_full_costmap: True
 
