@@ -307,5 +307,5 @@
     <disable_collisions link1="oak_rgb_camera_optical_frame" link2="back_box_link" reason="Never"/>
     <disable_collisions link1="oak_left_camera_optical_frame" link2="back_box_link" reason="Never"/>
 
-    <disable_collisions link1="arm_camera_mount_link" link2="robotiq_140_base_link" reason="Never"/>
+    <disable_collisions link1="arm_camera_mount_link" link2="robotiq_140_base_link" reason="Adjacent"/>
 </robot>
