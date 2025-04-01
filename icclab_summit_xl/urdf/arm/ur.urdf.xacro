@@ -16,8 +16,12 @@
     <!-- parameters -->
     <xacro:property name="joint_limit_params"
       default="$(find ur_description)/config/${ur_type}/joint_limits.yaml" />
+    <!-- <xacro:property name="kinematics_params"
+      default="$(find icclab_summit_xl)/config/ur5_calibrated_kinematics.yaml" /> -->
+
     <xacro:property name="kinematics_params"
-      default="$(find icclab_summit_xl)/config/ur5_calibrated_kinematics.yaml" />
+      default="$(find icclab_summit_xl)/config/ur5_calibrated_kinematics_01042025.yaml" />
+ 
     <xacro:property name="physical_params"
       default="$(find ur_description)/config/${ur_type}/physical_parameters.yaml" />
     <xacro:property name="visual_params" default="$(find ur_description)/config/${ur_type}/visual_parameters.yaml"/>
