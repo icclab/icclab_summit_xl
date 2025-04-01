@@ -14,17 +14,17 @@
     </material>
 
     <link name="back_box_link">
-      <!-- <visual>
+      <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>		  
-          <box size="0.45 0.4 0.2" />
+          <box size="0.25 0.4 0.20" />
         </geometry>
         <material name="black"/>
-      </visual> -->
+      </visual>
       <collision>
         <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
         <geometry>
-          <box size="0.45 0.4 0.2" />
+          <box size="0.25 0.4 0.20" />
         </geometry>
       </collision>
       <inertial>
