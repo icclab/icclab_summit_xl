@@ -22,27 +22,27 @@
 
 # front_rgbd_camera/color
 - ros_topic_name: "/summit/front_rgbd_camera/color/image_raw"
-  gz_topic_name: "/summit/front_rgbd_camera/color/image_raw"
+  gz_topic_name: "/summit/front_rgbd_camera/image"
   ros_type_name: "sensor_msgs/msg/Image"
   gz_type_name: "gz.msgs.Image"
   subscriber_queue: 10       # Default 10
   publisher_queue: 10        # Default 10
-  lazy: false                # Default "false"
+  lazy: true                # Default "false"
   direction: GZ_TO_ROS 
 
 # front_rgbd_camera/color/camera_info
 - ros_topic_name: "/summit/front_rgbd_camera/color/camera_info"
-  gz_topic_name: "/summit/front_rgbd_camera/color/camera_info"
+  gz_topic_name: "/summit/front_rgbd_camera/camera_info"
   ros_type_name: "sensor_msgs/msg/CameraInfo"
   gz_type_name: "gz.msgs.CameraInfo"
   subscriber_queue: 10       # Default 10
   publisher_queue: 10        # Default 10
-  lazy: false                # Default "false"
+  lazy: true                # Default "false"
   direction: GZ_TO_ROS
 
 # front_rgbd_camera/depth
 - ros_topic_name: "/summit/front_rgbd_camera/depth/image_raw"
-  gz_topic_name: "/summit/front_rgbd_camera/depth/image_raw"
+  gz_topic_name: "/summit/front_rgbd_camera/depth_image"
   ros_type_name: "sensor_msgs/msg/Image"
   gz_type_name: "gz.msgs.Image"
   subscriber_queue: 10       # Default 10
@@ -52,37 +52,47 @@
 
 # front_rgbd_camera/depth/camera_info
 - ros_topic_name: "/summit/front_rgbd_camera/depth/camera_info"
-  gz_topic_name: "/summit/front_rgbd_camera/depth/camera_info"
+  gz_topic_name: "/summit/front_rgbd_camera/camera_info"
   ros_type_name: "sensor_msgs/msg/CameraInfo"
   gz_type_name: "gz.msgs.CameraInfo"
   subscriber_queue: 10       # Default 10
   publisher_queue: 10        # Default 10
-  lazy: false                # Default "false"
+  lazy: true                # Default "false"
+  direction: GZ_TO_ROS
+
+# front_rgbd_camera/depth/image_raw/points
+- ros_topic_name: "/summit/front_rgbd_camera/points"
+  gz_topic_name: "/summit/front_rgbd_camera/points"
+  ros_type_name: "sensor_msgs/msg/PointCloud2"
+  gz_type_name: "gz.msgs.PointCloudPacked"
+  subscriber_queue: 10       # Default 10
+  publisher_queue: 10        # Default 10
+  lazy: true                # Default "false"
   direction: GZ_TO_ROS
 
 # arm_camera/color/image_raw
 - ros_topic_name: "/summit/arm_camera/color/image_raw" 
-  gz_topic_name: "/summit/arm_camera/color/image_raw"
+  gz_topic_name: "/summit/arm_camera/image"
   ros_type_name: "sensor_msgs/msg/Image"
   gz_type_name: "gz.msgs.Image"
   subscriber_queue: 10       # Default 10
   publisher_queue: 10        # Default 10
-  lazy: false                # Default "false"
+  lazy: true                # Default "false"
   direction: GZ_TO_ROS  
 
 # arm_camera/color/camera_info
 - ros_topic_name: "/summit/arm_camera/color/camera_info"
-  gz_topic_name: "/summit/arm_camera/color/camera_info"
+  gz_topic_name: "/summit/arm_camera/camera_info"
   ros_type_name: "sensor_msgs/msg/CameraInfo"
   gz_type_name: "gz.msgs.CameraInfo"
   subscriber_queue: 10       # Default 10
   publisher_queue: 10        # Default 10
-  lazy: false                # Default "false"
+  lazy: true                # Default "false"
   direction: GZ_TO_ROS
 
 # arm_camera/depth
 - ros_topic_name: "/summit/arm_camera/depth/image_raw"
-  gz_topic_name: "/summit/arm_camera/depth/image_raw"
+  gz_topic_name: "/summit/arm_camera/depth_image"
   ros_type_name: "sensor_msgs/msg/Image"
   gz_type_name: "gz.msgs.Image"
   subscriber_queue: 5       # Default 10
@@ -90,16 +100,25 @@
   lazy: true                # Default "false"
   direction: GZ_TO_ROS  
 
-# arm_camera/color/camera_info
+# arm_camera/depth/camera_info
 - ros_topic_name: "/summit/arm_camera/depth/camera_info"
-  gz_topic_name: "/summit/arm_camera/depth/camera_info"
+  gz_topic_name: "/summit/arm_camera/camera_info"
   ros_type_name: "sensor_msgs/msg/CameraInfo"
   gz_type_name: "gz.msgs.CameraInfo"
   subscriber_queue: 10       # Default 10
   publisher_queue: 10        # Default 10
-  lazy: false                # Default "false"
+  lazy: true                # Default "false"
   direction: GZ_TO_ROS
 
+# arm_camera/depth/image_raw/points
+- ros_topic_name: "/summit/arm_camera/points"
+  gz_topic_name: "/summit/arm_camera/points"
+  ros_type_name: "sensor_msgs/msg/PointCloud2"
+  gz_type_name: "gz.msgs.PointCloudPacked"
+  subscriber_queue: 10       # Default 10
+  publisher_queue: 10        # Default 10
+  lazy: true                # Default "false"
+  direction: GZ_TO_ROS
 
 # robotnik_base_control/odom
 # - ros_topic_name: "/robotnik_base_control/odom"
