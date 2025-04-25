@@ -14,11 +14,8 @@ summit:
       force_torque_sensor_broadcaster:
         type: force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster
 
-      joint_trajectory_controller:
-        type: joint_trajectory_controller/JointTrajectoryController
-
       arm_controller:
-        type: ur_controllers/ScaledJointTrajectoryController
+        type: joint_trajectory_controller/JointTrajectoryController
 
       forward_velocity_controller:
         type: velocity_controllers/JointGroupVelocityController
@@ -63,33 +60,6 @@ summit:
       frame_id: $(var tf_prefix)tool0
       topic_name: ft_data
 
-  joint_trajectory_controller:
-    ros__parameters:
-      joints:
-        - $(var tf_prefix)shoulder_pan_joint
-        - $(var tf_prefix)shoulder_lift_joint
-        - $(var tf_prefix)elbow_joint
-        - $(var tf_prefix)wrist_1_joint
-        - $(var tf_prefix)wrist_2_joint
-        - $(var tf_prefix)wrist_3_joint
-      command_interfaces:
-        - position
-      state_interfaces:
-        - position
-        - velocity
-      state_publish_rate: 100.0
-      action_monitor_rate: 20.0
-      allow_partial_joints_goal: false
-      constraints:
-        stopped_velocity_tolerance: 0.2
-        goal_time: 0.0
-        $(var tf_prefix)shoulder_pan_joint: { trajectory: 0.2, goal: 0.1 }
-        $(var tf_prefix)shoulder_lift_joint: { trajectory: 0.2, goal: 0.1 }
-        $(var tf_prefix)elbow_joint: { trajectory: 0.2, goal: 0.1 }
-        $(var tf_prefix)wrist_1_joint: { trajectory: 0.2, goal: 0.1 }
-        $(var tf_prefix)wrist_2_joint: { trajectory: 0.2, goal: 0.1 }
-        $(var tf_prefix)wrist_3_joint: { trajectory: 0.2, goal: 0.1 }
-
   arm_controller:
     ros__parameters:
       joints:
@@ -116,7 +86,6 @@ summit:
         $(var tf_prefix)wrist_1_joint: { trajectory: 0.2, goal: 0.1 }
         $(var tf_prefix)wrist_2_joint: { trajectory: 0.2, goal: 0.1 }
         $(var tf_prefix)wrist_3_joint: { trajectory: 0.2, goal: 0.1 }
-      speed_scaling_interface_name: $(var tf_prefix)speed_scaling/speed_scaling_factor
 
   forward_velocity_controller:
     ros__parameters:
@@ -138,4 +107,3 @@ summit:
         - $(var tf_prefix)wrist_1_joint
         - $(var tf_prefix)wrist_2_joint
         - $(var tf_prefix)wrist_3_joint
-
