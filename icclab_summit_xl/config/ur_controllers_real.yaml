@@ -65,9 +65,8 @@ summit:
       frame_id: $(var tf_prefix)tool0
       topic_name: ft_data
 
-
-  #joint_trajectory_controller:
-  arm_controller:
+  #arm_controller:
+  joint_trajectory_controller:
     ros__parameters:
       joints:
         - $(var tf_prefix)shoulder_pan_joint
@@ -94,9 +93,8 @@ summit:
         $(var tf_prefix)wrist_2_joint: { trajectory: 0.2, goal: 0.1 }
         $(var tf_prefix)wrist_3_joint: { trajectory: 0.2, goal: 0.1 }
 
-
-  #arm_controller:
-  scaled_joint_trajectory_controller:
+  #scaled_joint_trajectory_controller:
+  arm_controller:
     ros__parameters:
       joints:
         - $(var tf_prefix)shoulder_pan_joint
