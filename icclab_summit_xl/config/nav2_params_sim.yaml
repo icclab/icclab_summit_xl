@@ -26,7 +26,7 @@ amcl:
     recovery_alpha_fast: 0.0
     recovery_alpha_slow: 0.0
     resample_interval: 1
-    robot_model_type: "nav2_amcl::DifferentialMotionModel"
+    robot_model_type: "nav2_amcl::OmniMotionModel"
     save_pose_rate: 0.5
     sigma_hit: 0.2
     tf_broadcast: true
@@ -102,7 +102,7 @@ controller_server:
       plugin: "nav2_mppi_controller::MPPIController"
       time_steps: 56
       model_dt: 0.05
-      #motion_model: "Omni"
+      motion_model: "Omni"
       visualize: False
       TrajectoryVisualizer:
         trajectory_step: 5

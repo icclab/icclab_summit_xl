@@ -55,7 +55,9 @@ def launch_setup(context, *args, **kwargs):
         }],
     )
 
-    return [robot_state_publisher, LogInfo(msg=["summit_xl_simulation_ign", " robot_description_param: \n", robot_description_content])]
+    return [robot_state_publisher, 
+            #LogInfo(msg=["summit_xl_simulation_ign", " robot_description_param: \n", robot_description_content])
+            ]
 
 
 def generate_launch_description():

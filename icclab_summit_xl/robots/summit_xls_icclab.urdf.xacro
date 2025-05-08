@@ -73,8 +73,7 @@
 
 	<xacro:arg name="prefix" default=""/> <!-- was: summit_xl_-->
 	<xacro:arg name="use_fake_hardware" default="true"/>
-	<xacro:arg name="ros_planar_move_plugin" default="true"/>
-	<!-- <xacro:arg name="ros_planar_move_plugin" default="false"/> -->
+	<xacro:arg name="omni_steering" default="true"/>
 	<xacro:arg name="gpu" default="false"/>
 	<xacro:arg name="robot_id" default="summit"/>
 	<xacro:arg name="robot_ns" default="$(arg robot_id)"/>
@@ -186,21 +185,14 @@
 		
    </gazebo>
 
-	<xacro:if value="$(arg ros_planar_move_plugin)">
+	<xacro:if value="$(arg omni_steering)">
 	   <xacro:omni_steering prefix="$(arg prefix)" ns="$(arg robot_ns)"/>
-	   	<!-- <xacro:joint_state_publisher prefix="$(arg prefix)"/> -->
    </xacro:if>
 
-    <xacro:unless value="$(arg ros_planar_move_plugin)">
+    <xacro:unless value="$(arg omni_steering)">
 	   <xacro:skid_steering prefix="$(arg prefix)" ns="$(arg robot_ns)"/>
    </xacro:unless>
    
    <xacro:joint_state_publisher prefix="$(arg robot_id)"/>
-
-  <!-- Macro for robot wheels. TODO: For gz ign is now managed by gz, we might want to FIX this  -->
-  <!-- <xacro:if value="$(arg use_fake_hardware)">
-    <xacro:include filename="$(find summit_xl_description)/urdf/ros2_control.urdf.xacro"/>
-    <xacro:ros2_control/>
-  </xacro:if>  -->
 
 </robot>

@@ -51,26 +51,12 @@
 
   <xacro:macro name="omni_steering" params="ns prefix">
 		<gazebo>
-		<!-- <plugin filename="gz-sim-mecanum-drive-system" name="gz::sim::systems::MecanumDrive"> -->
-			<!-- <odom_publish_frequency>50.0</odom_publish_frequency> -->
-			<!-- <front_left_joint>${prefix}front_left_wheel_joint</front_left_joint> -->
-			<!-- <front_right_joint>${prefix}front_right_wheel_joint</front_right_joint> -->
-			<!-- <back_left_joint>${prefix}back_left_wheel_joint</back_left_joint> -->
-			<!-- <back_right_joint>${prefix}back_right_wheel_joint</back_right_joint> -->
-			<!-- https://www.roscomponents.com/en/mobile-robots/rb-steel -->
-			<!-- <wheel_separation>0.535</wheel_separation> -->
-			<!-- <wheelbase>0.43</wheelbase> -->
-			<!-- <wheel_radius>0.127</wheel_radius> -->
-			<!-- <topic>/robotnik_base_control/cmd_vel</topic> -->
-			<!-- <odom_topic>/robotnik_base_control/odom</odom_topic> -->
-			<!-- <tf_topic>/${ns}/tf</tf_topic> -->
-			<!-- <frame_id>${prefix}odom</frame_id> -->
-			<!-- <child_frame_id>${prefix}base_footprint</child_frame_id>  -->
-      <!-- </plugin> -->
 
 	    <plugin
         filename="gz-sim-velocity-control-system"
         name="gz::sim::systems::VelocityControl">
+            <initial_linear>0 0 0</initial_linear>
+            <initial_angular>0 0 0</initial_angular>
       	</plugin>
 
 		<plugin
@@ -79,7 +65,6 @@
 		<odom_frame>${prefix}odom</odom_frame>
 		<robot_base_frame>${prefix}base_footprint</robot_base_frame>
       	</plugin>
-
 	
 
 	  </gazebo>	
