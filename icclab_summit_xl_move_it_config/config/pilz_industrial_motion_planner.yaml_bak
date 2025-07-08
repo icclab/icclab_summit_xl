@@ -1,0 +1,82 @@
+cartesian_limits:
+  max_trans_vel: 1.0
+  max_trans_acc: 2.25
+  max_trans_dec: 2.25
+  max_rot_vel: 1.5
+  max_rot_acc: 3.14
+  max_rot_dec: 3.14
+
+joint_limits:
+  # UR5 arm joints
+  shoulder_pan_joint:
+    has_velocity_limits: true
+    max_velocity: 3.14
+    has_acceleration_limits: true
+    max_acceleration: 3.14
+    has_deceleration_limits: true
+    max_deceleration: 3.14
+  shoulder_lift_joint:
+    has_velocity_limits: true
+    max_velocity: 3.14
+    has_acceleration_limits: true
+    max_acceleration: 3.14
+    has_deceleration_limits: true
+    max_deceleration: 3.14
+  elbow_joint:
+    has_velocity_limits: true
+    max_velocity: 3.14
+    has_acceleration_limits: true
+    max_acceleration: 3.14
+    has_deceleration_limits: true
+    max_deceleration: 3.14
+  wrist_1_joint:
+    has_velocity_limits: true
+    max_velocity: 6.28
+    has_acceleration_limits: true
+    max_acceleration: 6.28
+    has_deceleration_limits: true
+    max_deceleration: 6.28
+  wrist_2_joint:
+    has_velocity_limits: true
+    max_velocity: 6.28
+    has_acceleration_limits: true
+    max_acceleration: 6.28
+    has_deceleration_limits: true
+    max_deceleration: 6.28
+  wrist_3_joint:
+    has_velocity_limits: true
+    max_velocity: 6.28
+    has_acceleration_limits: true
+    max_acceleration: 6.28
+    has_deceleration_limits: true
+    max_deceleration: 6.28
+  # Mobile base joints - adjust these if needed
+  # virtual_x_joint:
+  #   has_velocity_limits: true
+  #   max_velocity: 0.5
+  #   has_acceleration_limits: true
+  #   max_acceleration: 0.5
+  #   has_deceleration_limits: true
+  #   max_deceleration: 0.5
+  # virtual_y_joint:
+  #   has_velocity_limits: true
+  #   max_velocity: 0.5
+  #   has_acceleration_limits: true
+  #   max_acceleration: 0.5
+  #   has_deceleration_limits: true
+  #   max_deceleration: 0.5
+  # virtual_z_joint:
+  #   has_velocity_limits: true
+  #   max_velocity: 0.5
+  #   has_acceleration_limits: true
+  #   max_acceleration: 1.0
+  #   has_deceleration_limits: true
+  #   max_deceleration: 1.0
+
+planning_groups:
+  arm:  # Adjust to match your arm's move group name
+    default_planner: PTP
+    planners: [PTP, LIN, CIRC]
+  # mobile_base:  # Adjust to match your base's move group name if you want to use Pilz with it
+  #   default_planner: PTP
+  #   planners: [PTP]

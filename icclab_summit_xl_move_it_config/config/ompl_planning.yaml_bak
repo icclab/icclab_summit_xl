@@ -1,0 +1,41 @@
+planning_plugins: ["ompl_interface/OMPLPlanner"]
+
+planner_configs:
+  BiTRRT:
+    type: geometric::BiTRRT
+    range: 0.0  # Max motion added to tree. ==> This value will be set by the planner according to the problem definition
+    temp_change_factor: 0.1  # How much to increase or decrease temp.
+    init_temperature: 100  # Initial temperature
+    frountier_threshold: 0.0  # Dist new state to nearest neighbor to disqualify as frontier
+    frountier_node_ratio: 0.1  # 0.1:1 nonfrontier nodes for frontier nodes
+    cost_threshold: 1e300  # Cost threshold for rejecting new states
+
+  RRTConnect:
+    type: geometric::RRTConnect
+    range: 0.0  # Max motion added to tree. ==> This value will be set by the planner according to the problem definition
+    
+  RRTstar:
+    type: geometric::RRTstar
+    range: 0.0  # Max motion added to tree. ==> This value will be set by the planner according to the problem definition
+    goal_bias: 0.05  # When close to goal select goal, with this probability
+    delay_collision_checking: 1  # Stop collision checking as soon as possible
+    
+  BITstar:
+    type: geometric::BITstar
+    range: 0.0  # Max motion added to tree. ==> This value will be set by the planner according to the problem definition
+    
+  LBTRRT:
+    type: geometric::LBTRRT
+    range: 0.0  # Max motion added to tree. ==> This value will be set by the planner according to the problem definition
+    goal_bias: 0.05  # When close to goal select goal, with this probability
+    epsilon: 0.4  # optimality approximation factor
+
+arm:  # Adjust this to match your arm's move group name
+  planner_configs:
+    - RRTConnect
+    - BiTRRT
+    - BITstar
+    - RRTstar
+    - LBTRRT
+  # projection_evaluator: joints(shoulder_pan_joint,shoulder_lift_joint)  # Adjust joint names
+  longest_valid_segment_fraction: 0.005

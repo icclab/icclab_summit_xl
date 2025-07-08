@@ -71,5 +71,5 @@ def generate_move_group_launch(moveit_config):
 def generate_launch_description():
     moveit_config = MoveItConfigsBuilder("summit_xl", package_name="icclab_summit_xl_move_it_config").to_moveit_configs()
     ld = generate_move_group_launch(moveit_config)
-    # ld.add_action(LogInfo(msg=str(moveit_config)))
+    ld.add_action(LogInfo(msg=str(moveit_config)))
     return ld

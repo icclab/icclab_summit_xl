@@ -8,7 +8,7 @@
         <pose>0 0 0 0 -1.5707963267948966 -1.5707963267948966</pose>
         <visualize>true</visualize>
         <always_on>true</always_on>
-        <update_rate>15</update_rate>
+        <update_rate>10</update_rate>
         <!-- <camera name="orbbec"> -->
         <camera name="${prefix}">
           <optical_frame_id>${prefix}_color_optical_frame</optical_frame_id>
@@ -22,7 +22,7 @@
           </image>
           <clip>
             <near>0.05</near>
-            <far>20.0</far>
+            <far>40.0</far>
           </clip>
         </camera>
         <!-- plugin https://docs.ros.org/en/ros2_packages/rolling/api/gazebo_plugins/generated/classgazebo__plugins_1_1GazeboRosCamera.html -->
@@ -30,7 +30,7 @@
           <!-- <camera name="${prefix}"/> -->
           <gz_frame_id>${frame}</gz_frame_id>
           <min_depth>0.05</min_depth>
-          <max_depth>20.0</max_depth>
+          <max_depth>40.0</max_depth>
         <!-- </plugin>  -->
         <topic>${ns}/${prefix}</topic>
       </sensor>
