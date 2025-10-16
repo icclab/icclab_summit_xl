@@ -8,21 +8,23 @@ from launch_ros.actions import Node, PushRosNamespace
 from launch.actions import DeclareLaunchArgument, LogInfo, GroupAction
 from launch.conditions import IfCondition
 from launch.substitutions import PythonExpression
+from nav2_common.launch import RewrittenYaml
 
 def generate_launch_description():
   
   ld = launch.LaunchDescription()
 
-  namespace = launch.substitutions.LaunchConfiguration('namespace')
+  # Removed namespace for MoveItPy compatibility
+  # namespace = launch.substitutions.LaunchConfiguration('namespace')
   rviz = launch.substitutions.LaunchConfiguration('rviz')
   map = launch.substitutions.LaunchConfiguration('map')
   params_file = launch.substitutions.LaunchConfiguration('params_file')
 
-  ld.add_action(launch.actions.DeclareLaunchArgument(
-    name='namespace',
-    description='Namespace / Id of the robot',
-    default_value='summit',
-  ))
+  # ld.add_action(launch.actions.DeclareLaunchArgument(
+  #   name='namespace',
+  #   description='Namespace / Id of the robot',
+  #   default_value='summit',
+  # ))
   
   ld.add_action(launch.actions.DeclareLaunchArgument(
     name='rviz',
@@ -45,19 +47,21 @@ def generate_launch_description():
     description='Full path to nav2 params yaml file to load')
 
   ld.add_action(params_file_cmd)
-  
-  # start nav2    
+
+  # Params file has been modified to remove <robot_namespace> placeholders
+  # No need for RewrittenYaml anymore
+
+  # start nav2 - without namespace
   ld.add_action(launch.actions.IncludeLaunchDescription(
     PythonLaunchDescriptionSource(
       os.path.join(get_package_share_directory('nav2_bringup'), 'launch', 'bringup_launch.py')
     ),
     launch_arguments={
       'use_sim_time' : "true",
-      'use_namespace': "true",
-      'namespace': namespace,
+      'use_namespace': "false",  # Don't use namespace
       'map': map,
       'start_rviz': PythonExpression(['not ', rviz]),
-      'params_file': params_file,
+      'params_file': params_file,  # Use params directly
       }.items(),
   ))
   
@@ -72,14 +76,15 @@ def generate_launch_description():
       }.items(),
   ))
 
-  # start laserscan merger in the correct namespace
+  # start laserscan merger - removed namespace
   laser_scan_merger_action = launch.actions.IncludeLaunchDescription(
     PythonLaunchDescriptionSource(
       os.path.join(get_package_share_directory('ros2_laser_scan_merger'), 'launch', 'merge_2_scan.launch.py')
     ),
   )
-  ga = GroupAction(actions=[PushRosNamespace(namespace), laser_scan_merger_action])
-  ld.add_action(ga)
+  # Removed namespace push
+  # ga = GroupAction(actions=[PushRosNamespace(namespace), laser_scan_merger_action])
+  ld.add_action(laser_scan_merger_action)
 
   # log params used
   ld.add_action(LogInfo(msg=["params_file:", params_file]))

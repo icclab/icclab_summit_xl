@@ -12,16 +12,16 @@ def launch_setup(context, *args, **kwargs):
 
     use_sim_time = True
     # controllers_file = launch.substitutions.LaunchConfiguration('controllers_file')
-    controllers_file= [launch_ros.substitutions.FindPackageShare('icclab_summit_xl'), '/config/', 'ur_controllers.yaml']
     robot_id = launch.substitutions.LaunchConfiguration('robot_id')
     robot_xacro = launch.substitutions.LaunchConfiguration('robot_xacro')
 
-    config_file_rewritten = RewrittenYaml(
-        source_file=controllers_file,
-        param_rewrites={},
-        root_key=[robot_id],
-        convert_types=True,
-    )
+    # Don't use RewrittenYaml with root_key since we removed namespaces
+    # Use PathJoinSubstitution to create the controllers file path
+    config_file_rewritten = launch.substitutions.PathJoinSubstitution([
+        launch_ros.substitutions.FindPackageShare('icclab_summit_xl'),
+        'config',
+        'ur_controllers.yaml'
+    ])
 
     robot_description_content = launch.substitutions.Command(
         [
@@ -30,7 +30,7 @@ def launch_setup(context, *args, **kwargs):
             " ",
             robot_xacro,
             " robot_id:=", robot_id,
-            " robot_ns:=", robot_id,
+            # robot_ns defaults to empty in xacro for MoveItPy compatibility
             " config_controllers:=", config_file_rewritten,
         ]
     )
@@ -45,8 +45,10 @@ def launch_setup(context, *args, **kwargs):
         executable='robot_state_publisher',
         name='robot_state_publisher',
         output='screen',
-        namespace=robot_id,
-        remappings= [('/tf', 'tf'), ('/tf_static', 'tf_static')],
+        # Removed namespace for MoveItPy compatibility
+        # namespace=robot_id,
+        # Removed TF remappings - keep in global namespace
+        # remappings= [('/tf', 'tf'), ('/tf_static', 'tf_static')],
         parameters=[{
             'use_sim_time': use_sim_time,
             'robot_description': robot_description_param_no_comments,
@@ -103,7 +105,8 @@ def generate_launch_description():
   robot_spawner = launch_ros.actions.Node(
     package="ros_gz_sim",
     executable="create",
-    arguments=["-name", robot_id, "-topic", ("/",  robot_id, "/robot_description"), '-y', '2.0'],
+    # Removed namespace from robot_description topic
+    arguments=["-name", robot_id, "-topic", "robot_description", '-y', '2.0'],
   )
   ld.add_action(robot_spawner)
 
@@ -112,7 +115,8 @@ def generate_launch_description():
   joint_broadcaster = launch_ros.actions.Node(
     package="controller_manager",
     executable="spawner",
-    arguments=["joint_state_broadcaster", "--switch-timeout", "600", "--controller-manager", ["/", robot_id, "/controller_manager"]],
+    # Removed namespace from controller_manager path
+    arguments=["joint_state_broadcaster", "--switch-timeout", "600", "--controller-manager", "/controller_manager"],
   )
 
   # Delay joint_broadcaster start after `robot_spawner`
@@ -127,7 +131,8 @@ def generate_launch_description():
   arm_controller = launch_ros.actions.Node(
     package="controller_manager",
     executable="spawner",
-    arguments=["arm_controller", "--switch-timeout",  "600", "--controller-manager", ["/", robot_id, "/controller_manager"]],
+    # Removed namespace from controller_manager path
+    arguments=["arm_controller", "--switch-timeout",  "600", "--controller-manager", "/controller_manager"],
   )
 
   # Delay arm_controller start after `joint_state_broadcaster`
@@ -142,7 +147,8 @@ def generate_launch_description():
   gripper_controller = launch_ros.actions.Node(
     package="controller_manager",
     executable="spawner",
-    arguments=["robotiq_gripper_controller", "--controller-manager", ["/", robot_id, "/controller_manager"]],
+    # Removed namespace from controller_manager path
+    arguments=["robotiq_gripper_controller", "--controller-manager", "/controller_manager"],
   )
   # Delay gripper_controller start after `arm_controller`
   delay_gripper_controller_after_arm_controller = RegisterEventHandler(

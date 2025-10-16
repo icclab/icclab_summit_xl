@@ -76,7 +76,7 @@
 	<xacro:arg name="omni_steering" default="true"/>
 	<xacro:arg name="gpu" default="false"/>
 	<xacro:arg name="robot_id" default="summit"/>
-	<xacro:arg name="robot_ns" default="$(arg robot_id)"/>
+	<xacro:arg name="robot_ns" default=""/>
 
     <xacro:macro name="summit_xl" params="prefix publish_bf hq">
 
@@ -178,11 +178,11 @@
 		<plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
 			<parameters>$(arg config_controllers)</parameters>
 			<ros>
-			<namespace>$(arg robot_id)</namespace>
+			<namespace>$(arg robot_ns)</namespace>
 			<remapping>/robot_description:=robot_description</remapping>
 			</ros>
 		</plugin>
-		
+
    </gazebo>
 
 	<xacro:if value="$(arg omni_steering)">

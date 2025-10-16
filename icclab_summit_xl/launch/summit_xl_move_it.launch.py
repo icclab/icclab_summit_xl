@@ -13,29 +13,30 @@ def generate_launch_description():
   
   ld = launch.LaunchDescription()
 
-  robot_id = launch.substitutions.LaunchConfiguration('robot_id')
- 
-  ld.add_action(launch.actions.DeclareLaunchArgument(
-    name='robot_id',
-    description='Id of the robot',
-    default_value='summit',
-  ))
+  # Removed robot_id namespace to work with MoveItPy
+  # robot_id = launch.substitutions.LaunchConfiguration('robot_id')
+
+  # ld.add_action(launch.actions.DeclareLaunchArgument(
+  #   name='robot_id',
+  #   description='Id of the robot',
+  #   default_value='summit',
+  # ))
 
   use_sim_time = launch.substitutions.LaunchConfiguration('use_sim_time')
- 
+
   ld.add_action(launch.actions.DeclareLaunchArgument(
     name='use_sim_time',
     description='Whether simulation or not',
     default_value='true',
   ))
- 
-  # push namespace
-  namespace = launch_ros.actions.PushRosNamespace(namespace=robot_id)
-  ld.add_action(namespace)
 
-  # add remappings for all
-  ld.add_action(SetRemap('/tf', 'tf'))
-  ld.add_action(SetRemap('/tf_static', 'tf_static'))
+  # Removed namespace push - MoveItPy doesn't work well with namespaces in Jazzy
+  # namespace = launch_ros.actions.PushRosNamespace(namespace=robot_id)
+  # ld.add_action(namespace)
+
+  # Removed TF remappings - keep TF in global namespace
+  # ld.add_action(SetRemap('/tf', 'tf'))
+  # ld.add_action(SetRemap('/tf_static', 'tf_static'))
   # ld.add_action(SetRemap('/execute_trajectory', 'execute_trajectory'))
   # ld.add_action(SetRemap('/move_action', 'move_action'))
 
