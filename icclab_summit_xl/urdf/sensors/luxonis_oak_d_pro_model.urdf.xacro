@@ -51,7 +51,7 @@
     <joint name="oak_model_origin_joint" type="fixed">
 			<parent link="oak-d_frame" />
 			<!-- <child link="oak_model_origin" /> -->
-      <child link="arm_camera_link" />
+      		<child link="arm_camera_link" />
 			<origin xyz="0 0 0" rpy="1.5708 0 1.5708" />
 		</joint>
 

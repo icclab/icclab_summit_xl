@@ -54,14 +54,14 @@
   <xacro:macro name="sensor_orbbec_astra_gazebo_icclab" params="ns prefix frame">
     <xacro:property name="deg_to_rad" value="0.01745329251994329577"/>
     <gazebo reference="${prefix}_link">
-      <sensor name="${prefix}_color" type="rgbd_camera">
-        <pose>0 0 0 0 0 0</pose>
+      <sensor name="${prefix}" type="rgbd_camera">
+        <gz_frame_id>${prefix}_link</gz_frame_id>
         <visualize>true</visualize>
         <always_on>true</always_on>
         <update_rate>10</update_rate>
         <camera name="${prefix}">
           <!-- <camera_info_topic>${ns}/${prefix}/color/camera_info</camera_info_topic> -->
-          <optical_frame_id>${prefix}_rgb_optical_frame</optical_frame_id>
+          <!-- <optical_frame_id>${prefix}_rgb_optical_frame</optical_frame_id> -->
           <horizontal_fov>1.04719755</horizontal_fov>
           <vertical_fov>0.86393798</vertical_fov>
           <image>
@@ -74,7 +74,7 @@
             <far>40.0</far>
           </clip>
         </camera>
-        <gz_frame_id>${frame}</gz_frame_id>
+        
         <min_depth>0.05</min_depth>
         <max_depth>40.0</max_depth>
         <topic>${ns}/${prefix}</topic>

@@ -163,8 +163,8 @@
    		<!-- </xacro:sensor_d435_icclab>  -->
 
 		<!-- Luxonis OAK_D_PRO -->
-		<xacro:luxonis_oak_icclab prefix="arm_camera" ns="$(arg robot_ns)" parent="arm_camera_mount_link">
-			   <origin xyz="-0.05 0.08 0.02" rpy="${PI} ${-PI/2} ${PI/2}"/> 
+		<xacro:luxonis_oak_icclab prefix="arm_camera" ns="$(arg robot_ns)" parent="arm_flange">
+			   <origin xyz="0.027 0 -0.08" rpy="0 0 0"/> 
 		</xacro:luxonis_oak_icclab> 
 
    </xacro:macro>

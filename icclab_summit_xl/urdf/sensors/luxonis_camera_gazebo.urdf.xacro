@@ -3,15 +3,16 @@
 
   <xacro:macro name="luxonis_camera_gazebo" params="ns prefix frame">
     <xacro:property name="M_PI" value="3.1415926535897931" />
-    <gazebo reference="${prefix}_link">
+    <gazebo reference="${frame}">
       <sensor name="${prefix}" type="rgbd_camera">
-        <pose>0 0 0 0 -1.5707963267948966 -1.5707963267948966</pose>
+        <gz_frame_id>${frame}</gz_frame_id>
+        <!-- <pose>0 0 0 0 -1.5707963267948966 -1.5707963267948966</pose> -->
         <visualize>true</visualize>
         <always_on>true</always_on>
         <update_rate>15</update_rate>
         <!-- <camera name="orbbec"> -->
         <camera name="${prefix}">
-          <optical_frame_id>${prefix}_color_optical_frame</optical_frame_id>
+          <!-- <optical_frame_id>${prefix}_color_optical_frame</optical_frame_id> -->
           <!-- <camera_info_topic>${ns}/${prefix}/color/camera_info</camera_info_topic> -->
           <horizontal_fov>1.04719755</horizontal_fov>
           <vertical_fov>0.86393798</vertical_fov>
@@ -24,14 +25,9 @@
             <near>0.05</near>
             <far>20.0</far>
           </clip>
-        </camera>
-        <!-- plugin https://docs.ros.org/en/ros2_packages/rolling/api/gazebo_plugins/generated/classgazebo__plugins_1_1GazeboRosCamera.html -->
-        <!-- <plugin name="${prefix}" filename="libignition-gazebo-sensors-system.so"> -->
-          <!-- <camera name="${prefix}"/> -->
-          <gz_frame_id>${frame}</gz_frame_id>
+        </camera> 
           <min_depth>0.05</min_depth>
           <max_depth>20.0</max_depth>
-        <!-- </plugin>  -->
         <topic>${ns}/${prefix}</topic>
       </sensor>
     </gazebo>
