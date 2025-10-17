@@ -7,8 +7,6 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node, PushRosNamespace
 from launch.actions import DeclareLaunchArgument, LogInfo, GroupAction
 from launch.conditions import IfCondition
-from launch.substitutions import PythonExpression
-from nav2_common.launch import RewrittenYaml
 
 def generate_launch_description():
   
@@ -51,17 +49,16 @@ def generate_launch_description():
   # Params file has been modified to remove <robot_namespace> placeholders
   # No need for RewrittenYaml anymore
 
-  # start nav2 - without namespace
+  # start nav2 with custom navigation_launch (without route_server and docking_server)
   ld.add_action(launch.actions.IncludeLaunchDescription(
     PythonLaunchDescriptionSource(
-      os.path.join(get_package_share_directory('nav2_bringup'), 'launch', 'bringup_launch.py')
+      os.path.join(get_package_share_directory('icclab_summit_xl'), 'launch', 'bringup_launch.py')
     ),
     launch_arguments={
-      'use_sim_time' : "true",
-      'use_namespace': "false",  # Don't use namespace
+      'use_sim_time': 'true',
+      'use_namespace': 'false',
       'map': map,
-      'start_rviz': PythonExpression(['not ', rviz]),
-      'params_file': params_file,  # Use params directly
+      'params_file': params_file,
       }.items(),
   ))
   

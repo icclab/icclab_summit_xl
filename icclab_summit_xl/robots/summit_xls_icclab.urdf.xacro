@@ -177,6 +177,7 @@
    <gazebo>
 		<plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
 			<parameters>$(arg config_controllers)</parameters>
+			<use_sim_time>true</use_sim_time>
 			<ros>
 			<namespace>$(arg robot_ns)</namespace>
 			<remapping>/robot_description:=robot_description</remapping>

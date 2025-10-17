@@ -175,6 +175,7 @@ def generate_launch_description():
   start_gazebo_ros_bridge_cmd = launch_ros.actions.Node(
         package='ros_gz_bridge',
         executable='parameter_bridge',
+        parameters=[{'use_sim_time': True}],
         arguments=[
             '--ros-args',
             '-p',

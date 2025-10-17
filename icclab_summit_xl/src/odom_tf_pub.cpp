@@ -12,14 +12,20 @@ using std::placeholders::_1;
 class OdomToBaseLinkPublisher : public rclcpp::Node
 {
 public:
-  OdomToBaseLinkPublisher() 
+  OdomToBaseLinkPublisher()
   : Node("odom_to_base_link_publisher")
   {
+    // Declare and get use_sim_time parameter
+    this->declare_parameter("use_sim_time", false);
+
     subscription_ = this->create_subscription<nav_msgs::msg::Odometry>("/summit/robotnik_base_control/odom", 10, std::bind(&OdomToBaseLinkPublisher::odom_subscriber_callback, this, _1));
-    
+
     publisher_ = this->create_publisher<nav_msgs::msg::Odometry>("/summit/odom", 10);
 
     tf_broadcaster_ = std::make_shared<tf2_ros::TransformBroadcaster>(this);
+
+    RCLCPP_INFO(this->get_logger(), "OdomToBaseLinkPublisher initialized with use_sim_time: %s",
+                this->get_parameter("use_sim_time").as_bool() ? "true" : "false");
   }
 
 private:
