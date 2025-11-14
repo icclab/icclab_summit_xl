@@ -63,8 +63,9 @@ class SetupServo(Node):
             self.get_logger().error('MoveGroup action server not available')
             return False
 
-        # Define the "up" position joint values
-        # These correspond to the "up" configuration in summit_xl.srdf
+        # Define the "look_forward" position joint values
+        # These correspond to the "look_forward" configuration in summit_xl.srdf
+        # This position has good joint variation and avoids singularities
         arm_joint_names = [
             'arm_shoulder_pan_joint',
             'arm_shoulder_lift_joint',
@@ -74,8 +75,8 @@ class SetupServo(Node):
             'arm_wrist_3_joint'
         ]
 
-        # "up" configuration values from SRDF
-        up_position = [0.0, -1.57, 0.0, -1.57, 0.0, 0.0]
+        # "look_forward" configuration values from SRDF
+        safe_position = [0.0, -0.243, -2.8291, -0.7984, 1.5621, 0.0]
 
         # Create motion plan request
         goal_msg = MoveGroup.Goal()
@@ -95,7 +96,7 @@ class SetupServo(Node):
         for i, joint_name in enumerate(arm_joint_names):
             joint_constraint = JointConstraint()
             joint_constraint.joint_name = joint_name
-            joint_constraint.position = up_position[i]
+            joint_constraint.position = safe_position[i]
             joint_constraint.tolerance_above = 0.01
             joint_constraint.tolerance_below = 0.01
             joint_constraint.weight = 1.0

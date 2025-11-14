@@ -51,8 +51,8 @@ servo_node:
       smoothing_filter_plugin_name: "online_signal_smoothing::ButterworthFilterPlugin"
 
       # Singularity avoidance
-      lower_singularity_threshold: 17.0
-      hard_stop_singularity_threshold: 30.0
+      lower_singularity_threshold: 50.0  # Increased from 17.0 - less conservative
+      hard_stop_singularity_threshold: 80.0  # Increased from 30.0
       leaving_singularity_threshold_multiplier: 2.0
 
       # Joint limits
