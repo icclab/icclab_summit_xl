@@ -11,6 +11,7 @@ install(
 # Install Python scripts
 install(PROGRAMS
   scripts/servo_keyboard_control.py
+  scripts/servo_joint_jog_control.py
   scripts/servo_circle_demo.py
   scripts/move_to_safe_position.py
   scripts/setup_servo.py
