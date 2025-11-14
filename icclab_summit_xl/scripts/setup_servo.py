@@ -50,7 +50,7 @@ class SetupServo(Node):
 
     def move_to_safe_position(self):
         """Move arm to 'up' configuration"""
-        self.get_logger().info('Step 1: Moving arm to safe position...')
+        self.get_logger().info('Step 2: Moving arm to safe position...')
 
         # Wait for joint state
         self.get_logger().info('Waiting for joint state...')
@@ -151,7 +151,7 @@ class SetupServo(Node):
 
     def set_servo_command_type(self):
         """Set servo command type to TWIST"""
-        self.get_logger().info('Step 2: Setting servo command type to TWIST...')
+        self.get_logger().info('Step 1: Setting servo command type to TWIST...')
 
         # Wait for service
         if not self.servo_client.wait_for_service(timeout_sec=5.0):
@@ -186,19 +186,22 @@ def main(args=None):
     rclpy.init(args=args)
     node = SetupServo()
 
-    # Step 1: Move to safe position
+    # Step 1: Set command type (must be done before servo can accept commands)
+    if not node.set_servo_command_type():
+        node.get_logger().error('Failed to set servo command type')
+        node.destroy_node()
+        rclpy.shutdown()
+        return
+
+    # Small delay to let servo process command type change
+    time.sleep(0.5)
+
+    # Step 2: Move to safe position (now that servo is in TWIST mode)
     if not node.move_to_safe_position():
         node.get_logger().error('Failed to move to safe position')
         node.destroy_node()
         rclpy.shutdown()
         return
-
-    # Small delay to let motion complete
-    time.sleep(1.0)
-
-    # Step 2: Set command type
-    if not node.set_servo_command_type():
-        node.get_logger().error('Failed to set servo command type')
 
     node.destroy_node()
     rclpy.shutdown()

@@ -35,9 +35,9 @@ CTRL-C to quit
 """
 
 # Movement speed factors (reduced for smoother control)
-LINEAR_SPEED = 0.05   # m/s - much slower for precise control
-ANGULAR_SPEED = 0.2   # rad/s
-SPEED_INCREMENT = 0.02  # Speed adjustment step
+LINEAR_SPEED = 0.02   # m/s - very slow for precise control
+ANGULAR_SPEED = 0.1   # rad/s
+SPEED_INCREMENT = 0.01  # Speed adjustment step
 
 moveBindings = {
     'w': (1, 0, 0, 0, 0, 0),     # Forward (X+)
