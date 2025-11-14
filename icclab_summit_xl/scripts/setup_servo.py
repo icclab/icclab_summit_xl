@@ -63,9 +63,8 @@ class SetupServo(Node):
             self.get_logger().error('MoveGroup action server not available')
             return False
 
-        # Define the "look_forward" position joint values
-        # These correspond to the "look_forward" configuration in summit_xl.srdf
-        # This position has good joint variation and avoids singularities
+        # Define safe position joint values
+        # These values are verified to avoid singularity warnings
         arm_joint_names = [
             'arm_shoulder_pan_joint',
             'arm_shoulder_lift_joint',
@@ -75,8 +74,15 @@ class SetupServo(Node):
             'arm_wrist_3_joint'
         ]
 
-        # "look_forward" configuration values from SRDF
-        safe_position = [0.0, -0.243, -2.8291, -0.7984, 1.5621, 0.0]
+        # Safe position values (verified to work without singularity warnings)
+        safe_position = [
+            -1.336421520695716,    # arm_shoulder_pan_joint
+            -1.0173433430859413,   # arm_shoulder_lift_joint
+            -1.7652695616252208,   # arm_elbow_joint
+            -0.79047386389632,     # arm_wrist_1_joint
+            1.5523559894182737,    # arm_wrist_2_joint
+            -1.416207801480389     # arm_wrist_3_joint
+        ]
 
         # Create motion plan request
         goal_msg = MoveGroup.Goal()
