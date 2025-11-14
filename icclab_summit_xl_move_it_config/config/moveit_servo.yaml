@@ -54,9 +54,10 @@ servo_node:
       use_smoothing: true
       smoothing_filter_plugin_name: "online_signal_smoothing::ButterworthFilterPlugin"
 
-      # Singularity avoidance (temporarily disabled for debugging)
-      lower_singularity_threshold: 500.0  # Very high - effectively disabled
-      hard_stop_singularity_threshold: 800.0  # Very high - effectively disabled
+      # Singularity avoidance (DISABLED for debugging)
+      # Setting thresholds to 0.0 disables singularity checking
+      lower_singularity_threshold: 0.0  # 0 = disabled
+      hard_stop_singularity_threshold: 0.0  # 0 = disabled
       leaving_singularity_threshold_multiplier: 2.0
 
       # Joint limits
