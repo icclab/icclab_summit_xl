@@ -50,7 +50,7 @@ class ServoCircleDemo(Node):
         """Publish circular motion commands."""
         twist_msg = TwistStamped()
         twist_msg.header.stamp = self.get_clock().now().to_msg()
-        twist_msg.header.frame_id = 'arm_tool0'
+        twist_msg.header.frame_id = 'arm_base_link'  # Use planning frame
 
         # Calculate circular velocities based on the selected plane
         # The velocity vector should be perpendicular to the position vector
