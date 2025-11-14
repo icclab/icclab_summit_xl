@@ -34,6 +34,7 @@ servo_node:
 
       # Trajectory generation parameters
       num_outgoing_trajectory_points: 2  # Send 2 points to avoid single-point issues
+      duration_before_trajectory_scaling: 0.1  # Duration for outgoing trajectory (seconds)
 
       # Incoming command timeout
       incoming_command_timeout: 0.5  # Stop if no command received (seconds)

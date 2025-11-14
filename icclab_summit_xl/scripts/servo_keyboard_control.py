@@ -34,10 +34,10 @@ SPACE: stop all motion
 CTRL-C to quit
 """
 
-# Movement speed factors (reduced for smoother control)
-LINEAR_SPEED = 0.02   # m/s - very slow for precise control
-ANGULAR_SPEED = 0.1   # rad/s
-SPEED_INCREMENT = 0.01  # Speed adjustment step
+# Movement speed factors (extremely slow for testing)
+LINEAR_SPEED = 0.01   # m/s - extremely slow for debugging
+ANGULAR_SPEED = 0.05   # rad/s
+SPEED_INCREMENT = 0.005  # Speed adjustment step
 
 moveBindings = {
     'w': (1, 0, 0, 0, 0, 0),     # Forward (X+)
