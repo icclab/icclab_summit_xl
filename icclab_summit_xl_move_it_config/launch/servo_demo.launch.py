@@ -63,7 +63,6 @@ def generate_launch_description():
             Node(
                 package="moveit_servo",
                 executable="servo_node",
-                name="servo_node",
                 output="screen",
                 parameters=[
                     moveit_config.to_dict(),
