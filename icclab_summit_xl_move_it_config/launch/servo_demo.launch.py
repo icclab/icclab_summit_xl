@@ -65,15 +65,12 @@ def generate_launch_description():
                 executable="servo_node",
                 output="screen",
                 parameters=[
-                    moveit_config.to_dict(),
+                    # Only pass essential parameters, not full moveit_config
+                    moveit_config.robot_description,
+                    moveit_config.robot_description_semantic,
+                    moveit_config.robot_description_kinematics,
                     servo_params,
-                    {
-                        "use_sim_time": use_sim_time,
-                        # Ensure planning scene monitor is configured
-                        "publish_planning_scene": True,
-                        "publish_state_updates": True,
-                        "publish_transforms_updates": True,
-                    },
+                    {"use_sim_time": use_sim_time},
                 ],
                 condition=IfCondition(use_servo_node),
             )
