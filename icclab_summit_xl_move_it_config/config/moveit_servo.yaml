@@ -1,48 +1,50 @@
 servo_node:
   ros__parameters:
-    # MoveIt Servo Configuration for ROS 2 Jazzy
+    moveit_servo:
+      # MoveIt Servo Configuration for ROS 2 Jazzy
 
-    # Planning and kinematics
-    move_group_name: arm  # Name of the MoveIt planning group
-    planning_frame: arm_base_link  # Frame for planning
-    ee_frame_name: arm_tool0  # End-effector frame
+      # Planning and kinematics
+      move_group_name: arm  # Name of the MoveIt planning group
+      planning_frame: arm_base_link  # Frame for planning
+      ee_frame_name: arm_tool0  # End-effector frame
 
-    # Command type and scaling
-    command_in_type: "unitless"  # "unitless" commands in range [-1:1]
-    scale:
-      linear: 0.4   # Max linear velocity (m/s) for Cartesian commands
-      rotational: 0.8  # Max angular velocity (rad/s) for Cartesian commands
-      joint: 0.5    # Max joint velocity scale for joint commands
+      # Command type and scaling
+      command_in_type: "unitless"  # "unitless" commands in range [-1:1]
+      scale:
+        linear: 0.4   # Max linear velocity (m/s) for Cartesian commands
+        rotational: 0.8  # Max angular velocity (rad/s) for Cartesian commands
+        joint: 0.5    # Max joint velocity scale for joint commands
 
-    # Publishing
-    publish_period: 0.034  # Servo loop rate (seconds), ~30 Hz
-    publish_joint_positions: true
-    publish_joint_velocities: true
-    publish_joint_accelerations: false
+      # Publishing
+      publish_period: 0.034  # Servo loop rate (seconds), ~30 Hz
+      publish_joint_positions: true
+      publish_joint_velocities: true
+      publish_joint_accelerations: false
 
-    # Incoming command timeout
-    incoming_command_timeout: 0.5  # Stop if no command received (seconds)
+      # Incoming command timeout
+      incoming_command_timeout: 0.5  # Stop if no command received (seconds)
 
-    # Collision checking
-    check_collisions: true
-    collision_check_rate: 10.0  # Hz
-    self_collision_proximity_threshold: 0.01  # meters
-    scene_collision_proximity_threshold: 0.02  # meters
+      # Collision checking
+      check_collisions: true
+      collision_check_rate: 10.0  # Hz
+      self_collision_proximity_threshold: 0.01  # meters
+      scene_collision_proximity_threshold: 0.02  # meters
 
-    # Smoothing
-    use_smoothing: true
-    smoothing_filter_plugin_name: "online_signal_smoothing::ButterworthFilterPlugin"
+      # Smoothing
+      use_smoothing: true
+      smoothing_filter_plugin_name: "online_signal_smoothing::ButterworthFilterPlugin"
 
-    # Singularity avoidance
-    lower_singularity_threshold: 17.0
-    hard_stop_singularity_threshold: 30.0
-    leaving_singularity_threshold_multiplier: 2.0
+      # Singularity avoidance
+      lower_singularity_threshold: 17.0
+      hard_stop_singularity_threshold: 30.0
+      leaving_singularity_threshold_multiplier: 2.0
 
-    # Joint limits
-    override_velocity_scaling_factor: 0.0  # 0.0 means use joint limits from URDF
+      # Joint limits
+      override_velocity_scaling_factor: 0.0  # 0.0 means use joint limits from URDF
 
-    # Status and halt
-    num_outgoing_halt_msgs_to_publish: 4
+      # Status and halt
+      num_outgoing_halt_msgs_to_publish: 4
 
-    # Active joint group (optional - uses move_group_name by default)
-    # active_subgroup: arm
+      # Active joint group (optional - uses move_group_name by default)
+      # active_subgroup: arm
+
