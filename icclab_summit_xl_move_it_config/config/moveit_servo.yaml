@@ -8,6 +8,10 @@ servo_node:
       planning_frame: arm_base_link  # Frame for planning
       ee_frame_name: arm_tool0  # End-effector frame
 
+      # Robot state
+      joint_topic: /joint_states
+      status_topic: ~/status
+
       # Command type and scaling
       command_in_type: "unitless"  # "unitless" commands in range [-1:1]
       scale:
