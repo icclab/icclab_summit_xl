@@ -26,6 +26,12 @@ MoveIt Servo allows for real-time control of the robot arm using velocity comman
 
 ## Usage
 
+### Prerequisites
+
+Before using servo control, you need to:
+1. **Move the arm away from singularities** - The arm must not be in a fully extended or aligned configuration
+2. **Set the servo command type** - Tell servo what type of commands to expect
+
 ### 1. Basic Servo Demo (with robot simulation)
 
 First, start the robot simulation:
@@ -43,7 +49,43 @@ This will start:
 - MoveIt Servo node
 - RViz for visualization
 
+**Move arm to safe position:**
+```bash
+ros2 run icclab_summit_xl move_to_safe_position.py
+```
+
+**Set servo command type to TWIST (Cartesian control):**
+```bash
+ros2 service call /servo_node/switch_command_type moveit_msgs/srv/ServoCommandType "{command_type: 1}"
+```
+
+Command types:
+- `0` = JOINT_JOG (joint space control)
+- `1` = TWIST (Cartesian space control) - **use this for keyboard control**
+- `2` = POSE (target pose control)
+
 ### 2. Keyboard Control Demo
+
+**Quick start (all-in-one setup):**
+```bash
+# This script does both: moves to safe position AND sets command type
+ros2 run icclab_summit_xl setup_servo.py
+
+# Then start keyboard control
+ros2 run icclab_summit_xl servo_keyboard_control.py
+```
+
+**Or manual setup:**
+```bash
+# Move to safe position
+ros2 run icclab_summit_xl move_to_safe_position.py
+
+# Set command type
+ros2 service call /servo_node/switch_command_type moveit_msgs/srv/ServoCommandType "{command_type: 1}"
+
+# Start keyboard control
+ros2 run icclab_summit_xl servo_keyboard_control.py
+```
 
 To control the arm with your keyboard:
 
@@ -72,6 +114,11 @@ u/o : rotate around Z axis (yaw)
 ```
 
 ### 3. Circle Demo
+
+**Setup first:**
+```bash
+ros2 run icclab_summit_xl setup_servo.py
+```
 
 To see an automated circular motion demo:
 
