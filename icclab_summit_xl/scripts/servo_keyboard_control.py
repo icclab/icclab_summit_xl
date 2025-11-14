@@ -72,12 +72,12 @@ class ServoKeyboardControl(Node):
         # Publisher for Cartesian twist commands
         self.twist_pub = self.create_publisher(
             TwistStamped,
-            '/servo_node/twist_cmds',
+            '/servo_node/delta_twist_cmds',
             10
         )
 
         self.get_logger().info('MoveIt Servo Keyboard Control Node Started')
-        self.get_logger().info('Publishing twist commands to /servo_node/twist_cmds')
+        self.get_logger().info('Publishing twist commands to /servo_node/delta_twist_cmds')
 
     def publish_twist(self, x, y, z, roll, pitch, yaw):
         """Publish a twist command."""
