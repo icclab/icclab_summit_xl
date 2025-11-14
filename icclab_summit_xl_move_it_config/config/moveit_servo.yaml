@@ -22,11 +22,9 @@ servo_node:
       publish_planning_scene_hz: 30.0
 
       # Command type and scaling
-      command_in_type: "unitless"  # "unitless" commands in range [-1:1]
-      scale:
-        linear: 0.4   # Max linear velocity (m/s) for Cartesian commands
-        rotational: 0.8  # Max angular velocity (rad/s) for Cartesian commands
-        joint: 0.5    # Max joint velocity scale for joint commands
+      command_in_type: "speed_units"  # Commands are in m/s and rad/s (not unitless)
+      # Note: scale parameters are ignored when using speed_units
+      # The scripts directly specify the desired velocities
 
       # Publishing
       publish_period: 0.02  # Servo loop rate (seconds), 50 Hz

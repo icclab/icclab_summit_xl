@@ -17,8 +17,8 @@ class ServoCircleDemo(Node):
 
         # Parameters
         self.declare_parameter('publish_rate', 50.0)  # Hz
-        self.declare_parameter('radius', 0.1)  # meters
-        self.declare_parameter('angular_speed', 0.5)  # rad/s
+        self.declare_parameter('radius', 0.05)  # meters - smaller for safer demo
+        self.declare_parameter('angular_speed', 0.2)  # rad/s - slower for precise control
         self.declare_parameter('plane', 'xy')  # 'xy', 'xz', or 'yz'
 
         self.publish_rate = self.get_parameter('publish_rate').value
