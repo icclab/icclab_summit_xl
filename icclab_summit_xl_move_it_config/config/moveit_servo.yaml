@@ -9,11 +9,15 @@ servo_node:
       ee_frame_name: arm_tool0  # End-effector frame
 
       # Robot state
-      joint_topic: /joint_states
+      joint_topic: joint_states  # No leading slash - uses default namespace
       status_topic: ~/status
 
+      # Command output
+      command_out_topic: /arm_controller/joint_trajectory  # Correct controller name
+      command_out_type: trajectory_msgs/JointTrajectory
+
       # Planning scene monitor parameters
-      is_primary_planning_scene_monitor: false  # move_group is primary
+      is_primary_planning_scene_monitor: true  # Servo creates its own monitor
       monitored_planning_scene_topic: /monitored_planning_scene
       publish_planning_scene_hz: 30.0
 
