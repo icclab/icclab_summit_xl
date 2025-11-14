@@ -42,8 +42,8 @@ servo_node:
       # Latency parameters
       max_expected_latency: 0.5  # Maximum expected latency (seconds)
 
-      # Collision checking
-      check_collisions: true
+      # Collision checking (temporarily disabled for debugging)
+      check_collisions: false
       collision_check_rate: 10.0  # Hz
       self_collision_proximity_threshold: 0.01  # meters
       scene_collision_proximity_threshold: 0.02  # meters
@@ -52,9 +52,9 @@ servo_node:
       use_smoothing: true
       smoothing_filter_plugin_name: "online_signal_smoothing::ButterworthFilterPlugin"
 
-      # Singularity avoidance
-      lower_singularity_threshold: 50.0  # Increased from 17.0 - less conservative
-      hard_stop_singularity_threshold: 80.0  # Increased from 30.0
+      # Singularity avoidance (temporarily disabled for debugging)
+      lower_singularity_threshold: 500.0  # Very high - effectively disabled
+      hard_stop_singularity_threshold: 800.0  # Very high - effectively disabled
       leaving_singularity_threshold_multiplier: 2.0
 
       # Joint limits
