@@ -6,7 +6,7 @@ servo_node:
       # Planning and kinematics
       move_group_name: arm  # Name of the MoveIt planning group
       planning_frame: arm_base_link  # Frame for planning
-      ee_frame_name: arm_tool0  # End-effector frame
+      ee_frame_name: arm_flange  # End-effector frame (flange, not tool0)
 
       # Robot state
       joint_topic: joint_states  # No leading slash - uses default namespace
