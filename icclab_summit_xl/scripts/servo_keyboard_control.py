@@ -83,7 +83,7 @@ class ServoKeyboardControl(Node):
         """Publish a twist command."""
         twist_msg = TwistStamped()
         twist_msg.header.stamp = self.get_clock().now().to_msg()
-        twist_msg.header.frame_id = 'arm_tool0'
+        twist_msg.header.frame_id = 'arm_base_link'  # Use planning frame
 
         # Linear velocities
         twist_msg.twist.linear.x = x * LINEAR_SPEED
