@@ -29,7 +29,7 @@ class ServoCircleDemo(Node):
         # Publisher for Cartesian twist commands
         self.twist_pub = self.create_publisher(
             TwistStamped,
-            '/servo_node/delta_twist_cmds',
+            '/servo_node/twist_cmds',
             10
         )
 

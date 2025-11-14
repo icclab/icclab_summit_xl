@@ -93,11 +93,12 @@ Available planes: `xy` (horizontal), `xz` (vertical side), `yz` (vertical front)
 
 The servo node listens to the following topics:
 
-- `/servo_node/delta_twist_cmds` (geometry_msgs/TwistStamped) - Cartesian velocity commands
-- `/servo_node/delta_joint_cmds` (control_msgs/JointJog) - Joint velocity commands
+- `/servo_node/pose_target_cmds` (geometry_msgs/PoseStamped) - Target pose commands
+- `/servo_node/twist_cmds` (geometry_msgs/TwistStamped) - Cartesian velocity commands
+- `/servo_node/joint_cmds` (control_msgs/JointJog) - Joint velocity commands
 
-And publishes commands to:
-- `/arm_controller/joint_trajectory` (trajectory_msgs/JointTrajectory)
+And publishes to:
+- `/arm_controller/joint_trajectory` (trajectory_msgs/JointTrajectory) - Trajectory commands to the controller
 
 ## Configuration
 
@@ -127,7 +128,7 @@ class MyServoController(Node):
         super().__init__('my_servo_controller')
         self.pub = self.create_publisher(
             TwistStamped,
-            '/servo_node/delta_twist_cmds',
+            '/servo_node/twist_cmds',
             10
         )
 
