@@ -4,7 +4,7 @@ Launch file for MoveIt Servo demo with Summit XL robot
 """
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, TimerAction
 from launch.conditions import IfCondition
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch.launch_description_sources import PythonLaunchDescriptionSource
@@ -56,18 +56,23 @@ def generate_launch_description():
         ]
     )
 
-    # MoveIt Servo Node
-    servo_node = Node(
-        package="moveit_servo",
-        executable="servo_node",
-        name="servo_node",
-        output="screen",
-        parameters=[
-            moveit_config.to_dict(),
-            servo_params,
-            {"use_sim_time": use_sim_time},
-        ],
-        condition=IfCondition(use_servo_node),
+    # MoveIt Servo Node - delayed to ensure move_group is ready
+    servo_node = TimerAction(
+        period=5.0,  # Wait 5 seconds for move_group to initialize
+        actions=[
+            Node(
+                package="moveit_servo",
+                executable="servo_node",
+                name="servo_node",
+                output="screen",
+                parameters=[
+                    moveit_config.to_dict(),
+                    servo_params,
+                    {"use_sim_time": use_sim_time},
+                ],
+                condition=IfCondition(use_servo_node),
+            )
+        ]
     )
 
     # Start move_group for collision checking and planning scene
