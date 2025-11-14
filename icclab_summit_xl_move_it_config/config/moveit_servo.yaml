@@ -16,13 +16,16 @@ servo_node:
         joint: 0.5    # Max joint velocity scale for joint commands
 
       # Publishing
-      publish_period: 0.034  # Servo loop rate (seconds), ~30 Hz
+      publish_period: 0.02  # Servo loop rate (seconds), 50 Hz
       publish_joint_positions: true
       publish_joint_velocities: true
       publish_joint_accelerations: false
 
       # Incoming command timeout
       incoming_command_timeout: 0.5  # Stop if no command received (seconds)
+
+      # Latency parameters
+      max_expected_latency: 0.5  # Maximum expected latency (seconds)
 
       # Collision checking
       check_collisions: true
