@@ -4,8 +4,15 @@ project(icclab_summit_xl)
 find_package(ament_cmake REQUIRED)
 
 install(
-  DIRECTORY launch worlds config maps robots urdf rviz meshes
+  DIRECTORY launch worlds config maps robots urdf rviz meshes scripts
   DESTINATION share/${PROJECT_NAME}
+)
+
+# Install Python scripts
+install(PROGRAMS
+  scripts/servo_keyboard_control.py
+  scripts/servo_circle_demo.py
+  DESTINATION lib/${PROJECT_NAME}
 )
 
 ament_export_dependencies(${THIS_PACKAGE_INCLUDE_DEPENDS})

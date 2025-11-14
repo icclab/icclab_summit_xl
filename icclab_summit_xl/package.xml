@@ -56,6 +56,8 @@
   <build_depend>interactive_markers</build_depend>
   <build_depend>geometric_shapes</build_depend>
   <build_depend>moveit_visual_tools</build_depend>
+  <build_depend>moveit_servo</build_depend>
+  <build_depend>control_msgs</build_depend>
   <!--<build_depend>pcl_ros</build_depend>
   <build_depend>pcl_conversions</build_depend>
   <build_depend>rosbag</build_depend>
@@ -131,6 +133,9 @@
   <depend>geometry_msgs</depend>
   <depend>nav_msgs</depend>
   <depend>tf2_ros</depend>
+
+  <exec_depend>moveit_servo</exec_depend>
+  <exec_depend>control_msgs</exec_depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>
