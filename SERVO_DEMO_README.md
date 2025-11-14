@@ -4,12 +4,18 @@ This demo showcases MoveIt Servo functionality with the Summit XL robot equipped
 
 ## Overview
 
-MoveIt Servo allows for real-time control of the robot arm using velocity commands (twists) in Cartesian space or joint space. This is ideal for:
+MoveIt Servo allows for real-time control of the robot arm using velocity commands in joint space (joint jog). This is ideal for:
 - Teleoperation
 - Joystick/gamepad control
-- Visual servoing
+- Fine joint-level adjustments
 - Compliant manipulation
-- Fine adjustments
+
+## Current Status
+
+✅ **Joint Jog Mode**: Fully functional - control individual joints with precise velocity commands
+❌ **Twist (Cartesian) Mode**: Not working - IK solver has issues converting Cartesian velocities to joint velocities
+
+**Recommendation**: Use joint jog control (`servo_joint_jog_control.py`) for reliable servo operation.
 
 ## Files Added
 
@@ -21,84 +27,78 @@ MoveIt Servo allows for real-time control of the robot arm using velocity comman
 - `icclab_summit_xl/launch/servo_demo_full.launch.py` - Complete demo launcher with control nodes
 
 ### Demo Scripts
-- `icclab_summit_xl/scripts/servo_keyboard_control.py` - Keyboard teleoperation for the arm
-- `icclab_summit_xl/scripts/servo_circle_demo.py` - Automated circular motion demonstration
+- `icclab_summit_xl/scripts/servo_joint_jog_control.py` - **✅ WORKING** - Keyboard control for individual joints
+- `icclab_summit_xl/scripts/setup_servo.py` - Automated setup: moves arm to safe position and configures servo
+- `icclab_summit_xl/scripts/servo_debug_monitor.py` - Monitor servo status for debugging
+- `icclab_summit_xl/scripts/servo_keyboard_control.py` - ❌ Twist-based keyboard control (IK issues)
+- `icclab_summit_xl/scripts/servo_circle_demo.py` - ❌ Twist-based circular motion (IK issues)
+- `icclab_summit_xl/scripts/move_to_safe_position.py` - Standalone script to move arm away from singularities
 
 ## Usage
 
-### Prerequisites
+### Quick Start (Recommended - Joint Jog Control)
 
-Before using servo control, you need to:
-1. **Move the arm away from singularities** - The arm must not be in a fully extended or aligned configuration
-2. **Set the servo command type** - Tell servo what type of commands to expect
-
-### 1. Basic Servo Demo (with robot simulation)
-
-First, start the robot simulation:
+**Terminal 1** - Start simulation:
 ```bash
-ros2 launch icclab_summit_xl summit_xl_simulation.launch.py
+ros2 launch icclab_summit_xl summit_xl_simulation_ign.launch.py
 ```
 
-In a new terminal, start the servo demo:
+**Terminal 2** - Start servo demo:
 ```bash
 ros2 launch icclab_summit_xl_move_it_config servo_demo.launch.py
 ```
 
-This will start:
-- MoveIt move_group (for collision checking and planning)
-- MoveIt Servo node
-- RViz for visualization
-
-**Move arm to safe position:**
+**Terminal 3** - Setup servo (moves arm to safe position and sets command type to JOINT_JOG):
 ```bash
-ros2 run icclab_summit_xl move_to_safe_position.py
+# Modify setup_servo.py to keep command_type at 0 (JOINT_JOG), or manually:
+ros2 service call /servo_node/switch_command_type moveit_msgs/srv/ServoCommandType "{command_type: 0}"
 ```
 
-**Set servo command type to TWIST (Cartesian control):**
+**Terminal 4** - Start joint jog keyboard control:
 ```bash
+ros2 run icclab_summit_xl servo_joint_jog_control.py
+```
+
+**Joint Jog Keyboard Controls:**
+```
+Control individual joints:
+1/2 : shoulder_pan +/-
+3/4 : shoulder_lift +/-
+5/6 : elbow +/-
+7/8 : wrist_1 +/-
+9/0 : wrist_2 +/-
+-/= : wrist_3 +/-
+
+SPACE: stop all motion
+CTRL-C to quit
+```
+
+### Command Types
+
+Servo supports different command modes:
+- `0` = **JOINT_JOG** - ✅ Works perfectly - control individual joints
+- `1` = **TWIST** - ❌ IK issues - Cartesian control not functional
+- `2` = **POSE** - Not tested
+
+Set command type with:
+```bash
+ros2 service call /servo_node/switch_command_type moveit_msgs/srv/ServoCommandType "{command_type: 0}"
+```
+
+### Alternative: Cartesian Twist Control (Not Recommended - Has Issues)
+
+**Note**: The twist-based keyboard and circle demos have inverse kinematics issues and do not work correctly. All twist commands result in the same joint motion regardless of input direction.
+
+If you want to try anyway (for debugging):
+```bash
+# Set command type to TWIST
 ros2 service call /servo_node/switch_command_type moveit_msgs/srv/ServoCommandType "{command_type: 1}"
-```
 
-Command types:
-- `0` = JOINT_JOG (joint space control)
-- `1` = TWIST (Cartesian space control) - **use this for keyboard control**
-- `2` = POSE (target pose control)
-
-### 2. Keyboard Control Demo
-
-**Quick start (all-in-one setup):**
-```bash
-# This script does both: moves to safe position AND sets command type
-ros2 run icclab_summit_xl setup_servo.py
-
-# Then start keyboard control
+# Try keyboard control (will not work as expected)
 ros2 run icclab_summit_xl servo_keyboard_control.py
 ```
 
-**Or manual setup:**
-```bash
-# Move to safe position
-ros2 run icclab_summit_xl move_to_safe_position.py
-
-# Set command type
-ros2 service call /servo_node/switch_command_type moveit_msgs/srv/ServoCommandType "{command_type: 1}"
-
-# Start keyboard control
-ros2 run icclab_summit_xl servo_keyboard_control.py
-```
-
-To control the arm with your keyboard:
-
-```bash
-ros2 launch icclab_summit_xl servo_demo_full.launch.py start_keyboard_control:=true
-```
-
-Or run the keyboard control node separately:
-```bash
-ros2 run icclab_summit_xl servo_keyboard_control.py
-```
-
-**Keyboard Controls:**
+**Twist Keyboard Controls (non-functional):**
 ```
 Moving in Cartesian space:
         w

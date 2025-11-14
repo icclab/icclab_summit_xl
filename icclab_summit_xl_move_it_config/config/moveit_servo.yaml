@@ -44,8 +44,8 @@ servo_node:
       # Latency parameters
       max_expected_latency: 0.5  # Maximum expected latency (seconds)
 
-      # Collision checking (temporarily disabled for debugging)
-      check_collisions: false
+      # Collision checking
+      check_collisions: true
       collision_check_rate: 10.0  # Hz
       self_collision_proximity_threshold: 0.01  # meters
       scene_collision_proximity_threshold: 0.02  # meters
@@ -54,10 +54,10 @@ servo_node:
       use_smoothing: true
       smoothing_filter_plugin_name: "online_signal_smoothing::ButterworthFilterPlugin"
 
-      # Singularity avoidance (DISABLED for debugging)
-      # Setting thresholds to 0.0 disables singularity checking
-      lower_singularity_threshold: 0.0  # 0 = disabled
-      hard_stop_singularity_threshold: 0.0  # 0 = disabled
+      # Singularity avoidance
+      # NOTE: Values tuned for joint jog mode. Twist mode has IK issues.
+      lower_singularity_threshold: 100.0
+      hard_stop_singularity_threshold: 150.0
       leaving_singularity_threshold_multiplier: 2.0
 
       # Joint limits
