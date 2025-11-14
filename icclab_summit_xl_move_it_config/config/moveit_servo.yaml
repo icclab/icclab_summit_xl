@@ -12,6 +12,10 @@ servo_node:
       joint_topic: /joint_states
       status_topic: ~/status
 
+      # Planning scene monitor parameters
+      monitored_planning_scene_topic: /monitored_planning_scene
+      publish_planning_scene_hz: 30.0
+
       # Command type and scaling
       command_in_type: "unitless"  # "unitless" commands in range [-1:1]
       scale:

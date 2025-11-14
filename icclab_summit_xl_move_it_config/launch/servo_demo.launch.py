@@ -68,7 +68,13 @@ def generate_launch_description():
                 parameters=[
                     moveit_config.to_dict(),
                     servo_params,
-                    {"use_sim_time": use_sim_time},
+                    {
+                        "use_sim_time": use_sim_time,
+                        # Ensure planning scene monitor is configured
+                        "publish_planning_scene": True,
+                        "publish_state_updates": True,
+                        "publish_transforms_updates": True,
+                    },
                 ],
                 condition=IfCondition(use_servo_node),
             )
