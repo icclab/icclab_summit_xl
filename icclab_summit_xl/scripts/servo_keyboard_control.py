@@ -8,11 +8,11 @@ The servo node must be running for this script to work.
 import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import TwistStamped
-from control_msgs.msg import JointJog
 import sys
 import select
 import termios
 import tty
+import threading
 
 msg = """
 MoveIt Servo Keyboard Control
@@ -29,12 +29,15 @@ i/k : rotate around X axis (roll)
 j/l : rotate around Y axis (pitch)
 u/o : rotate around Z axis (yaw)
 
++/- : increase/decrease speed
+SPACE: stop all motion
 CTRL-C to quit
 """
 
-# Movement speed factors
-LINEAR_SPEED = 0.5   # m/s
-ANGULAR_SPEED = 0.5  # rad/s
+# Movement speed factors (reduced for smoother control)
+LINEAR_SPEED = 0.05   # m/s - much slower for precise control
+ANGULAR_SPEED = 0.2   # rad/s
+SPEED_INCREMENT = 0.02  # Speed adjustment step
 
 moveBindings = {
     'w': (1, 0, 0, 0, 0, 0),     # Forward (X+)
@@ -52,11 +55,11 @@ moveBindings = {
 }
 
 
-def getKey(settings):
+def getKey(settings, timeout=0.1):
     """Get a single keypress from stdin."""
     tty.setraw(sys.stdin.fileno())
     # Use select to wait for input with a timeout
-    rlist, _, _ = select.select([sys.stdin], [], [], 0.1)
+    rlist, _, _ = select.select([sys.stdin], [], [], timeout)
     if rlist:
         key = sys.stdin.read(1)
     else:
@@ -76,26 +79,57 @@ class ServoKeyboardControl(Node):
             10
         )
 
-        self.get_logger().info('MoveIt Servo Keyboard Control Node Started')
-        self.get_logger().info('Publishing twist commands to /servo_node/delta_twist_cmds')
+        # Current velocity command
+        self.current_twist = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]  # x, y, z, roll, pitch, yaw
+        self.linear_speed = LINEAR_SPEED
+        self.angular_speed = ANGULAR_SPEED
 
-    def publish_twist(self, x, y, z, roll, pitch, yaw):
-        """Publish a twist command."""
+        # Create a timer to continuously publish twist commands at 50Hz
+        # This matches the servo publish_period of 0.02s
+        self.timer = self.create_timer(0.02, self.publish_twist)
+
+        self.get_logger().info('MoveIt Servo Keyboard Control Node Started')
+        self.get_logger().info('Publishing twist commands to /servo_node/delta_twist_cmds at 50Hz')
+        self.get_logger().info(f'Linear speed: {self.linear_speed:.3f} m/s, Angular speed: {self.angular_speed:.3f} rad/s')
+
+    def set_twist(self, x, y, z, roll, pitch, yaw):
+        """Set the current twist command."""
+        self.current_twist = [x, y, z, roll, pitch, yaw]
+
+    def publish_twist(self):
+        """Continuously publish the current twist command."""
         twist_msg = TwistStamped()
         twist_msg.header.stamp = self.get_clock().now().to_msg()
-        twist_msg.header.frame_id = 'arm_base_link'  # Use planning frame
+        twist_msg.header.frame_id = 'arm_base_link'
 
         # Linear velocities
-        twist_msg.twist.linear.x = x * LINEAR_SPEED
-        twist_msg.twist.linear.y = y * LINEAR_SPEED
-        twist_msg.twist.linear.z = z * LINEAR_SPEED
+        twist_msg.twist.linear.x = self.current_twist[0] * self.linear_speed
+        twist_msg.twist.linear.y = self.current_twist[1] * self.linear_speed
+        twist_msg.twist.linear.z = self.current_twist[2] * self.linear_speed
 
         # Angular velocities
-        twist_msg.twist.angular.x = roll * ANGULAR_SPEED
-        twist_msg.twist.angular.y = pitch * ANGULAR_SPEED
-        twist_msg.twist.angular.z = yaw * ANGULAR_SPEED
+        twist_msg.twist.angular.x = self.current_twist[3] * self.angular_speed
+        twist_msg.twist.angular.y = self.current_twist[4] * self.angular_speed
+        twist_msg.twist.angular.z = self.current_twist[5] * self.angular_speed
 
         self.twist_pub.publish(twist_msg)
+
+    def increase_speed(self):
+        """Increase movement speed."""
+        self.linear_speed += SPEED_INCREMENT
+        self.angular_speed += SPEED_INCREMENT * 2
+        self.get_logger().info(f'Speed increased - Linear: {self.linear_speed:.3f} m/s, Angular: {self.angular_speed:.3f} rad/s')
+
+    def decrease_speed(self):
+        """Decrease movement speed."""
+        self.linear_speed = max(0.01, self.linear_speed - SPEED_INCREMENT)
+        self.angular_speed = max(0.02, self.angular_speed - SPEED_INCREMENT * 2)
+        self.get_logger().info(f'Speed decreased - Linear: {self.linear_speed:.3f} m/s, Angular: {self.angular_speed:.3f} rad/s')
+
+    def stop(self):
+        """Stop all motion."""
+        self.set_twist(0, 0, 0, 0, 0, 0)
+        self.get_logger().info('Motion stopped')
 
 
 def main(args=None):
@@ -107,22 +141,33 @@ def main(args=None):
 
     print(msg)
 
+    # Spin in a separate thread
+    spin_thread = threading.Thread(target=rclpy.spin, args=(node,), daemon=True)
+    spin_thread.start()
+
     try:
         while rclpy.ok():
-            key = getKey(settings)
+            key = getKey(settings, timeout=0.05)
 
             if key in moveBindings.keys():
+                # Set the velocity based on key press
                 x, y, z, roll, pitch, yaw = moveBindings[key]
-                node.publish_twist(x, y, z, roll, pitch, yaw)
+                node.set_twist(x, y, z, roll, pitch, yaw)
+            elif key == ' ':  # Space bar - stop
+                node.stop()
+            elif key == '+' or key == '=':  # Increase speed
+                node.increase_speed()
+            elif key == '-' or key == '_':  # Decrease speed
+                node.decrease_speed()
             elif key == '\x03':  # CTRL-C
                 break
+            elif key == '':
+                # No key pressed - maintain current velocity
+                pass
             else:
-                # Publish zero velocity when no key is pressed
-                if key == '':
-                    node.publish_twist(0, 0, 0, 0, 0, 0)
-
-            # Spin once to process callbacks
-            rclpy.spin_once(node, timeout_sec=0.01)
+                # Unknown key - stop motion for safety
+                if key != '':
+                    node.stop()
 
     except Exception as e:
         print(e)
@@ -132,7 +177,7 @@ def main(args=None):
         termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
 
         # Send final zero velocity command
-        node.publish_twist(0, 0, 0, 0, 0, 0)
+        node.stop()
 
         node.destroy_node()
         rclpy.shutdown()
