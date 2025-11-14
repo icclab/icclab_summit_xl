@@ -15,6 +15,14 @@ install(PROGRAMS
   DESTINATION lib/${PROJECT_NAME}
 )
 
+# Install test scripts
+install(PROGRAMS
+  test/test_simulation_readiness.py
+  test/test_navigation.py
+  test/test_moveit_configurations.py
+  DESTINATION lib/${PROJECT_NAME}
+)
+
 ament_export_dependencies(${THIS_PACKAGE_INCLUDE_DEPENDS})
 find_package(rclpy REQUIRED)
 find_package(std_msgs REQUIRED)

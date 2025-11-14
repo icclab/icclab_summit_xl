@@ -137,6 +137,12 @@
   <exec_depend>moveit_servo</exec_depend>
   <exec_depend>control_msgs</exec_depend>
 
+  <!-- Test dependencies -->
+  <test_depend>launch_testing</test_depend>
+  <test_depend>launch_testing_ament_cmake</test_depend>
+  <test_depend>launch_testing_ros</test_depend>
+  <test_depend>python3-pytest</test_depend>
+
   <!-- The export tag contains other, unspecified, tags -->
   <export>
     <build_type>ament_cmake</build_type>
