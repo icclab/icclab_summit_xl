@@ -13,6 +13,7 @@ servo_node:
       status_topic: ~/status
 
       # Planning scene monitor parameters
+      is_primary_planning_scene_monitor: false  # move_group is primary
       monitored_planning_scene_topic: /monitored_planning_scene
       publish_planning_scene_hz: 30.0
 
