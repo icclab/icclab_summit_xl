@@ -29,8 +29,11 @@ servo_node:
       # Publishing
       publish_period: 0.02  # Servo loop rate (seconds), 50 Hz
       publish_joint_positions: true
-      publish_joint_velocities: true
+      publish_joint_velocities: false  # Don't publish velocities to avoid controller errors
       publish_joint_accelerations: false
+
+      # Trajectory generation parameters
+      num_outgoing_trajectory_points: 2  # Send 2 points to avoid single-point issues
 
       # Incoming command timeout
       incoming_command_timeout: 0.5  # Stop if no command received (seconds)
