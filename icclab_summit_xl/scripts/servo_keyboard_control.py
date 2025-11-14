@@ -34,10 +34,11 @@ SPACE: stop all motion
 CTRL-C to quit
 """
 
-# Movement speed factors (extremely slow for testing)
-LINEAR_SPEED = 0.01   # m/s - extremely slow for debugging
-ANGULAR_SPEED = 0.05   # rad/s
-SPEED_INCREMENT = 0.005  # Speed adjustment step
+# Movement speed factors (unitless, range [-1, 1])
+# With servo config: linear scale=0.05 m/s, angular scale=0.2 rad/s
+LINEAR_SPEED = 0.3   # Unitless command strength (0.3 * 0.05 = 0.015 m/s)
+ANGULAR_SPEED = 0.3   # Unitless command strength (0.3 * 0.2 = 0.06 rad/s)
+SPEED_INCREMENT = 0.1  # Speed adjustment step
 
 moveBindings = {
     'w': (1, 0, 0, 0, 0, 0),     # Forward (X+)

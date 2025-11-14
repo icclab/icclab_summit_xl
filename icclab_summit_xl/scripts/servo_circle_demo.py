@@ -16,9 +16,11 @@ class ServoCircleDemo(Node):
         super().__init__('servo_circle_demo')
 
         # Parameters
+        # Note: Using unitless commands now - scale is in moveit_servo.yaml
+        # linear scale = 0.05 m/s, so unitless values will be scaled accordingly
         self.declare_parameter('publish_rate', 50.0)  # Hz
-        self.declare_parameter('radius', 0.05)  # meters - smaller for safer demo
-        self.declare_parameter('angular_speed', 0.2)  # rad/s - slower for precise control
+        self.declare_parameter('radius', 1.0)  # Unitless radius (NOT meters)
+        self.declare_parameter('angular_speed', 0.5)  # Unitless angular speed
         self.declare_parameter('plane', 'xy')  # 'xy', 'xz', or 'yz'
 
         self.publish_rate = self.get_parameter('publish_rate').value
