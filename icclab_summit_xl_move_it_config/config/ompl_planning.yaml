@@ -107,7 +107,7 @@ planner_configs:
 
 # Group-specific configurations
 arm:
-  default_planner_config: LBKPIECE  # Very robust for difficult problems
+  default_planner_config: AnytimePathShortening  # Very robust for difficult problems
   planner_configs:
     - AnytimePathShortening
     - LBKPIECE
