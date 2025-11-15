@@ -4,8 +4,27 @@ project(icclab_summit_xl)
 find_package(ament_cmake REQUIRED)
 
 install(
-  DIRECTORY launch worlds config maps robots urdf rviz meshes
+  DIRECTORY launch worlds config maps robots urdf rviz meshes scripts
   DESTINATION share/${PROJECT_NAME}
+)
+
+# Install Python scripts
+install(PROGRAMS
+  scripts/servo_keyboard_control.py
+  scripts/servo_joint_jog_control.py
+  scripts/servo_debug_monitor.py
+  scripts/servo_circle_demo.py
+  scripts/move_to_safe_position.py
+  scripts/setup_servo.py
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+# Install test scripts
+install(PROGRAMS
+  test/test_simulation_readiness.py
+  test/test_navigation.py
+  test/test_moveit_configurations.py
+  DESTINATION lib/${PROJECT_NAME}
 )
 
 ament_export_dependencies(${THIS_PACKAGE_INCLUDE_DEPENDS})
@@ -92,7 +111,11 @@ add_executable(move_arm_to_pose src/move_arm_to_pose.cpp)
 #    ${catkin_LIBRARIES}
 #  )
 
-install(TARGETS move_arm_to_pose
+add_executable(odom_tf src/odom_tf_pub.cpp)
+
+ament_target_dependencies(odom_tf rclcpp geometry_msgs nav_msgs tf2_ros)
+
+install(TARGETS move_arm_to_pose odom_tf
   DESTINATION lib/${PROJECT_NAME})
 
 ament_target_dependencies(move_arm_to_pose rclcpp moveit_ros_planning_interface)
@@ -101,5 +124,7 @@ ament_target_dependencies(move_arm_to_pose rclcpp moveit_ros_planning_interface)
 #    ${catkin_LIBRARIES}
 #  )
 
+ament_export_dependencies(ros_gz_bridge)
+ament_export_dependencies(ros_gz_sim)
 
 ament_package()

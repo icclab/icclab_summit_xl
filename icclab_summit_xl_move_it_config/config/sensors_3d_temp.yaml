@@ -1,10 +1,11 @@
 sensors:
-  #- arm_camera
+  - arm_camera
   - front_rgbd_camera
 arm_camera:
   far_clipping_plane_distance: 5.0
-  filtered_cloud_topic: filtered_cloud_arm
-  image_topic: /summit/oak/stereo/image_raw
+  filtered_cloud_topic: /filtered_cloud_arm
+  # image_topic: /arm_camera/depth/image_raw
+  camera_info_topic: /arm_camera/depth/camera_info
   max_update_rate: 1.0
   near_clipping_plane_distance: 0.3
   padding_offset: 0.03
@@ -14,8 +15,9 @@ arm_camera:
   shadow_threshold: 0.2
 front_rgbd_camera:
   far_clipping_plane_distance: 5.0
-  filtered_cloud_topic: filtered_cloud_front
-  image_topic: /summit/front_rgbd_camera/depth/image_raw
+  filtered_cloud_topic: /filtered_cloud_front
+  # image_topic: /front_rgbd_camera/depth/image_raw
+  camera_info_topic: /front_rgbd_camera/depth/camera_info
   max_update_rate: 1.0
   near_clipping_plane_distance: 0.3
   padding_offset: 0.03
@@ -23,3 +25,5 @@ front_rgbd_camera:
   queue_size: 5
   sensor_plugin: occupancy_map_monitor/DepthImageOctomapUpdater
   shadow_threshold: 0.2
+# octomap_frame: front_rgbd_camera_link
+octomap_update_rate: 1.0

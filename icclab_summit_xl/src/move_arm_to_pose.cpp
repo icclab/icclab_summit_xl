@@ -1,6 +1,6 @@
 #include <rclcpp/rclcpp.hpp>
-#include <moveit/move_group_interface/move_group_interface.h>
-#include <moveit/planning_scene_interface/planning_scene_interface.h>
+#include <moveit/move_group_interface/move_group_interface.hpp>
+#include <moveit/planning_scene_interface/planning_scene_interface.hpp>
 #include <moveit_msgs/msg/display_trajectory.hpp>
 #include <moveit_msgs/msg/attached_collision_object.hpp>
 #include <moveit_msgs/msg/collision_object.hpp>
@@ -95,8 +95,8 @@ int main(int argc, char** argv)
     RCLCPP_INFO(node->get_logger(), "Current joint %s position: %f", joint_names[i].c_str(), joint_group_positions[i]);
   }
   
-  move_group.setGoalTolerance(0.05);
-  move_group.setMaxVelocityScalingFactor(0.1);
+  move_group.setGoalTolerance(0.01);
+  move_group.setMaxVelocityScalingFactor(0.5);
   
   Eigen::Isometry3d text_pose = Eigen::Isometry3d::Identity();
   text_pose.translation().z() = 1.75;

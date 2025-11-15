@@ -1,17 +1,19 @@
 <?xml version="1.0"?>
 <robot name="luxonis_camera_gazebo" xmlns:xacro="http://wiki.ros.org/Sensors/OrbbecAstra">
-  <xacro:property name="deg_to_rad" value="0.01745329251994329577"/>
+
   <xacro:macro name="luxonis_camera_gazebo" params="ns prefix frame">
-    <gazebo reference="${prefix}_link">
-      <sensor name="${prefix}" type="depth">
+    <xacro:property name="M_PI" value="3.1415926535897931" />
+    <gazebo reference="${frame}">
+      <sensor name="${prefix}" type="rgbd_camera">
+        <gz_frame_id>${frame}</gz_frame_id>
         <pose>0 0 0 0 0 0</pose>
-        <!-- <visualize>true</visualize> -->
+        <visualize>true</visualize>
+        <always_on>true</always_on>
         <update_rate>15</update_rate>
-        <camera>
+        <camera name="${prefix}">
           <horizontal_fov>1.04719755</horizontal_fov>
           <vertical_fov>0.86393798</vertical_fov>
           <image>
-            <format>B8G8R8</format>
             <width>640</width>
             <height>480</height>
           </image>
@@ -19,23 +21,16 @@
             <near>0.05</near>
             <far>20.0</far>
           </clip>
+          <depth_camera>
+            <clip>
+              <near>0.05</near>
+              <far>20.0</far>
+            </clip>
+          </depth_camera>
         </camera>
-        <!-- plugin https://docs.ros.org/en/ros2_packages/rolling/api/gazebo_plugins/generated/classgazebo__plugins_1_1GazeboRosCamera.html -->
-        <plugin name="${prefix}" filename="libgazebo_ros_camera.so">
-          <ros>
-            <namespace>${ns}</namespace>
-            <remapping>~/image_raw:=~/color/image_raw</remapping>
-            <remapping>~/camera_info:=~/color/camera_info</remapping>
-            <remapping>~/image_raw/compressed:=~/color/image_raw/compressed</remapping>
-            <remapping>~/image_raw/compressedDepth:=~/color/image_raw/compressedDepth</remapping>
-            <remapping>~/image_raw/theora:=~/color/image_raw/theora</remapping>
-          </ros>
-          <camera_name>${prefix}</camera_name>
-          <frame_name>${frame}</frame_name>
-          <min_depth>0.05</min_depth>
-          <max_depth>20.0</max_depth>
-        </plugin>
+        <topic>${ns}/${prefix}</topic>
       </sensor>
     </gazebo>
   </xacro:macro>
+
 </robot>

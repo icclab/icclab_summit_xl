@@ -10,7 +10,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://robotnik_sensors/meshes/orbbec_astra.dae"/>
+          <mesh filename="package://icclab_summit_xl/meshes/orbbec_astra.dae"/>
         </geometry>
       </visual>
       <collision>
@@ -57,38 +57,30 @@
   <xacro:macro name="sensor_orbbec_astra_gazebo_icclab" params="ns prefix frame">
     <xacro:property name="deg_to_rad" value="0.01745329251994329577"/>
     <gazebo reference="${prefix}_link">
-      <sensor name="${prefix}" type="depth">
-        <pose>0 0 0 0 0 0</pose>
+      <sensor name="${prefix}" type="rgbd_camera">
+        <gz_frame_id>${prefix}_link</gz_frame_id>
         <visualize>true</visualize>
-        <update_rate>15</update_rate>
-        <camera>
+        <always_on>true</always_on>
+        <update_rate>10</update_rate>
+        <camera name="${prefix}">
+          <!-- <camera_info_topic>${ns}/${prefix}/color/camera_info</camera_info_topic> -->
+          <!-- <optical_frame_id>${prefix}_rgb_optical_frame</optical_frame_id> -->
           <horizontal_fov>1.04719755</horizontal_fov>
           <vertical_fov>0.86393798</vertical_fov>
           <image>
-            <format>B8G8R8</format>
+            <!-- <format>B8G8R8</format> -->
             <width>640</width>
             <height>480</height>
           </image>
           <clip>
             <near>0.05</near>
-            <far>20.0</far>
+            <far>40.0</far>
           </clip>
         </camera>
-        <!-- plugin https://docs.ros.org/en/ros2_packages/rolling/api/gazebo_plugins/generated/classgazebo__plugins_1_1GazeboRosCamera.html -->
-        <plugin name="${prefix}" filename="libgazebo_ros_camera.so">
-          <ros>
-            <namespace>${ns}</namespace>
-            <remapping>~/image_raw:=~/color/image_raw</remapping>
-            <remapping>~/camera_info:=~/color/camera_info</remapping>
-            <remapping>~/image_raw/compressed:=~/color/image_raw/compressed</remapping>
-            <remapping>~/image_raw/compressedDepth:=~/color/image_raw/compressedDepth</remapping>
-            <remapping>~/image_raw/theora:=~/color/image_raw/theora</remapping>
-          </ros>
-          <camera_name>${prefix}</camera_name>
-          <frame_name>${frame}</frame_name>
-          <min_depth>0.05</min_depth>
-          <max_depth>20.0</max_depth>
-        </plugin>
+        
+        <min_depth>0.05</min_depth>
+        <max_depth>40.0</max_depth>
+        <topic>${ns}/${prefix}</topic>
       </sensor>
     </gazebo>
   </xacro:macro>

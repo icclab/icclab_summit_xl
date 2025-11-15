@@ -35,6 +35,7 @@ controller_manager: # merged from: https://github.com/UniversalRobots/Universal_
     
 robotiq_gripper_controller:
   ros__parameters:
+    use_sim_time: true
     default: true
     joint: finger_joint
 
@@ -98,6 +99,7 @@ robotnik_base_control:
 
 arm_controller:
   ros__parameters:
+    use_sim_time: true
     joints:
       - arm_shoulder_pan_joint
       - arm_shoulder_lift_joint

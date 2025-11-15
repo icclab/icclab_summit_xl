@@ -41,63 +41,28 @@
 	<xacro:property name="sim_ignition" default="false" />
     </xacro:unless>
 
-    <!-- import ur macro -->
+    <!-- import ur macros -->
     <xacro:include filename="$(find ur_description)/urdf/ur_macro.xacro" />
-
+    <xacro:include filename="$(find ur_simulation_gz)/urdf/ur_gz.ros2_control.xacro" />
+    
     <!-- call the actual ur macro -->
-    <!-- NOTE: we pass use_fake_hardware="false" to avoid generation of unneeded ros2 control plugins, i.e., mock_components/GenericSystem -->
     <xacro:ur_robot
+     name="${name}"
+     tf_prefix="${tf_prefix}"
+     parent="${parent}"
+     joint_limits_parameters_file="${joint_limit_params}"
+     kinematics_parameters_file="${kinematics_params}"
+     physical_parameters_file="${physical_params}"
+     visual_parameters_file="${visual_params}">
+     <xacro:insert_block name="origin" />          <!-- position robot in the world -->
+   </xacro:ur_robot>
+
+    <!-- ros2 control instance -->
+    <xacro:ur_ros2_control
       name="${name}"
       tf_prefix="${tf_prefix}"
-      parent="${parent}"
-      joint_limits_parameters_file="${joint_limit_params}"
-      kinematics_parameters_file="${kinematics_params}"
-      physical_parameters_file="${physical_params}"
-      visual_parameters_file="${visual_params}"
-      use_fake_hardware="false"
-      sim_gazebo="${sim_gazebo}"
-      sim_ignition="${sim_ignition}"
-      headless_mode="${headless_mode}"
-      robot_ip="${robot_ip}"
-      script_filename="/opt/ros/humble/share/ur_client_library/resources/external_control.urscript"
-      output_recipe_filename="/opt/ros/humble/share/ur_robot_driver/resources/rtde_output_recipe.txt"
-      input_recipe_filename="/opt/ros/humble/share/ur_robot_driver/resources/rtde_input_recipe.txt"
-    >
-      <xacro:insert_block name="origin" />  <!-- position robot in the world -->
-    </xacro:ur_robot>
-
-    <!-- Commented: we use a single controller manager and it's included by the robot base-->
-    <!-- <xacro:if value="$(arg sim_gazebo)">
-    <gazebo reference="$(arg tf_prefix)base_link">
-    </gazebo>
-    <gazebo>
-      <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control_arm">
-        <namespace>$(arg robot_id)</namespace>
-        <parameters>$(arg simulation_controllers)</parameters>
-      </plugin>
-    </gazebo>
-  </xacro:if> -->
-
-    <!-- TODO: FIXME for Ignition
-  
-  <xacro:if value="${sim_ignition}">
-    <gazebo reference="$(arg tf_prefix)base_link">
-    </gazebo>
-    <gazebo>
-      <plugin filename="libign_ros2_control-system.so"
-    name="ign_ros2_control::IgnitionROS2ControlPlugin">
-        <parameters>$(arg simulation_controllers)</parameters>
-        <controller_manager_node_name>$(arg tf_prefix)controller_manager</controller_manager_node_name>
-      </plugin>
-    </gazebo>
-  </xacro:if> -->
+    />
 
   </xacro:macro>
-  
-  <!-- <xacro:icclab_summit_arm simulation="true">
-			<origin xyz="0.255 0 0.275" rpy="0 0 ${pi}" />
-	</xacro:icclab_summit_arm> -->
-
-  
 
 </robot>
