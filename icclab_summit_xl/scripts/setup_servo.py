@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
-Setup servo for use - moves arm to safe position and sets command type
+Setup servo for use - moves arm to safe position and sets command type to JOINT_JOG
+Note: TWIST mode has known IK issues, so this script uses JOINT_JOG mode
 """
 
 import rclpy
@@ -49,8 +50,8 @@ class SetupServo(Node):
             self.joint_names = msg.name
 
     def move_to_safe_position(self):
-        """Move arm to 'up' configuration"""
-        self.get_logger().info('Step 2: Moving arm to safe position...')
+        """Move arm to safe position away from singularities"""
+        self.get_logger().info('Moving arm to safe position...')
 
         # Wait for joint state
         self.get_logger().info('Waiting for joint state...')
@@ -149,9 +150,9 @@ class SetupServo(Node):
             self.get_logger().error(f'Motion planning failed with error code: {result.error_code.val}')
             return False
 
-    def set_servo_command_type(self, cmd_type=0): #JOINT_JOG
-        """Set servo command type to cmd_type"""
-        self.get_logger().info('Step 1: Setting servo command type to (0: JOINT_JOG, 1:TWIST): ' + str(cmd_type))
+    def set_servo_command_type(self, cmd_type=0):  # JOINT_JOG
+        """Set servo command type to cmd_type (0=JOINT_JOG, 1=TWIST)"""
+        self.get_logger().info(f'Setting servo command type to {cmd_type} (0=JOINT_JOG, 1=TWIST)')
 
         # Wait for service
         if not self.servo_client.wait_for_service(timeout_sec=5.0):
@@ -160,23 +161,17 @@ class SetupServo(Node):
 
         # Call service
         req = ServoCommandType.Request()
-        req.command_type = cmd_type  # TWIST for Cartesian control
+        req.command_type = cmd_type
 
         future = self.servo_client.call_async(req)
         rclpy.spin_until_future_complete(self, future, timeout_sec=2.0)
 
         if future.result() is not None:
             if future.result().success:
-                self.get_logger().info('✓ Servo command type set')
-                self.get_logger().info('')
-                if (cmd_type == 1):
-                    self.get_logger().info('==============================================')
-                    self.get_logger().info('Servo is ready! You can now use:')
-                    self.get_logger().info('  ros2 run icclab_summit_xl servo_keyboard_control.py')
-                    self.get_logger().info('==============================================')
+                self.get_logger().info(f'✓ Servo command type set to {cmd_type}')
                 return True
             else:
-                self.get_logger().warn('Failed to set command type')
+                self.get_logger().warn(f'Failed to set command type to {cmd_type}')
                 return False
         else:
             self.get_logger().error('Service call failed')
@@ -187,7 +182,13 @@ def main(args=None):
     rclpy.init(args=args)
     node = SetupServo()
 
-    # Step 1: Set command type to JOINT so we can move the arm
+    node.get_logger().info('==============================================')
+    node.get_logger().info('Summit XL Servo Setup')
+    node.get_logger().info('==============================================')
+    node.get_logger().info('')
+
+    # Step 1: Set command type to JOINT_JOG mode so we can move the arm
+    node.get_logger().info('Step 1/2: Configuring servo for JOINT_JOG mode...')
     if not node.set_servo_command_type(0):
         node.get_logger().error('Failed to set servo command type')
         node.destroy_node()
@@ -198,20 +199,25 @@ def main(args=None):
     time.sleep(0.5)
 
     # Step 2: Move to safe position (now that servo is in JOINT_JOG mode)
+    node.get_logger().info('Step 2/2: Moving arm to safe position...')
     if not node.move_to_safe_position():
         node.get_logger().error('Failed to move to safe position')
         node.destroy_node()
         rclpy.shutdown()
         return
-    
-    # Step 3: Set command type (must be done before servo can accept commands)
-    if not node.set_servo_command_type(1):
-        node.get_logger().error('Failed to set servo command type')
-        node.destroy_node()
-        rclpy.shutdown()
-        return
 
-    # Small delay to let servo process command type change
+    # Leave servo in JOINT_JOG mode (0) since TWIST mode (1) has IK issues
+    # The servo is already in JOINT_JOG mode from step 1, ready to use!
+    node.get_logger().info('')
+    node.get_logger().info('==============================================')
+    node.get_logger().info('✓ Servo is ready in JOINT_JOG mode!')
+    node.get_logger().info('You can now use:')
+    node.get_logger().info('  ros2 run icclab_summit_xl servo_joint_jog_control.py')
+    node.get_logger().info('')
+    node.get_logger().info('Note: TWIST mode has known IK issues, use JOINT_JOG mode')
+    node.get_logger().info('==============================================')
+
+    # Small delay before exit
     time.sleep(0.5)
 
     node.destroy_node()
