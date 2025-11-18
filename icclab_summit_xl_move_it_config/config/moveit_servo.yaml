@@ -4,9 +4,9 @@ servo_node:
       # MoveIt Servo Configuration for ROS 2 Jazzy
 
       # Planning and kinematics
-      move_group_name: arm  # Name of the MoveIt planning group
-      planning_frame: arm_base_link  # Frame for planning
-      ee_frame_name: arm_flange  # End-effector frame (flange, not tool0)
+      # NOTE: planning_frame and ee_frame_name were removed in Servo refactoring (PR #2224)
+      # Frames are now determined by move_group SRDF chain and command message frame_id
+      move_group_name: arm  # Name of the MoveIt planning group (defines base_link and tip_link)
 
       # Robot state
       joint_topic: joint_states  # No leading slash - uses default namespace
@@ -55,17 +55,19 @@ servo_node:
       smoothing_filter_plugin_name: "online_signal_smoothing::ButterworthFilterPlugin"
 
       # Singularity avoidance
-      # NOTE: Values tuned for joint jog mode. Twist mode has IK issues.
-      lower_singularity_threshold: 100.0
-      hard_stop_singularity_threshold: 150.0
+      # Condition number thresholds - lower values = more restrictive
+      # Typical values: 10-30 for lower, 50-100 for hard stop
+      lower_singularity_threshold: 30.0  # Start slowing down near singularity
+      hard_stop_singularity_threshold: 90.0  # Emergency stop threshold
       leaving_singularity_threshold_multiplier: 2.0
 
       # Joint limits
       override_velocity_scaling_factor: 0.0  # 0.0 means use joint limits from URDF
 
-      # Inverse kinematics parameters for twist commands
-      # These control how Cartesian velocities are converted to joint velocities
-      use_inv_jacobian: true  # Use Jacobian inverse for IK (vs pseudoinverse)
+      # Twist command frame interpretation
+      # When true: angular velocity is applied about ee_frame axes
+      # When false: twist is interpreted in the planning frame
+      apply_twist_commands_about_ee_frame: true  # Enable end-effector relative control
 
       # Status and halt
       num_outgoing_halt_msgs_to_publish: 4

@@ -101,7 +101,7 @@ class ServoKeyboardControl(Node):
         """Continuously publish the current twist command."""
         twist_msg = TwistStamped()
         twist_msg.header.stamp = self.get_clock().now().to_msg()
-        twist_msg.header.frame_id = 'arm_base_link'  # Commands in planning frame for stability
+        twist_msg.header.frame_id = 'arm_tool0'  # EE frame for apply_twist_commands_about_ee_frame=true
 
         # Linear velocities
         twist_msg.twist.linear.x = self.current_twist[0] * self.linear_speed

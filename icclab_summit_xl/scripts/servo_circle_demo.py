@@ -52,7 +52,7 @@ class ServoCircleDemo(Node):
         """Publish circular motion commands."""
         twist_msg = TwistStamped()
         twist_msg.header.stamp = self.get_clock().now().to_msg()
-        twist_msg.header.frame_id = 'arm_flange'  # Commands relative to arm flange
+        twist_msg.header.frame_id = 'arm_tool0'  # EE frame for apply_twist_commands_about_ee_frame=true
 
         # Calculate circular velocities based on the selected plane
         # The velocity vector should be perpendicular to the position vector
@@ -105,7 +105,7 @@ def main(args=None):
         # Send final zero velocity command
         twist_msg = TwistStamped()
         twist_msg.header.stamp = node.get_clock().now().to_msg()
-        twist_msg.header.frame_id = 'arm_flange'
+        twist_msg.header.frame_id = 'arm_tool0'
         node.twist_pub.publish(twist_msg)
 
         node.destroy_node()

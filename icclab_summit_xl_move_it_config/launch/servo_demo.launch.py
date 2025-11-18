@@ -42,6 +42,7 @@ def generate_launch_description():
     moveit_config = (
         MoveItConfigsBuilder("summit_xl", package_name="icclab_summit_xl_move_it_config")
         .robot_description_semantic(file_path="config/summit_xl.srdf")
+        .robot_description_kinematics(file_path="config/kinematics.yaml")
         .trajectory_execution(file_path="config/moveit_controllers.yaml")
         .planning_pipelines(pipelines=["ompl"])
         .to_moveit_configs()
