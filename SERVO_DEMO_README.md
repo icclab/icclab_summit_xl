@@ -13,9 +13,14 @@ MoveIt Servo allows for real-time control of the robot arm using velocity comman
 ## Current Status
 
 ✅ **Joint Jog Mode**: Fully functional - control individual joints with precise velocity commands
-❌ **Twist (Cartesian) Mode**: Not working - IK solver has issues converting Cartesian velocities to joint velocities
+✅ **Twist (Cartesian) Mode**: Fully functional - Cartesian velocity control with proper IK configuration
 
-**Recommendation**: Use joint jog control (`servo_joint_jog_control.py`) for reliable servo operation.
+Both control modes are working correctly with the UR5 arm on the Summit XL robot.
+
+**Key Configuration Requirements:**
+- KDL kinematics plugin must be loaded via MoveItConfigsBuilder
+- Twist commands should use `arm_flange` frame for end-effector relative control
+- Singularity thresholds set appropriately for smooth operation
 
 ## Files Added
 
@@ -28,15 +33,15 @@ MoveIt Servo allows for real-time control of the robot arm using velocity comman
 
 ### Demo Scripts
 - `icclab_summit_xl/scripts/servo_joint_jog_control.py` - **✅ WORKING** - Keyboard control for individual joints
+- `icclab_summit_xl/scripts/servo_keyboard_control.py` - **✅ WORKING** - Twist-based Cartesian keyboard control
+- `icclab_summit_xl/scripts/servo_circle_demo.py` - **✅ WORKING** - Twist-based circular motion demo
 - `icclab_summit_xl/scripts/setup_servo.py` - Automated setup: moves arm to safe position and configures servo
 - `icclab_summit_xl/scripts/servo_debug_monitor.py` - Monitor servo status for debugging
-- `icclab_summit_xl/scripts/servo_keyboard_control.py` - ❌ Twist-based keyboard control (IK issues)
-- `icclab_summit_xl/scripts/servo_circle_demo.py` - ❌ Twist-based circular motion (IK issues)
 - `icclab_summit_xl/scripts/move_to_safe_position.py` - Standalone script to move arm away from singularities
 
 ## Usage
 
-### Quick Start (Recommended - Joint Jog Control)
+### Quick Start - Cartesian Twist Control
 
 **Terminal 1** - Start simulation:
 ```bash
@@ -48,59 +53,19 @@ ros2 launch icclab_summit_xl summit_xl_simulation_ign.launch.py
 ros2 launch icclab_summit_xl_move_it_config servo_demo.launch.py
 ```
 
-**Terminal 3** - Setup servo (moves arm to safe position and sets command type to JOINT_JOG):
+**Terminal 3** - Run setup servo to move arm to safe position and enable TWIST mode:
 ```bash
-# Modify setup_servo.py to keep command_type at 0 (JOINT_JOG), or manually:
-ros2 service call /servo_node/switch_command_type moveit_msgs/srv/ServoCommandType "{command_type: 0}"
+ros2 run icclab_summit_xl setup_servo.py
 ```
 
-**Terminal 4** - Start joint jog keyboard control:
+**Terminal 4** - Start Cartesian keyboard control:
 ```bash
-ros2 run icclab_summit_xl servo_joint_jog_control.py
-```
-
-**Joint Jog Keyboard Controls:**
-```
-Control individual joints:
-1/2 : shoulder_pan +/-
-3/4 : shoulder_lift +/-
-5/6 : elbow +/-
-7/8 : wrist_1 +/-
-9/0 : wrist_2 +/-
--/= : wrist_3 +/-
-
-SPACE: stop all motion
-CTRL-C to quit
-```
-
-### Command Types
-
-Servo supports different command modes:
-- `0` = **JOINT_JOG** - ✅ Works perfectly - control individual joints
-- `1` = **TWIST** - ❌ IK issues - Cartesian control not functional
-- `2` = **POSE** - Not tested
-
-Set command type with:
-```bash
-ros2 service call /servo_node/switch_command_type moveit_msgs/srv/ServoCommandType "{command_type: 0}"
-```
-
-### Alternative: Cartesian Twist Control (Not Recommended - Has Issues)
-
-**Note**: The twist-based keyboard and circle demos have inverse kinematics issues and do not work correctly. All twist commands result in the same joint motion regardless of input direction.
-
-If you want to try anyway (for debugging):
-```bash
-# Set command type to TWIST
-ros2 service call /servo_node/switch_command_type moveit_msgs/srv/ServoCommandType "{command_type: 1}"
-
-# Try keyboard control (will not work as expected)
 ros2 run icclab_summit_xl servo_keyboard_control.py
 ```
 
-**Twist Keyboard Controls (non-functional):**
+**Twist Keyboard Controls:**
 ```
-Moving in Cartesian space:
+Moving in Cartesian space (relative to end-effector):
         w
    a    s    d
         x
@@ -111,30 +76,35 @@ q/e : move up/down (Z axis)
 i/k : rotate around X axis (roll)
 j/l : rotate around Y axis (pitch)
 u/o : rotate around Z axis (yaw)
+
++/- : increase/decrease speed
+SPACE: stop all motion
+CTRL-C to quit
 ```
 
-### 3. Circle Demo
-
-**Setup first:**
-```bash
-ros2 run icclab_summit_xl setup_servo.py
-```
+### Circle Demo
 
 To see an automated circular motion demo:
-
 ```bash
-ros2 launch icclab_summit_xl servo_demo_full.launch.py start_circle_demo:=true
+ros2 run icclab_summit_xl servo_circle_demo.py
 ```
 
-You can customize the circle parameters:
+You can customize parameters (radius in unitless scale, plane: xy/xz/yz):
 ```bash
-ros2 launch icclab_summit_xl servo_demo_full.launch.py \
-    start_circle_demo:=true \
-    circle_demo_plane:=xz \
-    circle_demo_radius:=0.15
+ros2 run icclab_summit_xl servo_circle_demo.py --ros-args -p radius:=0.5 -p plane:=xz
 ```
 
-Available planes: `xy` (horizontal), `xz` (vertical side), `yz` (vertical front)
+### Command Types
+
+Servo supports different command modes:
+- `0` = **JOINT_JOG** - ✅ Works perfectly - control individual joints
+- `1` = **TWIST** - ✅ Works perfectly - Cartesian velocity control
+- `2` = **POSE** - Not tested
+
+Set command type manually with:
+```bash
+ros2 service call /servo_node/switch_command_type moveit_msgs/srv/ServoCommandType "{command_type: 1}"
+```
 
 ## Topics
 
@@ -245,6 +215,26 @@ ros2 launch icclab_summit_xl_move_it_config servo_demo.launch.py use_sim_time:=f
 - Keep the emergency stop accessible when using the real robot
 - Be aware of the robot's workspace limits
 - Collision checking is enabled by default but should not be the only safety measure
+
+## Configuration Notes for ROS 2 Jazzy
+
+The following configuration is critical for proper twist (Cartesian) control:
+
+1. **Kinematics Plugin Loading**: The `MoveItConfigsBuilder` must explicitly load the kinematics configuration:
+   ```python
+   .robot_description_kinematics(file_path="config/kinematics.yaml")
+   ```
+
+2. **Frame Configuration**:
+   - Twist commands should use `arm_flange` frame_id for end-effector relative control
+   - The `apply_twist_commands_about_ee_frame: true` parameter enables EE-relative control
+   - The SRDF defines the kinematic chain: `base_link="arm_base_link"` to `tip_link="arm_tool0"`
+
+3. **Singularity Thresholds**: Appropriate values prevent unnecessary emergency stops:
+   - `lower_singularity_threshold: 30.0`
+   - `hard_stop_singularity_threshold: 90.0`
+
+4. **Kinematics Solver**: Using `kdl_kinematics_plugin/KDLKinematicsPlugin` (not cached version) for better reliability
 
 ## References
 

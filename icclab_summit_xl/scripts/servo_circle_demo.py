@@ -16,11 +16,10 @@ class ServoCircleDemo(Node):
         super().__init__('servo_circle_demo')
 
         # Parameters
-        # Note: Using unitless commands now - scale is in moveit_servo.yaml
-        # linear scale = 0.05 m/s, so unitless values will be scaled accordingly
+        # Note: Using speed_units commands - values are in m/s and rad/s
         self.declare_parameter('publish_rate', 50.0)  # Hz
-        self.declare_parameter('radius', 1.0)  # Unitless radius (NOT meters)
-        self.declare_parameter('angular_speed', 0.5)  # Unitless angular speed
+        self.declare_parameter('radius', 0.05)  # Circle radius in meters
+        self.declare_parameter('angular_speed', 0.3)  # Angular speed in rad/s for circular motion
         self.declare_parameter('plane', 'xy')  # 'xy', 'xz', or 'yz'
 
         self.publish_rate = self.get_parameter('publish_rate').value
@@ -52,7 +51,7 @@ class ServoCircleDemo(Node):
         """Publish circular motion commands."""
         twist_msg = TwistStamped()
         twist_msg.header.stamp = self.get_clock().now().to_msg()
-        twist_msg.header.frame_id = 'arm_tool0'  # EE frame for apply_twist_commands_about_ee_frame=true
+        twist_msg.header.frame_id = 'arm_flange'  # EE frame for end-effector relative control
 
         # Calculate circular velocities based on the selected plane
         # The velocity vector should be perpendicular to the position vector
@@ -105,7 +104,7 @@ def main(args=None):
         # Send final zero velocity command
         twist_msg = TwistStamped()
         twist_msg.header.stamp = node.get_clock().now().to_msg()
-        twist_msg.header.frame_id = 'arm_tool0'
+        twist_msg.header.frame_id = 'arm_flange'
         node.twist_pub.publish(twist_msg)
 
         node.destroy_node()

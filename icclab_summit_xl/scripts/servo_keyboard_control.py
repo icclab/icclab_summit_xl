@@ -34,11 +34,11 @@ SPACE: stop all motion
 CTRL-C to quit
 """
 
-# Movement speed factors (unitless, range [-1, 1])
-# With servo config: linear scale=0.05 m/s, angular scale=0.2 rad/s
-LINEAR_SPEED = 0.3   # Unitless command strength (0.3 * 0.05 = 0.015 m/s)
-ANGULAR_SPEED = 0.3   # Unitless command strength (0.3 * 0.2 = 0.06 rad/s)
-SPEED_INCREMENT = 0.1  # Speed adjustment step
+# Movement speed in actual units (m/s and rad/s)
+# With servo config: command_in_type="speed_units"
+LINEAR_SPEED = 0.02   # Linear velocity in m/s
+ANGULAR_SPEED = 0.1   # Angular velocity in rad/s
+SPEED_INCREMENT = 0.01  # Speed adjustment step
 
 moveBindings = {
     'w': (1, 0, 0, 0, 0, 0),     # Forward (X+)
@@ -91,7 +91,7 @@ class ServoKeyboardControl(Node):
 
         self.get_logger().info('MoveIt Servo Keyboard Control Node Started')
         self.get_logger().info('Publishing twist commands to /servo_node/delta_twist_cmds at 50Hz')
-        self.get_logger().info(f'Linear speed: {self.linear_speed:.3f} m/s, Angular speed: {self.angular_speed:.3f} rad/s')
+        self.get_logger().info(f'Initial velocities: linear={self.linear_speed:.3f} m/s, angular={self.angular_speed:.3f} rad/s')
 
     def set_twist(self, x, y, z, roll, pitch, yaw):
         """Set the current twist command."""
@@ -101,7 +101,7 @@ class ServoKeyboardControl(Node):
         """Continuously publish the current twist command."""
         twist_msg = TwistStamped()
         twist_msg.header.stamp = self.get_clock().now().to_msg()
-        twist_msg.header.frame_id = 'arm_tool0'  # EE frame for apply_twist_commands_about_ee_frame=true
+        twist_msg.header.frame_id = 'arm_flange'  # EE frame for apply_twist_commands_about_ee_frame=true
 
         # Linear velocities
         twist_msg.twist.linear.x = self.current_twist[0] * self.linear_speed
@@ -119,13 +119,13 @@ class ServoKeyboardControl(Node):
         """Increase movement speed."""
         self.linear_speed += SPEED_INCREMENT
         self.angular_speed += SPEED_INCREMENT * 2
-        self.get_logger().info(f'Speed increased - Linear: {self.linear_speed:.3f} m/s, Angular: {self.angular_speed:.3f} rad/s')
+        self.get_logger().info(f'Velocities increased - linear: {self.linear_speed:.3f} m/s, angular: {self.angular_speed:.3f} rad/s')
 
     def decrease_speed(self):
         """Decrease movement speed."""
-        self.linear_speed = max(0.01, self.linear_speed - SPEED_INCREMENT)
-        self.angular_speed = max(0.02, self.angular_speed - SPEED_INCREMENT * 2)
-        self.get_logger().info(f'Speed decreased - Linear: {self.linear_speed:.3f} m/s, Angular: {self.angular_speed:.3f} rad/s')
+        self.linear_speed = max(0.001, self.linear_speed - SPEED_INCREMENT)
+        self.angular_speed = max(0.01, self.angular_speed - SPEED_INCREMENT * 2)
+        self.get_logger().info(f'Velocities decreased - linear: {self.linear_speed:.3f} m/s, angular: {self.angular_speed:.3f} rad/s')
 
     def stop(self):
         """Stop all motion."""

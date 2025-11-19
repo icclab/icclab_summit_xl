@@ -22,11 +22,11 @@ servo_node:
       publish_planning_scene_hz: 30.0
 
       # Command type and scaling
-      command_in_type: "unitless"  # Commands in range [-1, 1]
+      command_in_type: "speed_units"  # Commands in m/s and rad/s
       scale:
-        linear: 0.05   # Max linear velocity (m/s) when command is 1.0
-        rotational: 0.2  # Max angular velocity (rad/s) when command is 1.0
-        joint: 0.3    # Max joint velocity scale for joint commands
+        linear: 1.0    # No scaling - commands are in m/s
+        rotational: 1.0  # No scaling - commands are in rad/s
+        joint: 1.0     # No scaling - commands are in rad/s
 
       # Publishing
       publish_period: 0.02  # Servo loop rate (seconds), 50 Hz
@@ -55,8 +55,8 @@ servo_node:
       smoothing_filter_plugin_name: "online_signal_smoothing::ButterworthFilterPlugin"
 
       # Singularity avoidance
-      # Condition number thresholds - lower values = more restrictive
-      # Typical values: 10-30 for lower, 50-100 for hard stop
+      # Condition number thresholds for Jacobian-based IK
+      # Higher values = less restrictive (allow operation closer to singularities)
       lower_singularity_threshold: 30.0  # Start slowing down near singularity
       hard_stop_singularity_threshold: 90.0  # Emergency stop threshold
       leaving_singularity_threshold_multiplier: 2.0
