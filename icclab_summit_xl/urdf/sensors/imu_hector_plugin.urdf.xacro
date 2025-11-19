@@ -36,11 +36,9 @@
         <visualize>true</visualize>
         <update_rate>100</update_rate>
         <imu>
-          <topic>__default_topic__</topic>
           <angular_velocity>
             <x>
               <noise type="gaussian">
-	    					<type>gaussian</type>
                 <mean>0</mean>
                 <stddev>0.2</stddev>
                 <bias_mean>0</bias_mean>
@@ -51,7 +49,6 @@
             </x>
             <y>
               <noise type="gaussian">
-	    					<type>gaussian</type>
                 <mean>0</mean>
                 <stddev>0.2</stddev>
                 <bias_mean>0</bias_mean>
@@ -62,7 +59,6 @@
             </y>
             <z>
               <noise type="gaussian">
-	    					<type>gaussian</type>
                 <mean>0</mean>
                 <stddev>0.2</stddev>
                 <bias_mean>0</bias_mean>
@@ -75,7 +71,6 @@
           <linear_acceleration>
             <x>
               <noise type="gaussian">
-	    					<type>gaussian</type>
                 <mean>0</mean>
                 <stddev>0.2</stddev>
                 <bias_mean>0</bias_mean>
@@ -86,7 +81,6 @@
             </x>
             <y>
               <noise type="gaussian">
-	    					<type>gaussian</type>
                 <mean>0</mean>
                 <stddev>0.2</stddev>
                 <bias_mean>0</bias_mean>
@@ -97,7 +91,6 @@
             </y>
             <z>
               <noise type="gaussian">
-	    					<type>gaussian</type>
                 <mean>0</mean>
                 <stddev>0.2</stddev>
                 <bias_mean>0</bias_mean>

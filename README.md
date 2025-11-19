@@ -49,3 +49,7 @@ We're using namespaced tf, so if you want to use rqt to debug and see the frames
 3. Nav2:
 
         ros2 launch icclab_summit_xl summit_xl_nav2.launch.py slam:=True use_sim_time:=False
+
+## Added Servo Demo (tested only in Sim for now)
+
+See [SERVO_DEMO_README](SERVO_DEMO_README.md)

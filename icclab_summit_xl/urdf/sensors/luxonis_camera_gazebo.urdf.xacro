@@ -6,18 +6,14 @@
     <gazebo reference="${frame}">
       <sensor name="${prefix}" type="rgbd_camera">
         <gz_frame_id>${frame}</gz_frame_id>
-        <!-- <pose>0 0 0 0 -1.5707963267948966 -1.5707963267948966</pose> -->
+        <pose>0 0 0 0 0 0</pose>
         <visualize>true</visualize>
         <always_on>true</always_on>
         <update_rate>15</update_rate>
-        <!-- <camera name="orbbec"> -->
         <camera name="${prefix}">
-          <!-- <optical_frame_id>${prefix}_color_optical_frame</optical_frame_id> -->
-          <!-- <camera_info_topic>${ns}/${prefix}/color/camera_info</camera_info_topic> -->
           <horizontal_fov>1.04719755</horizontal_fov>
           <vertical_fov>0.86393798</vertical_fov>
           <image>
-            <!-- <format>B8G8R8</format> -->
             <width>640</width>
             <height>480</height>
           </image>
@@ -25,9 +21,13 @@
             <near>0.05</near>
             <far>20.0</far>
           </clip>
-        </camera> 
-          <min_depth>0.05</min_depth>
-          <max_depth>20.0</max_depth>
+          <depth_camera>
+            <clip>
+              <near>0.05</near>
+              <far>20.0</far>
+            </clip>
+          </depth_camera>
+        </camera>
         <topic>${ns}/${prefix}</topic>
       </sensor>
     </gazebo>

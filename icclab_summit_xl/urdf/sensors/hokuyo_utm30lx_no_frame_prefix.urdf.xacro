@@ -57,6 +57,7 @@
 			<sensor type="gpu_lidar" name="${prefix}_sensor">
 				<pose>0 0 0 0 0 0</pose>
 				<topic>${ns}/${prefix}/scan</topic>
+				<frame_id>${prefix}_link</frame_id>
 				<visualize>false</visualize>
 				<update_rate>30</update_rate>
 				<lidar>
@@ -78,20 +79,9 @@
 						<mean>0.0</mean>
 						<stddev>0.01</stddev>
 					</noise>
-        <!-- </ray> -->
-				</lidar>  
+				</lidar>
         <always_on>true</always_on>
         <visualize>true</visualize>
-        
-				<!-- <plugin name="${prefix}" filename="${plugin_lib}"> -->
-          <!-- <ros>
-            <namespace>${ns}</namespace>
-            <remapping>~/out:=~/scan</remapping>
-          </ros>
-          <output_type>sensor_msgs/LaserScan</output_type> -->
-					<gz_frame_id>${prefix}_link</gz_frame_id>
-          <render_engine>ogre2</render_engine>
-			  <!-- </plugin> -->
 			</sensor>
 		</gazebo>
   </xacro:macro>

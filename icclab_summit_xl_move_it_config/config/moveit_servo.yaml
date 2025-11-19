@@ -1,0 +1,77 @@
+servo_node:
+  ros__parameters:
+    moveit_servo:
+      # MoveIt Servo Configuration for ROS 2 Jazzy
+
+      # Planning and kinematics
+      # NOTE: planning_frame and ee_frame_name were removed in Servo refactoring (PR #2224)
+      # Frames are now determined by move_group SRDF chain and command message frame_id
+      move_group_name: arm  # Name of the MoveIt planning group (defines base_link and tip_link)
+
+      # Robot state
+      joint_topic: joint_states  # No leading slash - uses default namespace
+      status_topic: ~/status
+
+      # Command output
+      command_out_topic: /arm_controller/joint_trajectory  # Correct controller name
+      command_out_type: trajectory_msgs/JointTrajectory
+
+      # Planning scene monitor parameters
+      is_primary_planning_scene_monitor: true  # Servo creates its own monitor
+      monitored_planning_scene_topic: /monitored_planning_scene
+      publish_planning_scene_hz: 30.0
+
+      # Command type and scaling
+      command_in_type: "speed_units"  # Commands in m/s and rad/s
+      scale:
+        linear: 1.0    # No scaling - commands are in m/s
+        rotational: 1.0  # No scaling - commands are in rad/s
+        joint: 1.0     # No scaling - commands are in rad/s
+
+      # Publishing
+      publish_period: 0.02  # Servo loop rate (seconds), 50 Hz
+      publish_joint_positions: true
+      publish_joint_velocities: false  # Don't publish velocities to avoid controller errors
+      publish_joint_accelerations: false
+
+      # Trajectory generation parameters
+      num_outgoing_trajectory_points: 2  # Send 2 points to avoid single-point issues
+      duration_before_trajectory_scaling: 0.1  # Duration for outgoing trajectory (seconds)
+
+      # Incoming command timeout
+      incoming_command_timeout: 0.5  # Stop if no command received (seconds)
+
+      # Latency parameters
+      max_expected_latency: 0.5  # Maximum expected latency (seconds)
+
+      # Collision checking
+      check_collisions: true
+      collision_check_rate: 10.0  # Hz
+      self_collision_proximity_threshold: 0.01  # meters
+      scene_collision_proximity_threshold: 0.02  # meters
+
+      # Smoothing
+      use_smoothing: true
+      smoothing_filter_plugin_name: "online_signal_smoothing::ButterworthFilterPlugin"
+
+      # Singularity avoidance
+      # Condition number thresholds for Jacobian-based IK
+      # Higher values = less restrictive (allow operation closer to singularities)
+      lower_singularity_threshold: 30.0  # Start slowing down near singularity
+      hard_stop_singularity_threshold: 90.0  # Emergency stop threshold
+      leaving_singularity_threshold_multiplier: 2.0
+
+      # Joint limits
+      override_velocity_scaling_factor: 0.0  # 0.0 means use joint limits from URDF
+
+      # Twist command frame interpretation
+      # When true: angular velocity is applied about ee_frame axes
+      # When false: twist is interpreted in the planning frame
+      apply_twist_commands_about_ee_frame: true  # Enable end-effector relative control
+
+      # Status and halt
+      num_outgoing_halt_msgs_to_publish: 4
+
+      # Active joint group (optional - uses move_group_name by default)
+      # active_subgroup: arm
+
