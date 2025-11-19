@@ -13,7 +13,7 @@
 
 	<link name="oak-d_frame_rotated"/>
 	<joint name="oak-d_frame_rotated_joint" type="fixed">
-	  <origin xyz="0 0 0" rpy="${PI} 0 0" />
+	  <origin xyz="0.02 0 0" rpy="${PI} 0 0" />
 	  <parent link="oak-d_frame"/>
 	  <child link="oak-d_frame_rotated"/>
 	</joint>

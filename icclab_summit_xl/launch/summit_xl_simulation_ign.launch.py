@@ -69,8 +69,9 @@ def generate_launch_description():
   robot_id = launch.substitutions.LaunchConfiguration('robot_id')
   robot_xacro = launch.substitutions.LaunchConfiguration('robot_xacro')
   world = launch.substitutions.LaunchConfiguration('world')
+  headless = launch.substitutions.LaunchConfiguration('headless')
 
-  ld.add_action(launch.actions.AppendEnvironmentVariable(name="GZ_SIM_RESOURCE_PATH", value=("/opt/ros/jazzy/share" + ":" 
+  ld.add_action(launch.actions.AppendEnvironmentVariable(name="GZ_SIM_RESOURCE_PATH", value=("/opt/ros/jazzy/share" + ":"
     + os.environ['COLCON_PREFIX_PATH'] + "/icclab_summit_xl/share" + ":"
     + os.environ['COLCON_PREFIX_PATH'] + "/robotiq_description/share")))
 
@@ -92,14 +93,35 @@ def generate_launch_description():
     default_value=['https://fuel.gazebosim.org/1.0/sonay/worlds/tugbot_depot'] #"empty.sdf"
   ))
 
+  ld.add_action(launch.actions.DeclareLaunchArgument(
+    name='headless',
+    description='Run Gazebo in headless mode (no GUI)',
+    default_value='false'
+  ))
+
   ros_gz_sim = get_package_share_directory('ros_gz_sim')
 
+
+  # Build gz_args conditionally based on headless mode
+  # Note: Gazebo must run (not be paused) for gz_ros2_control to work properly
+  # The -r flag makes it run immediately on start
+  gz_args = launch.substitutions.PythonExpression([
+    '"',
+    '-v 1 -s -r ',  # -s for headless (server only), -r to run on start
+    world,
+    '" if "',
+    headless,
+    '" == "true" else "',
+    '-v 1 -r ',  # GUI mode with -r to run on start
+    world,
+    '"'
+  ])
 
   ld.add_action(launch.actions.IncludeLaunchDescription(
     PythonLaunchDescriptionSource(
       os.path.join(ros_gz_sim, 'launch', 'gz_sim.launch.py')
     ),
-    launch_arguments={'gz_args': ['-v 1 ', world]}.items()
+    launch_arguments={'gz_args': gz_args}.items()
   ))
 
   robot_spawner = launch_ros.actions.Node(
@@ -111,53 +133,67 @@ def generate_launch_description():
   ld.add_action(robot_spawner)
 
   ld.add_action(OpaqueFunction(function=launch_setup))
-  
+
   joint_broadcaster = launch_ros.actions.Node(
     package="controller_manager",
     executable="spawner",
     # Removed namespace from controller_manager path
-    arguments=["joint_state_broadcaster", "--switch-timeout", "600", "--controller-manager", "/controller_manager"],
+    arguments=["joint_state_broadcaster", "--controller-manager", "/controller_manager"],
   )
 
-  # Delay joint_broadcaster start after `robot_spawner`
+  # Use TimerAction to give gz_ros2_control time to initialize after robot spawn
+  # This avoids race condition where controllers try to activate before plugin is ready
   delay_joint_broadcaster_after_robot_spawner = RegisterEventHandler(
       event_handler=OnProcessExit(
           target_action=robot_spawner,
-          on_exit=[joint_broadcaster],
+          on_exit=[
+              launch.actions.TimerAction(
+                  period=2.0,  # Wait 2 seconds after robot spawn for gz_ros2_control to fully initialize
+                  actions=[joint_broadcaster]
+              )
+          ],
       )
   )
   ld.add_action(delay_joint_broadcaster_after_robot_spawner)
 
+  # Load and activate arm_controller and robotiq_gripper_controller after joint_state_broadcaster
+  # Note: gz_ros2_control auto-loads controllers, which can take ~10s. Spawner will wait/retry.
   arm_controller = launch_ros.actions.Node(
     package="controller_manager",
     executable="spawner",
-    # Removed namespace from controller_manager path
-    arguments=["arm_controller", "--switch-timeout",  "600", "--controller-manager", "/controller_manager"],
+    arguments=["arm_controller", "--controller-manager", "/controller_manager"],
   )
-
-  # Delay arm_controller start after `joint_state_broadcaster`
-  delay_arm_controller_after_joint_state_broadcaster = RegisterEventHandler(
-      event_handler=OnProcessExit(
-          target_action=joint_broadcaster,
-          on_exit=[arm_controller],
-      )
-  )
-  ld.add_action(delay_arm_controller_after_joint_state_broadcaster)
 
   gripper_controller = launch_ros.actions.Node(
     package="controller_manager",
     executable="spawner",
-    # Removed namespace from controller_manager path
     arguments=["robotiq_gripper_controller", "--controller-manager", "/controller_manager"],
   )
-  # Delay gripper_controller start after `arm_controller`
-  delay_gripper_controller_after_arm_controller = RegisterEventHandler(
+
+  # Delay arm controller after joint_state_broadcaster
+  # Longer delay needed because gz_ros2_control auto-loads the controller (from YAML config)
+  # and this takes ~10 seconds. We need to wait for that to complete before spawner can activate it.
+  delay_arm_controller = RegisterEventHandler(
+      event_handler=OnProcessExit(
+          target_action=joint_broadcaster,
+          on_exit=[
+              launch.actions.TimerAction(
+                  period=8.0,  # Wait 8 seconds after joint_state_broadcaster for gz_ros2_control to finish loading
+                  actions=[arm_controller]
+              )
+          ],
+      )
+  )
+  ld.add_action(delay_arm_controller)
+
+  # Delay gripper controller after arm controller
+  delay_gripper_controller = RegisterEventHandler(
       event_handler=OnProcessExit(
           target_action=arm_controller,
           on_exit=[gripper_controller],
       )
   )
-  ld.add_action(delay_gripper_controller_after_arm_controller)
+  ld.add_action(delay_gripper_controller)
 
   # robotnik_base_control = launch_ros.actions.Node(
   #   package="controller_manager",
