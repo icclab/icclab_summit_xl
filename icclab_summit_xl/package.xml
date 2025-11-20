@@ -136,6 +136,7 @@
 
   <exec_depend>moveit_servo</exec_depend>
   <exec_depend>control_msgs</exec_depend>
+  <exec_depend>moveit_py</exec_depend>
 
   <!-- Test dependencies -->
   <test_depend>launch_testing</test_depend>

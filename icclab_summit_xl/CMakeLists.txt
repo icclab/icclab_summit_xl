@@ -16,6 +16,7 @@ install(PROGRAMS
   scripts/servo_circle_demo.py
   scripts/move_to_safe_position.py
   scripts/setup_servo.py
+  scripts/moveit_py_example.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
