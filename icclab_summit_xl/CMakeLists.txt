@@ -14,9 +14,9 @@ install(PROGRAMS
   scripts/servo_joint_jog_control.py
   scripts/servo_debug_monitor.py
   scripts/servo_circle_demo.py
-  scripts/move_to_safe_position.py
   scripts/setup_servo.py
   scripts/moveit_py_example.py
+  scripts/nav2_action_client.py
   DESTINATION lib/${PROJECT_NAME}
 )
 

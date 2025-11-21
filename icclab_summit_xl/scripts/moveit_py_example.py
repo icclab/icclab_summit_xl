@@ -124,7 +124,7 @@ class MoveItPyExample:
             logger.error(f"Config keys that were provided: {list(config_dict.keys()) if 'config_dict' in locals() else 'config_dict not created'}")
             raise
 
-        # Cache planning components (EXACT pattern from wrapper)
+        # Cache planning components
         self.planning_components: Dict[str, PlanningComponent] = {}
 
         # Get robot model and planning scene monitor
@@ -141,7 +141,7 @@ class MoveItPyExample:
         # Wait for planning scene to receive joint state updates
         # MoveItPy handles its own spinning internally
         self.logger.info('Waiting for planning scene to initialize...')
-        time.sleep(2.0)  # Give time for subscriptions and initial messages
+        time.sleep(5.0)  # Give time for subscriptions and initial messages
         self.logger.info('Planning scene initialization complete')
 
     def get_planning_component(self, group_name: str) -> PlanningComponent:
@@ -241,7 +241,7 @@ class MoveItPyExample:
         self.logger.info('=' * 60)
 
         # List of arm configurations to demonstrate
-        configurations = ['home', 'up', 'docked', 'look_forward']
+        configurations = ['home', 'up', 'docked', 'look_forward', 'home']
 
         for config in configurations:
             success = self.move_to_named_configuration("arm", config)
@@ -251,7 +251,7 @@ class MoveItPyExample:
 
             # Pause between movements to let controller fully settle
             # This prevents accumulated tracking errors
-            time.sleep(2.0)
+            time.sleep(1.0)
 
         self.logger.info('Arm movement demonstration completed successfully!')
         return True
@@ -273,7 +273,7 @@ class MoveItPyExample:
 
             # Pause between movements to let controller fully settle
             # This prevents accumulated tracking errors
-            time.sleep(2.0)
+            time.sleep(1.0)
 
         self.logger.info('Gripper movement demonstration completed successfully!')
         return True
@@ -305,34 +305,44 @@ class MoveItPyExample:
         return True
 
     def shutdown(self):
-        """Clean shutdown (EXACT wrapper pattern)."""
+        """Clean shutdown - just clear planning components.
+
+        Don't explicitly shutdown rclpy or delete moveit object.
+        Let Python's normal exit sequence handle cleanup to avoid
+        crashes from MoveItPy's internal threads being torn down improperly.
+        """
         logger.info("Shutting down MoveItWrapper")
         self.planning_components.clear()
-        # MoveItPy handles its own cleanup
-        
-        if self.node:
-            self.node.destroy_node()
-        if rclpy.ok():
-            rclpy.shutdown()
 
 
 def main():
     """Main entry point for the script."""
+    example = None
     try:
         # Create and run the example using EXACT wrapper pattern
         example = MoveItPyExample()
         success = example.run_demonstration()
+
+        # Allow time for final callbacks to complete
+        time.sleep(0.5)
+
+        # Proper cleanup before exit
         example.shutdown()
 
-        # Exit with appropriate code
-        exit(0 if success else 1)
+        # Use os._exit() to bypass Python's cleanup that causes MoveItPy segfault
+        # This is a known issue with MoveItPy's C++ destructor in Jazzy
+        os._exit(0 if success else 1)
 
     except KeyboardInterrupt:
         print('\nInterrupted by user')
-        exit(0)
+        if example:
+            example.shutdown()
+        os._exit(0)
     except Exception as e:
         print(f'Error: {e}')
-        exit(1)
+        if example:
+            example.shutdown()
+        os._exit(1)
 
 
 if __name__ == '__main__':
