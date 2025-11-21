@@ -28,6 +28,20 @@ arm_controller:
     state_interfaces:
       - position
       - velocity
+    constraints:
+      goal_time: 0.5  # Allow 0.5 seconds to settle after trajectory end
+      arm_shoulder_pan_joint:
+        goal: 0.01  # 0.01 radians = ~0.57 degrees
+      arm_shoulder_lift_joint:
+        goal: 0.01
+      arm_elbow_joint:
+        goal: 0.01
+      arm_wrist_1_joint:
+        goal: 0.01
+      arm_wrist_2_joint:
+        goal: 0.01
+      arm_wrist_3_joint:
+        goal: 0.01
 gripper_controller:
   ros__parameters:
     joint: finger_joint
@@ -36,3 +50,7 @@ gripper_controller:
     state_interfaces:
       - position
       - velocity
+    constraints:
+      goal_time: 0.5
+      finger_joint:
+        goal: 0.01
