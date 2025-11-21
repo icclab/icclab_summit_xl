@@ -8,6 +8,7 @@ The regression test suite verifies that the complete robot system works correctl
 1. **Simulation readiness** - Gazebo simulation is running and publishing data
 2. **Navigation functionality** - Nav2 can navigate the robot to goal positions
 3. **MoveIt configurations** - All pre-set arm and gripper configurations are reachable
+4. **MoveIt Servo motion** - Real-time servo control functionality for the arm
 
 ## Test Files
 
@@ -39,6 +40,15 @@ Located in `icclab_summit_xl/test/`:
      - `closed` - Gripper closed
    - Cycles through configurations to ensure transitions work
 
+4. **test_servo_motion.py**
+   - Verifies MoveIt Servo node is running and responsive
+   - Tests switching between command types (JOINT_JOG, TWIST)
+   - Tests joint jog commands move individual joints
+   - Tests twist (Cartesian velocity) commands move the arm
+   - Tests circular motion patterns with twist commands
+   - Verifies stop commands work correctly
+   - Checks collision detection during safe motions
+
 ### Launch Files
 
 Located in `icclab_summit_xl/launch/`:
@@ -67,12 +77,14 @@ ros2 launch icclab_summit_xl regression_test.launch.py
 This will:
 1. Start Gazebo simulation with Summit XL robot
 2. Wait 10 seconds, then start Nav2
-3. Wait 15 seconds, then start MoveIt
-4. Run simulation readiness test at 20 seconds
-5. Run MoveIt configurations test at 25 seconds
-6. Run navigation test at 30 seconds
+3. Wait 15 seconds, then start MoveIt move_group
+4. Wait 20 seconds, then start MoveIt Servo
+5. Run simulation readiness test at 25 seconds
+6. Run navigation test (after simulation test completes)
+7. Run MoveIt configurations test (after navigation test completes)
+8. Run MoveIt Servo motion test (after MoveIt test completes)
 
-**Expected duration:** 3-5 minutes
+**Expected duration:** 5-7 minutes
 
 **Note:** The tests run in sequence with delays to ensure components are fully initialized.
 
@@ -101,7 +113,14 @@ ros2 launch icclab_summit_xl_move_it_config move_group.launch.py
 
 Wait for MoveIt to load (look for "You can start planning now!").
 
-**Terminal 4: Run Tests**
+**Terminal 4: Start MoveIt Servo**
+```bash
+ros2 launch icclab_summit_xl_move_it_config servo_demo.launch.py start_rviz:=false
+```
+
+Wait for Servo to initialize (look for servo status messages).
+
+**Terminal 5: Run Tests**
 
 Run individual tests:
 ```bash
@@ -113,6 +132,9 @@ ros2 run icclab_summit_xl test_navigation.py
 
 # Test 3: MoveIt configurations
 ros2 run icclab_summit_xl test_moveit_configurations.py
+
+# Test 4: MoveIt Servo motion
+ros2 run icclab_summit_xl test_servo_motion.py
 ```
 
 Or run all tests via launch file:
@@ -193,18 +215,51 @@ pytest-3 /path/to/test_simulation_readiness.py -v
 - 0.5 second settling time between motions
 - Cycle tests ensure smooth transitions between configurations
 
+### MoveIt Servo Motion Test
+
+**Tests performed:**
+- ✓ Servo status is being published
+- ✓ Can switch to joint jog (JOINT_JOG) mode
+- ✓ Can switch to twist (TWIST/Cartesian) mode
+- ✓ Joint jog commands move individual joints
+- ✓ Twist commands move the end-effector in Cartesian space
+- ✓ Circular motion patterns work correctly
+- ✓ Stop commands halt motion
+- ✓ No collision warnings during safe motions
+
+**Success criteria:**
+- Servo node is running and publishing status
+- Command type switching succeeds
+- Joint jog commands produce measurable joint motion (>0.05 rad)
+- Twist commands produce measurable arm motion (>0.01 rad total)
+- Circular motion completes without errors
+- No collision or singularity halts during test motions
+
+**Notes:**
+- **IMPORTANT:** Test automatically moves arm to a safe position away from singularities before testing
+- Safe position matches the one used in `setup_servo.py` from the servo demo
+- Tests use small, safe velocities to avoid singularities
+- Joint jog test moves wrist_3 joint (safe to move)
+- Twist tests use small upward motions (Z-axis)
+- Circular motion uses 10cm radius in YZ plane (vertical circle) for 5 seconds
+- All motions are designed to be collision-free
+
 ## Expected Results
 
 ### All Tests Pass
 
 ```
 ======================================================================
-Ran 15 tests in 180.234s
+Ran 24 tests in 240.567s
 
 OK
 ```
 
-All tests should pass with green checkmarks (✓) in the logs.
+All tests should pass with green checkmarks (✓) in the logs. The test count includes:
+- 3 simulation readiness tests
+- 3 navigation tests
+- 9 MoveIt configuration tests
+- 9 MoveIt Servo motion tests
 
 ### Common Failures and Solutions
 
@@ -253,6 +308,28 @@ All tests should pass with green checkmarks (✓) in the logs.
 **Failure:** "Execution failed for [configuration]"
 - **Cause:** Controller not responding or trajectory execution error
 - **Solution:** Check controller status, verify controller configuration
+
+#### Test 4: MoveIt Servo Failures
+
+**Failure:** "Servo status not being published"
+- **Cause:** Servo node not started or failed to initialize
+- **Solution:** Check that servo_demo.launch.py was run, verify move_group is running first
+
+**Failure:** "Failed to switch to [mode] mode"
+- **Cause:** Servo service not available or in invalid state
+- **Solution:** Check servo node logs, verify servo is fully initialized
+
+**Failure:** "Joint/Twist command did not produce motion"
+- **Cause:** Commands not reaching servo, wrong command type active, or arm at limit
+- **Solution:** Verify command type is correct, check joint limits, review servo logs
+
+**Failure:** "Collision detected during safe motion"
+- **Cause:** Self-collision due to arm configuration or planning scene issues
+- **Solution:** Check arm starting position, verify planning scene is accurate
+
+**Failure:** "Servo halted due to singularity"
+- **Cause:** Arm too close to kinematic singularity
+- **Solution:** Adjust singularity thresholds in moveit_servo.yaml or use different test motions
 
 ## Integration with CI/CD
 
@@ -460,7 +537,8 @@ Expected test durations on typical hardware (Intel i7, 16GB RAM, GTX 1060):
 - **Simulation readiness:** 5-10 seconds
 - **Navigation test:** 60-90 seconds
 - **MoveIt configurations:** 90-120 seconds
-- **Total (all tests):** 3-5 minutes
+- **MoveIt Servo motion:** 60-90 seconds
+- **Total (all tests):** 5-7 minutes
 
 ## Contributing
 

@@ -113,7 +113,25 @@ def generate_launch_description():
         ]
     )
 
-    # 4. Run tests (with delay to let everything start)
+    # 4. Start MoveIt Servo (with delay after move_group)
+    servo_launch = TimerAction(
+        period=20.0,  # Wait 20 seconds for move_group to be ready
+        actions=[
+            LogInfo(msg='Starting MoveIt Servo...'),
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource(
+                    os.path.join(pkg_moveit_config, 'launch', 'servo_demo.launch.py')
+                ),
+                launch_arguments={
+                    'use_sim_time': 'true',
+                    'start_rviz': 'false',  # Don't start RViz in tests
+                    'use_servo_node': 'true',
+                }.items(),
+            ),
+        ]
+    )
+
+    # 5. Run tests (with delay to let everything start)
     # Test 1: Simulation readiness
     simulation_test_process = ExecuteProcess(
         cmd=['ros2', 'run', 'icclab_summit_xl', 'test_simulation_readiness.py'],
@@ -121,7 +139,7 @@ def generate_launch_description():
     )
 
     simulation_test = TimerAction(
-        period=20.0,
+        period=25.0,  # Wait for servo to start
         actions=[
             LogInfo(msg='='*60),
             LogInfo(msg='Running simulation readiness test...'),
@@ -176,10 +194,33 @@ def generate_launch_description():
         )
     )
 
+    # Test 4: Servo motion (starts after MoveIt test completes)
+    servo_test_process = ExecuteProcess(
+        cmd=['ros2', 'run', 'icclab_summit_xl', 'test_servo_motion.py'],
+        output='screen',
+    )
+
+    servo_test = RegisterEventHandler(
+        OnProcessExit(
+            target_action=moveit_test_process,
+            on_exit=[
+                TimerAction(
+                    period=2.0,  # Small delay between tests
+                    actions=[
+                        LogInfo(msg='='*60),
+                        LogInfo(msg='Running MoveIt Servo motion test...'),
+                        LogInfo(msg='='*60),
+                        servo_test_process,
+                    ]
+                )
+            ]
+        )
+    )
+
     # Shutdown after all tests complete
     shutdown_handler = RegisterEventHandler(
         OnProcessExit(
-            target_action=moveit_test_process,
+            target_action=servo_test_process,
             on_exit=[
                 TimerAction(
                     period=2.0,  # Brief delay before shutdown
@@ -205,8 +246,10 @@ def generate_launch_description():
         simulation_launch,
         nav2_launch,
         moveit_launch,
+        servo_launch,
         simulation_test,
         navigation_test,
         moveit_test,
+        servo_test,
         shutdown_handler,
     ])

@@ -25,6 +25,7 @@ install(PROGRAMS
   test/test_simulation_readiness.py
   test/test_navigation.py
   test/test_moveit_configurations.py
+  test/test_servo_motion.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
