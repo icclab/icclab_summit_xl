@@ -73,6 +73,7 @@ def generate_launch_description():
 
   ld.add_action(launch.actions.AppendEnvironmentVariable(name="GZ_SIM_RESOURCE_PATH", value=("/opt/ros/jazzy/share" + ":"
     + os.environ['COLCON_PREFIX_PATH'] + "/icclab_summit_xl/share" + ":"
+    + os.environ['COLCON_PREFIX_PATH'] + "/icclab_summit_xl/share/icclab_summit_xl/worlds/models" + ":"
     + os.environ['COLCON_PREFIX_PATH'] + "/robotiq_description/share")))
 
   ld.add_action(launch.actions.DeclareLaunchArgument(
@@ -230,6 +231,69 @@ def generate_launch_description():
   ld.add_action(delay_bridge_after_robot_spawner)
 
 
+  # IMAGE TRANSPORT REPUBLISHERS FOR MCP SERVER COMPATIBILITY
+  # These convert raw Gazebo images to compressed format for MCP server
+
+  # Front camera color image compression
+  front_color_compression = launch_ros.actions.Node(
+      package='image_transport',
+      executable='republish',
+      arguments=['raw', 'compressed'],
+      remappings=[
+          ('in', '/front_rgbd_camera/color/image_raw'),
+          ('out/compressed', '/front_rgbd_camera/color/image_raw/compressed')
+      ],
+      output='screen',
+      parameters=[{'use_sim_time': True}]
+  )
+
+  # Front camera depth image compression
+  front_depth_compression = launch_ros.actions.Node(
+      package='image_transport',
+      executable='republish',
+      arguments=['raw', 'compressedDepth'],
+      remappings=[
+          ('in', '/front_rgbd_camera/depth/image_raw'),
+          ('out/compressedDepth', '/front_rgbd_camera/depth/image_raw/compressedDepth')
+      ],
+      output='screen',
+      parameters=[{'use_sim_time': True}]
+  )
+
+  # Arm camera color image compression
+  arm_color_compression = launch_ros.actions.Node(
+      package='image_transport',
+      executable='republish',
+      arguments=['raw', 'compressed'],
+      remappings=[
+          ('in', '/arm_camera/color/image_raw'),
+          ('out/compressed', '/arm_camera/color/image_raw/compressed')
+      ],
+      output='screen',
+      parameters=[{'use_sim_time': True}]
+  )
+
+  # Arm camera depth image compression
+  arm_depth_compression = launch_ros.actions.Node(
+      package='image_transport',
+      executable='republish',
+      arguments=['raw', 'compressedDepth'],
+      remappings=[
+          ('in', '/arm_camera/depth/image_raw'),
+          ('out/compressedDepth', '/arm_camera/depth/image_raw/compressedDepth')
+      ],
+      output='screen',
+      parameters=[{'use_sim_time': True}]
+  )
+
+  # Start image compression nodes with delay after everything is initialized
+  delay_compression = launch.actions.TimerAction(
+      period=15.0,  # Wait 15 seconds for all systems to be ready
+      actions=[front_color_compression, front_depth_compression,
+              arm_color_compression, arm_depth_compression]
+  )
+  ld.add_action(delay_compression)
+
   # odom_tf = launch_ros.actions.Node(
   #       package='icclab_summit_xl',
   #       executable='odom_tf',
@@ -244,5 +308,5 @@ def generate_launch_description():
   #       name='cmd_vel_topic_remap',
   #   )
   # ld.add_action(cmd_vel_topic_remap)
-  
+
   return ld
