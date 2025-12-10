@@ -17,6 +17,7 @@ install(PROGRAMS
   scripts/setup_servo.py
   scripts/moveit_py_example.py
   scripts/nav2_action_client.py
+  scripts/segmentation_node.py
   DESTINATION lib/${PROJECT_NAME}
 )
 

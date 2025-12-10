@@ -1,0 +1,8 @@
+# Segmentation Parameters
+segmentation_node:
+  ros__parameters:
+    model_type: "langsam"  # Options: "sam", "langsam", "mobile_sam"
+    sam_checkpoint: "sam_vit_h_4b8939.pth"
+    device: "cuda"
+    use_gpu: true
+    rgb_topic: "/arm_camera/color/image_raw"
