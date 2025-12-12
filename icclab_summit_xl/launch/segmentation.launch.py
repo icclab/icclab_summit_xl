@@ -32,6 +32,12 @@ def generate_launch_description():
     ])
 
     # Declare launch arguments
+    use_sim_time_arg = DeclareLaunchArgument(
+        'use_sim_time',
+        default_value='false',
+        description='Use simulation time'
+    )
+
     rgb_topic_arg = DeclareLaunchArgument(
         'rgb_topic',
         default_value='/arm_camera/color/image_raw',
@@ -59,6 +65,7 @@ def generate_launch_description():
         parameters=[
             config_file,
             {
+                'use_sim_time': LaunchConfiguration('use_sim_time'),
                 'rgb_topic': LaunchConfiguration('rgb_topic'),
                 'depth_topic': LaunchConfiguration('depth_topic'),
                 'camera_info_topic': LaunchConfiguration('camera_info_topic')
@@ -71,6 +78,7 @@ def generate_launch_description():
     ld = LaunchDescription()
 
     # Add launch arguments
+    ld.add_action(use_sim_time_arg)
     ld.add_action(rgb_topic_arg)
     ld.add_action(depth_topic_arg)
     ld.add_action(camera_info_topic_arg)

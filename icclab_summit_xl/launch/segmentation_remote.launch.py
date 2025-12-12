@@ -26,6 +26,12 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
     # Declare launch arguments
+    use_sim_time_arg = DeclareLaunchArgument(
+        'use_sim_time',
+        default_value='false',
+        description='Use simulation time'
+    )
+
     server_url_arg = DeclareLaunchArgument(
         'server_url',
         default_value='http://localhost:8001',
@@ -93,6 +99,7 @@ def generate_launch_description():
         name='remote_segmentation_node',
         output='screen',
         parameters=[{
+            'use_sim_time': LaunchConfiguration('use_sim_time'),
             'server_url': LaunchConfiguration('server_url'),
             'server_timeout': LaunchConfiguration('server_timeout'),
             'sam_type': LaunchConfiguration('sam_type'),
@@ -111,6 +118,7 @@ def generate_launch_description():
     ld = LaunchDescription()
 
     # Add launch arguments
+    ld.add_action(use_sim_time_arg)
     ld.add_action(server_url_arg)
     ld.add_action(server_timeout_arg)
     ld.add_action(sam_type_arg)
