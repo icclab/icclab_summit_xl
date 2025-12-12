@@ -18,6 +18,7 @@ install(PROGRAMS
   scripts/moveit_py_example.py
   scripts/nav2_action_client.py
   scripts/segmentation_node.py
+  scripts/segmentation_node_remote.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
