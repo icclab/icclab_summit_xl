@@ -1,0 +1,98 @@
+# Visual Servoing Configuration
+# Parameters for teach-by-demonstration visual servoing system
+
+visual_servo:
+  ros__parameters:
+    # Feature extraction settings
+    feature_extractor:
+      type: "superpoint"  # Options: "superpoint", "xfeat", "orb"
+      nms_radius: 4
+      keypoint_threshold: 0.005
+      max_keypoints: 500
+
+    # Feature matching settings
+    matching:
+      method: "lightglue"  # Options: "lightglue", "nearest_neighbor", "flann"
+      match_threshold: 0.2
+      min_matches: 10  # Minimum matches to consider tracking valid
+      ransac_threshold: 0.01  # RANSAC inlier threshold in meters
+
+    # Object detection settings
+    detection:
+      method: "langsam"  # Options: "langsam", "sam", "manual_bbox"
+      redetect_interval: 10  # Re-run detection every N frames
+      confidence_threshold: 0.5
+      use_mask: true  # Use segmentation mask to filter features
+
+    # Camera settings
+    camera:
+      topic_rgb: "/camera/color/image_raw"
+      topic_depth: "/camera/depth/image_rect_raw"
+      topic_camera_info: "/camera/color/camera_info"
+      frame_id: "camera_color_optical_frame"
+
+      # Camera intrinsics (if not using camera_info topic)
+      # These are example values for RealSense D435
+      fx: 615.0
+      fy: 615.0
+      cx: 320.0
+      cy: 240.0
+
+      # Depth processing
+      depth_scale: 0.001  # Convert depth values to meters
+      min_depth: 0.1  # Minimum valid depth (meters)
+      max_depth: 2.0  # Maximum valid depth (meters)
+
+    # Control settings
+    control:
+      rate: 30.0  # Control loop rate (Hz)
+      velocity_scaling: 1.0  # Global velocity scaling factor
+
+      # Proportional gains for position and orientation
+      k_position: 0.5  # Position control gain
+      k_orientation: 0.3  # Orientation control gain
+
+      # Velocity limits
+      max_linear_velocity: 0.1  # m/s
+      max_angular_velocity: 0.3  # rad/s
+
+      # Convergence thresholds
+      position_tolerance: 0.005  # 5mm
+      orientation_tolerance: 0.087  # ~5 degrees in radians
+
+      # Servo topic
+      servo_topic: "/servo_node/delta_twist_cmds"
+      servo_frame: "arm_tool0"  # Frame for servo commands
+
+    # Grasp execution settings
+    grasp:
+      approach_distance: 0.15  # Distance to maintain before final approach (meters)
+      final_approach_speed: 0.02  # Speed during final approach (m/s)
+      gripper_close_topic: "/gripper/command"
+      gripper_close_value: 0.8  # Value to close gripper (depends on gripper type)
+
+    # Tracking settings
+    tracking:
+      lost_track_threshold: 5  # Number of frames with low matches before re-detection
+      motion_smoothing: true  # Apply smoothing to velocity commands
+      smoothing_alpha: 0.3  # Exponential smoothing factor (0-1)
+
+      # ICP fallback settings (optional)
+      use_icp_fallback: false
+      icp_max_correspondence_distance: 0.05
+      icp_max_iterations: 30
+
+    # Visualization settings
+    visualization:
+      enabled: true
+      show_features: true
+      show_matches: true
+      show_pose_error: true
+      rviz_marker_topic: "/visual_servo/markers"
+      debug_image_topic: "/visual_servo/debug_image"
+
+    # Storage settings
+    storage:
+      taught_grasps_directory: "~/taught_grasps"
+      auto_save: true
+      save_format: "yaml"  # Options: "yaml", "pickle"

@@ -4,10 +4,39 @@ project(icclab_summit_xl)
 find_package(ament_cmake REQUIRED)
 
 install(
-  DIRECTORY launch worlds config maps robots urdf rviz meshes
+  DIRECTORY launch worlds config maps robots urdf rviz meshes scripts
   DESTINATION share/${PROJECT_NAME}
 )
 
+# Install Python scripts
+install(PROGRAMS
+  scripts/servo_keyboard_control.py
+  scripts/servo_joint_jog_control.py
+  scripts/servo_debug_monitor.py
+  scripts/servo_circle_demo.py
+  scripts/setup_servo.py
+  scripts/moveit_py_example.py
+  scripts/nav2_action_client.py
+  scripts/segmentation_node.py
+  scripts/segmentation_node_remote.py
+  scripts/visual_servo_teach.py
+  scripts/visual_servo_execute.py
+  scripts/visual_servo_demo.py
+  scripts/camera_utils.py
+  scripts/feature_tracker.py
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+# Install test scripts
+install(PROGRAMS
+  test/test_simulation_readiness.py
+  test/test_navigation.py
+  test/test_moveit_configurations.py
+  test/test_servo_motion.py
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+>>>>>>> 1ce6ac3 (Add teach-by-demonstration visual servoing system)
 ament_export_dependencies(${THIS_PACKAGE_INCLUDE_DEPENDS})
 find_package(rclpy REQUIRED)
 find_package(std_msgs REQUIRED)

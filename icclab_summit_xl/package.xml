@@ -114,6 +114,43 @@
   <exec_depend>realsense2_description</exec_depend>
   <exec_depend>urg_node</exec_depend>
 
+  <!-- <exec_depend>ign_ros2_control</exec_depend> -->
+  <exec_depend>joint_state_publisher</exec_depend>
+  <exec_depend>launch</exec_depend>
+  <exec_depend>launch_ros</exec_depend>
+  <exec_depend>rviz2</exec_depend>
+  <exec_depend>ur_description</exec_depend>
+  <exec_depend>ur_moveit_config</exec_depend>
+  <exec_depend>urdf</exec_depend>
+  <exec_depend>xacro</exec_depend>
+
+  <depend>ros_gz_bridge</depend>
+  <depend>ros_gz_image</depend>
+  <depend>ros_gz_sim</depend>
+
+  <depend>geometry_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>tf2_ros</depend>
+
+  <exec_depend>moveit_servo</exec_depend>
+  <exec_depend>control_msgs</exec_depend>
+  <exec_depend>moveit_py</exec_depend>
+
+  <!-- Visual servoing dependencies -->
+  <depend>sensor_msgs</depend>
+  <depend>cv_bridge</depend>
+  <depend>image_transport</depend>
+  <exec_depend>python3-opencv</exec_depend>
+  <exec_depend>python3-numpy</exec_depend>
+  <exec_depend>python3-scipy</exec_depend>
+  <exec_depend>python3-yaml</exec_depend>
+
+  <!-- Test dependencies -->
+  <test_depend>launch_testing</test_depend>
+  <test_depend>launch_testing_ament_cmake</test_depend>
+  <test_depend>launch_testing_ros</test_depend>
+  <test_depend>python3-pytest</test_depend>
+
   <!-- The export tag contains other, unspecified, tags -->
   <export>
     <build_type>ament_cmake</build_type>
