@@ -58,7 +58,7 @@ servo_node:
       # Condition number thresholds for Jacobian-based IK
       # Higher values = less restrictive (allow operation closer to singularities)
       lower_singularity_threshold: 30.0  # Start slowing down near singularity
-      hard_stop_singularity_threshold: 90.0  # Emergency stop threshold
+      hard_stop_singularity_threshold: 99.0  # Emergency stop threshold
       leaving_singularity_threshold_multiplier: 2.0
 
       # Joint limits

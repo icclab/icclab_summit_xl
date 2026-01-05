@@ -205,17 +205,20 @@ class RemoteSegmentationNode(Node):
         Returns:
             Open3D point cloud
         """
-        # Ensure depth is uint16 in millimeters
-        if depth.dtype != np.uint16:
-            if depth.dtype == np.float32 or depth.dtype == np.float64:
-                # Assume it's already in meters or mm, convert to mm uint16
-                depth = (depth * 1000).astype(np.uint16) if depth.max() < 100 else depth.astype(np.uint16)
-            else:
-                depth = depth.astype(np.uint16)
+        # Gazebo RGBD camera publishes depth in float32 meters with NaN for invalid pixels
+        # Keep it as float32 for Open3D processing
+        if depth.dtype == np.float32 or depth.dtype == np.float64:
+            # Replace NaN/inf with 0
+            depth = np.nan_to_num(depth, nan=0.0, posinf=0.0, neginf=0.0)
+        else:
+            # If it's uint16, assume it's in millimeters
+            depth = depth.astype(np.float32) / 1000.0
 
         # Apply mask to depth and RGB
-        masked_depth = depth * mask
-        masked_rgb = rgb * mask[..., None]
+        # For Open3D, we need to preserve image dimensions but set non-masked pixels to 0 depth
+        # Open3D will skip pixels with 0 or invalid depth when creating point cloud
+        masked_depth = np.where(mask, depth, 0.0)
+        masked_rgb = np.where(mask[..., None], rgb, 0)
 
         # Debug: Check depth values in masked region
         valid_depths = masked_depth[mask > 0]
@@ -227,14 +230,17 @@ class RemoteSegmentationNode(Node):
         # Convert to Open3D format with proper image dimensions
         height, width = rgb.shape[:2]
         intrinsic_o3d = self.intrinsic_matrix_to_o3d(intrinsic_matrix, width, height)
-        depth_o3d = o3d.geometry.Image(masked_depth)
-        rgb_o3d = o3d.geometry.Image(masked_rgb)
+
+        # Convert depth to Open3D Image (needs to be float32 or uint16)
+        depth_o3d = o3d.geometry.Image(masked_depth.astype(np.float32))
+        rgb_o3d = o3d.geometry.Image(masked_rgb.astype(np.uint8))
 
         # Create RGBD image
         rgbd_o3d = o3d.geometry.RGBDImage.create_from_color_and_depth(
             color=rgb_o3d,
             depth=depth_o3d,
-            depth_scale=1000.0,  # Convert mm to meters
+            depth_scale=1.0,  # Depth is already in meters from Gazebo simulation
+            depth_trunc=20.0,  # Match the camera far clipping plane
             convert_rgb_to_intensity=False
         )
 
