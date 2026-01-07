@@ -126,6 +126,12 @@ class RemoteSegmentationNode(Node):
             10
         )
 
+        self.rgb_pub = self.create_publisher(
+            Image,
+            '/segmentation_rgb',
+            10
+        )
+
         self.pointcloud_pub = self.create_publisher(
             PointCloud2,
             '/segmented_pointcloud',
@@ -455,17 +461,28 @@ class RemoteSegmentationNode(Node):
             self.publish_status(f'ERROR: {str(e)}')
 
     def publish_mask(self, mask):
-        """Publish segmentation mask and segmented point cloud."""
+        """Publish segmentation mask, RGB image used for segmentation, and segmented point cloud."""
         # Convert boolean mask to uint8 (0 or 255)
         mask_uint8 = (mask * 255).astype(np.uint8)
 
-        # Convert to ROS Image message
-        mask_msg = self.bridge.cv2_to_imgmsg(mask_uint8, encoding='mono8')
-        mask_msg.header.stamp = self.get_clock().now().to_msg()
-        mask_msg.header.frame_id = self.current_rgb_frame_id if self.current_rgb_frame_id else 'camera_color_optical_frame'
+        # Get timestamp and frame_id
+        timestamp = self.get_clock().now().to_msg()
+        frame_id = self.current_rgb_frame_id if self.current_rgb_frame_id else 'camera_color_optical_frame'
 
+        # Publish mask
+        mask_msg = self.bridge.cv2_to_imgmsg(mask_uint8, encoding='mono8')
+        mask_msg.header.stamp = timestamp
+        mask_msg.header.frame_id = frame_id
         self.mask_pub.publish(mask_msg)
-        self.get_logger().info('Published segmentation mask')
+
+        # Publish the RGB image that was used for segmentation
+        # This ensures tracker initialization uses the exact same image
+        rgb_msg = self.bridge.cv2_to_imgmsg(self.current_rgb, encoding='rgb8')
+        rgb_msg.header.stamp = timestamp
+        rgb_msg.header.frame_id = frame_id
+        self.rgb_pub.publish(rgb_msg)
+
+        self.get_logger().info('Published segmentation mask and RGB image')
 
         # Generate and publish point cloud if we have all required data
         if self.current_rgb is not None and self.current_depth is not None and self.intrinsic_matrix is not None:
