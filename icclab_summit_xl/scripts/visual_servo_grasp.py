@@ -375,13 +375,15 @@ class SimpleMaskTracker:
         self._last_tracked_image = image
 
         # Skip tracker update every N frames for speed (CSRT is slow)
-        if not hasattr(self, '_frame_skip_counter'):
-            self._frame_skip_counter = 0
-        self._frame_skip_counter += 1
+        # Can be disabled by setting skip_frames=False
+        if getattr(self, 'skip_frames', True):
+            if not hasattr(self, '_frame_skip_counter'):
+                self._frame_skip_counter = 0
+            self._frame_skip_counter += 1
 
-        if self._frame_skip_counter % 2 != 0 and self.prev_center is not None:
-            # Skip this frame, return previous result
-            return self.prev_center, self.prev_angle, 0.85
+            if self._frame_skip_counter % 2 != 0 and self.prev_center is not None:
+                # Skip this frame, return previous result
+                return self.prev_center, self.prev_angle, 0.85
 
         # CSRT needs BGR image
         if len(image.shape) == 2:
@@ -428,15 +430,88 @@ class SimpleMaskTracker:
         else:
             confidence = 0.8  # Default confidence
 
-        # For angle, use the previous angle or try to compute from current bbox region
-        # For simplicity, maintain previous angle (could improve with edge detection)
-        angle = self.prev_angle
+        # Estimate angle from bbox - the long axis indicates object orientation
+        # CSRT bbox is axis-aligned, so we need to analyze the image region
+        # For now, use bbox aspect ratio to determine if object is more horizontal or vertical
+        # and refine using edge detection within the bbox
+        angle = self._estimate_angle_from_bbox(image_bgr, x, y, w, h)
 
         # Update tracking state
         self.prev_center = center
         self.prev_angle = angle
 
         return center, angle, confidence
+
+    def _estimate_angle_from_bbox(self, image, x, y, w, h):
+        """
+        Estimate object orientation angle from the tracked bounding box region.
+        Uses edge detection and line fitting to find the dominant orientation.
+
+        Returns angle in radians where 0 = horizontal, pi/2 = vertical.
+        We want the gripper to grasp across the long axis, so we return
+        the angle that needs to be corrected (target is 0 for horizontal grip).
+        """
+        # Extract region of interest
+        img_h, img_w = image.shape[:2]
+        x1 = max(0, x)
+        y1 = max(0, y)
+        x2 = min(img_w, x + w)
+        y2 = min(img_h, y + h)
+
+        if x2 <= x1 or y2 <= y1:
+            return self.prev_angle
+
+        roi = image[y1:y2, x1:x2]
+
+        # Convert to grayscale if needed
+        if len(roi.shape) == 3:
+            gray = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
+        else:
+            gray = roi
+
+        # Use Canny edge detection
+        edges = cv2.Canny(gray, 50, 150)
+
+        # Find contours in the edge image
+        contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+        if len(contours) == 0:
+            return self.prev_angle
+
+        # Combine all contour points
+        all_points = np.vstack(contours)
+
+        if len(all_points) < 5:
+            return self.prev_angle
+
+        # Fit minimum area rectangle to get orientation
+        rect = cv2.minAreaRect(all_points)
+        rect_angle = rect[2]  # Angle in degrees from -90 to 0
+        rect_w, rect_h = rect[1]
+
+        # minAreaRect returns angle of the shorter side relative to horizontal
+        # We want angle of the LONG axis
+        # If width > height, long axis is at rect_angle
+        # If height > width, long axis is at rect_angle + 90
+        if rect_h > rect_w:
+            long_axis_angle = rect_angle + 90
+        else:
+            long_axis_angle = rect_angle
+
+        # Normalize to [-90, 90] range
+        while long_axis_angle > 90:
+            long_axis_angle -= 180
+        while long_axis_angle < -90:
+            long_axis_angle += 180
+
+        # Convert to radians
+        angle_rad = np.deg2rad(long_axis_angle)
+
+        # Apply low-pass filter to reduce noise
+        alpha = 0.3
+        filtered_angle = alpha * angle_rad + (1 - alpha) * self.prev_angle
+
+        return filtered_angle
 
     def get_visualization(self, confidence=None):
         """
@@ -881,41 +956,26 @@ class VisualServoGrasp(Node):
         # Handle tracker re-initialization during active servoing states
         # Always reinitialize when fresh segmentation arrives (not just when explicitly waiting)
         if self.state in ['APPROACH', 'ORIENT', 'DESCENDING']:
-            if np.sum(self.segmentation_mask) > 50 and self.segmentation_rgb is not None:
-                # Check mask quality before using for re-initialization
+            mask_area = np.sum(self.segmentation_mask)
+            if mask_area > 50 and self.segmentation_rgb is not None:
+                # Trust the segmentation model - no heuristic rejection
                 y_coords, x_coords = np.where(self.segmentation_mask > 0)
-                if len(x_coords) > 0:
-                    mask_width = x_coords.max() - x_coords.min()
-                    mask_height = y_coords.max() - y_coords.min()
-                    mask_area = np.sum(self.segmentation_mask)
-                    mask_bbox_area = mask_width * mask_height
+                mask_width = x_coords.max() - x_coords.min() if len(x_coords) > 0 else 0
+                mask_height = y_coords.max() - y_coords.min() if len(y_coords) > 0 else 0
 
-                    # Check if mask seems reasonable (not too small, not too sparse)
-                    min_size = 30  # Minimum 30 pixels in each dimension
-                    density_threshold = 0.3  # Mask should fill at least 30% of its bounding box
-
-                    if mask_width < min_size or mask_height < min_size:
-                        self.get_logger().warn(
-                            f'Received mask too small for re-init: {mask_width}x{mask_height} pixels - ignoring'
-                        )
-                        self.waiting_for_reinit_segmentation = False
-                    elif mask_bbox_area > 0 and (mask_area / mask_bbox_area) < density_threshold:
-                        self.get_logger().warn(
-                            f'Received sparse mask for re-init: density={mask_area/mask_bbox_area:.2f} - ignoring'
-                        )
-                        self.waiting_for_reinit_segmentation = False
-                    else:
-                        self.get_logger().info(
-                            f'Re-initializing tracker with SYNCHRONIZED mask+RGB: {mask_width}x{mask_height}, '
-                            f'area={mask_area}, density={mask_area/mask_bbox_area:.2f}'
-                        )
-                        # Use synchronized RGB image that matches the mask timestamp
-                        if self.tracker.initialize(self.segmentation_rgb, self.segmentation_mask, self.get_logger()):
-                            self.get_logger().info('Tracker successfully re-initialized with synchronized images')
-                            self.waiting_for_reinit_segmentation = False
-                        else:
-                            self.get_logger().warn('Tracker re-initialization failed')
-                            self.waiting_for_reinit_segmentation = False
+                self.get_logger().info(
+                    f'Re-initializing tracker with SYNCHRONIZED mask+RGB: {mask_width}x{mask_height}, '
+                    f'area={mask_area}'
+                )
+                # Use synchronized RGB image that matches the mask timestamp
+                if self.tracker.initialize(self.segmentation_rgb, self.segmentation_mask, self.get_logger()):
+                    self.get_logger().info('Tracker successfully re-initialized with synchronized images')
+                    self.waiting_for_reinit_segmentation = False
+                    # Track when tracker was re-initialized for stabilization period
+                    self._tracker_reinit_time = time.time()
+                else:
+                    self.get_logger().warn('Tracker re-initialization failed')
+                    self.waiting_for_reinit_segmentation = False
 
     def joint_state_callback(self, msg):
         """Update motion monitor with current joint states."""
@@ -1245,17 +1305,26 @@ class VisualServoGrasp(Node):
 
     def request_segmentation_update(self):
         """Request a fresh segmentation for tracker re-initialization."""
+        self._try_request_segmentation()
+
+    def _try_request_segmentation(self):
+        """Request a fresh segmentation for tracker re-initialization.
+
+        Returns:
+            True if request was actually sent, False if rate-limited or skipped.
+        """
         if self.object_description is None:
-            return
+            return False
 
         current_time = time.time()
         if current_time - self.last_segmentation_request_time < self.segmentation_request_interval:
-            return  # Rate limit requests
+            return False  # Rate limit requests
 
         self.get_logger().info('Requesting fresh segmentation for tracker update')
         self.segment_request_pub.publish(String(data=self.object_description))
         self.last_segmentation_request_time = current_time
         self.waiting_for_reinit_segmentation = True
+        return True
 
     def start_grasp_callback(self, msg):
         """Start grasp sequence with object description."""
@@ -1953,8 +2022,8 @@ class VisualServoGrasp(Node):
             if self.current_rgb is None:
                 return
 
-            # Continuously update table plane (humanoid base may move)
-            # self._update_plane_and_grasp_pose()
+            # Disable tracker frame skipping in ORIENT for stability
+            self.tracker.skip_frames = False
 
             # Track object
             center, angle, confidence = self.tracker.update(self.current_rgb)
@@ -2006,30 +2075,34 @@ class VisualServoGrasp(Node):
 
                 if in_danger_zone:
                     # Object at/beyond FOV edge - actively re-center it, no orientation
-                    self.get_logger().warn(
-                        f'ORIENT: DANGER zone - bbox corner only {min_distance_to_edge:.0f}px from edge - '
-                        f'pausing orientation, actively re-centering object'
-                    )
+                    # Rate-limit this warning to once every 2 seconds
+                    if not hasattr(self, '_last_orient_danger_warn') or time.time() - self._last_orient_danger_warn > 2.0:
+                        self.get_logger().warn(
+                            f'ORIENT: DANGER zone - bbox corner only {min_distance_to_edge:.0f}px from edge - '
+                            f'pausing orientation, actively re-centering object'
+                        )
+                        self._last_orient_danger_warn = time.time()
                     # Skip to re-centering logic below (no return, let XY correction run)
                     # Don't request re-segmentation (would get partial object)
 
                 elif in_warning_zone:
                     # Object approaching edge - pause orientation and re-center
-                    if not self.waiting_for_reinit_segmentation:
+                    # Rate-limit this warning
+                    if not hasattr(self, '_last_orient_warning_warn') or time.time() - self._last_orient_warning_warn > 2.0:
                         self.get_logger().warn(
                             f'ORIENT: WARNING zone - bbox corner {min_distance_to_edge:.0f}px from edge - '
-                            f'requesting re-segmentation and pausing orientation to re-center'
+                            f'pausing orientation to re-center'
                         )
-                        self.request_segmentation_update()
+                        self._last_orient_warning_warn = time.time()
                     # Continue to re-centering logic (don't return)
 
                 elif confidence < self.tracker_reinit_confidence_threshold and not self.waiting_for_reinit_segmentation:
                     # In safe zone but low confidence - re-segment without stopping
-                    self.get_logger().warn(
-                        f'Low tracking confidence ({confidence:.2f}) in safe zone - '
-                        f'requesting fresh segmentation (motion continues)'
-                    )
-                    self.request_segmentation_update()
+                    # Only log if we actually send a request (rate-limited internally)
+                    if self._try_request_segmentation():
+                        self.get_logger().warn(
+                            f'[ORIENT] Tracker conf={confidence:.2f} below threshold, requested re-segmentation'
+                        )
 
             # Publish tracker debug visualization
             if self.tracker.initialized:
@@ -2076,17 +2149,17 @@ class VisualServoGrasp(Node):
                     gripper_rot, self.table_normal_world
                 )
 
-            # XY compensation with PD control to reduce oscillation at low control rates
-            # Boost gain in WARNING/DANGER zones to pull object back
+            # XY compensation with PD control to reduce oscillation at low control rates (~6Hz)
+            # Lower gains to prevent overshoots at low control rate
             if in_danger_zone if (center is not None and hasattr(self.tracker, 'template_bbox')) else at_boundary:
-                kp_xy = 3.0  # Aggressive re-centering in danger zone
-                kd_xy = 0.8
-            elif in_warning_zone if (center is not None and hasattr(self.tracker, 'template_bbox')) else near_boundary:
-                kp_xy = 2.0  # Strong re-centering in warning zone
-                kd_xy = 0.5
-            else:
-                kp_xy = 1.0  # Normal gain when safe
+                kp_xy = 0.8  # Re-centering in danger zone
                 kd_xy = 0.3
+            elif in_warning_zone if (center is not None and hasattr(self.tracker, 'template_bbox')) else near_boundary:
+                kp_xy = 0.6  # Re-centering in warning zone
+                kd_xy = 0.25
+            else:
+                kp_xy = 0.5  # Normal gain when safe
+                kd_xy = 0.2
 
             # Compute derivative term
             error_xy = np.array([error_cam_x, error_cam_y])
@@ -2107,59 +2180,98 @@ class VisualServoGrasp(Node):
             v_tool_x = kp_xy * error_cam_x + kd_xy * d_error_xy[0]
             v_tool_y = kp_xy * error_cam_y + kd_xy * d_error_xy[1]
 
-            max_xy_vel = 0.06
+            # Limit max velocity
+            max_xy_vel = 0.04
             v_tool_x = np.clip(v_tool_x, -max_xy_vel, max_xy_vel)
             v_tool_y = np.clip(v_tool_y, -max_xy_vel, max_xy_vel)
 
             # Minimal Z motion during orientation correction
             v_tool_z = 0.001
 
-            # Orientation correction - skip if in WARNING/DANGER zone (prioritize re-centering)
+            # Orientation correction - only skip in DANGER zone (bbox at edge)
+            # WARNING zone is OK - bbox will naturally move during yaw rotation
             omega_tool = np.zeros(3)
-            orientation_aligned = True
 
-            # Check if we should skip orientation to focus on re-centering
-            skip_orientation = in_danger_zone or in_warning_zone if (center is not None and hasattr(self.tracker, 'template_bbox')) else False
+            # Only skip orientation in danger zone (not warning zone)
+            skip_orientation = in_danger_zone if (center is not None and hasattr(self.tracker, 'template_bbox')) else False
 
-            if not skip_orientation and angular_error is not None and rotation_axis_world is not None:
-                if angular_error > self.orientation_tolerance:
-                    orientation_aligned = False
+            # Yaw control: rotate gripper so object's long axis is VERTICAL in camera
+            # Gripper fingers close horizontally, so we want to grasp across the long axis
+            # The tracker returns angle where 0 = horizontal, so target is pi/2 (vertical)
+            yaw_error = angle - np.pi / 2
 
-                    # Check timeout
-                    elapsed_time = time.time() - self.state_start_time
-                    if elapsed_time > self.max_orientation_time:
-                        self.get_logger().warn(
-                            f'Orientation timeout ({elapsed_time:.1f}s), using fallback'
-                        )
-                        self.use_orientation_fallback = True
-                        orientation_aligned = True
-                    else:
-                        # Adaptive rotation speed based on XY error
-                        # If XY error is large, slow down rotation to let XY catch up
-                        if at_boundary:
-                            # At FOV edge - prioritize XY, minimal rotation
-                            kp_rot = 0.02
-                            max_omega = 0.05
-                        elif xy_error_norm > 0.03:
-                            # Large XY error - slow rotation
-                            kp_rot = 0.05
-                            max_omega = 0.1
-                        elif xy_error_norm > 0.015:
-                            # Moderate XY error
-                            kp_rot = 0.1
-                            max_omega = 0.15
-                        else:
-                            # XY well centered - faster rotation
-                            kp_rot = 0.2
-                            max_omega = 0.25
+            # Normalize yaw error to [-pi/2, pi/2] - we don't care about 180 degree ambiguity
+            while yaw_error > np.pi / 2:
+                yaw_error -= np.pi
+            while yaw_error < -np.pi / 2:
+                yaw_error += np.pi
+
+            # Check alignment status (always check, even when not controlling)
+            yaw_aligned = abs(yaw_error) < 0.1  # ~5.7 degrees tolerance
+            pitch_roll_aligned = angular_error is None or angular_error <= self.orientation_tolerance
+
+            if not skip_orientation:
+                # Check timeout
+                elapsed_time = time.time() - self.state_start_time
+                if elapsed_time > self.max_orientation_time:
+                    self.get_logger().warn(
+                        f'Orientation timeout ({elapsed_time:.1f}s), using fallback'
+                    )
+                    self.use_orientation_fallback = True
+                    pitch_roll_aligned = True
+                    yaw_aligned = True
+                else:
+                    # 1. Pitch/Roll control: align gripper Z with table normal (come from above)
+                    if not pitch_roll_aligned and angular_error is not None and rotation_axis_world is not None:
+                        # Higher gains - pitch/roll was way too slow
+                        kp_rot = 0.15
+                        min_omega = 0.04  # Minimum speed to avoid stalling
+                        max_omega = 0.15
 
                         omega_magnitude = kp_rot * angular_error
+                        # Apply minimum speed when not aligned (avoid stalling near target)
+                        if omega_magnitude > 0.001:
+                            omega_magnitude = max(omega_magnitude, min_omega)
                         omega_magnitude = np.clip(omega_magnitude, 0.0, max_omega)
                         omega_world = omega_magnitude * rotation_axis_world
 
                         # Transform to tool frame
                         R_world_to_tool = gripper_rot.as_matrix().T
-                        omega_tool = R_world_to_tool @ omega_world
+                        omega_pitch_roll = R_world_to_tool @ omega_world
+                        omega_tool[0] = omega_pitch_roll[0]
+                        omega_tool[1] = omega_pitch_roll[1]
+
+                    # 2. Yaw control: align gripper fingers with object (only if pitch/roll mostly done)
+                    if pitch_roll_aligned and not yaw_aligned:
+                        # Conservative yaw gains for low control rate
+                        kp_yaw = 0.4
+                        kd_yaw = 0.1
+                        min_omega_yaw = 0.03  # Minimum speed to avoid stalling
+                        max_omega_yaw = 0.12
+
+                        # Derivative term for yaw
+                        if not hasattr(self, '_orient_prev_yaw_error'):
+                            self._orient_prev_yaw_error = yaw_error
+                            self._orient_prev_yaw_time = time.time()
+
+                        dt_yaw = time.time() - self._orient_prev_yaw_time
+                        if dt_yaw > 0.001:
+                            d_yaw_error = (yaw_error - self._orient_prev_yaw_error) / dt_yaw
+                        else:
+                            d_yaw_error = 0.0
+
+                        self._orient_prev_yaw_error = yaw_error
+                        self._orient_prev_yaw_time = time.time()
+
+                        # PD control for yaw - rotate around tool Z axis
+                        omega_z = kp_yaw * yaw_error + kd_yaw * d_yaw_error
+                        # Apply minimum speed when not aligned (avoid stalling near target)
+                        if abs(omega_z) > 0.001:
+                            omega_z = np.sign(omega_z) * max(abs(omega_z), min_omega_yaw)
+                        omega_z = np.clip(omega_z, -max_omega_yaw, max_omega_yaw)
+                        omega_tool[2] = omega_z
+
+            orientation_aligned = pitch_roll_aligned and yaw_aligned
 
             # Check if orientation is complete
             if orientation_aligned and xy_error_norm < self.xy_tolerance * 2:
@@ -2183,10 +2295,10 @@ class VisualServoGrasp(Node):
             self._orient_count += 1
 
             if self._orient_count % 30 == 1:
-                orient_str = f'{np.rad2deg(angular_error):.1f}deg' if angular_error else 'N/A'
+                pitch_roll_str = f'{np.rad2deg(angular_error):.1f}deg' if angular_error else 'N/A'
                 self.get_logger().info(
-                    f'ORIENT: xy_err={xy_error_norm:.4f}m, orient_err={orient_str}, '
-                    f'omega={np.linalg.norm(omega_tool):.3f}, conf={confidence:.2f}'
+                    f'ORIENT: xy_err={xy_error_norm:.4f}m, pitch_roll={pitch_roll_str}, '
+                    f'yaw_err={np.rad2deg(yaw_error):.1f}deg, conf={confidence:.2f}'
                 )
                 self.publish_orientation_markers()
 
@@ -2212,16 +2324,16 @@ class VisualServoGrasp(Node):
             )
 
         elif self.state == 'GRASPING':
-            # Close gripper
+            # Close gripper - only send command once
             self.send_zero_velocity()
-            self.send_gripper_command(True)  # True = close
 
-            # Wait a moment for gripper to close, then lift
             if not hasattr(self, '_grasp_start_time'):
                 self._grasp_start_time = time.time()
+                self.send_gripper_command(True)  # True = close
                 self.get_logger().info('Closing gripper...')
                 return
 
+            # Wait for gripper to close, then lift
             if time.time() - self._grasp_start_time > 1.0:  # 1 second to close
                 del self._grasp_start_time
                 self.transition_to_state('LIFTING')
@@ -2408,21 +2520,31 @@ class VisualServoGrasp(Node):
             self._fov_in_warning_zone = in_warning_zone
             self._fov_min_distance = min_distance_to_edge
 
-            if in_warning_zone and not self.waiting_for_reinit_segmentation:
+            # Don't request re-segmentation if bbox is too large (>60% of image area)
+            # because segmentation won't help when object fills the FOV
+            bbox_area = w * h
+            image_area = img_width * img_height
+            bbox_too_large = bbox_area > 0.6 * image_area
+
+            if in_warning_zone and not self.waiting_for_reinit_segmentation and not bbox_too_large:
                 # Object approaching edge - request re-segment but don't stop XY motion
-                self.get_logger().warn(
-                    f'{state_name}: Object in WARNING zone - bbox corner {min_distance_to_edge:.0f}px from edge - '
-                    f'requesting fresh segmentation (XY motion continues)'
-                )
+                # Rate-limit warnings
+                if not hasattr(self, '_last_servo_warning_warn') or time.time() - self._last_servo_warning_warn > 2.0:
+                    self.get_logger().warn(
+                        f'{state_name}: Object in WARNING zone - bbox corner {min_distance_to_edge:.0f}px from edge - '
+                        f'requesting fresh segmentation (XY motion continues)'
+                    )
+                    self._last_servo_warning_warn = time.time()
                 self.request_segmentation_update()
 
-            elif confidence < self.tracker_reinit_confidence_threshold and not self.waiting_for_reinit_segmentation:
+            elif confidence < self.tracker_reinit_confidence_threshold and not self.waiting_for_reinit_segmentation and not bbox_too_large:
                 # In safe zone but low confidence - re-segment without stopping
-                self.get_logger().warn(
-                    f'{state_name}: Low tracking confidence ({confidence:.2f}) in safe zone - '
-                    f'requesting fresh segmentation (motion continues)'
-                )
-                self.request_segmentation_update()
+                # Only log if we actually send a request (rate-limited internally)
+                if self._try_request_segmentation():
+                    self.get_logger().warn(
+                        f'{state_name}: Low tracking confidence ({confidence:.2f}) in safe zone - '
+                        f'requesting fresh segmentation (motion continues)'
+                    )
 
         # Publish tracker debug visualization
         self.publish_tracker_debug(confidence)
@@ -2610,15 +2732,15 @@ class VisualServoGrasp(Node):
         msg.twist.angular.y = float(velocity[4])
         msg.twist.angular.z = float(velocity[5])
 
-        # Debug: log occasionally to verify values
-        if not hasattr(self, '_velocity_log_count'):
-            self._velocity_log_count = 0
-        self._velocity_log_count += 1
-        if self._velocity_log_count % 30 == 1:
-            self.get_logger().info(
-                f'Sending velocity: linear=[{msg.twist.linear.x:.4f}, {msg.twist.linear.y:.4f}, {msg.twist.linear.z:.4f}], '
-                f'angular=[{msg.twist.angular.x:.4f}, {msg.twist.angular.y:.4f}, {msg.twist.angular.z:.4f}]'
-            )
+        # # Debug: log occasionally to verify values
+        # if not hasattr(self, '_velocity_log_count'):
+        #     self._velocity_log_count = 0
+        # self._velocity_log_count += 1
+        # if self._velocity_log_count % 30 == 1:
+        #     self.get_logger().info(
+        #         f'Sending velocity: linear=[{msg.twist.linear.x:.4f}, {msg.twist.linear.y:.4f}, {msg.twist.linear.z:.4f}], '
+        #         f'angular=[{msg.twist.angular.x:.4f}, {msg.twist.angular.y:.4f}, {msg.twist.angular.z:.4f}]'
+        #     )
 
         self.twist_pub.publish(msg)
 

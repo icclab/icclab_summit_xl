@@ -77,7 +77,7 @@ def generate_launch_description():
         parameters=[{
             'use_sim_time': LaunchConfiguration('use_sim_time'),
             'pre_grasp_height': 0.25,       # Height above object for approach (meters)
-            'grasp_clearance': 0.22,        # Clearance above table when grasping (meters)
+            'grasp_clearance': 0.17,        # Clearance above table when grasping (meters)
             'descent_speed': 0.01,          # Vertical descent speed (m/s)
             'approach_speed': 0.05,         # Approach speed (m/s)
             'servo_rate': 30.0,             # Control loop rate (Hz)
