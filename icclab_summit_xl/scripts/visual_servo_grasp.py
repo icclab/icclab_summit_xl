@@ -22,7 +22,7 @@ import rclpy
 from rclpy.node import Node
 from rclpy.action import ActionClient
 from rclpy.qos import QoSProfile, ReliabilityPolicy, DurabilityPolicy
-from sensor_msgs.msg import Image, PointCloud2, JointState
+from sensor_msgs.msg import Image, PointCloud2, JointState, CameraInfo
 from geometry_msgs.msg import TwistStamped, PoseStamped, Pose, Point, TransformStamped
 from std_msgs.msg import String, ColorRGBA
 from moveit_msgs.srv import ServoCommandType
@@ -651,9 +651,9 @@ class VisualServoGrasp(Node):
     def __init__(self):
         super().__init__('visual_servo_grasp')
 
-        # Parameters - distances from arm_tool0 to the table plane
-        self.declare_parameter('pre_grasp_height', 0.25)  # Distance from arm_tool0 to table plane at pre-grasp
-        self.declare_parameter('grasp_clearance', 0.20)  # Distance from arm_tool0 to table plane when grasping
+        # Parameters - distances from fingertips to the table plane
+        self.declare_parameter('pre_grasp_height', 0.25)  # Fingertip distance to table plane at pre-grasp
+        self.declare_parameter('grasp_clearance', 0.20)  # Fingertip distance to table plane when grasping
         self.declare_parameter('descent_speed', 0.01)     # Vertical descent speed (m/s)
         self.declare_parameter('servo_rate', 30.0)        # Control loop rate (Hz)
         self.declare_parameter('xy_tolerance', 0.005)     # Position tolerance (m)
@@ -663,6 +663,10 @@ class VisualServoGrasp(Node):
         self.declare_parameter('stall_time', 1.0)         # Time without motion before stall (seconds)
         self.declare_parameter('max_stall_retries', 3)    # Max retries on stall before aborting
         self.declare_parameter('orientation_tolerance', 0.15)  # Radians (~8.6 deg) tolerance for gripper alignment
+        # Camera-to-fingertip offset in camera optical frame (meters)
+        self.declare_parameter('fingertip_offset_x', 0.128)  # Fingertips ahead of camera
+        self.declare_parameter('fingertip_offset_y', -0.031) # Fingertips slightly right of camera
+        self.declare_parameter('fingertip_offset_z', 0.080)  # Fingertips below camera (closer to table)
 
         self.pre_grasp_height = self.get_parameter('pre_grasp_height').value
         self.grasp_clearance = self.get_parameter('grasp_clearance').value
@@ -676,6 +680,16 @@ class VisualServoGrasp(Node):
         self.max_stall_retries = self.get_parameter('max_stall_retries').value
         self.orientation_tolerance = self.get_parameter('orientation_tolerance').value
         self.max_orientation_time = self.get_parameter('state_timeout').value
+        # Camera-to-fingertip offset vector in camera optical frame
+        self.fingertip_offset = np.array([
+            self.get_parameter('fingertip_offset_x').value,
+            self.get_parameter('fingertip_offset_y').value,
+            self.get_parameter('fingertip_offset_z').value
+        ])
+        self.get_logger().info(
+            f'Fingertip offset (camera frame): [{self.fingertip_offset[0]:.3f}, '
+            f'{self.fingertip_offset[1]:.3f}, {self.fingertip_offset[2]:.3f}]m'
+        )
 
         # CV Bridge
         self.bridge = CvBridge()
@@ -688,6 +702,10 @@ class VisualServoGrasp(Node):
         self.segmentation_mask = None
         self.segmentation_rgb = None  # RGB image synchronized with segmentation mask
         self.intrinsic_matrix = None
+        self.fx = None  # Focal length x (will be set from camera_info)
+        self.fy = None  # Focal length y
+        self.cx = None  # Principal point x
+        self.cy = None  # Principal point y
 
         self.table_plane = None  # [a, b, c, d] plane equation in camera frame (for visualization)
         self.table_plane_world = None  # [a, b, c, d] plane equation in world frame (base_footprint)
@@ -782,6 +800,14 @@ class VisualServoGrasp(Node):
             '/start_grasp',
             self.start_grasp_callback,
             10
+        )
+
+        # Camera intrinsics subscriber
+        self.camera_info_sub = self.create_subscription(
+            CameraInfo,
+            '/arm_camera/color/camera_info',
+            self.camera_info_callback,
+            sensor_qos
         )
 
         # Joint state subscriber for motion feedback
@@ -919,6 +945,22 @@ class VisualServoGrasp(Node):
         else:
             self.get_logger().warn(f'Unknown depth encoding: {msg.encoding}')
 
+    def camera_info_callback(self, msg):
+        """Extract and store camera intrinsics from CameraInfo message."""
+        # K is a 3x3 intrinsic matrix stored as a flat array [fx, 0, cx, 0, fy, cy, 0, 0, 1]
+        K = np.array(msg.k).reshape(3, 3)
+        self.intrinsic_matrix = K
+        self.fx = K[0, 0]
+        self.fy = K[1, 1]
+        self.cx = K[0, 2]
+        self.cy = K[1, 2]
+        self.get_logger().info(
+            f'Camera intrinsics received: fx={self.fx:.1f}, fy={self.fy:.1f}, '
+            f'cx={self.cx:.1f}, cy={self.cy:.1f}'
+        )
+        # Unsubscribe - intrinsics don't change
+        self.destroy_subscription(self.camera_info_sub)
+
     def scene_pointcloud_callback(self, msg):
         """Store current full scene point cloud from arm camera."""
         # Only needed in DETECTING state (for plane fitting)
@@ -967,6 +1009,19 @@ class VisualServoGrasp(Node):
                     f'Re-initializing tracker with SYNCHRONIZED mask+RGB: {mask_width}x{mask_height}, '
                     f'area={mask_area}'
                 )
+
+                # In ORIENT state with yaw segmentation requested: compute target yaw from mask
+                # This is more reliable than tracker bbox for orientation
+                if self.state == 'ORIENT' and getattr(self, '_yaw_segmentation_requested', False):
+                    target_yaw = self.compute_yaw_from_mask(self.segmentation_mask)
+                    if target_yaw is not None:
+                        self._target_yaw_from_mask = target_yaw
+                        self.get_logger().info(
+                            f'Target yaw computed from mask: {np.rad2deg(target_yaw):.1f}deg'
+                        )
+                    else:
+                        self.get_logger().warn('Failed to compute yaw from mask')
+
                 # Use synchronized RGB image that matches the mask timestamp
                 if self.tracker.initialize(self.segmentation_rgb, self.segmentation_mask, self.get_logger()):
                     self.get_logger().info('Tracker successfully re-initialized with synchronized images')
@@ -1012,6 +1067,67 @@ class VisualServoGrasp(Node):
         """Check if servo is halted due to collision or singularity."""
         return self.servo_status_code in [SERVO_HALT_SINGULARITY, SERVO_HALT_COLLISION, SERVO_JOINT_BOUND]
 
+    def compute_yaw_from_mask(self, mask):
+        """
+        Compute object orientation (yaw) directly from segmentation mask using PCA.
+
+        PCA finds the principal axes of the mask pixel distribution, which is more
+        robust than minAreaRect because it considers all pixels (mass distribution)
+        rather than just the contour outline.
+
+        Args:
+            mask: Binary segmentation mask (numpy array)
+
+        Returns:
+            angle: Orientation in radians (angle of long axis), or None if mask invalid
+        """
+        if mask is None or mask.sum() == 0:
+            return None
+
+        # Get all mask pixel coordinates
+        y_coords, x_coords = np.where(mask > 0)
+
+        if len(x_coords) < 10:
+            return None
+
+        # Stack into points array (N x 2)
+        points = np.column_stack((x_coords, y_coords)).astype(np.float64)
+
+        # Compute mean (centroid)
+        mean = np.mean(points, axis=0)
+
+        # Center the points
+        centered = points - mean
+
+        # Compute covariance matrix
+        cov = np.cov(centered.T)
+
+        # Compute eigenvalues and eigenvectors
+        eigenvalues, eigenvectors = np.linalg.eig(cov)
+
+        # First principal component (largest eigenvalue) = long axis direction
+        long_axis_idx = np.argmax(eigenvalues)
+        long_axis = eigenvectors[:, long_axis_idx]
+
+        # Compute angle of long axis (in image coordinates: x=right, y=down)
+        angle_rad = np.arctan2(long_axis[1], long_axis[0])
+
+        # Normalize to [-pi/2, pi/2] - we don't care about 180 degree ambiguity
+        while angle_rad > np.pi / 2:
+            angle_rad -= np.pi
+        while angle_rad < -np.pi / 2:
+            angle_rad += np.pi
+
+        # Compute eigenvalue ratio for logging (indicates how elongated the object is)
+        eigenvalue_ratio = max(eigenvalues) / (min(eigenvalues) + 1e-6)
+
+        self.get_logger().info(
+            f'Yaw from mask (PCA): angle={np.rad2deg(angle_rad):.1f}deg, '
+            f'eigenvalue_ratio={eigenvalue_ratio:.1f} (higher=more elongated)'
+        )
+
+        return angle_rad
+
     def get_gripper_orientation(self, target_frame='base_footprint'):
         """
         Get current gripper orientation in target frame.
@@ -1036,6 +1152,25 @@ class VisualServoGrasp(Node):
         except (LookupException, ConnectivityException, ExtrapolationException) as e:
             self.get_logger().warn(f'TF lookup failed: {e}')
             return None
+
+    def get_gripper_yaw(self):
+        """
+        Get the gripper's yaw angle (rotation around its Z-axis) relative to base.
+
+        This extracts the yaw component of the gripper rotation, which corresponds
+        to rotation in the image plane when the gripper is pointing down.
+
+        Returns:
+            float: Yaw angle in radians, or None if TF unavailable
+        """
+        gripper_rot = self.get_gripper_orientation()
+        if gripper_rot is None:
+            return None
+
+        # Extract Euler angles (ZYX convention: yaw, pitch, roll)
+        # The gripper's Z-axis yaw is what matters for image-plane rotation
+        euler = gripper_rot.as_euler('ZYX')
+        return euler[0]  # First component is Z rotation (yaw)
 
     def get_gripper_position(self, target_frame='base_footprint'):
         """
@@ -1093,6 +1228,76 @@ class VisualServoGrasp(Node):
         # Plane normal points DOWN (negative Z in world frame)
         # Positive signed_distance means gripper is above the plane
         return abs(signed_distance)
+
+    def get_fingertip_distance_to_plane(self):
+        """
+        Compute the distance from fingertips to the detected table plane.
+
+        This accounts for the camera-to-fingertip offset, projecting it onto
+        the table normal to determine how much closer the fingertips are to
+        the table than the camera.
+
+        Returns:
+            float: Distance in meters (positive = above plane), or None if unavailable
+        """
+        if self.table_plane_world is None:
+            return None
+
+        # Get camera (gripper) position and orientation in world frame
+        gripper_pos = self.get_gripper_position(target_frame='base_footprint')
+        gripper_rot = self.get_gripper_orientation()
+        if gripper_pos is None or gripper_rot is None:
+            return None
+
+        # Transform fingertip offset from camera frame to world frame
+        # The offset is defined in camera optical frame
+        rot_matrix = gripper_rot.as_matrix()
+        fingertip_offset_world = rot_matrix @ self.fingertip_offset
+
+        # Compute fingertip position in world frame
+        fingertip_pos = gripper_pos + fingertip_offset_world
+
+        # Compute signed distance from fingertip to plane
+        a, b, c, d = self.table_plane_world
+        normal_magnitude = np.sqrt(a*a + b*b + c*c)
+
+        signed_distance = (a * fingertip_pos[0] +
+                          b * fingertip_pos[1] +
+                          c * fingertip_pos[2] + d) / normal_magnitude
+
+        return abs(signed_distance)
+
+    def get_fingertip_offset_toward_plane(self):
+        """
+        Compute how much closer the fingertips are to the table than the camera.
+
+        Projects the camera-to-fingertip offset vector onto the table normal.
+        This gives the vertical component of the offset that matters for collision.
+
+        Returns:
+            float: Offset in meters (positive = fingertips closer to table), or None if unavailable
+        """
+        if self.table_plane_world is None:
+            return None
+
+        gripper_rot = self.get_gripper_orientation()
+        if gripper_rot is None:
+            return None
+
+        # Transform fingertip offset from camera frame to world frame
+        rot_matrix = gripper_rot.as_matrix()
+        fingertip_offset_world = rot_matrix @ self.fingertip_offset
+
+        # Table normal (a, b, c) points DOWN toward table
+        a, b, c, d = self.table_plane_world
+        table_normal = np.array([a, b, c])
+        table_normal = table_normal / np.linalg.norm(table_normal)
+
+        # Project offset onto table normal
+        # Positive result means fingertips are closer to table
+        offset_toward_table = np.dot(fingertip_offset_world, table_normal)
+
+        return offset_toward_table
 
     def compute_orientation_error(self, gripper_rotation, target_normal_world):
         """
@@ -1695,6 +1900,13 @@ class VisualServoGrasp(Node):
         if old_state == 'IDLE' and new_state != 'IDLE':
             self._idle_stopped = False
 
+        # Reset yaw segmentation flag and target when entering ORIENT
+        if new_state == 'ORIENT':
+            self._yaw_segmentation_requested = False
+            self._target_yaw_from_mask = None  # Will be set when segmentation arrives
+            self._tracker_angle_at_mask = None  # Reference tracker angle when mask was taken
+            self._gripper_yaw_at_mask = None  # Gripper yaw from TF when mask was taken (for rotation tracking)
+
         self.get_logger().info(f'State transition: {old_state} -> {new_state}')
         self.status_pub.publish(String(data=f'{new_state}'))
 
@@ -2028,50 +2240,30 @@ class VisualServoGrasp(Node):
             # Track object
             center, angle, confidence = self.tracker.update(self.current_rgb)
 
-            # Check FOV boundaries and tracker confidence
-            # Check if any bbox corner is too close to or outside image edges
-            # - Safe zone: all corners >50px from edges (normal operation)
-            # - Warning zone: any corner 20-50px from edges (proactive re-segment + STOP)
-            # - Danger zone: any corner <20px from edges or outside (STOP, no re-segment)
+            # Check FOV boundaries using bbox CENTER (not corners)
+            # Large objects may have corners outside FOV but center still trackable
+            # - Warning zone: center approaching edge (within 20% of image dimension)
+            # - Danger zone: center very close to edge (within 10% of image dimension)
             if center is not None and hasattr(self.tracker, 'template_bbox'):
                 img_height, img_width = self.current_rgb.shape[:2]
                 x, y, w, h = self.tracker.template_bbox
 
-                warning_margin = 50
-                danger_margin = 20
+                # Use bbox center for FOV check, not corners
+                bbox_center_x = x + w / 2
+                bbox_center_y = y + h / 2
 
-                # Check all 4 corners of bbox
-                corners = [
-                    (x, y),              # top-left
-                    (x + w, y),          # top-right
-                    (x, y + h),          # bottom-left
-                    (x + w, y + h)       # bottom-right
-                ]
+                # Distance from center to nearest edge (as fraction of image size)
+                dist_to_left = bbox_center_x / img_width
+                dist_to_right = (img_width - bbox_center_x) / img_width
+                dist_to_top = bbox_center_y / img_height
+                dist_to_bottom = (img_height - bbox_center_y) / img_height
 
-                # Calculate minimum distance from any corner to image edges
-                # If any corner is outside image bounds, immediately DANGER zone
-                min_distance_to_edge = float('inf')
-                any_corner_outside = False
-                for i, (cx, cy) in enumerate(corners):
-                    # Check if corner is outside image (valid coords: 0 to width-1, 0 to height-1)
-                    if cx < 0 or cy < 0 or cx >= img_width or cy >= img_height:
-                        any_corner_outside = True
-                        self.get_logger().debug(
-                            f'ORIENT: Corner {i} at ({cx},{cy}) is outside image bounds ({img_width}x{img_height})'
-                        )
-                        min_distance_to_edge = -1  # Negative indicates outside
-                        continue
+                min_dist_fraction = min(dist_to_left, dist_to_right, dist_to_top, dist_to_bottom)
 
-                    dist_to_left = cx
-                    dist_to_top = cy
-                    dist_to_right = img_width - cx
-                    dist_to_bottom = img_height - cy
-
-                    corner_min_dist = min(dist_to_left, dist_to_top, dist_to_right, dist_to_bottom)
-                    min_distance_to_edge = min(min_distance_to_edge, corner_min_dist)
-
-                in_danger_zone = any_corner_outside or min_distance_to_edge < danger_margin
-                in_warning_zone = (not any_corner_outside) and (danger_margin <= min_distance_to_edge < warning_margin)
+                # Danger if center is within 10% of edge, warning if within 20%
+                in_danger_zone = min_dist_fraction < 0.10
+                in_warning_zone = 0.10 <= min_dist_fraction < 0.20
+                min_distance_to_edge = min_dist_fraction * min(img_width, img_height)  # For logging
 
                 if in_danger_zone:
                     # Object at/beyond FOV edge - actively re-center it, no orientation
@@ -2133,8 +2325,9 @@ class VisualServoGrasp(Node):
             if current_depth is None or current_depth < 0.1:
                 current_depth = 0.3
 
-            focal_length_approx = 500.0
-            pixel_to_meter = current_depth / focal_length_approx
+            # Use camera intrinsics if available, fallback to estimate
+            focal_length = self.fx if self.fx is not None else 500.0
+            pixel_to_meter = current_depth / focal_length
 
             error_cam_x = error_pixels[0] * pixel_to_meter
             error_cam_y = error_pixels[1] * pixel_to_meter
@@ -2185,8 +2378,21 @@ class VisualServoGrasp(Node):
             v_tool_x = np.clip(v_tool_x, -max_xy_vel, max_xy_vel)
             v_tool_y = np.clip(v_tool_y, -max_xy_vel, max_xy_vel)
 
-            # Minimal Z motion during orientation correction
-            v_tool_z = 0.001
+            # Z control: maintain pre_grasp_height during orientation
+            # Use fingertip distance for safety (same as APPROACH/DESCENDING)
+            fingertip_distance = self.get_fingertip_distance_to_plane()
+            if fingertip_distance is None:
+                # Fallback if plane/TF not available
+                fingertip_offset = self.get_fingertip_offset_toward_plane()
+                if fingertip_offset is not None:
+                    fingertip_distance = current_depth - fingertip_offset
+                else:
+                    fingertip_distance = current_depth - self.fingertip_offset[2]
+
+            z_error = fingertip_distance - self.pre_grasp_height
+            # Small proportional control to maintain height
+            kp_z = 0.3
+            v_tool_z = np.clip(kp_z * z_error, -0.02, 0.02)
 
             # Orientation correction - only skip in DANGER zone (bbox at edge)
             # WARNING zone is OK - bbox will naturally move during yaw rotation
@@ -2197,8 +2403,38 @@ class VisualServoGrasp(Node):
 
             # Yaw control: rotate gripper so object's long axis is VERTICAL in camera
             # Gripper fingers close horizontally, so we want to grasp across the long axis
-            # The tracker returns angle where 0 = horizontal, so target is pi/2 (vertical)
-            yaw_error = angle - np.pi / 2
+            #
+            # Strategy: Use mask-derived angle to compute initial error, then track rotation
+            # using GRIPPER TF (not tracker angle, which is noisy and causes oscillation).
+            # yaw_error = initial_mask_error - gripper_rotation_since_mask
+            #
+            # The gripper yaw from TF is stable and accurate, unlike tracker angle which
+            # suffers from 180-degree ambiguity issues at near-vertical orientations.
+            current_gripper_yaw = self.get_gripper_yaw()
+
+            if getattr(self, '_target_yaw_from_mask', None) is not None and current_gripper_yaw is not None:
+                # Store gripper yaw at mask time for reference (first time only)
+                if getattr(self, '_gripper_yaw_at_mask', None) is None:
+                    self._gripper_yaw_at_mask = current_gripper_yaw
+                    self._tracker_angle_at_mask = angle  # Still store for logging
+                    self.get_logger().info(
+                        f'Yaw reference set: mask={np.rad2deg(self._target_yaw_from_mask):.1f}deg, '
+                        f'gripper_yaw={np.rad2deg(current_gripper_yaw):.1f}deg, '
+                        f'tracker={np.rad2deg(angle):.1f}deg'
+                    )
+
+                # Compute how much gripper has actually rotated since mask (from TF, accurate!)
+                gripper_rotation_since_mask = current_gripper_yaw - self._gripper_yaw_at_mask
+
+                # Initial error from mask (target is pi/2 = vertical)
+                initial_error = self._target_yaw_from_mask - np.pi / 2
+
+                # Current error = initial error minus rotation applied
+                # As gripper rotates, the object appears to rotate opposite direction in image
+                yaw_error = initial_error + gripper_rotation_since_mask
+            else:
+                # Fallback to tracker angle directly (less reliable, may oscillate)
+                yaw_error = angle - np.pi / 2
 
             # Normalize yaw error to [-pi/2, pi/2] - we don't care about 180 degree ambiguity
             while yaw_error > np.pi / 2:
@@ -2243,6 +2479,25 @@ class VisualServoGrasp(Node):
 
                     # 2. Yaw control: align gripper fingers with object (only if pitch/roll mostly done)
                     if pitch_roll_aligned and not yaw_aligned:
+                        # Request fresh segmentation once when starting yaw alignment
+                        # Now that we're looking straight down, the object proportions are correct
+                        # This helps the tracker get a proper bbox for yaw estimation
+                        if not getattr(self, '_yaw_segmentation_requested', False):
+                            self.get_logger().info(
+                                'ORIENT: Pitch/roll aligned, requesting fresh segmentation for yaw alignment'
+                            )
+                            self._try_request_segmentation()
+                            self._yaw_segmentation_requested = True
+                            self.waiting_for_reinit_segmentation = True
+                            # Wait for new segmentation before starting yaw control
+                            self.send_zero_velocity()
+                            return
+
+                        # Wait for new segmentation to arrive and reinit tracker
+                        if self.waiting_for_reinit_segmentation:
+                            self.send_zero_velocity()
+                            return
+
                         # Conservative yaw gains for low control rate
                         kp_yaw = 0.4
                         kd_yaw = 0.1
@@ -2296,9 +2551,10 @@ class VisualServoGrasp(Node):
 
             if self._orient_count % 30 == 1:
                 pitch_roll_str = f'{np.rad2deg(angular_error):.1f}deg' if angular_error else 'N/A'
+                gripper_yaw_str = f'{np.rad2deg(current_gripper_yaw):.1f}deg' if current_gripper_yaw else 'N/A'
                 self.get_logger().info(
                     f'ORIENT: xy_err={xy_error_norm:.4f}m, pitch_roll={pitch_roll_str}, '
-                    f'yaw_err={np.rad2deg(yaw_error):.1f}deg, conf={confidence:.2f}'
+                    f'yaw_err={np.rad2deg(yaw_error):.1f}deg, gripper_yaw={gripper_yaw_str}, conf={confidence:.2f}'
                 )
                 self.publish_orientation_markers()
 
@@ -2443,8 +2699,12 @@ class VisualServoGrasp(Node):
         """
         Visual servoing to maintain XY centering while descending to target distance from plane.
 
+        Uses fingertip distance to table plane (not camera distance) for collision safety.
+        The camera-to-fingertip offset is projected onto the table normal based on
+        current gripper orientation.
+
         Args:
-            target_distance: Target distance from arm_tool0 to table plane (meters) (FIXME: target?)
+            target_distance: Target distance from fingertips to table plane (meters)
             z_speed: Maximum Z approach speed (m/s)
             min_confidence: Minimum tracking confidence to continue
             state_name: Current state name for logging
@@ -2520,13 +2780,15 @@ class VisualServoGrasp(Node):
             self._fov_in_warning_zone = in_warning_zone
             self._fov_min_distance = min_distance_to_edge
 
-            # Don't request re-segmentation if bbox is too large (>60% of image area)
-            # because segmentation won't help when object fills the FOV
+            # Don't request re-segmentation if:
+            # - bbox is too large (>60% of image area) - segmentation won't help
+            # - we're in DESCENDING state - object filling FOV is expected
             bbox_area = w * h
             image_area = img_width * img_height
             bbox_too_large = bbox_area > 0.6 * image_area
+            skip_resegmentation = bbox_too_large or state_name == 'DESCENDING'
 
-            if in_warning_zone and not self.waiting_for_reinit_segmentation and not bbox_too_large:
+            if in_warning_zone and not self.waiting_for_reinit_segmentation and not skip_resegmentation:
                 # Object approaching edge - request re-segment but don't stop XY motion
                 # Rate-limit warnings
                 if not hasattr(self, '_last_servo_warning_warn') or time.time() - self._last_servo_warning_warn > 2.0:
@@ -2537,7 +2799,7 @@ class VisualServoGrasp(Node):
                     self._last_servo_warning_warn = time.time()
                 self.request_segmentation_update()
 
-            elif confidence < self.tracker_reinit_confidence_threshold and not self.waiting_for_reinit_segmentation and not bbox_too_large:
+            elif confidence < self.tracker_reinit_confidence_threshold and not self.waiting_for_reinit_segmentation and not skip_resegmentation:
                 # In safe zone but low confidence - re-segment without stopping
                 # Only log if we actually send a request (rate-limited internally)
                 if self._try_request_segmentation():
@@ -2556,21 +2818,33 @@ class VisualServoGrasp(Node):
                 self.tracker.initialized = False
             return True
 
-        # Get distance to tracked object using depth at object center
-        plane_distance_raw = self._get_depth_at_point(center)
-        if plane_distance_raw is None or plane_distance_raw < 0.05:
+        # Get depth to tracked object for XY visual servo calculations
+        object_depth_raw = self._get_depth_at_point(center)
+        if object_depth_raw is None or object_depth_raw < 0.05:
             self.get_logger().warn(f'Cannot get depth measurement at tracked object in {state_name}')
             self.send_zero_velocity()
             return True
 
         # Low-pass filter depth to reduce noise (alpha = 0.2 for moderate filtering)
-        # Depth changes smoothly as we approach
-        if not hasattr(self, '_prev_plane_distance_filtered'):
-            self._prev_plane_distance_filtered = plane_distance_raw
+        if not hasattr(self, '_prev_object_depth_filtered'):
+            self._prev_object_depth_filtered = object_depth_raw
+        object_depth = 0.8 * self._prev_object_depth_filtered + 0.2 * object_depth_raw
+        self._prev_object_depth_filtered = object_depth
 
-        # Moderate filtering - depth should change continuously
-        plane_distance = 0.8 * self._prev_plane_distance_filtered + 0.2 * plane_distance_raw
-        self._prev_plane_distance_filtered = plane_distance
+        # Get fingertip distance to table plane for Z control (collision safety)
+        # This accounts for camera-to-fingertip offset based on current gripper orientation
+        fingertip_distance = self.get_fingertip_distance_to_plane()
+        if fingertip_distance is None:
+            # Fallback to camera-based estimate if plane/TF not available
+            fingertip_offset = self.get_fingertip_offset_toward_plane()
+            if fingertip_offset is not None:
+                fingertip_distance = object_depth - fingertip_offset
+            else:
+                # Last resort: assume fingertips are fingertip_offset_z closer
+                fingertip_distance = object_depth - self.fingertip_offset[2]
+            self.get_logger().debug(
+                f'Using estimated fingertip distance: {fingertip_distance:.3f}m'
+            )
 
         # Compute image-space error for XY control
         image_center = np.array([self.current_rgb.shape[1] / 2,
@@ -2592,12 +2866,12 @@ class VisualServoGrasp(Node):
             )
 
         # Convert pixel error to meters using depth estimate
-        # TODO: Use camera intrinsics
         current_depth = self._get_depth_at_point(center)
         if current_depth is None or current_depth < 0.05:
             current_depth = 0.3
-        focal_length_approx = 500.0
-        pixel_to_meter = current_depth / focal_length_approx
+        # Use camera intrinsics if available, fallback to estimate
+        focal_length = self.fx if self.fx is not None else 500.0
+        pixel_to_meter = current_depth / focal_length
 
         error_cam_x = error_pixels[0] * pixel_to_meter
         error_cam_y = error_pixels[1] * pixel_to_meter
@@ -2637,16 +2911,21 @@ class VisualServoGrasp(Node):
         v_tool_x = np.clip(v_tool_x, -max_xy_vel, max_xy_vel)
         v_tool_y = np.clip(v_tool_y, -max_xy_vel, max_xy_vel)
 
-        # Z control: descend until plane_distance == target_distance
-        z_error = plane_distance - target_distance
+        # Z control: descend until fingertip_distance == target_distance
+        # Using fingertip distance (not camera depth) for collision safety
+        z_error = fingertip_distance - target_distance
 
         # Use FOV state from bbox corner check (more accurate than center-only check)
         # In danger zone: stop Z motion but allow XY to center the object
         # In warning zone: slow Z motion
+        # Exception: During DESCENDING, object may fill FOV - ignore FOV warnings
         fov_in_danger = getattr(self, '_fov_in_danger_zone', False)
         fov_in_warning = getattr(self, '_fov_in_warning_zone', False)
 
-        if fov_in_danger:
+        if state_name == 'DESCENDING':
+            # During descent we're very close - object filling FOV is expected
+            fov_penalty = 1.0
+        elif fov_in_danger:
             fov_penalty = 0.0
             # Rate-limit this warning
             if not hasattr(self, '_last_fov_danger_warn') or time.time() - self._last_fov_danger_warn > 2.0:
@@ -2665,7 +2944,7 @@ class VisualServoGrasp(Node):
         if at_target:
             if xy_error_norm < self.xy_tolerance * 3:
                 self.get_logger().info(
-                    f'{state_name} complete (xy_err={xy_error_norm:.4f}m, plane_dist={plane_distance:.3f}m), '
+                    f'{state_name} complete (xy_err={xy_error_norm:.4f}m, fingertip_dist={fingertip_distance:.3f}m), '
                     f'transitioning to {next_state}'
                 )
                 self.transition_to_state(next_state)

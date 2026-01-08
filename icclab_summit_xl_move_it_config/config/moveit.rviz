@@ -10,7 +10,7 @@ Panels:
         - /Plane_Marker1/Topic1
         - /Gripper Orientation Marker1/Topic1
       Splitter Ratio: 0.519784152507782
-    Tree Height: 216
+    Tree Height: 134
   - Class: rviz_common/Help
     Name: Help
   - Class: rviz_common/Views
@@ -728,83 +728,84 @@ Visualization Manager:
       Show Axes: true
       Show Names: true
       Tree:
-        odom:
-          base_footprint:
-            base_link:
-              arm_base_link:
-                arm_base:
-                  {}
-                arm_base_link_inertia:
-                  arm_shoulder_link:
-                    arm_upper_arm_link:
-                      arm_forearm_link:
-                        arm_wrist_1_link:
-                          arm_wrist_2_link:
-                            arm_wrist_3_link:
-                              arm_flange:
-                                arm_camera_mount_link:
-                                  {}
-                                arm_tool0:
-                                  robotiq_base_link:
-                                    robotiq_140_base_link:
-                                      left_inner_knuckle:
-                                        {}
-                                      left_outer_knuckle:
-                                        left_outer_finger:
-                                          left_inner_finger:
-                                            left_inner_finger_pad:
-                                              {}
-                                      right_inner_knuckle:
-                                        {}
-                                      right_outer_knuckle:
-                                        right_outer_finger:
-                                          right_inner_finger:
-                                            right_inner_finger_pad:
-                                              {}
-                                oak-d_frame:
-                                  arm_camera_link:
-                                    arm_camera_usb_plug_link:
-                                      {}
-                                  oak-d_frame_rotated:
-                                    {}
-                                  oak_imu_frame:
-                                    {}
-                                  oak_left_camera_frame:
-                                    oak_left_camera_optical_frame:
-                                      {}
-                                  oak_rgb_camera_frame:
-                                    arm_camera_color_optical_frame:
-                                      {}
-                                  oak_right_camera_frame:
-                                    oak_right_camera_optical_frame:
-                                      {}
-                              arm_ft_frame:
+        base_footprint:
+          base_link:
+            arm_base_link:
+              arm_base:
+                {}
+              arm_base_link_inertia:
+                arm_shoulder_link:
+                  arm_upper_arm_link:
+                    arm_forearm_link:
+                      arm_wrist_1_link:
+                        arm_wrist_2_link:
+                          arm_wrist_3_link:
+                            arm_flange:
+                              arm_camera_mount_link:
                                 {}
-              base_docking_contact:
+                              arm_tool0:
+                                robotiq_base_link:
+                                  robotiq_140_base_link:
+                                    left_inner_knuckle:
+                                      {}
+                                    left_outer_knuckle:
+                                      left_outer_finger:
+                                        left_inner_finger:
+                                          left_inner_finger_pad:
+                                            {}
+                                    right_inner_knuckle:
+                                      {}
+                                    right_outer_knuckle:
+                                      right_outer_finger:
+                                        right_inner_finger:
+                                          right_inner_finger_pad:
+                                            {}
+                              oak-d_frame:
+                                arm_camera_link:
+                                  arm_camera_usb_plug_link:
+                                    {}
+                                oak-d_frame_rotated:
+                                  {}
+                                oak_imu_frame:
+                                  {}
+                                oak_left_camera_frame:
+                                  oak_left_camera_optical_frame:
+                                    {}
+                                oak_rgb_camera_frame:
+                                  arm_camera_color_optical_frame:
+                                    {}
+                                oak_right_camera_frame:
+                                  oak_right_camera_optical_frame:
+                                    {}
+                            arm_ft_frame:
+                              {}
+            base_docking_contact:
+              {}
+            front_laser_base_link:
+              front_laser_link:
                 {}
-              front_laser_base_link:
-                front_laser_link:
+            front_left_wheel_link:
+              {}
+            front_rgbd_camera_link:
+              front_rgbd_camera_depth_frame:
+                front_rgbd_camera_depth_optical_frame:
                   {}
-              front_left_wheel_link:
-                {}
-              front_rgbd_camera_link:
-                front_rgbd_camera_depth_frame:
-                  front_rgbd_camera_depth_optical_frame:
-                    {}
-                front_rgbd_camera_rgb_frame:
-                  front_rgbd_camera_rgb_optical_frame:
-                    {}
-              front_right_wheel_link:
-                {}
-              imu_link:
-                {}
-              rear_laser_base_link:
-                rear_laser_link:
+              front_rgbd_camera_rgb_frame:
+                front_rgbd_camera_rgb_optical_frame:
                   {}
-              rear_left_wheel_link:
+            front_right_wheel_link:
+              {}
+            imu_link:
+              {}
+            rear_laser_base_link:
+              rear_laser_link:
                 {}
-              rear_right_wheel_link:
-                {}
+            rear_left_wheel_link:
+              {}
+            rear_right_wheel_link:
+              {}
+        odom:
+          {}
       Update Interval: 0
       Value: true
     - Alpha: 0.30000001192092896
@@ -1179,7 +1180,7 @@ Visualization Manager:
       Enabled: true
       Name: Plane_Marker
       Namespaces:
-        table_plane: true
+        {}
       Topic:
         Depth: 5
         Durability Policy: Volatile
@@ -1192,7 +1193,7 @@ Visualization Manager:
       Enabled: true
       Name: Gripper Orientation Marker
       Namespaces:
-        gripper_orientation: true
+        {}
       Topic:
         Depth: 5
         Durability Policy: Volatile
@@ -1205,7 +1206,7 @@ Visualization Manager:
       Enabled: true
       Name: Table Normal Marker
       Namespaces:
-        table_normal: true
+        {}
       Topic:
         Depth: 5
         Durability Policy: Volatile
@@ -1246,32 +1247,32 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 1.0015538930892944
+      Distance: 2.7773876190185547
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 1.031385064125061
-        Y: -0.4967561960220337
-        Z: 0.6635874509811401
+        X: 0.6300763487815857
+        Y: -0.5695192813873291
+        Z: 0.770237386226654
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.21000002324581146
+      Pitch: 0.29499998688697815
       Target Frame: base_footprint
       Value: Orbit (rviz_default_plugins)
-      Yaw: 4.945198059082031
+      Yaw: 5.335198879241943
     Saved: ~
 Window Geometry:
   Camera:
     collapsed: false
   Displays:
     collapsed: false
-  Height: 1029
+  Height: 804
   Help:
     collapsed: false
   Hide Left Dock: false
@@ -1282,11 +1283,11 @@ Window Geometry:
     collapsed: false
   MotionPlanning - Trajectory Slider:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd0000000200000000000001c9000003affc0200000005fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000003f00fffffffb000000100044006900730070006c006100790073010000003b00000159000000c700fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e0067010000019a000002500000016900fffffffb0000000800480065006c0070000000029a0000006e0000006e00fffffffb0000000a005600690065007700730000000282000000a0000000a000ffffff00000001000002bc000003affc0200000003fb0000000a0049006d006100670065010000003b000000c00000001600fffffffb0000000c00430061006d00650072006101000001010000016f0000001600fffffffb0000001c0054007200610063006b0069006e00670020004400650062007500670100000276000001740000001600ffffff000002ef000003af00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd0000000200000000000001c9000002cefc0200000005fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000003f00fffffffb000000100044006900730070006c006100790073010000003b00000107000000c700fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e00670100000148000001c10000016900fffffffb0000000800480065006c0070000000029a0000006e0000006e00fffffffb0000000a005600690065007700730000000282000000a0000000a000ffffff0000000100000174000002cefc0200000003fb0000000a0049006d006100670065010000003b000000920000001600fffffffb0000000c00430061006d00650072006101000000d3000001170000001600fffffffb0000001c0054007200610063006b0069006e006700200044006500620075006701000001f0000001190000001600ffffff0000020f000002ce00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Tracking Debug:
     collapsed: false
   Views:
     collapsed: false
-  Width: 1920
-  X: 0
+  Width: 1368
+  X: 542
   Y: 27
