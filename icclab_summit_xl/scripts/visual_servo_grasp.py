@@ -664,9 +664,11 @@ class VisualServoGrasp(Node):
         self.declare_parameter('max_stall_retries', 3)    # Max retries on stall before aborting
         self.declare_parameter('orientation_tolerance', 0.15)  # Radians (~8.6 deg) tolerance for gripper alignment
         # Camera-to-fingertip offset in camera optical frame (meters)
-        self.declare_parameter('fingertip_offset_x', 0.128)  # Fingertips ahead of camera
-        self.declare_parameter('fingertip_offset_y', -0.031) # Fingertips slightly right of camera
-        self.declare_parameter('fingertip_offset_z', 0.080)  # Fingertips below camera (closer to table)
+        # Optical frame: X=right, Y=down, Z=forward (into scene)
+        # Camera is centered between gripper fingers, so X and Y offsets are ~0
+        self.declare_parameter('fingertip_offset_x', 0.0)    # Lateral offset (right), ~0 for centered camera
+        self.declare_parameter('fingertip_offset_y', 0.0)    # Vertical offset (down), ~0 for centered camera
+        self.declare_parameter('fingertip_offset_z', 0.128)  # Forward offset - fingertips ahead of camera
 
         self.pre_grasp_height = self.get_parameter('pre_grasp_height').value
         self.grasp_clearance = self.get_parameter('grasp_clearance').value
@@ -2847,9 +2849,49 @@ class VisualServoGrasp(Node):
             )
 
         # Compute image-space error for XY control
+        # Target is image center for APPROACH, but offset for DESCENDING
+        # to account for camera-to-fingertip offset
         image_center = np.array([self.current_rgb.shape[1] / 2,
                                 self.current_rgb.shape[0] / 2])
-        error_pixels = center - image_center
+
+        # During DESCENDING, compensate for fingertip offset so object ends up
+        # under the fingertips, not under the camera.
+        #
+        # The fingertip_offset vector is defined in camera optical frame where the
+        # parameter names use a different convention:
+        #   fingertip_offset[0] = "X" = offset in camera's forward direction (toward scene)
+        #   fingertip_offset[1] = "Y" = offset in camera's right direction
+        #   fingertip_offset[2] = "Z" = offset in camera's down direction (toward table)
+        #
+        # For image-plane compensation, we need the lateral offsets:
+        #   Image X (cols, right) <- fingertip_offset[1] (right)
+        #   Image Y (rows, down)  <- fingertip_offset[2] (down)
+        #
+        # If fingertips are RIGHT of camera center, object should appear LEFT of
+        # image center so fingertips end up on it. So we ADD the offset to target.
+        if state_name == 'DESCENDING':
+            # Convert fingertip lateral offset from meters to pixels
+            current_depth_for_offset = self._get_depth_at_point(center)
+            if current_depth_for_offset is None or current_depth_for_offset < 0.05:
+                current_depth_for_offset = 0.3
+            focal_length_for_offset = self.fx if self.fx is not None else 500.0
+            meter_to_pixel = focal_length_for_offset / current_depth_for_offset
+
+            # Map fingertip offset to image coordinates
+            # fingertip_offset[1] = right offset -> image X
+            # fingertip_offset[2] = down offset -> image Y (but Z is "below" = toward table)
+            # Note: fingertip_offset[2] being positive means fingertips are CLOSER to table,
+            # which in the downward-looking camera view means offset in +Y image direction
+            fingertip_offset_pixels = np.array([
+                self.fingertip_offset[1] * meter_to_pixel,  # lateral right -> image X
+                self.fingertip_offset[2] * meter_to_pixel   # down toward table -> image Y
+            ])
+            # Shift target: if fingertips are at offset, we want object at that offset in image
+            target_position = image_center + fingertip_offset_pixels
+        else:
+            target_position = image_center
+
+        error_pixels = center - target_position
 
         img_height, img_width = self.current_rgb.shape[:2]
         fov_margin = 100
