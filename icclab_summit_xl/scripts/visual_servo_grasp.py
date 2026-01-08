@@ -665,9 +665,8 @@ class VisualServoGrasp(Node):
         self.declare_parameter('orientation_tolerance', 0.15)  # Radians (~8.6 deg) tolerance for gripper alignment
         # Camera-to-fingertip offset in camera optical frame (meters)
         # Optical frame: X=right, Y=down, Z=forward (into scene)
-        # Camera is centered between gripper fingers, so X and Y offsets are ~0
         self.declare_parameter('fingertip_offset_x', 0.0)    # Lateral offset (right), ~0 for centered camera
-        self.declare_parameter('fingertip_offset_y', 0.0)    # Vertical offset (down), ~0 for centered camera
+        self.declare_parameter('fingertip_offset_y', 0.080)  # Down offset - fingertips below camera (closer to table)
         self.declare_parameter('fingertip_offset_z', 0.128)  # Forward offset - fingertips ahead of camera
 
         self.pre_grasp_height = self.get_parameter('pre_grasp_height').value
@@ -2553,10 +2552,9 @@ class VisualServoGrasp(Node):
 
             if self._orient_count % 30 == 1:
                 pitch_roll_str = f'{np.rad2deg(angular_error):.1f}deg' if angular_error else 'N/A'
-                gripper_yaw_str = f'{np.rad2deg(current_gripper_yaw):.1f}deg' if current_gripper_yaw else 'N/A'
                 self.get_logger().info(
                     f'ORIENT: xy_err={xy_error_norm:.4f}m, pitch_roll={pitch_roll_str}, '
-                    f'yaw_err={np.rad2deg(yaw_error):.1f}deg, gripper_yaw={gripper_yaw_str}, conf={confidence:.2f}'
+                    f'yaw_err={np.rad2deg(yaw_error):.1f}deg, conf={confidence:.2f}'
                 )
                 self.publish_orientation_markers()
 
@@ -2849,45 +2847,49 @@ class VisualServoGrasp(Node):
             )
 
         # Compute image-space error for XY control
-        # Target is image center for APPROACH, but offset for DESCENDING
-        # to account for camera-to-fingertip offset
+        # Target is image center for APPROACH, but offset for DESCENDING to account
+        # for camera-to-fingertip offset in the image plane
         image_center = np.array([self.current_rgb.shape[1] / 2,
                                 self.current_rgb.shape[0] / 2])
 
-        # During DESCENDING, compensate for fingertip offset so object ends up
-        # under the fingertips, not under the camera.
+        # During DESCENDING, compensate for fingertip offset in the image plane.
+        # The fingertips are offset from camera in 3D (X=0, Y=0.08m down, Z=0.128m forward).
+        # We need to project this 3D offset into the 2D image plane.
         #
-        # The fingertip_offset vector is defined in camera optical frame where the
-        # parameter names use a different convention:
-        #   fingertip_offset[0] = "X" = offset in camera's forward direction (toward scene)
-        #   fingertip_offset[1] = "Y" = offset in camera's right direction
-        #   fingertip_offset[2] = "Z" = offset in camera's down direction (toward table)
+        # In camera optical frame looking at a point at depth D:
+        # - X offset (right) -> image x shift = fx * offset_x / D
+        # - Y offset (down)  -> image y shift = fy * offset_y / D
+        # - Z offset (forward) -> no direct image shift (changes depth, not position)
         #
-        # For image-plane compensation, we need the lateral offsets:
-        #   Image X (cols, right) <- fingertip_offset[1] (right)
-        #   Image Y (rows, down)  <- fingertip_offset[2] (down)
-        #
-        # If fingertips are RIGHT of camera center, object should appear LEFT of
-        # image center so fingertips end up on it. So we ADD the offset to target.
+        # So we compensate for X and Y offsets in image space.
         if state_name == 'DESCENDING':
-            # Convert fingertip lateral offset from meters to pixels
             current_depth_for_offset = self._get_depth_at_point(center)
             if current_depth_for_offset is None or current_depth_for_offset < 0.05:
                 current_depth_for_offset = 0.3
-            focal_length_for_offset = self.fx if self.fx is not None else 500.0
-            meter_to_pixel = focal_length_for_offset / current_depth_for_offset
 
-            # Map fingertip offset to image coordinates
-            # fingertip_offset[1] = right offset -> image X
-            # fingertip_offset[2] = down offset -> image Y (but Z is "below" = toward table)
-            # Note: fingertip_offset[2] being positive means fingertips are CLOSER to table,
-            # which in the downward-looking camera view means offset in +Y image direction
-            fingertip_offset_pixels = np.array([
-                self.fingertip_offset[1] * meter_to_pixel,  # lateral right -> image X
-                self.fingertip_offset[2] * meter_to_pixel   # down toward table -> image Y
+            fx = self.fx if self.fx is not None else 500.0
+            fy = self.fy if self.fy is not None else 500.0
+
+            # Compensate for fingertip offset so we grasp at object center.
+            # fingertip_offset = [X=0 lateral, Y=0.08 down, Z=0.128 forward]
+            #
+            # When looking down at the table:
+            # - Y offset (down): fingertips are BELOW camera, so to hit object center
+            #   we need object to appear ABOVE image center (negative Y in image)
+            # - Z offset (forward): fingertips are AHEAD of camera, so they contact
+            #   the table "further away" from camera. In a downward-looking view,
+            #   "further" appears higher in image (negative Y in image)
+            #
+            # Both Y and Z offsets shift target UP in image (reduce image Y coordinate)
+            fingertip_y_offset_pixels = fy * self.fingertip_offset[1] / current_depth_for_offset
+            fingertip_z_offset_pixels = fy * self.fingertip_offset[2] / current_depth_for_offset
+            total_y_shift = fingertip_y_offset_pixels + fingertip_z_offset_pixels
+
+            # Target: same X as center, but shifted UP (lower Y value)
+            target_position = np.array([
+                image_center[0],  # X unchanged
+                image_center[1] + total_y_shift  # Y shifted down (add to go down in image)
             ])
-            # Shift target: if fingertips are at offset, we want object at that offset in image
-            target_position = image_center + fingertip_offset_pixels
         else:
             target_position = image_center
 
