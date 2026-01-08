@@ -2870,25 +2870,21 @@ class VisualServoGrasp(Node):
             fx = self.fx if self.fx is not None else 500.0
             fy = self.fy if self.fy is not None else 500.0
 
-            # Compensate for fingertip offset so we grasp at object center.
+            # Compensate for fingertip Y offset so we grasp at object center.
             # fingertip_offset = [X=0 lateral, Y=0.08 down, Z=0.128 forward]
             #
-            # When looking down at the table:
-            # - Y offset (down): fingertips are BELOW camera, so to hit object center
-            #   we need object to appear ABOVE image center (negative Y in image)
-            # - Z offset (forward): fingertips are AHEAD of camera, so they contact
-            #   the table "further away" from camera. In a downward-looking view,
-            #   "further" appears higher in image (negative Y in image)
+            # Y offset (down): fingertips are BELOW camera optical center.
+            # To hit object center, we need object to appear BELOW image center,
+            # so when fingertips (which are below camera) close, they hit the object.
             #
-            # Both Y and Z offsets shift target UP in image (reduce image Y coordinate)
+            # The Z offset (forward) is handled by get_fingertip_distance_to_plane() for
+            # depth/distance calculations - it doesn't affect XY targeting in image plane.
             fingertip_y_offset_pixels = fy * self.fingertip_offset[1] / current_depth_for_offset
-            fingertip_z_offset_pixels = fy * self.fingertip_offset[2] / current_depth_for_offset
-            total_y_shift = fingertip_y_offset_pixels + fingertip_z_offset_pixels
 
-            # Target: same X as center, but shifted UP (lower Y value)
+            # Target: same X as center, shifted DOWN (higher Y value) by fingertip Y offset
             target_position = np.array([
                 image_center[0],  # X unchanged
-                image_center[1] + total_y_shift  # Y shifted down (add to go down in image)
+                image_center[1] + fingertip_y_offset_pixels  # Y shifted down (add to go down)
             ])
         else:
             target_position = image_center

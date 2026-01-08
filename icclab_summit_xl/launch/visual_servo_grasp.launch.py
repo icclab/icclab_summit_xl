@@ -76,8 +76,8 @@ def generate_launch_description():
         output='screen',
         parameters=[{
             'use_sim_time': LaunchConfiguration('use_sim_time'),
-            'pre_grasp_height': 0.25,       # Fingertip distance to table plane at pre-grasp (meters)
-            'grasp_clearance': 0.17,        # Fingertip distance to table plane when grasping (meters)
+            'pre_grasp_height': 0.20,       # Fingertip distance to table plane at pre-grasp (meters)
+            'grasp_clearance': 0.16,        # Fingertip distance to table plane when grasping (meters)
             'descent_speed': 0.01,          # Vertical descent speed (m/s)
             'approach_speed': 0.05,         # Approach speed (m/s)
             'servo_rate': 30.0,             # Control loop rate (Hz)
@@ -89,10 +89,9 @@ def generate_launch_description():
             # Camera-to-fingertip offset in camera optical frame (meters)
             # These offsets describe where the fingertips are relative to the camera
             # X: forward (positive = fingertips ahead of camera)
-            # Y: left (positive = fingertips left of camera)
+            # Y: left (positive = fingertips left of camera, not used)
             # Z: down in optical frame (positive = fingertips below/closer to table)
-            'fingertip_offset_x': 0.17,    # Fingertips ahead of camera
-            'fingertip_offset_y': -0.031,   # Fingertips slightly right of camera
+            'fingertip_offset_x': 0.16,    # Fingertips ahead of camera            
             'fingertip_offset_z': 0.080,    # Fingertips below camera (closer to table)
         }]
     )
