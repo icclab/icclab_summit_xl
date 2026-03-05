@@ -206,7 +206,7 @@ def generate_launch_description():
   bridge_params = os.path.join(
         get_package_share_directory('icclab_summit_xl'),
         'config',
-        'ign_gazebo_bridge.yaml'
+        'ign_gazebo_bridge_depth_image.yaml'
     )
 
   start_gazebo_ros_bridge_cmd = launch_ros.actions.Node(
@@ -230,6 +230,35 @@ def generate_launch_description():
   )
   ld.add_action(delay_bridge_after_robot_spawner)
 
+
+  # Generate arm_camera pointcloud from depth+color via depth_image_proc
+  # (Gazebo rgbd_camera pointcloud is in wrong frame convention, so we skip it
+  # and regenerate on the ROS side with correct optical frame)
+  arm_camera_pointcloud = launch_ros.actions.Node(
+      package='depth_image_proc',
+      executable='point_cloud_xyzrgb_node',
+      name='arm_camera_pointcloud',
+      remappings=[
+          ('rgb/image_rect_color', '/arm_camera/color/image_raw'),
+          ('rgb/camera_info', '/arm_camera/color/camera_info'),
+          ('depth_registered/image_rect', '/arm_camera/depth/image_raw'),
+          ('points', '/arm_camera/points'),
+      ],
+      parameters=[{'use_sim_time': True}],
+  )
+
+  delay_pointcloud_after_bridge = RegisterEventHandler(
+      event_handler=OnProcessExit(
+          target_action=robot_spawner,
+          on_exit=[
+              launch.actions.TimerAction(
+                  period=5.0,
+                  actions=[arm_camera_pointcloud]
+              )
+          ],
+      )
+  )
+  ld.add_action(delay_pointcloud_after_bridge)
 
   # IMAGE TRANSPORT REPUBLISHERS FOR MCP SERVER COMPATIBILITY
   # These convert raw Gazebo images to compressed format for MCP server

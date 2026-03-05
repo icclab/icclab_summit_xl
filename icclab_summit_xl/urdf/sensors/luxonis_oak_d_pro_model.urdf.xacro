@@ -24,15 +24,15 @@
 
     <!-- <link name="oak_model_origin"> -->
     <link name="arm_camera_link">
-				<visual>
-					<origin xyz="0 0 0" rpy="0 0 0" />
-					<geometry>
-						<mesh filename="file://$(find icclab_summit_xl)/meshes/sensors/OAK-D-PRO.stl" />
-					</geometry>
-					<material name="mat">
-						<color rgba="0.8 0.8 0.8 0.8" />
-					</material>
-				</visual>
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="file://$(find icclab_summit_xl)/meshes/sensors/OAK-D-PRO.stl" />
+			</geometry>
+			<material name="mat">
+				<color rgba="0.8 0.8 0.8 0.8" />
+			</material>
+		</visual>
         <collision>
           <origin xyz="0 0 0" rpy="0 0 0"/>
           <geometry>
@@ -52,7 +52,7 @@
 			<parent link="oak-d_frame" />
 			<!-- <child link="oak_model_origin" /> -->
       		<child link="arm_camera_link" />
-			<origin xyz="0 0 0" rpy="1.5708 0 1.5708" />
+			<origin xyz="0 0 0" rpy="${M_PI/2} 0 ${M_PI/2}" />
 		</joint>
 
     <link name="oak_imu_frame" />
@@ -68,7 +68,7 @@
 		<joint name="oak_rgb_camera_joint" type="fixed">
 		  	<parent link="oak-d_frame" />
 		  	<child link="oak_rgb_camera_frame" />
-		  	<origin xyz="0 0 0" rpy="0 0 0" />
+		  	<origin xyz="0 0 0" rpy="${M_PI} 0 0" />
 		</joint>
 
 		<!-- <link name="oak_rgb_camera_optical_frame" /> -->

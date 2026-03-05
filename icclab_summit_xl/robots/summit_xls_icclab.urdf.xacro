@@ -22,7 +22,7 @@
 	<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/orbbec_astra.urdf.xacro" />
 	<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/intel_d435.urdf.xacro" />
 	<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/intel_camera_mount.urdf.xacro" />
-	<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/luxonis_oak_d_pro.urdf.xacro" />
+	<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/luxonis_oak_d_pro_depth_image.urdf.xacro" />
 	<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/luxonis_camera_mount.urdf.xacro" />
 	<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/imu_hector_plugin.urdf.xacro"/>
 
