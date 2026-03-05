@@ -253,29 +253,26 @@
         <include>
             <uri>model://aws_robomaker_residential_Dumbbell_01</uri>
         </include>
-        <pose frame=''>2.512849 2.717787 0.002183 0 -0 0</pose>
-	</model>
-	<model name='Scissors'>        
-        <include>
-            <uri>https://fuel.gazebosim.org/1.0/GoogleResearch/models/Diamond_Visions_Scissors_Red</uri>
-        </include>
-        <pose frame=''>1.572830 -1.775857 0.41790 0.0 0.0 0.0</pose>
-	</model>
+        <pose>2.512849 2.717787 0.002183 0 -0 0</pose>
+	</model>    	
 	<model name='Screwdriver'>
-        <static>true</static>
         <include>
-            <uri>
-            https://fuel.gazebosim.org/1.0/GoogleResearch/models/Craftsman_Grip_Screwdriver_Phillips_Cushion
-            </uri>
+            <uri>model://craftsman_grip_screwdriver_phillips_cushion</uri>
         </include>
-        <pose frame=''>1.272830 -1.675857 0.511790 -0.020625 -0.000080 0.390</pose>
+        <pose >1.382830 -1.635857 0.511790 -0.020625 -0.000080 0.390</pose>
 	</model>
     <model name='Spatula'>
     <include>
-        <uri>https://fuel.gazebosim.org/1.0/GoogleResearch/models/OXO_Cookie_Spatula</uri>
+        <uri>model://oxo_cookie_spatula</uri>
     </include>
     <pose frame=''>1.872830 -1.775857 0.401790 -0.020625 -0.000080 -0.006317</pose>
     </model>
+    <model name='Scissors'>        
+        <include>
+            <uri>model://diamond_visions_scissors_red</uri>
+        </include>
+        <pose>1.572830 -1.775857 0.41790 0.0 0.0 0.0</pose>
+	</model>    
 	<model name='FitnessEquipment_01_001'>
         <static>true</static>    
         <include>
