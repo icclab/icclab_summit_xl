@@ -231,7 +231,7 @@ def generate_launch_description():
   ld.add_action(delay_bridge_after_robot_spawner)
 
 
-  # Generate arm_camera pointcloud from depth+color via depth_image_proc
+  # Generate pointclouds from depth+color via depth_image_proc
   # (Gazebo rgbd_camera pointcloud is in wrong frame convention, so we skip it
   # and regenerate on the ROS side with correct optical frame)
   arm_camera_pointcloud = launch_ros.actions.Node(
@@ -247,13 +247,26 @@ def generate_launch_description():
       parameters=[{'use_sim_time': True}],
   )
 
+  front_camera_pointcloud = launch_ros.actions.Node(
+      package='depth_image_proc',
+      executable='point_cloud_xyzrgb_node',
+      name='front_camera_pointcloud',
+      remappings=[
+          ('rgb/image_rect_color', '/front_rgbd_camera/color/image_raw'),
+          ('rgb/camera_info', '/front_rgbd_camera/color/camera_info'),
+          ('depth_registered/image_rect', '/front_rgbd_camera/depth/image_raw'),
+          ('points', '/front_rgbd_camera/points'),
+      ],
+      parameters=[{'use_sim_time': True}],
+  )
+
   delay_pointcloud_after_bridge = RegisterEventHandler(
       event_handler=OnProcessExit(
           target_action=robot_spawner,
           on_exit=[
               launch.actions.TimerAction(
                   period=5.0,
-                  actions=[arm_camera_pointcloud]
+                  actions=[arm_camera_pointcloud, front_camera_pointcloud]
               )
           ],
       )

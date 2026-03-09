@@ -61,15 +61,7 @@
   lazy: true
   direction: GZ_TO_ROS
 
-# front_rgbd_camera/depth/image_raw/points
-- ros_topic_name: "/front_rgbd_camera/points"
-  gz_topic_name: "/front_rgbd_camera/points"
-  ros_type_name: "sensor_msgs/msg/PointCloud2"
-  gz_type_name: "gz.msgs.PointCloudPacked"
-  subscriber_queue: 10
-  publisher_queue: 10
-  lazy: true
-  direction: GZ_TO_ROS
+# NOTE: front_rgbd_camera/points NOT bridged — use depth_image_proc on ROS side instead
 
 # arm_camera/color/image_raw
 - ros_topic_name: "/arm_camera/color/image_raw"
