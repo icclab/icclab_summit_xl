@@ -5,8 +5,6 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /MotionPlanning1/Planned Path1
-        - /PointCloud21
-        - /PointCloud21/Status1
         - /PlanningScene1/Scene Geometry1
         - /PlanningScene1/Scene Robot1
         - /Image1
@@ -230,10 +228,6 @@ Visualization Manager:
             Show Trail: false
             Value: true
           oak-d_frame:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-          oak-d_frame_rotated:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -522,10 +516,6 @@ Visualization Manager:
             Alpha: 1
             Show Axes: false
             Show Trail: false
-          oak-d_frame_rotated:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
           oak_imu_frame:
             Alpha: 1
             Show Axes: false
@@ -683,11 +673,7 @@ Visualization Manager:
           Value: false
         left_outer_knuckle:
           Value: false
-        map:
-          Value: true
         oak-d_frame:
-          Value: false
-        oak-d_frame_rotated:
           Value: false
         oak_imu_frame:
           Value: false
@@ -731,8 +717,6 @@ Visualization Manager:
       Show Axes: true
       Show Names: true
       Tree:
-        map:
-          {}
         odom:
           base_footprint:
             base_link:
@@ -770,8 +754,6 @@ Visualization Manager:
                                   arm_camera_link:
                                     arm_camera_usb_plug_link:
                                       {}
-                                  oak-d_frame_rotated:
-                                    {}
                                   oak_imu_frame:
                                     {}
                                   oak_left_camera_frame:
@@ -992,10 +974,6 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        oak-d_frame_rotated:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
         oak_imu_frame:
           Alpha: 1
           Show Axes: false
@@ -1133,7 +1111,7 @@ Visualization Manager:
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Best Effort
-        Value: /segmented_pointcloud
+        Value: /arm_camera/points
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
@@ -1174,7 +1152,7 @@ Visualization Manager:
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /segmentation_mask
+        Value: /arm_camera/color/image_raw
       Value: true
   Enabled: true
   Global Options:
@@ -1194,25 +1172,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 8.27328872680664
+      Distance: 7.327079772949219
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.24810461699962616
-        Y: 0.24336284399032593
-        Z: 0.4385318160057068
+        X: 0.48538199067115784
+        Y: -1.122201919555664
+        Z: 0.12748399376869202
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.7600001692771912
+      Pitch: 0.6750003099441528
       Target Frame: base_footprint
       Value: Orbit (rviz_default_plugins)
-      Yaw: 5.6751909255981445
+      Yaw: 2.0651867389678955
     Saved: ~
 Window Geometry:
   Camera:
@@ -1230,9 +1208,9 @@ Window Geometry:
     collapsed: false
   MotionPlanning - Trajectory Slider:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd00000002000000000000022e000002ddfc0200000005fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000003f00fffffffb000000100044006900730070006c006100790073010000003b0000010d000000c700fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e0067010000014e000001ca0000016900fffffffb0000000800480065006c0070000000029a0000006e0000006e00fffffffb0000000a005600690065007700730000000282000000a0000000a000ffffff00000001000001af000002ddfc0200000002fb0000000a0049006d006100670065010000003b000000f80000001600fffffffb0000000c00430061006d0065007200610100000139000001df0000001600ffffff000000dc000002dd00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd0000000200000000000001c9000002ddfc0200000005fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000003f00fffffffb000000100044006900730070006c006100790073010000003b0000010d000000c700fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e0067010000014e000001ca0000016900fffffffb0000000800480065006c0070000000029a0000006e0000006e00fffffffb0000000a005600690065007700730000000282000000a0000000a000ffffff00000001000000f3000002ddfc0200000002fb0000000a0049006d006100670065010000003b000000f80000001600fffffffb0000000c00430061006d0065007200610100000139000001df0000001600ffffff000001fd000002dd00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Views:
     collapsed: false
   Width: 1221
-  X: 36
-  Y: 48
+  X: 483
+  Y: 172

@@ -60,8 +60,7 @@
         <always_on>true</always_on>
         <update_rate>10</update_rate>
         <camera name="${prefix}">
-          <!-- <camera_info_topic>${ns}/${prefix}/color/camera_info</camera_info_topic> -->
-          <!-- <optical_frame_id>${prefix}_rgb_optical_frame</optical_frame_id> -->
+          <optical_frame_id>${prefix}_rgb_optical_frame</optical_frame_id>
           <horizontal_fov>1.04719755</horizontal_fov>
           <vertical_fov>0.86393798</vertical_fov>
           <image>
