@@ -15,12 +15,12 @@ install(PROGRAMS
   scripts/servo_debug_monitor.py
   scripts/servo_circle_demo.py
   scripts/setup_servo.py
+  scripts/summit_arm.py
   scripts/moveit_py_example.py
   scripts/nav2_action_client.py
   scripts/segmentation_node.py
   scripts/segmentation_node_remote.py
-#  scripts/visual_servo_grasp.py
-#  scripts/trigger_grasp.py
+  scripts/trigger_grasp.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
