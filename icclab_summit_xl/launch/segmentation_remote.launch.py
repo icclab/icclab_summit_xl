@@ -28,7 +28,7 @@ def generate_launch_description():
     # Declare launch arguments
     use_sim_time_arg = DeclareLaunchArgument(
         'use_sim_time',
-        default_value='false',
+        default_value='true',
         description='Use simulation time'
     )
 
@@ -46,7 +46,7 @@ def generate_launch_description():
 
     sam_type_arg = DeclareLaunchArgument(
         'sam_type',
-        default_value='sam2.1_hiera_small',
+        default_value='sam2.1_hiera_large',
         description='SAM model type to use on the server'
     )
 

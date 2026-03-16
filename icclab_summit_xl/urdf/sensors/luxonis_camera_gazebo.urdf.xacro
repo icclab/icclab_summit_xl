@@ -1,6 +1,10 @@
 <?xml version="1.0"?>
 <robot name="luxonis_camera_gazebo" xmlns:xacro="http://wiki.ros.org/Sensors/OrbbecAstra">
 
+  <!-- Option A: All data published with camera frame (Gazebo convention: X-fwd, Y-left, Z-up).
+       Pointcloud + images + camera_info all use the camera frame as frame_id.
+       Data is consistent with frame_id. RViz/TF handles transforms to optical frame.
+       Note: ROS tools expecting optical frame data may need config adjustments. -->
   <xacro:macro name="luxonis_camera_gazebo" params="ns prefix frame">
     <xacro:property name="M_PI" value="3.1415926535897931" />
     <gazebo reference="${frame}">

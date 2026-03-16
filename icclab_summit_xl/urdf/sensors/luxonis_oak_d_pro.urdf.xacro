@@ -11,14 +11,7 @@
 	  <xacro:insert_block name="origin" />
 	</xacro:luxonis>
 
-	<link name="oak-d_frame_rotated"/>
-	<joint name="oak-d_frame_rotated_joint" type="fixed">
-	  <origin xyz="0.02 0 0" rpy="${PI} 0 0" />
-	  <parent link="oak-d_frame"/>
-	  <child link="oak-d_frame_rotated"/>
-	</joint>
-
-	<xacro:luxonis_camera_gazebo ns="${ns}" prefix="${prefix}" frame="oak-d_frame_rotated"/>
+	<xacro:luxonis_camera_gazebo ns="${ns}" prefix="${prefix}" frame="oak_rgb_camera_frame"/>
 
 </xacro:macro>	
 

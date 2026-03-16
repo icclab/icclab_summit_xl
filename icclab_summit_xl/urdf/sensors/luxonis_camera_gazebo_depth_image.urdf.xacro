@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<robot name="luxonis_camera_gazebo" xmlns:xacro="http://wiki.ros.org/Sensors/OrbbecAstra">
+
+  <!-- Option B: Images/depth published with optical_frame_id for correct ROS convention.
+       Pointcloud NOT bridged from Gazebo (it's in wrong convention anyway).
+       Use depth_image_proc/point_cloud_xyzrgb on ROS side to generate a proper
+       optical-frame pointcloud from depth + color + camera_info. -->
+  <xacro:macro name="luxonis_camera_gazebo" params="ns prefix frame optical_frame">
+    <xacro:property name="M_PI" value="3.1415926535897931" />
+    <gazebo reference="${frame}">
+      <sensor name="${prefix}" type="rgbd_camera">
+        <gz_frame_id>${frame}</gz_frame_id>
+        <pose>0 0 0 0 0 0</pose>
+        <visualize>true</visualize>
+        <always_on>true</always_on>
+        <update_rate>15</update_rate>
+        <camera name="${prefix}">
+          <optical_frame_id>${optical_frame}</optical_frame_id>
+          <horizontal_fov>1.04719755</horizontal_fov>
+          <vertical_fov>0.86393798</vertical_fov>
+          <image>
+            <width>640</width>
+            <height>480</height>
+          </image>
+          <clip>
+            <near>0.05</near>
+            <far>20.0</far>
+          </clip>
+          <depth_camera>
+            <clip>
+              <near>0.05</near>
+              <far>20.0</far>
+            </clip>
+          </depth_camera>
+        </camera>
+        <topic>${ns}/${prefix}</topic>
+      </sensor>
+    </gazebo>
+  </xacro:macro>
+
+</robot>
