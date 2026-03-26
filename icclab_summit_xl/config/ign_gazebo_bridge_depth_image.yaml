@@ -154,3 +154,33 @@
   publisher_queue: 10
   lazy: false
   direction: GZ_TO_ROS
+
+# World model poses — used by gripper_attach_node to auto-identify the closest object
+- ros_topic_name: "/world/model_poses"
+  gz_topic_name: "/world/world_demo/pose/info"
+  ros_type_name: "tf2_msgs/msg/TFMessage"
+  gz_type_name: "gz.msgs.Pose_V"
+  subscriber_queue: 10
+  publisher_queue: 10
+  lazy: false
+  direction: GZ_TO_ROS
+
+# DetachableJoint: attach object to gripper (publish model name as StringMsg)
+- ros_topic_name: "/gripper/attach"
+  gz_topic_name: "/gripper/attach"
+  ros_type_name: "std_msgs/msg/String"
+  gz_type_name: "gz.msgs.StringMsg"
+  subscriber_queue: 5
+  publisher_queue: 5
+  lazy: false
+  direction: ROS_TO_GZ
+
+# DetachableJoint: detach object from gripper (publish empty message)
+- ros_topic_name: "/gripper/detach"
+  gz_topic_name: "/gripper/detach"
+  ros_type_name: "std_msgs/msg/Empty"
+  gz_type_name: "gz.msgs.Empty"
+  subscriber_queue: 5
+  publisher_queue: 5
+  lazy: false
+  direction: ROS_TO_GZ

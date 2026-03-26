@@ -76,6 +76,10 @@ def generate_launch_description():
     + os.environ['COLCON_PREFIX_PATH'] + "/icclab_summit_xl/share/icclab_summit_xl/worlds/models" + ":"
     + os.environ['COLCON_PREFIX_PATH'] + "/robotiq_description/share")))
 
+  ld.add_action(launch.actions.AppendEnvironmentVariable(
+    name="GZ_SIM_SYSTEM_PLUGIN_PATH",
+    value=os.environ['COLCON_PREFIX_PATH'] + "/icclab_summit_xl/lib/icclab_summit_xl"))
+
   ld.add_action(launch.actions.DeclareLaunchArgument(
     name='robot_id',
     description='Id of the robot',
@@ -129,7 +133,8 @@ def generate_launch_description():
     package="ros_gz_sim",
     executable="create",
     # Removed namespace from robot_description topic
-    arguments=["-name", robot_id, "-topic", "robot_description", '-y', '2.0'],
+    arguments=["-name", robot_id, "-topic", "robot_description",
+               "-x", "1.1031", "-y", "-0.6850", "-z", "0.0", "-Y", "-1.3621"],
   )
   ld.add_action(robot_spawner)
 

@@ -20,6 +20,7 @@ install(PROGRAMS
   scripts/nav2_action_client.py
   scripts/segmentation_node.py
   scripts/segmentation_node_remote.py
+  scripts/gripper_attach_node.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
@@ -131,5 +132,19 @@ ament_target_dependencies(move_arm_to_pose rclcpp moveit_ros_planning_interface)
 
 ament_export_dependencies(ros_gz_bridge)
 ament_export_dependencies(ros_gz_sim)
+
+# --- DynamicGripperAttach Gazebo system plugin ---
+find_package(gz-sim8 REQUIRED)
+find_package(gz-transport13 REQUIRED)
+find_package(gz-msgs10 REQUIRED)
+
+add_library(DynamicGripperAttach SHARED
+  src/dynamic_gripper_attach/DynamicGripperAttach.cc)
+target_link_libraries(DynamicGripperAttach
+  gz-sim8::gz-sim8
+  gz-transport13::gz-transport13
+  gz-msgs10::gz-msgs10)
+install(TARGETS DynamicGripperAttach
+  DESTINATION lib/${PROJECT_NAME})
 
 ament_package()

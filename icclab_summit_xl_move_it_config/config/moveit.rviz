@@ -4,7 +4,9 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
+        - /MotionPlanning1
         - /MotionPlanning1/Planned Path1
+        - /PointCloud21
         - /PlanningScene1/Scene Geometry1
         - /PlanningScene1/Scene Robot1
         - /Image1
@@ -673,6 +675,8 @@ Visualization Manager:
           Value: false
         left_outer_knuckle:
           Value: false
+        map:
+          Value: true
         oak-d_frame:
           Value: false
         oak_imu_frame:
@@ -717,81 +721,82 @@ Visualization Manager:
       Show Axes: true
       Show Names: true
       Tree:
-        odom:
-          base_footprint:
-            base_link:
-              arm_base_link:
-                arm_base:
-                  {}
-                arm_base_link_inertia:
-                  arm_shoulder_link:
-                    arm_upper_arm_link:
-                      arm_forearm_link:
-                        arm_wrist_1_link:
-                          arm_wrist_2_link:
-                            arm_wrist_3_link:
-                              arm_flange:
-                                arm_camera_mount_link:
-                                  {}
-                                arm_tool0:
-                                  robotiq_base_link:
-                                    robotiq_140_base_link:
-                                      left_inner_knuckle:
-                                        {}
-                                      left_outer_knuckle:
-                                        left_outer_finger:
-                                          left_inner_finger:
-                                            left_inner_finger_pad:
-                                              {}
-                                      right_inner_knuckle:
-                                        {}
-                                      right_outer_knuckle:
-                                        right_outer_finger:
-                                          right_inner_finger:
-                                            right_inner_finger_pad:
-                                              {}
-                                oak-d_frame:
-                                  arm_camera_link:
-                                    arm_camera_usb_plug_link:
-                                      {}
-                                  oak_imu_frame:
+        map:
+          odom:
+            base_footprint:
+              base_link:
+                arm_base_link:
+                  arm_base:
+                    {}
+                  arm_base_link_inertia:
+                    arm_shoulder_link:
+                      arm_upper_arm_link:
+                        arm_forearm_link:
+                          arm_wrist_1_link:
+                            arm_wrist_2_link:
+                              arm_wrist_3_link:
+                                arm_flange:
+                                  arm_camera_mount_link:
                                     {}
-                                  oak_left_camera_frame:
-                                    oak_left_camera_optical_frame:
+                                  arm_tool0:
+                                    robotiq_base_link:
+                                      robotiq_140_base_link:
+                                        left_inner_knuckle:
+                                          {}
+                                        left_outer_knuckle:
+                                          left_outer_finger:
+                                            left_inner_finger:
+                                              left_inner_finger_pad:
+                                                {}
+                                        right_inner_knuckle:
+                                          {}
+                                        right_outer_knuckle:
+                                          right_outer_finger:
+                                            right_inner_finger:
+                                              right_inner_finger_pad:
+                                                {}
+                                  oak-d_frame:
+                                    arm_camera_link:
+                                      arm_camera_usb_plug_link:
+                                        {}
+                                    oak_imu_frame:
                                       {}
-                                  oak_rgb_camera_frame:
-                                    arm_camera_color_optical_frame:
-                                      {}
-                                  oak_right_camera_frame:
-                                    oak_right_camera_optical_frame:
-                                      {}
-                              arm_ft_frame:
-                                {}
-              base_docking_contact:
-                {}
-              front_laser_base_link:
-                front_laser_link:
+                                    oak_left_camera_frame:
+                                      oak_left_camera_optical_frame:
+                                        {}
+                                    oak_rgb_camera_frame:
+                                      arm_camera_color_optical_frame:
+                                        {}
+                                    oak_right_camera_frame:
+                                      oak_right_camera_optical_frame:
+                                        {}
+                                arm_ft_frame:
+                                  {}
+                base_docking_contact:
                   {}
-              front_left_wheel_link:
-                {}
-              front_rgbd_camera_link:
-                front_rgbd_camera_depth_frame:
-                  front_rgbd_camera_depth_optical_frame:
+                front_laser_base_link:
+                  front_laser_link:
                     {}
-                front_rgbd_camera_rgb_frame:
-                  front_rgbd_camera_rgb_optical_frame:
-                    {}
-              front_right_wheel_link:
-                {}
-              imu_link:
-                {}
-              rear_laser_base_link:
-                rear_laser_link:
+                front_left_wheel_link:
                   {}
-              rear_left_wheel_link:
-                {}
-              rear_right_wheel_link:
-                {}
+                front_rgbd_camera_link:
+                  front_rgbd_camera_depth_frame:
+                    front_rgbd_camera_depth_optical_frame:
+                      {}
+                  front_rgbd_camera_rgb_frame:
+                    front_rgbd_camera_rgb_optical_frame:
+                      {}
+                front_right_wheel_link:
+                  {}
+                imu_link:
+                  {}
+                rear_laser_base_link:
+                  rear_laser_link:
+                    {}
+                rear_left_wheel_link:
+                  {}
+                rear_right_wheel_link:
+                  {}
       Update Interval: 0
       Value: true
     - Alpha: 0.30000001192092896
@@ -1111,7 +1116,7 @@ Visualization Manager:
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Best Effort
-        Value: /arm_camera/points
+        Value: /segmented_pointcloud
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
@@ -1152,7 +1157,7 @@ Visualization Manager:
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /arm_camera/color/image_raw
+        Value: /segmentation_mask
       Value: true
   Enabled: true
   Global Options:
@@ -1172,25 +1177,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 7.327079772949219
+      Distance: 4.394015312194824
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.48538199067115784
-        Y: -1.122201919555664
-        Z: 0.12748399376869202
+        X: 0.029597092419862747
+        Y: -0.7462343573570251
+        Z: -0.07738152891397476
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.6750003099441528
+      Pitch: 0.5750003457069397
       Target Frame: base_footprint
       Value: Orbit (rviz_default_plugins)
-      Yaw: 2.0651867389678955
+      Yaw: 1.035187005996704
     Saved: ~
 Window Geometry:
   Camera:

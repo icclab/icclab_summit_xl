@@ -23,6 +23,14 @@
     <plugin name='ignition::gazebo::systems::Sensors' filename='ignition-gazebo-sensors-system'>
       <render_engine>ogre2</render_engine>
     </plugin>
+
+    <plugin filename="DynamicGripperAttach"
+            name="icclab::DynamicGripperAttach">
+      <parent_model>summit</parent_model>
+      <parent_link>arm_wrist_3_link</parent_link>
+      <attach_topic>/gripper/attach</attach_topic>
+      <detach_topic>/gripper/detach</detach_topic>
+    </plugin>
     <scene>
       <ambient>0.4 0.4 0.4 1</ambient>
       <background>0.7 0.7 0.7 1</background>
@@ -54,7 +62,6 @@
         <pose frame=''>-2.004656 -5.226610 0.003485 0 -0 0</pose>
 	</model>
 	<model name='Ball_01_001'>
-        <static>true</static>    
         <include>
             <uri>model://aws_robomaker_residential_Ball_01</uri>
         </include>
@@ -73,7 +80,6 @@
 
     <!-- bedroom ball -->
   <model name='Ball_01_003'>
-        <static>true</static>      
         <include>
             <uri>model://aws_robomaker_residential_Ball_01</uri>
         </include>
@@ -249,21 +255,18 @@
 	</model>
 	
 	<model name='Dumbbell_01_001'>
-        <static>true</static>    
         <include>
             <uri>model://aws_robomaker_residential_Dumbbell_01</uri>
         </include>
         <pose frame=''>2.512849 2.717787 0.002183 0 -0 0</pose>
 	</model>
 	<model name='Tablet_01_001'>
-        <static>true</static>
         <include>
             <uri>model://aws_robomaker_residential_Tablet_01</uri>
         </include>
         <pose frame=''>1.572830 -1.775857 0.401790 -0.020625 -0.000080 -0.006317</pose>
 	</model>
 	<model name='Clamp_01_001'>
-        <static>true</static>
         <include>
             <uri>https://fuel.gazebosim.org/1.0/GoogleResearch/models/Pony_C_Clamp_1440</uri>
         </include>
@@ -608,7 +611,6 @@
         <pose frame=''>0.629509 -5.183576 -0.017049 0 -0 1.5792</pose>
 	</model>
 	<model name='Vase_01_001'>
-        <static>true</static>    
         <include>
             <uri>model://aws_robomaker_residential_Vase_01</uri>
         </include>
