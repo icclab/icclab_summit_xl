@@ -244,43 +244,9 @@ class RemoteSegmentationNode(Node):
             convert_rgb_to_intensity=False
         )
 
-        # Create point cloud
-        # NOTE: Gazebo RGBD camera frame alignment requires specific rotation.
-        # Working tf2 transform: roll=-π/2, yaw=-π/2
-        # ROS applies rotations in X,Y,Z order, meaning: first Rx, then Ry, then Rz
-        # So the extrinsic needs the INVERSE: Rx^-1 @ Ry^-1 @ Rz^-1
-
-        roll = -np.pi / 2
-        yaw = -np.pi / 2
-
-        # Compute rotation matrices
-        cos_r, sin_r = np.cos(roll), np.sin(roll)
-        cos_y, sin_y = np.cos(yaw), np.sin(yaw)
-
-        # Rx(roll)
-        Rx = np.array([
-            [1, 0, 0],
-            [0, cos_r, -sin_r],
-            [0, sin_r, cos_r]
-        ])
-
-        # Rz(yaw)
-        Rz = np.array([
-            [cos_y, -sin_y, 0],
-            [sin_y, cos_y, 0],
-            [0, 0, 1]
-        ])
-
-        # For extrinsic, we need the inverse transformation
-        # (Rz @ Rx)^-1 = Rx^T @ Rz^T
-        R = Rx.T @ Rz.T
-
-        extrinsic = np.eye(4)
-        extrinsic[:3, :3] = R
         pcd = o3d.geometry.PointCloud.create_from_rgbd_image(
             image=rgbd_o3d,
-            intrinsic=intrinsic_o3d,
-            extrinsic=extrinsic
+            intrinsic=intrinsic_o3d
         )
 
         self.get_logger().info(f'Pointcloud created: {len(pcd.points)} points before filtering')
