@@ -64,7 +64,7 @@ def generate_launch_description():
             description='Launch in localization mode.'),
 
         DeclareLaunchArgument(
-            'namespace', default_value='summit',
+            'namespace', default_value='',
             description='Namespace for the rtabmap nodes.'),
 
         # Nodes to launch
