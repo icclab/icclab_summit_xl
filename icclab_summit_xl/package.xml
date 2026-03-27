@@ -139,6 +139,30 @@
   <exec_depend>moveit_py</exec_depend>
   <exec_depend>depth_image_proc</exec_depend>
 
+  <!-- Optional dependencies: not required by default, install only for specific features.
+       See README.md for installation instructions. -->
+
+  <!-- SLAM (rtabmap.launch.py):
+       sudo apt install ros-jazzy-rtabmap-ros -->
+  <!-- <exec_depend>rtabmap_ros</exec_depend> -->
+
+  <!-- Dual LIDAR scan merging (summit_xl_nav2.launch.py):
+       sudo apt install ros-jazzy-ros2-laser-scan-merger -->
+  <!-- <exec_depend>ros2_laser_scan_merger</exec_depend> -->
+
+  <!-- OAK-D camera driver (real/oak.camera.launch.py):
+       sudo apt install ros-jazzy-depthai-ros -->
+  <!-- <exec_depend>depthai_ros_driver</exec_depend> -->
+
+  <!-- Astra Mini camera driver (real/astra_mini.launch.py):
+       sudo apt install ros-jazzy-astra-camera -->
+  <!-- <exec_depend>astra_camera</exec_depend> -->
+
+  <!-- Python packages for local segmentation (segmentation.launch.py):
+       pip install open3d
+       pip install git+https://github.com/facebookresearch/segment-anything.git
+       See README.md for LangSAM GPU server setup -->
+
   <!-- Test dependencies -->
   <test_depend>launch_testing</test_depend>
   <test_depend>launch_testing_ament_cmake</test_depend>
