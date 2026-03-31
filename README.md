@@ -399,7 +399,120 @@ Configure and initialize the Servo node.
 
 ### `gripper_attach_node.py`
 
-ROS2 node for dynamic gripper attachment (Gazebo plugin interface).
+ROS2 node that bridges perception, simulation physics, and MoveIt2 planning to implement **automatic object grasping** in Gazebo. It ties together three subsystems:
+
+1. **Segmentation** — consumes the segmented pointcloud produced by `segmentation_node.py` / `segmentation_node_remote.py`.
+2. **Gazebo physics** — attaches/detaches the target object to the gripper using the Gazebo `DetachableJoint` plugin (via bridged ROS2 topics).
+3. **MoveIt2 planning scene** — registers the object's convex hull as a collision object so the motion planner can account for its geometry while carrying it.
+
+#### When to start it
+
+Start `gripper_attach_node` **after** all of the following are running:
+
+| Prerequisite | Why |
+|---|---|
+| `summit_xl_simulation_ign.launch.py` | Provides the Gazebo world, TF tree, and the `/gripper/attach`–`/gripper/detach` bridge |
+| `summit_xl_nav2.launch.py` (with a map) | Publishes the `map` frame into TF — **required for calibration**. Without it, `lookup_transform(map → base_footprint)` always fails and the gz→ROS offset is never computed, so Gazebo model matching is permanently disabled |
+| `summit_xl_move_it.launch.py` | Provides `move_group` and the `/planning_scene` topic |
+| Segmentation node (`segmentation.launch.py` or `segmentation_remote.launch.py`) | Provides `/segmented_pointcloud` |
+
+```bash
+ros2 run icclab_summit_xl gripper_attach_node
+```
+
+The node can also be launched with custom parameters:
+
+```bash
+ros2 run icclab_summit_xl gripper_attach_node \
+  --ros-args \
+  -p attach_distance:=0.08 \
+  -p gz_world:=tugbot_depot
+```
+
+#### What it does — step by step
+
+1. **Calibration** (automatic, one-time): On startup, the node reads Gazebo world poses (via `gz topic`) and compares the robot's Gazebo position against its TF position in the `map` frame. This produces a coordinate offset that lets Gazebo positions be matched to ROS TF positions. Calibration completes as soon as TF becomes available — you will see a log line like:
+   ```
+   Calibrated gz→ROS offset: [x.xxx, y.yyy, z.zzz]
+   ```
+
+2. **Object registration** (on each `/segmented_pointcloud` message): The node transforms the pointcloud into the `map` frame, computes its **convex hull**, and publishes it to `/planning_scene` as a `CollisionObject`. It also searches Gazebo world poses to auto-resolve the nearest model name (within `max_match_distance`).
+
+3. **Proximity monitoring** (10 Hz timer): Computes the midpoint between the two inner finger pads (via TF) and measures its distance to the object centroid. Log output (throttled to 1 Hz):
+   ```
+   finger_midpoint→object dist: 0.073m (target=cardboard_box, attached=False)
+   ```
+
+4. **Attach** (triggered when `dist < attach_distance` and a model name is resolved):
+   - Publishes the model name to `/gripper/attach` → Gazebo `DetachableJoint` welds the object to the gripper.
+   - Publishes an `AttachedCollisionObject` to `/planning_scene` → MoveIt2 knows to carry the object's shape with the arm.
+
+5. **Detach** (triggered by `/gripper/force_detach`):
+   - Publishes an `Empty` to `/gripper/detach` → Gazebo releases the weld.
+   - Removes the collision object from the MoveIt2 planning scene.
+
+> **Note**: The node does **not** auto-detach based on distance once grasped. The stored centroid is the pre-grasp position, so distance naturally grows as the arm lifts. Always use the `/gripper/force_detach` topic to release the object.
+
+#### Topics
+
+| Topic | Type | Direction | Purpose |
+|---|---|---|---|
+| `/segmented_pointcloud` | `sensor_msgs/PointCloud2` | **Subscribed** | Segmented object points (camera frame) |
+| `/gripper/attach` | `std_msgs/String` | **Published** | Gz model name to attach (DetachableJoint) |
+| `/gripper/detach` | `std_msgs/Empty` | **Published** | Release Gz DetachableJoint |
+| `/gripper/force_detach` | `std_msgs/Empty` | **Subscribed** | External trigger to release grasp |
+| `/planning_scene` | `moveit_msgs/PlanningScene` | **Published** | Add/attach/remove collision objects |
+
+#### Parameters
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `finger_link_left` | `str` | `left_inner_finger_pad` | Left finger TF frame for proximity |
+| `finger_link_right` | `str` | `right_inner_finger_pad` | Right finger TF frame for proximity |
+| `attach_link` | `str` | `robotiq_140_base_link` | MoveIt link the object attaches to |
+| `planning_frame` | `str` | `map` | TF root frame for MoveIt planning |
+| `robot_gz_model` | `str` | `summit` | Robot's Gazebo model name (for calibration) |
+| `robot_tf_frame` | `str` | `base_footprint` | Robot's ROS TF frame (for calibration) |
+| `attach_distance` | `float` | `0.10` | Grasp trigger distance in metres |
+| `max_match_distance` | `float` | `0.30` | Max radius to search for Gz model match |
+| `exclude_prefixes` | `str` | `summit,ground_plane,sun,aws_robomaker` | Comma-separated Gz model name prefixes to ignore during model matching |
+| `gz_world` | `str` | `world_demo` | Gazebo world name (used to subscribe to pose topic) |
+
+#### Triggering a grasp in your own script
+
+A typical pick-and-place sequence using `gripper_attach_node`:
+
+```python
+# 1. Segment the target object
+ros2 topic pub --once /segment_text std_msgs/msg/String "data: 'red box'"
+# → segmentation_node publishes /segmented_pointcloud
+# → gripper_attach_node registers it in the planning scene
+
+# 2. Move the arm toward the object with MoveIt (plan + execute)
+#    gripper_attach_node auto-attaches when the finger midpoint is within attach_distance
+
+# 3. Lift the arm / execute place motion
+
+# 4. Release the object
+ros2 topic pub --once /gripper/force_detach std_msgs/msg/Empty "{}"
+```
+
+From Python (e.g., inside a MoveItPy script):
+
+```python
+from std_msgs.msg import Empty
+detach_pub = node.create_publisher(Empty, '/gripper/force_detach', 1)
+detach_pub.publish(Empty())
+```
+
+#### Troubleshooting
+
+| Symptom | Likely cause | Fix |
+|---|---|---|
+| `Calibrated gz→ROS offset` never appears | TF not publishing or `gz` binary not on PATH | Ensure simulation is running and `gz` CLI is available |
+| Object not attached after gripper closes | `attach_distance` too small, or model not resolved | Check log for distance readout; increase `attach_distance` or reduce `max_match_distance` |
+| Wrong object attached | Another Gazebo model is closer to the centroid | Set `exclude_prefixes` to filter it out, or reduce `max_match_distance` |
+| MoveIt plans through the grasped object | Attach did not complete before planning | Wait for the `Attached "..."` log line before sending the next MoveIt goal |
 
 ---
 
