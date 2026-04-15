@@ -18,7 +18,7 @@ This node:
 
 import rclpy
 from rclpy.node import Node
-from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy
+from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy, DurabilityPolicy
 from sensor_msgs.msg import Image, CameraInfo, PointCloud2, PointField
 from std_msgs.msg import String, Header
 from geometry_msgs.msg import Point
@@ -139,16 +139,25 @@ class SegmentationNode(Node):
             10
         )
 
+        # Latched QoS so gripper_attach_node receives the pointcloud
+        # even if it subscribes after the one-shot publish
+        latched_qos = QoSProfile(
+            reliability=ReliabilityPolicy.RELIABLE,
+            durability=DurabilityPolicy.TRANSIENT_LOCAL,
+            history=HistoryPolicy.KEEP_LAST,
+            depth=1,
+        )
+
         self.pointcloud_pub = self.create_publisher(
             PointCloud2,
             '/segmented_pointcloud',
-            10
+            latched_qos,
         )
 
         self.status_pub = self.create_publisher(
             String,
             '/segmentation_status',
-            10
+            latched_qos,
         )
 
         self.get_logger().info('Segmentation Node initialized')
