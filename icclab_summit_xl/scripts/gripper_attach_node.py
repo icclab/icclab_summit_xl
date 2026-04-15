@@ -36,7 +36,7 @@ import numpy as np
 import open3d as o3d
 import rclpy
 from rclpy.node import Node
-from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy
+from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy, DurabilityPolicy
 from std_msgs.msg import String, Empty
 from sensor_msgs.msg import PointCloud2
 from geometry_msgs.msg import TransformStamped, Pose, Point
@@ -95,7 +95,8 @@ def _extract_blocks(text: str, keyword: str) -> list[str]:
     return blocks
 
 
-def _parse_pose_info(text: str) -> dict[str, np.ndarray]:
+def _parse_pose_info(text: str) -> dict[str, tuple[np.ndarray, np.ndarray]]:
+    """Parse Gz pose dump → {name: (position xyz, quaternion xyzw)}."""
     result = {}
     for content in _extract_blocks(text, 'pose'):
         m = _RE_NAME.search(content)
@@ -104,11 +105,22 @@ def _parse_pose_info(text: str) -> dict[str, np.ndarray]:
         pos_blocks = _extract_blocks(content, 'position')
         if not pos_blocks:
             continue
-        floats = _RE_FLOAT.findall(pos_blocks[0])
-        if len(floats) >= 3:
-            result[m.group(1)] = np.array(
-                [float(floats[0]), float(floats[1]), float(floats[2])]
-            )
+        pf = _RE_FLOAT.findall(pos_blocks[0])
+        if len(pf) < 3:
+            continue
+        pos = np.array([float(pf[0]), float(pf[1]), float(pf[2])])
+        ori_blocks = _extract_blocks(content, 'orientation')
+        if ori_blocks:
+            of = _RE_FLOAT.findall(ori_blocks[0])
+            if len(of) >= 4:
+                # Gz prints x, y, z, w (in that order)
+                quat = np.array([float(of[0]), float(of[1]),
+                                 float(of[2]), float(of[3])])
+            else:
+                quat = np.array([0.0, 0.0, 0.0, 1.0])
+        else:
+            quat = np.array([0.0, 0.0, 0.0, 1.0])
+        result[m.group(1)] = (pos, quat)
     return result
 
 
@@ -130,7 +142,7 @@ class GripperAttachNode(Node):
         self.declare_parameter('planning_frame',     'map')
         self.declare_parameter('robot_gz_model',     'summit')
         self.declare_parameter('robot_tf_frame',     'base_footprint')
-        self.declare_parameter('attach_distance',    0.10)
+        self.declare_parameter('attach_distance',    0.15)
         self.declare_parameter('max_match_distance', 0.30)
         self.declare_parameter('exclude_prefixes',
                                'summit,ground_plane,sun,aws_robomaker')
@@ -148,12 +160,15 @@ class GripperAttachNode(Node):
         excl = self.get_parameter('exclude_prefixes').value
         self._exclude        = [s.strip() for s in excl.split(',') if s.strip()]
 
-        # gz_world → planning_frame calibration offset
-        self._gz_to_ros: np.ndarray | None = None
+        # gz_world → planning_frame full SE(3) calibration:
+        # R_gz_to_ros (3x3), t_gz_to_ros (3,)
+        # such that: pos_ros = R_gz_to_ros @ pos_gz + t_gz_to_ros
+        self._R_gz_to_ros: np.ndarray | None = None
+        self._t_gz_to_ros: np.ndarray | None = None
         self._calib_lock = threading.Lock()
 
-        # Live Gz poses (gz world frame)
-        self._model_poses_gz: dict[str, np.ndarray] = {}
+        # Live Gz poses (gz world frame): name → (pos xyz, quat xyzw)
+        self._model_poses_gz: dict[str, tuple[np.ndarray, np.ndarray]] = {}
         self._poses_lock = threading.Lock()
 
         # Current object state
@@ -170,9 +185,13 @@ class GripperAttachNode(Node):
         self._gz_attach_pub = self.create_publisher(String, '/gripper/attach', 5)
         self._gz_detach_pub = self.create_publisher(Empty,  '/gripper/detach', 5)
 
-        # Explicit detach trigger from pick-and-place scripts
+        # Explicit detach trigger from pick-and-place scripts.
+        # Accept both Empty (original) and String (works reliably over rosbridge,
+        # which has trouble with zero-field Empty messages in advertise/publish races).
         self.create_subscription(Empty, '/gripper/force_detach',
                                  self._force_detach_cb, 5)
+        self.create_subscription(String, '/gripper/force_detach_str',
+                                 lambda msg: self._force_detach_cb(Empty()), 5)
 
         # MoveIt planning scene publisher
         from moveit_msgs.msg import PlanningScene
@@ -180,9 +199,10 @@ class GripperAttachNode(Node):
             PlanningScene, _PLANNING_SCENE_TOPIC, 5
         )
 
-        # Segmented pointcloud
+        # Segmented pointcloud — TRANSIENT_LOCAL matches the latched publisher
         pc_qos = QoSProfile(
-            reliability=ReliabilityPolicy.BEST_EFFORT,
+            reliability=ReliabilityPolicy.RELIABLE,
+            durability=DurabilityPolicy.TRANSIENT_LOCAL,
             history=HistoryPolicy.KEEP_LAST,
             depth=5,
         )
@@ -226,28 +246,37 @@ class GripperAttachNode(Node):
                         self._try_calibrate(poses)
                 buf = ''
 
-    def _try_calibrate(self, poses: dict[str, np.ndarray]):
-        with self._calib_lock:
-            if self._gz_to_ros is not None:
-                return
+    def _try_calibrate(self, poses: dict[str, tuple[np.ndarray, np.ndarray]]):
         if self._robot_gz_model not in poses:
             return
-        robot_gz_pos = poses[self._robot_gz_model]
+        robot_gz_pos, robot_gz_quat = poses[self._robot_gz_model]
         try:
             t: TransformStamped = self._tf_buffer.lookup_transform(
                 self._planning_frame, self._robot_tf_frame, rclpy.time.Time()
             )
-            tx = t.transform.translation
-            robot_ros_pos = np.array([tx.x, tx.y, tx.z])
         except Exception:
             return
-        offset = robot_ros_pos - robot_gz_pos
+        tx = t.transform.translation
+        rq = t.transform.rotation
+        robot_ros_pos = np.array([tx.x, tx.y, tx.z])
+        R_map_base = _quat_to_rot(rq.x, rq.y, rq.z, rq.w)
+        R_gz_base  = _quat_to_rot(robot_gz_quat[0], robot_gz_quat[1],
+                                  robot_gz_quat[2], robot_gz_quat[3])
+        # T_map_gz = T_map_base @ T_base_gz = T_map_base @ inv(T_gz_base)
+        R_base_gz = R_gz_base.T
+        t_base_gz = -R_base_gz @ robot_gz_pos
+        R_map_gz  = R_map_base @ R_base_gz
+        t_map_gz  = R_map_base @ t_base_gz + robot_ros_pos
         with self._calib_lock:
-            self._gz_to_ros = offset
-        self.get_logger().info(
-            f'Calibrated gz→ROS offset: '
-            f'[{offset[0]:.3f}, {offset[1]:.3f}, {offset[2]:.3f}]'
-        )
+            first = self._R_gz_to_ros is None
+            self._R_gz_to_ros = R_map_gz
+            self._t_gz_to_ros = t_map_gz
+        if first:
+            self.get_logger().info(
+                f'Calibrated gz→ROS SE(3): t='
+                f'[{t_map_gz[0]:.3f}, {t_map_gz[1]:.3f}, {t_map_gz[2]:.3f}] '
+                f'R[0]=[{R_map_gz[0,0]:.3f}, {R_map_gz[0,1]:.3f}, {R_map_gz[0,2]:.3f}]'
+            )
 
     # ------------------------------------------------------------------
     # Pointcloud callback — update scene object and resolve model name
@@ -260,10 +289,20 @@ class GripperAttachNode(Node):
 
         centroid_cam = pts.mean(axis=0)
 
-        # Single TF lookup — used for both centroid and full pointcloud transform
+        # Use the pointcloud's own timestamp so a latched (TRANSIENT_LOCAL)
+        # message is transformed with the TF that was valid when it was captured,
+        # not the current (potentially moved) robot pose.
+        stamp = msg.header.stamp
+        # Fall back to latest TF if stamp is zero (unset)
+        if stamp.sec == 0 and stamp.nanosec == 0:
+            stamp = rclpy.time.Time()
+        else:
+            stamp = rclpy.time.Time(seconds=stamp.sec, nanoseconds=stamp.nanosec)
+
         try:
             t: TransformStamped = self._tf_buffer.lookup_transform(
-                self._planning_frame, msg.header.frame_id, rclpy.time.Time()
+                self._planning_frame, msg.header.frame_id, stamp,
+                timeout=rclpy.duration.Duration(seconds=2.0)
             )
             tx = t.transform.translation
             q  = t.transform.rotation
@@ -322,17 +361,33 @@ class GripperAttachNode(Node):
     # Attach / detach (Gz + MoveIt)
     # ------------------------------------------------------------------
 
-    def _force_detach_cb(self, _msg: Empty):
+    def _force_detach_cb(self, _msg):
+        self.get_logger().info('force_detach received')
         if self._attached:
             self._do_detach()
         else:
             self.get_logger().warn('force_detach received but nothing is attached.')
 
+    def _gz_publish(self, topic: str, msg_type: str, payload: str):
+        """Publish directly to gz-transport via the `gz topic` CLI.
+
+        The ros_gz_bridge ROS→GZ path is unreliable for short-lived publishes
+        (lazy subscription activation + VOLATILE QoS can drop the first msg).
+        Shelling out bypasses the bridge entirely and is reliable.
+        """
+        try:
+            subprocess.run(
+                ['gz', 'topic', '-t', topic, '-m', msg_type, '-p', payload],
+                check=True, timeout=2.0,
+                stdout=subprocess.DEVNULL, stderr=subprocess.PIPE,
+            )
+        except Exception as e:
+            self.get_logger().error(f'gz topic publish {topic} failed: {e}')
+
     def _do_attach(self):
-        # 1. Gazebo DetachableJoint
-        gz_msg = String()
-        gz_msg.data = self._target_model
-        self._gz_attach_pub.publish(gz_msg)
+        # 1. Gazebo DetachableJoint — publish directly to gz-transport
+        self._gz_publish('/gripper/attach', 'gz.msgs.StringMsg',
+                         f'data: "{self._target_model}"')
 
         # 2. MoveIt planning scene — attach collision object to gripper link
         self._attach_collision_object(
@@ -346,8 +401,8 @@ class GripperAttachNode(Node):
         )
 
     def _do_detach(self):
-        # 1. Gazebo DetachableJoint
-        self._gz_detach_pub.publish(Empty())
+        # 1. Gazebo DetachableJoint — publish directly to gz-transport
+        self._gz_publish('/gripper/detach', 'gz.msgs.Empty', '')
 
         # 2. MoveIt planning scene — detach and remove collision object
         if self._collision_obj_id:
@@ -450,8 +505,9 @@ class GripperAttachNode(Node):
 
     def _find_nearest_model(self, centroid_ros: np.ndarray) -> str | None:
         with self._calib_lock:
-            offset = self._gz_to_ros
-        if offset is None:
+            R = self._R_gz_to_ros
+            t = self._t_gz_to_ros
+        if R is None or t is None:
             self.get_logger().warn(
                 'gz→ROS calibration not ready yet.', throttle_duration_sec=5.0
             )
@@ -461,17 +517,27 @@ class GripperAttachNode(Node):
             poses_gz = dict(self._model_poses_gz)
 
         best_name, best_dist = None, self._max_match_dist
-        for name, pos_gz in poses_gz.items():
+        closest_any_name, closest_any_dist = None, float('inf')
+        for name, (pos_gz, _q) in poses_gz.items():
             if any(name.startswith(p) for p in self._exclude):
                 continue
-            pos_ros = pos_gz + offset
+            pos_ros = R @ pos_gz + t
             d = float(np.linalg.norm(pos_ros - centroid_ros))
+            if d < closest_any_dist:
+                closest_any_dist, closest_any_name = d, name
             if d < best_dist:
                 best_dist, best_name = d, name
 
         if best_name and best_name != self._target_model:
             self.get_logger().info(
                 f'Auto-resolved target: "{best_name}" ({best_dist:.3f} m from centroid)'
+            )
+        elif best_name is None:
+            self.get_logger().warn(
+                f'No model within {self._max_match_dist:.2f}m. '
+                f'Closest: "{closest_any_name}" at {closest_any_dist:.3f}m. '
+                f'centroid={centroid_ros.tolist()}',
+                throttle_duration_sec=5.0,
             )
         return best_name
 
