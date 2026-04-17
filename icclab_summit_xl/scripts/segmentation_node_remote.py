@@ -400,11 +400,16 @@ class RemoteSegmentationNode(Node):
                 self.publish_status('NO_OBJECTS_FOUND')
                 return
 
-            # Decode masks from base64
+            # Decode masks
             masks = []
-            for mask_data in result['masks']:
-                mask_bytes = base64.b64decode(mask_data['data'])
-                mask = np.frombuffer(mask_bytes, dtype=np.uint8).reshape(mask_data['shape'])
+            
+            # for mask_data in result['masks']:
+            #     mask_bytes = base64.b64decode(mask_data['data'])
+            #     mask = np.frombuffer(mask_bytes, dtype=np.uint8).reshape(mask_data['shape'])
+            #     masks.append(mask.astype(bool))
+
+            for i, mask_data in enumerate(result["masks"]):
+                mask = np.array(mask_data, dtype=bool)
                 masks.append(mask.astype(bool))
 
             # Use the first (highest confidence) mask
