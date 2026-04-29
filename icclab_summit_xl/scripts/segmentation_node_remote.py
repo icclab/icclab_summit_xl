@@ -32,6 +32,7 @@ import struct
 import requests
 from io import BytesIO
 import base64
+import threading
 
 
 class RemoteSegmentationNode(Node):
@@ -67,11 +68,13 @@ class RemoteSegmentationNode(Node):
         # Initialize CV bridge
         self.bridge = CvBridge()
 
-        # Current RGB and depth images
+        # Current RGB and depth images (guarded by a lock to avoid partial reads)
+        self._image_lock = threading.Lock()
         self.current_rgb = None
         self.current_depth = None
         self.current_rgb_frame_id = None
         self.intrinsic_matrix = None
+        self._sync_count = 0
 
         # QoS for camera topics
         qos_profile = QoSProfile(
@@ -288,8 +291,34 @@ class RemoteSegmentationNode(Node):
 
     def o3d_to_ros_pointcloud2(self, pcd, frame_id=None):
         """Convert Open3D point cloud to ROS PointCloud2 message."""
-        points = np.asarray(pcd.points)
-        colors = np.asarray(pcd.colors)
+        points = np.asarray(pcd.points)       # (N, 3) float64
+        colors = np.asarray(pcd.colors)       # (N, 3) float64  or empty
+
+        n = len(points)
+
+        # Build the packed buffer entirely with numpy — no per-point Python loop.
+        # Layout per point (24 bytes, matching arm_camera/points):
+        #   offset  0: x      float32
+        #   offset  4: y      float32
+        #   offset  8: z      float32
+        #   offset 12: pad    uint32  = 0
+        #   offset 16: rgb    float32 (BGR packed as uint32 reinterpreted as float)
+        #   offset 20: pad    uint32  = 0
+        buf = np.zeros((n, 6), dtype=np.float32)
+        buf[:, 0] = points[:, 0]
+        buf[:, 1] = points[:, 1]
+        buf[:, 2] = points[:, 2]
+        # offset 12 (col 3) stays 0 (padding)
+
+        if n > 0 and colors.size > 0:
+            rgb_u8 = (colors * 255).clip(0, 255).astype(np.uint8)  # (N, 3) BGR-ready
+            # Pack as 0x00RRGGBB stored in little-endian float32 slot
+            packed = (rgb_u8[:, 0].astype(np.uint32) << 16 |
+                      rgb_u8[:, 1].astype(np.uint32) << 8  |
+                      rgb_u8[:, 2].astype(np.uint32))
+            # Reinterpret the uint32 bits as float32 (same trick as the old struct code)
+            buf[:, 4] = packed.view(np.float32)
+        # offset 20 (col 5) stays 0 (padding)
 
         # Create header
         header = Header()
@@ -304,47 +333,37 @@ class RemoteSegmentationNode(Node):
             PointField(name='rgb', offset=16, datatype=PointField.FLOAT32, count=1),
         ]
 
-        # Pack point cloud data with padding for alignment
-        cloud_data = []
-        for i in range(len(points)):
-            x, y, z = points[i]
-            if len(colors) > 0:
-                r, g, b = (colors[i] * 255).astype(np.uint8)
-                rgb = struct.unpack('f', struct.pack('I', struct.unpack('I', struct.pack('BBBB', b, g, r, 0))[0]))[0]
-            else:
-                rgb = 0.0
-            # Pack: x, y, z (12 bytes) + 4 bytes padding + rgb as float (4 bytes) + 4 bytes padding = 24 bytes total
-            cloud_data.append(struct.pack('fffIfI', x, y, z, 0, rgb, 0))
-
-        # Create PointCloud2 message
         pc2_msg = PointCloud2()
         pc2_msg.header = header
         pc2_msg.height = 1
-        pc2_msg.width = len(points)
+        pc2_msg.width = n
         pc2_msg.fields = fields
         pc2_msg.is_bigendian = False
-        pc2_msg.point_step = 24  # Updated to match arm_camera/points
-        pc2_msg.row_step = pc2_msg.point_step * pc2_msg.width
+        pc2_msg.point_step = 24
+        pc2_msg.row_step = pc2_msg.point_step * n
         pc2_msg.is_dense = True
-        pc2_msg.data = b''.join(cloud_data)
+        pc2_msg.data = buf.tobytes()
 
         return pc2_msg
 
     def synchronized_callback(self, rgb_msg, depth_msg):
         """Callback for synchronized RGB and depth images."""
         try:
-            self.current_rgb = self.bridge.imgmsg_to_cv2(rgb_msg, desired_encoding='rgb8')
-            self.current_depth = self.bridge.imgmsg_to_cv2(depth_msg, desired_encoding='passthrough')
-            self.current_rgb_frame_id = rgb_msg.header.frame_id
+            new_rgb = self.bridge.imgmsg_to_cv2(rgb_msg, desired_encoding='rgb8')
+            new_depth = self.bridge.imgmsg_to_cv2(depth_msg, desired_encoding='passthrough')
+            frame_id = rgb_msg.header.frame_id
 
-            # Log once every 100 messages to avoid spam
-            if not hasattr(self, '_sync_count'):
-                self._sync_count = 0
-            self._sync_count += 1
-            if self._sync_count % 100 == 1:
+            with self._image_lock:
+                self.current_rgb = new_rgb
+                self.current_depth = new_depth
+                self.current_rgb_frame_id = frame_id
+                self._sync_count += 1
+                count = self._sync_count
+
+            if count % 100 == 1:
                 self.get_logger().info(
-                    f'Synchronized RGB-D pair received (RGB: {self.current_rgb.shape}, '
-                    f'Depth: {self.current_depth.shape}, Frame: {self.current_rgb_frame_id})'
+                    f'Synchronized RGB-D pair received (RGB: {new_rgb.shape}, '
+                    f'Depth: {new_depth.shape}, Frame: {frame_id})'
                 )
         except Exception as e:
             self.get_logger().error(f'Error converting synchronized images: {e}')
@@ -354,7 +373,12 @@ class RemoteSegmentationNode(Node):
         text_prompt = msg.data
         self.get_logger().info(f'Text segmentation request: "{text_prompt}"')
 
-        if self.current_rgb is None:
+        with self._image_lock:
+            current_rgb = self.current_rgb
+            current_depth = self.current_depth
+            current_frame_id = self.current_rgb_frame_id
+
+        if current_rgb is None:
             self.get_logger().error('No RGB image available')
             self.publish_status('ERROR: No image')
             return
@@ -364,7 +388,7 @@ class RemoteSegmentationNode(Node):
 
         try:
             # Encode image as PNG
-            success, image_encoded = cv2.imencode('.png', cv2.cvtColor(self.current_rgb, cv2.COLOR_RGB2BGR))
+            success, image_encoded = cv2.imencode('.png', cv2.cvtColor(current_rgb, cv2.COLOR_RGB2BGR))
             if not success:
                 raise ValueError("Failed to encode image")
 
@@ -418,8 +442,8 @@ class RemoteSegmentationNode(Node):
             if result.get('labels'):
                 self.get_logger().info(f'Detected phrase: "{result["labels"][0]}"')
 
-            # Publish mask
-            self.publish_mask(mask)
+            # Publish mask (pass the locally captured snapshot to avoid TOCTOU races)
+            self.publish_mask(mask, current_rgb, current_depth, current_frame_id)
             self.publish_status('SUCCESS')
 
         except requests.exceptions.Timeout:
@@ -434,7 +458,7 @@ class RemoteSegmentationNode(Node):
             traceback.print_exc()
             self.publish_status(f'ERROR: {str(e)}')
 
-    def publish_mask(self, mask):
+    def publish_mask(self, mask, current_rgb, current_depth, current_frame_id):
         """Publish segmentation mask and segmented point cloud."""
         # Convert boolean mask to uint8 (0 or 255)
         mask_uint8 = (mask * 255).astype(np.uint8)
@@ -442,21 +466,21 @@ class RemoteSegmentationNode(Node):
         # Convert to ROS Image message
         mask_msg = self.bridge.cv2_to_imgmsg(mask_uint8, encoding='mono8')
         mask_msg.header.stamp = self.get_clock().now().to_msg()
-        mask_msg.header.frame_id = self.current_rgb_frame_id if self.current_rgb_frame_id else 'camera_color_optical_frame'
+        mask_msg.header.frame_id = current_frame_id if current_frame_id else 'camera_color_optical_frame'
 
         self.mask_pub.publish(mask_msg)
         self.get_logger().info('Published segmentation mask')
 
         # Generate and publish point cloud if we have all required data
-        if self.current_rgb is not None and self.current_depth is not None and self.intrinsic_matrix is not None:
+        if current_rgb is not None and current_depth is not None and self.intrinsic_matrix is not None:
             try:
                 # Step 1: Erode mask to remove edge noise
                 eroded_mask = self.erode_mask(mask)
 
                 # Step 2: Create point cloud from RGB-D and mask
                 pcd = self.create_pointcloud_from_rgbd(
-                    rgb=self.current_rgb,
-                    depth=self.current_depth,
+                    rgb=current_rgb,
+                    depth=current_depth,
                     mask=eroded_mask,
                     intrinsic_matrix=self.intrinsic_matrix
                 )
@@ -466,9 +490,9 @@ class RemoteSegmentationNode(Node):
 
                 # Step 4: Convert to ROS message and publish
                 if len(pcd.points) > 0:
-                    pc2_msg = self.o3d_to_ros_pointcloud2(pcd, frame_id=self.current_rgb_frame_id)
+                    pc2_msg = self.o3d_to_ros_pointcloud2(pcd, frame_id=current_frame_id)
                     self.pointcloud_pub.publish(pc2_msg)
-                    self.get_logger().info(f'Published segmented point cloud with {len(pcd.points)} points in frame {self.current_rgb_frame_id}')
+                    self.get_logger().info(f'Published segmented point cloud with {len(pcd.points)} points in frame {current_frame_id}')
                 else:
                     self.get_logger().warn('Point cloud is empty after filtering')
 
@@ -478,9 +502,9 @@ class RemoteSegmentationNode(Node):
                 traceback.print_exc()
         else:
             missing = []
-            if self.current_rgb is None:
+            if current_rgb is None:
                 missing.append('RGB')
-            if self.current_depth is None:
+            if current_depth is None:
                 missing.append('depth')
             if self.intrinsic_matrix is None:
                 missing.append('camera intrinsics')
