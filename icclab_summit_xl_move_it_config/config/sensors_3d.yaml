@@ -1,31 +1,36 @@
 # 3D sensors disabled due to wrong frames for octomaps using Gazebo simulation;
-sensors: []
-# sensors:
-#   - arm_camera
-#   - front_rgbd_camera
-# arm_camera:
-#   far_clipping_plane_distance: 5.0
-#   filtered_cloud_topic: /filtered_cloud_arm
-#   image_topic: /arm_camera/depth/image_raw
-#   camera_info_topic: /arm_camera/depth/camera_info
-#   max_update_rate: 1.0
-#   near_clipping_plane_distance: 0.3
-#   padding_offset: 0.03
-#   padding_scale: 4.0
-#   queue_size: 5
-#   sensor_plugin: occupancy_map_monitor/DepthImageOctomapUpdater
-#   shadow_threshold: 0.2
-# front_rgbd_camera:
-#   far_clipping_plane_distance: 5.0
-#   filtered_cloud_topic: /filtered_cloud_front
-#   image_topic: /front_rgbd_camera/depth/image_raw
-#   camera_info_topic: /front_rgbd_camera/depth/camera_info
-#   max_update_rate: 1.0
-#   near_clipping_plane_distance: 0.3
-#   padding_offset: 0.03
-#   padding_scale: 4.0
-#   queue_size: 5
-#   sensor_plugin: occupancy_map_monitor/DepthImageOctomapUpdater
-#   shadow_threshold: 0.2
-# octomap_frame: front_rgbd_camera_link
-# octomap_update_rate: 1.0
+# sensors: []
+sensors:
+  - arm_camera
+  - front_rgbd_camera
+arm_camera:
+  far_clipping_plane_distance: 5.0
+  filtered_cloud_topic: /filtered_cloud_arm
+  image_topic: /arm_camera/depth/image_raw
+  camera_info_topic: /arm_camera/depth/camera_info
+  max_update_rate: 1.0
+  near_clipping_plane_distance: 0.3
+  padding_offset: 0.03
+  padding_scale: 4.0
+  queue_size: 5
+  sensor_plugin: occupancy_map_monitor/DepthImageOctomapUpdater
+  # sensor_plugin: occupancy_map_monitor/PointCloudOctomapUpdater
+  # point_cloud_topic: /arm_camera/points
+  shadow_threshold: 0.2
+front_rgbd_camera:
+  far_clipping_plane_distance: 5.0
+  filtered_cloud_topic: /filtered_cloud_front
+  image_topic: /front_rgbd_camera/depth/image_raw
+  camera_info_topic: /front_rgbd_camera/depth/camera_info
+  max_update_rate: 1.0
+  near_clipping_plane_distance: 0.3
+  padding_offset: 0.03
+  padding_scale: 4.0
+  queue_size: 5
+  sensor_plugin: occupancy_map_monitor/DepthImageOctomapUpdater
+  # sensor_plugin: occupancy_map_monitor/PointCloudOctomapUpdater
+  # point_cloud_topic: /front_rgbd_camera/points
+  shadow_threshold: 0.2
+octomap_frame: odom
+octomap_update_rate: 1.0
+octomap_resolution: 0.02
