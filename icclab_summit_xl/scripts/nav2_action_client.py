@@ -11,7 +11,7 @@ class Nav2ActionClient(Node):
 
     def __init__(self):
         super().__init__('nav2_action_client')
-        self._action_client = ActionClient(self, NavigateToPose, '/summit/navigate_to_pose')
+        self._action_client = ActionClient(self, NavigateToPose, '/navigate_to_pose')
         self.info("nav2_action_client created")
 
     def send_goal(self, args):

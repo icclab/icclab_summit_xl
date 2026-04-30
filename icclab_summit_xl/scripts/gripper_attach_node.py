@@ -125,6 +125,82 @@ def _parse_pose_info(text: str) -> dict[str, tuple[np.ndarray, np.ndarray]]:
 
 
 # ---------------------------------------------------------------------------
+# ACM helper node — owns the service clients and runs on its own executor
+# so service calls never interfere with GripperAttachNode's executor.
+# ---------------------------------------------------------------------------
+
+class _AcmHelperNode(Node):
+
+    def __init__(self):
+        super().__init__('gripper_attach_acm_helper')
+        from moveit_msgs.srv import ApplyPlanningScene, GetPlanningScene
+        self._get_cli   = self.create_client(GetPlanningScene,   '/get_planning_scene')
+        self._apply_cli = self.create_client(ApplyPlanningScene, '/apply_planning_scene')
+
+    def set_acm_entry(self, obj_id: str, allowed: bool) -> bool:
+        """Blocking read-modify-write on the ACM. Returns True on success."""
+        from moveit_msgs.msg import PlanningScene, AllowedCollisionEntry, PlanningSceneComponents
+        from moveit_msgs.srv import GetPlanningScene, ApplyPlanningScene
+        import concurrent.futures
+
+        # --- GET ---
+        if not self._get_cli.wait_for_service(timeout_sec=5.0):
+            self.get_logger().warn('get_planning_scene service not available')
+            return False
+        req = GetPlanningScene.Request()
+        req.components.components = PlanningSceneComponents.ALLOWED_COLLISION_MATRIX
+        future = self._get_cli.call_async(req)
+        # Block until done — this node's own executor is spinning on another thread
+        result = future.result() if self._wait(future) else None
+        if result is None:
+            self.get_logger().warn('get_planning_scene timed out')
+            return False
+        acm = result.scene.allowed_collision_matrix
+
+        # --- MODIFY ---
+        octomap_entry = '<octomap>'
+        for entry in [obj_id, octomap_entry]:
+            if entry not in acm.entry_names:
+                if not allowed:
+                    return True  # nothing to remove
+                n = len(acm.entry_names)
+                acm.entry_names.append(entry)
+                for row in acm.entry_values:
+                    row.enabled.append(False)
+                acm.entry_values.append(AllowedCollisionEntry(enabled=[False] * (n + 1)))
+
+        obj_idx = acm.entry_names.index(obj_id)
+        oct_idx = acm.entry_names.index(octomap_entry)
+        acm.entry_values[obj_idx].enabled[oct_idx] = allowed
+        acm.entry_values[oct_idx].enabled[obj_idx] = allowed
+
+        # --- APPLY ---
+        if not self._apply_cli.wait_for_service(timeout_sec=5.0):
+            self.get_logger().warn('apply_planning_scene service not available')
+            return False
+        scene = PlanningScene()
+        scene.is_diff = True
+        scene.allowed_collision_matrix = acm
+        apply_req = ApplyPlanningScene.Request()
+        apply_req.scene = scene
+        future = self._apply_cli.call_async(apply_req)
+        if not self._wait(future) or future.result() is None:
+            self.get_logger().warn('apply_planning_scene timed out')
+            return False
+        return True
+
+    def _wait(self, future, timeout: float = 5.0) -> bool:
+        """Block until future is done. Safe to call from any thread."""
+        import time
+        deadline = time.monotonic() + timeout
+        while not future.done():
+            if time.monotonic() > deadline:
+                return False
+            time.sleep(0.01)
+        return True
+
+
+# ---------------------------------------------------------------------------
 # Node
 # ---------------------------------------------------------------------------
 
@@ -176,6 +252,8 @@ class GripperAttachNode(Node):
         self._target_model: str | None      = None   # Gz model name
         self._collision_obj_id: str | None  = None   # MoveIt collision object id
         self._object_pos: np.ndarray | None = None   # centroid in planning_frame
+        self._acm_allowed_ids: set[str]     = set()  # obj IDs already in ACM
+        self._acm_thread_lock               = threading.Lock()  # one ACM op at a time
 
         # TF
         self._tf_buffer   = tf2_ros.Buffer()
@@ -198,6 +276,13 @@ class GripperAttachNode(Node):
         self._scene_pub = self.create_publisher(
             PlanningScene, _PLANNING_SCENE_TOPIC, 5
         )
+
+        # Service calls for ACM read-modify-write run on a separate helper node
+        # with its own executor so they never conflict with this node's executor.
+        self._acm_helper = _AcmHelperNode()
+        self._acm_executor = rclpy.executors.SingleThreadedExecutor()
+        self._acm_executor.add_node(self._acm_helper)
+        threading.Thread(target=self._acm_executor.spin, daemon=True).start()
 
         # Segmented pointcloud — TRANSIENT_LOCAL matches the latched publisher
         pc_qos = QoSProfile(
@@ -419,6 +504,27 @@ class GripperAttachNode(Node):
     # MoveIt planning scene helpers
     # ------------------------------------------------------------------
 
+    def _set_acm_entry(self, obj_id: str, allowed: bool):
+        """Add or remove obj_id <-> <octomap> in the ACM (fire-and-forget thread)."""
+        if allowed and obj_id in self._acm_allowed_ids:
+            return
+        if not allowed and obj_id not in self._acm_allowed_ids:
+            return
+        threading.Thread(
+            target=self._set_acm_entry_blocking,
+            args=(obj_id, allowed),
+            daemon=True,
+        ).start()
+
+    def _set_acm_entry_blocking(self, obj_id: str, allowed: bool):
+        with self._acm_thread_lock:
+            ok = self._acm_helper.set_acm_entry(obj_id, allowed)
+            if ok:
+                if allowed:
+                    self._acm_allowed_ids.add(obj_id)
+                else:
+                    self._acm_allowed_ids.discard(obj_id)
+
     def _update_collision_object(self, obj_id: str, pts_ros: np.ndarray,
                                   frame_id: str):
         """Build a convex hull mesh from pts_ros and publish it to the planning scene."""
@@ -437,7 +543,6 @@ class GripperAttachNode(Node):
         co.operation = CollisionObject.ADD
         co.meshes = [mesh]
 
-        # Identity pose — mesh vertices are already in frame_id
         pose = Pose()
         pose.orientation.w = 1.0
         co.mesh_poses = [pose]
@@ -446,6 +551,11 @@ class GripperAttachNode(Node):
         scene.is_diff = True
         scene.world.collision_objects = [co]
         self._scene_pub.publish(scene)
+
+        # Allow obj <-> octomap collisions so voxels inside the hull don't
+        # block planning. Done as a separate read-modify-write on the ACM so
+        # we never overwrite existing robot link pairs.
+        self._set_acm_entry(obj_id, allowed=True)
 
     def _remove_collision_object(self, obj_id: str):
         from moveit_msgs.msg import PlanningScene
@@ -458,6 +568,9 @@ class GripperAttachNode(Node):
         scene.is_diff = True
         scene.world.collision_objects = [co]
         self._scene_pub.publish(scene)
+
+        # Revoke the octomap exemption for this object.
+        self._set_acm_entry(obj_id, allowed=False)
 
     def _attach_collision_object(self, obj_id: str, link: str,
                                   touch_links: list[str]):
