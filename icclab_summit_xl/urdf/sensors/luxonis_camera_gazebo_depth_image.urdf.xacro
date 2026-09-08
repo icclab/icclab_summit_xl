@@ -13,7 +13,8 @@
         <pose>0 0 0 0 0 0</pose>
         <visualize>true</visualize>
         <always_on>true</always_on>
-        <update_rate>15</update_rate>
+        <!-- 10 Hz to match what the RAP pods have been running in practice. -->
+        <update_rate>10</update_rate>
         <camera name="${prefix}">
           <optical_frame_id>${optical_frame}</optical_frame_id>
           <horizontal_fov>1.04719755</horizontal_fov>

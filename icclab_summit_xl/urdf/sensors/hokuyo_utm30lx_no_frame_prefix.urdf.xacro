@@ -59,7 +59,13 @@
 				<topic>${ns}/${prefix}/scan</topic>
 				<frame_id>${prefix}_link</frame_id>
 				<visualize>false</visualize>
-				<update_rate>30</update_rate>
+				<!-- 10 Hz, not 30. Measured on the RAP cluster (A30, Gazebo Harmonic,
+				     tugbot_depot world): two of these at 1081 samples and 30 Hz cost
+				     ~19 points of real-time factor. Headless RTF went 0.81 -> 1.00 by
+				     changing only this value. The physical UTM-30LX runs at 40 Hz, so
+				     this is a deliberate fidelity trade for the teaching setup; nav2 is
+				     comfortable at 10 Hz (TurtleBot3's LDS publishes at 5). -->
+				<update_rate>10</update_rate>
 				<lidar>
 					<scan>
 						<horizontal>
