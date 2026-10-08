@@ -1,11 +1,5 @@
-# move_group for the real Summit: everything there runs in the /summit namespace
-# (controller_manager, arm_controller, joint_states, tf), on wall time.
-#
-#   ros2 launch icclab_summit_xl_move_it_config move_group_real.launch.py
-#   ros2 launch icclab_summit_xl_move_it_config move_group_real.launch.py allow_trajectory_execution:=true
-#
-# allow_trajectory_execution defaults to false: move_group then only plans and never
-# sends a trajectory to the arm. The simulation keeps using move_group.launch.py.
+# move_group for the real robot: runs in the robot_id namespace (default summit), TF from <robot_id>/tf.
+# Executes trajectories like the simulation; allow_trajectory_execution:=false only plans.
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, GroupAction
 from launch.substitutions import LaunchConfiguration
@@ -15,14 +9,13 @@ from moveit_configs_utils import MoveItConfigsBuilder
 
 
 def generate_launch_description():
-    # same xacro arguments as summit_xl_real.launch.py, so the model matches /summit/robot_description
     moveit_config = (
         MoveItConfigsBuilder("summit_xl", package_name="icclab_summit_xl_move_it_config")
-        .robot_description(mappings={"use_fake_hardware": "false", "robot_id": "summit", "robot_ns": "summit"})
+        .robot_description(mappings={"use_fake_hardware": "false"})
         .planning_pipelines(pipelines=["ompl"])
         .to_moveit_configs()
     )
-    # sensors_3d.yaml points at the simulation's camera topics
+    # sensors_3d.yaml uses the simulation camera topics
     moveit_config.sensors_3d = {}
 
     allow_execution = LaunchConfiguration("allow_trajectory_execution")
@@ -41,10 +34,10 @@ def generate_launch_description():
     }
 
     return LaunchDescription([
-        DeclareLaunchArgument("allow_trajectory_execution", default_value="false"),
+        DeclareLaunchArgument("robot_id", default_value="summit", description="Id of the robot"),
+        DeclareLaunchArgument("allow_trajectory_execution", default_value="true"),
         GroupAction([
-            PushRosNamespace("summit"),
-            # robot_state_publisher on the Summit publishes to /summit/tf and /summit/tf_static
+            PushRosNamespace(LaunchConfiguration("robot_id")),
             SetRemap(src="/tf", dst="tf"),
             SetRemap(src="/tf_static", dst="tf_static"),
             Node(
