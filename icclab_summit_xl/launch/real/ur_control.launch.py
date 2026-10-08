@@ -210,31 +210,23 @@ def launch_setup(context, *args, **kwargs):
         [FindPackageShare(description_package), "rviz", "view_robot.rviz"]
     )
 
-    # define update rate
-    update_rate_config_file = PathJoinSubstitution(
-        [
-            FindPackageShare(runtime_config_package),
-            "config",
-            ur_type.perform(context) + "_update_rate.yaml",
-        ]
-    )
-
     control_node = Node(
         package="controller_manager",
         executable="ros2_control_node",
         parameters=[
-            update_rate_config_file,
             ParameterFile(initial_joint_controllers, allow_substs=True),
         ],
         output="screen",
         condition=IfCondition(use_fake_hardware),
     )
 
+    # ur_robot_driver 3.x (Jazzy) has no ur_ros2_control_node any more: the standard
+    # ros2_control_node loads the UR hardware interface from the robot description.
+    # The update rate comes from the controllers file.
     ur_control_node = Node(
-        package="ur_robot_driver",
-        executable="ur_ros2_control_node",
+        package="controller_manager",
+        executable="ros2_control_node",
         parameters=[
-            update_rate_config_file,
             ParameterFile(initial_joint_controllers, allow_substs=True),
         ],
         remappings=[('~/robot_description','/summit/robot_description')],
