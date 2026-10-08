@@ -92,11 +92,23 @@ def generate_launch_description():
         description='Enable statistical outlier removal'
     )
 
+    node_name_arg = DeclareLaunchArgument(
+        'node_name',
+        default_value='remote_segmentation_node',
+        description='ROS node name (use distinct names when running multiple instances)'
+    )
+
+    topic_prefix_arg = DeclareLaunchArgument(
+        'topic_prefix',
+        default_value='',
+        description='Prefix prepended to /segment_text, /segmentation_mask, /segmented_pointcloud, /segmentation_status (e.g. "/front" for the front camera instance)'
+    )
+
     # Remote Segmentation Node
     remote_segmentation_node = Node(
         package='icclab_summit_xl',
         executable='segmentation_node_remote.py',
-        name='remote_segmentation_node',
+        name=LaunchConfiguration('node_name'),
         output='screen',
         parameters=[{
             'use_sim_time': LaunchConfiguration('use_sim_time'),
@@ -110,6 +122,7 @@ def generate_launch_description():
             'camera_info_topic': LaunchConfiguration('camera_info_topic'),
             'voxel_size': LaunchConfiguration('voxel_size'),
             'remove_outliers': LaunchConfiguration('remove_outliers'),
+            'topic_prefix': LaunchConfiguration('topic_prefix'),
         }],
         emulate_tty=True
     )
@@ -129,6 +142,8 @@ def generate_launch_description():
     ld.add_action(camera_info_topic_arg)
     ld.add_action(voxel_size_arg)
     ld.add_action(remove_outliers_arg)
+    ld.add_action(node_name_arg)
+    ld.add_action(topic_prefix_arg)
 
     # Add node
     ld.add_action(remote_segmentation_node)
