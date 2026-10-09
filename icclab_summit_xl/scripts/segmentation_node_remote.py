@@ -52,6 +52,10 @@ class RemoteSegmentationNode(Node):
         self.declare_parameter('camera_info_topic', '/arm_camera/color/camera_info')
         self.declare_parameter('voxel_size', 0.002)  # 2mm voxel size for downsampling
         self.declare_parameter('remove_outliers', True)
+        # Prefix prepended to /segment_text, /segmentation_mask, /segmented_pointcloud,
+        # /segmentation_status. Empty for arm camera, "/front" for the front camera
+        # instance. Lets two nodes coexist without topic collisions.
+        self.declare_parameter('topic_prefix', '')
 
         # Get parameters
         self.server_url = self.get_parameter('server_url').value
@@ -64,6 +68,7 @@ class RemoteSegmentationNode(Node):
         self.camera_info_topic = self.get_parameter('camera_info_topic').value
         self.voxel_size = self.get_parameter('voxel_size').value
         self.remove_outliers = self.get_parameter('remove_outliers').value
+        self.topic_prefix = self.get_parameter('topic_prefix').value
 
         # Initialize CV bridge
         self.bridge = CvBridge()
@@ -117,7 +122,7 @@ class RemoteSegmentationNode(Node):
         # Segmentation prompt subscribers (only text for LangSAM)
         self.text_prompt_sub = self.create_subscription(
             String,
-            '/segment_text',
+            f'{self.topic_prefix}/segment_text',
             self.text_prompt_callback,
             10
         )
@@ -125,7 +130,7 @@ class RemoteSegmentationNode(Node):
         # Publishers
         self.mask_pub = self.create_publisher(
             Image,
-            '/segmentation_mask',
+            f'{self.topic_prefix}/segmentation_mask',
             10
         )
 
@@ -140,13 +145,13 @@ class RemoteSegmentationNode(Node):
 
         self.pointcloud_pub = self.create_publisher(
             PointCloud2,
-            '/segmented_pointcloud',
+            f'{self.topic_prefix}/segmented_pointcloud',
             latched_qos,
         )
 
         self.status_pub = self.create_publisher(
             String,
-            '/segmentation_status',
+            f'{self.topic_prefix}/segmentation_status',
             latched_qos,
         )
 
