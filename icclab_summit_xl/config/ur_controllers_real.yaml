@@ -1,7 +1,7 @@
 summit:
   controller_manager:
     ros__parameters:
-      update_rate: 500
+      update_rate: 125  # UR5 CB3 RTDE rate (ur_robot_driver ur5_update_rate.yaml)
       joint_state_broadcaster:
         type: joint_state_broadcaster/JointStateBroadcaster
 
