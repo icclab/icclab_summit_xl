@@ -9,13 +9,13 @@
 	<!-- First we import all posible elements defined in the urdf.xacro files. All these elements are defined as macro:xacros -->
 
 	<!-- Import summit XL base elements -->
-	<!-- <xacro:include filename="$(find summit_xl_description)/urdf/bases/summit_xl_hls_base.urdf.xacro" /> -->
+	<!-- <xacro:include filename="$(find icclab_summit_xl)/urdf/bases/summit_xl_hls_base.urdf.xacro" /> -->
 	<xacro:include filename="$(find icclab_summit_xl)/urdf/bases/summit_xl_hls_base.urdf.xacro" />
 
 	<!-- Import summit XL wheels -->
-	<xacro:include filename="$(find summit_xl_description)/urdf/wheels/omni_wheel.urdf.xacro" />
-	<xacro:include filename="$(find summit_xl_description)/urdf/wheels/rubber_wheel.urdf.xacro" />
-	<xacro:include filename="$(find summit_xl_description)/urdf/structures/structure_hokuyo.urdf.xacro" />
+	<xacro:include filename="$(find icclab_summit_xl)/urdf/wheels/omni_wheel.urdf.xacro" />
+	<xacro:include filename="$(find icclab_summit_xl)/urdf/wheels/rubber_wheel.urdf.xacro" />
+	<xacro:include filename="$(find icclab_summit_xl)/urdf/structures/structure_hokuyo.urdf.xacro" />
 
 	<!-- Import our modified sensor -->
 	<xacro:include filename="$(find icclab_summit_xl)/urdf/sensors/hokuyo_utm30lx_no_frame_prefix.urdf.xacro" />
