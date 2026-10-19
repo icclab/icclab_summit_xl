@@ -1,9 +1,9 @@
-# move_group for the real robot: runs in the robot_id namespace (default summit), TF from <robot_id>/tf.
+# move_group for the real robot, without namespace (as in the simulation).
 # Executes trajectories like the simulation; allow_trajectory_execution:=false only plans.
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, GroupAction
+from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
-from launch_ros.actions import Node, PushRosNamespace, SetRemap
+from launch_ros.actions import Node
 from launch_ros.parameter_descriptions import ParameterValue
 from moveit_configs_utils import MoveItConfigsBuilder
 
@@ -34,17 +34,11 @@ def generate_launch_description():
     }
 
     return LaunchDescription([
-        DeclareLaunchArgument("robot_id", default_value="summit", description="Id of the robot"),
         DeclareLaunchArgument("allow_trajectory_execution", default_value="true"),
-        GroupAction([
-            PushRosNamespace(LaunchConfiguration("robot_id")),
-            SetRemap(src="/tf", dst="tf"),
-            SetRemap(src="/tf_static", dst="tf_static"),
-            Node(
-                package="moveit_ros_move_group",
-                executable="move_group",
-                output="screen",
-                parameters=[moveit_config.to_dict(), move_group_configuration],
-            ),
-        ]),
+        Node(
+            package="moveit_ros_move_group",
+            executable="move_group",
+            output="screen",
+            parameters=[moveit_config.to_dict(), move_group_configuration],
+        ),
     ])

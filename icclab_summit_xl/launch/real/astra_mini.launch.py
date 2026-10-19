@@ -13,23 +13,23 @@ def generate_launch_description():
         config_params = yaml.safe_load(file)
     container = ComposableNodeContainer(
         name='astra_camera_container',
-        namespace='summit/front_rgbd_camera',
+        namespace='front_rgbd_camera',
         package='rclcpp_components',
         executable='component_container',
         composable_node_descriptions=[
             ComposableNode(package='astra_camera',
                            plugin='astra_camera::OBCameraNodeFactory',
                            name='camera',
-                           namespace='summit/front_rgbd_camera',
+                           namespace='front_rgbd_camera',
                            parameters=[config_params]),
             ## These use lots of CPU
             ComposableNode(package='astra_camera',
                            plugin='astra_camera::PointCloudXyzNode',
-                           namespace='summit/front_rgbd_camera',
+                           namespace='front_rgbd_camera',
                            name='points'),
             #ComposableNode(package='astra_camera',
             #               plugin='astra_camera::PointCloudXyzrgbNode',
-            #               namespace='summit/front_rgbd_camera',
+            #               namespace='front_rgbd_camera',
             #               name='point_cloud_xyzrgb')
         ],
         output='screen')
@@ -40,8 +40,8 @@ def generate_launch_description():
       # namespace=namespace,
       # parameters=[params],
       arguments=['raw', 'compressed'],
-      remappings=[('in', '/summit/front_rgbd_camera/color/image_raw'),
-      ('out/compressed', '/summit/front_rgbd_camera/color/image/compressed')])
+      remappings=[('in', '/front_rgbd_camera/color/image_raw'),
+      ('out/compressed', '/front_rgbd_camera/color/image/compressed')])
 
     depth_compression = Node(
       package='image_transport',
@@ -49,6 +49,6 @@ def generate_launch_description():
       # namespace=namespace,
       # parameters=[params],
       arguments=['raw', 'compressedDepth'],
-      remappings=[('in', '/summit/front_rgbd_camera/depth/image_raw'),
-      ('out/compressedDepth', '/summit/front_rgbd_camera/depth/image/compressedDepth')])
+      remappings=[('in', '/front_rgbd_camera/depth/image_raw'),
+      ('out/compressedDepth', '/front_rgbd_camera/depth/image/compressedDepth')])
     return LaunchDescription([container]) #color_compression, depth_compression -> they flood wg0

@@ -1,4 +1,4 @@
-/summit/lidar_front:
+/lidar_front:
   ros__parameters:
     angle_max: 2.2689
     angle_min: -2.2689
