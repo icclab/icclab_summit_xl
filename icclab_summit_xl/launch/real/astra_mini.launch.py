@@ -54,12 +54,4 @@ def generate_launch_description():
       arguments=['raw', 'compressedDepth'],
       remappings=[('in', '/front_rgbd_camera/depth/image_raw'),
       ('out/compressedDepth', '/front_rgbd_camera/depth/image/compressedDepth')])
-    # The driver stamps color images with <camera>_color_optical_frame; the URDF calls it _rgb_optical_frame
-    # (as the simulation does). Same frame, so the segmented point clouds can be transformed on the real robot.
-    color_frame = Node(
-      package='tf2_ros',
-      executable='static_transform_publisher',
-      name='front_rgbd_camera_color_frame',
-      arguments=['--frame-id', 'front_rgbd_camera_rgb_optical_frame',
-                 '--child-frame-id', 'front_rgbd_camera_color_optical_frame'])
-    return LaunchDescription([container, color_frame]) #color_compression, depth_compression -> they flood wg0
+    return LaunchDescription([container]) #color_compression, depth_compression -> they flood wg0
