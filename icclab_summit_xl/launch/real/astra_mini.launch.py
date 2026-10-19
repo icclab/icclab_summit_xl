@@ -21,7 +21,10 @@ def generate_launch_description():
                            plugin='astra_camera::OBCameraNodeFactory',
                            name='camera',
                            namespace='front_rgbd_camera',
-                           parameters=[config_params]),
+                           parameters=[config_params],
+                           # The driver always publishes its own TF under camera_link (not in the URDF;
+                           # it ignores publish_tf). The camera frames come from the URDF instead.
+                           remappings=[('/tf', 'driver_tf'), ('/tf_static', 'driver_tf_static')]),
             ## These use lots of CPU
             ComposableNode(package='astra_camera',
                            plugin='astra_camera::PointCloudXyzNode',
