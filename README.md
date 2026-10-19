@@ -113,7 +113,7 @@ ros2 launch icclab_summit_xl summit_xl_simulation_ign.launch.py
 
 | Argument | Default | Description |
 |---|---|---|
-| `robot_id` | `summit` | Robot namespace identifier |
+| `robot_id` | `summit` | Robot id (Gazebo model name), not a ROS namespace |
 | `robot_xacro` | *(icclab xacro)* | Path to URDF xacro file |
 | `world` | `tugbot_depot` | Gazebo world URL |
 | `headless` | `false` | Run without Gazebo GUI |
@@ -155,7 +155,7 @@ Save a Nav2-generated map to disk.
 ros2 launch icclab_summit_xl map_save.launch.py
 ```
 
-Saves to `my_map.yaml` / `my_map.pgm` by subscribing to `/summit/map`.
+Saves to `my_map.yaml` / `my_map.pgm` by subscribing to `/map`.
 
 ---
 

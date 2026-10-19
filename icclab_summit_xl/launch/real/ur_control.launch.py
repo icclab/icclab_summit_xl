@@ -229,7 +229,7 @@ def launch_setup(context, *args, **kwargs):
         parameters=[
             ParameterFile(initial_joint_controllers, allow_substs=True),
         ],
-        remappings=[('~/robot_description','/summit/robot_description')],
+        remappings=[('~/robot_description','/robot_description')],
         output="screen",
         condition=UnlessCondition(use_fake_hardware),
     )
@@ -313,7 +313,7 @@ def launch_setup(context, *args, **kwargs):
             executable="spawner",
             arguments=[
                 "--controller-manager",
-                "/summit/controller_manager",
+                "/controller_manager",
                 "--controller-manager-timeout",
                 controller_spawner_timeout,
             ]
@@ -340,7 +340,7 @@ def launch_setup(context, *args, **kwargs):
         arguments=[
             initial_joint_controller,
             "-c",
-            "/summit/controller_manager",
+            "/controller_manager",
             "--controller-manager-timeout",
             controller_spawner_timeout,
         ],
@@ -352,7 +352,7 @@ def launch_setup(context, *args, **kwargs):
         arguments=[
             initial_joint_controller,
             "-c",
-            "/summit/controller_manager",
+            "/controller_manager",
             "--controller-manager-timeout",
             controller_spawner_timeout,
             "--inactive",
@@ -363,13 +363,13 @@ def launch_setup(context, *args, **kwargs):
     robotiq_gripper_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["robotiq_gripper_controller", "-c", "/summit/controller_manager"],
+        arguments=["robotiq_gripper_controller", "-c", "/controller_manager"],
     )
 
     robotiq_activation_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["robotiq_activation_controller", "-c", "/summit/controller_manager"],
+        arguments=["robotiq_activation_controller", "-c", "/controller_manager"],
     )
 
 

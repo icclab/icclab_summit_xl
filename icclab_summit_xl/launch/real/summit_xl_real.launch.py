@@ -5,13 +5,13 @@ import os
 from ament_index_python.packages import get_package_share_directory
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node
+from launch_ros.parameter_descriptions import ParameterValue
 
 def generate_launch_description():
   
   ld = launch.LaunchDescription()
 
   robot_id = launch.substitutions.LaunchConfiguration('robot_id')
-  namespace = launch.substitutions.LaunchConfiguration('robot_id')
   robot_xacro = launch.substitutions.LaunchConfiguration('robot_xacro')
   world = launch.substitutions.LaunchConfiguration('world')
 
@@ -27,18 +27,21 @@ def generate_launch_description():
         default_value=os.path.join(get_package_share_directory('icclab_summit_xl'), 'robots', 'summit_xls_icclab.urdf.xacro')
   ))
 
-  # start robot_state_publisher and robot description
+  # start robot_state_publisher and robot description, without namespace (as in the simulation)
 
-  ld.add_action(launch.actions.IncludeLaunchDescription(
-    PythonLaunchDescriptionSource(
-      os.path.join(get_package_share_directory('summit_xl_description'), 'launch', 'default.launch.py')
-    ),
-    launch_arguments={
-      'robot_id': robot_id,
-      'robot_ns': namespace,
-      'robot_description_path': robot_xacro,
-      'use_fake_hardware': 'false',
-      }.items(),
+  robot_description = ParameterValue(
+    launch.substitutions.Command(['xacro ', robot_xacro, ' robot_id:=', robot_id, ' use_fake_hardware:=false']),
+    value_type=str)
+
+  ld.add_action(Node(
+    package='robot_state_publisher',
+    executable='robot_state_publisher',
+    name='robot_state_publisher',
+    output='screen',
+    parameters=[{
+      'robot_description': robot_description,
+      'publish_frequency': 100.0,
+    }],
   ))
 
   # Arm and gripper contollers launched separately in arm_controller.launch
