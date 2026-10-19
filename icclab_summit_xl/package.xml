@@ -44,7 +44,6 @@
   <!--   <test_depend>gtest</test_depend> -->
   <buildtool_depend>ament_cmake</buildtool_depend>
   <build_depend>ur</build_depend>
-  <build_depend>summit_xl_description</build_depend>
   <!-- <build_depend>roscpp</build_depend>
   <build_depend>rospy</build_depend>
   <build_depend>std_msgs</build_depend>
@@ -84,10 +83,6 @@
   <exec_depend>tf2_ros</exec_depend>
   <exec_depend>tf2_eigen</exec_depend>
   <exec_depend>tf2_geometry_msgs</exec_depend>
-  <exec_depend>summit_xl_localization</exec_depend>
-  <exec_depend>summit_xl_navigation</exec_depend>
-  <exec_depend>summit_xl_pad</exec_depend>
-  <exec_depend>summit_xl_control</exec_depend>
   <exec_depend>ur_gazebo</exec_depend>
   <exec_depend>ira_laser_tools</exec_depend>
   <exec_depend>timed_roslaunch</exec_depend>
@@ -108,7 +103,6 @@
   <!-- This package is referenced in the warehouse launch files, but does not build out of the box at the moment. Commented the dependency until this works. -->
   <!-- <run_depend>warehouse_ros_mongo</run_depend> -->
   
-  <exec_depend>summit_xl_description</exec_depend>
   <exec_depend>ur</exec_depend> 
   <exec_depend>ur_simulation_gz</exec_depend>
   <exec_depend>robotiq_description</exec_depend>

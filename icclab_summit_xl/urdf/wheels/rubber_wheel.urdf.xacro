@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<robot name="wheel" xmlns:xacro="http://wiki.ros.org/xacro">
+
+  <xacro:include filename="$(find icclab_summit_xl)/urdf/inertia.urdf.xacro"/>
+
+  <!-- CONSTANTS -->
+  <xacro:property name="M_PI" value="3.1415926535897931"/>
+  <xacro:property name="rubber_wheel_radius" value="0.11"/>
+  <xacro:property name="rubber_wheel_height" value="0.15"/>
+  <xacro:property name="rubber_wheel_mass" value="6.5"/>
+
+  <!-- WHEEL XACRO -->
+  <xacro:macro name="rubber_wheel" params="prefix parent *origin reflect hq">
+
+    <!--TIRE -->
+    <joint name="${prefix}wheel_joint" type="continuous">
+      <xacro:insert_block name="origin" />
+      <parent link="${parent}"/>
+      <child link="${prefix}wheel_link"/>
+      <axis xyz="0 1 0" rpy="0 0 0" />
+      <limit effort="100" velocity="100"/>
+      <dynamics damping="0.05" friction="0.1"/>
+    </joint>
+
+    <link name="${prefix}wheel_link">
+      <visual>
+        <!-- HIGH RESOLUTION WHEELS -->
+        <xacro:if value="${hq}">
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <geometry>
+						<xacro:if value="${reflect}">
+							<mesh filename="file://$(find icclab_summit_xl)/meshes/wheels/rubber_wheel_left.dae" />
+						</xacro:if>
+						<xacro:unless value="${reflect}">
+							<mesh filename="file://$(find icclab_summit_xl)/meshes/wheels/rubber_wheel_right.dae" />
+						</xacro:unless>
+          </geometry>
+        </xacro:if>
+       <!-- LOW RESOLUTION WHEELS -->
+        <xacro:unless value="${hq}">
+          <origin xyz="0 0 0" rpy="${M_PI/2} 0 0" />
+          <geometry>
+            <cylinder length="${rubber_wheel_height}" radius="${rubber_wheel_radius}" />
+          </geometry>
+        </xacro:unless>
+      </visual>
+      <collision>
+				<origin xyz="0 0 0" rpy="${M_PI/2} 0 0" />
+        <geometry>
+          <cylinder length="${rubber_wheel_height}" radius="${rubber_wheel_radius}" />
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="${rubber_wheel_mass}" />
+        <origin xyz="0 0 0" />
+        <xacro:solid_cylinder_inertia  m="${rubber_wheel_mass}" r="${rubber_wheel_radius}" h="${rubber_wheel_height}" />
+      </inertial>
+    </link>
+
+    <gazebo reference="${prefix}wheel_link">
+      <mu1>0.95</mu1>
+      <mu2>0.90</mu2>
+      <kp>2.75e6</kp>
+      <kd>8.25e1</kd>
+      <fdir1>0 0 0</fdir1>
+      <maxContacts>4</maxContacts>
+    </gazebo>
+  </xacro:macro>
+</robot>
