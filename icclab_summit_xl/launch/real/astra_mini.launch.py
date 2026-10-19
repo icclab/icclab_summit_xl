@@ -21,7 +21,10 @@ def generate_launch_description():
                            plugin='astra_camera::OBCameraNodeFactory',
                            name='camera',
                            namespace='front_rgbd_camera',
-                           parameters=[config_params]),
+                           parameters=[config_params],
+                           # The driver always publishes its own TF under camera_link (not in the URDF;
+                           # it ignores publish_tf). The camera frames come from the URDF instead.
+                           remappings=[('/tf', 'driver_tf'), ('/tf_static', 'driver_tf_static')]),
             ## These use lots of CPU
             ComposableNode(package='astra_camera',
                            plugin='astra_camera::PointCloudXyzNode',
@@ -51,4 +54,12 @@ def generate_launch_description():
       arguments=['raw', 'compressedDepth'],
       remappings=[('in', '/front_rgbd_camera/depth/image_raw'),
       ('out/compressedDepth', '/front_rgbd_camera/depth/image/compressedDepth')])
-    return LaunchDescription([container]) #color_compression, depth_compression -> they flood wg0
+    # The driver stamps color images with <camera>_color_optical_frame; the URDF calls it _rgb_optical_frame
+    # (as the simulation does). Same frame, so the segmented point clouds can be transformed on the real robot.
+    color_frame = Node(
+      package='tf2_ros',
+      executable='static_transform_publisher',
+      name='front_rgbd_camera_color_frame',
+      arguments=['--frame-id', 'front_rgbd_camera_rgb_optical_frame',
+                 '--child-frame-id', 'front_rgbd_camera_color_optical_frame'])
+    return LaunchDescription([container, color_frame]) #color_compression, depth_compression -> they flood wg0
