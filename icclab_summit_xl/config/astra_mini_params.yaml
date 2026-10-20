@@ -17,7 +17,7 @@ depth_fps: 15
 enable_depth: true
 
 # 是否开启D2C对齐(硬件对齐) | open depth to color alignment （hardware alignment）
-depth_align: false
+depth_align: true
 # 设备序列号，多相机的时候需要填写
 serial_number: ""
 number_of_devices: 1
