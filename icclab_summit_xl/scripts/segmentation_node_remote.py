@@ -35,6 +35,30 @@ import base64
 import threading
 
 
+def select_mask(masks, depth, max_distance_m):
+    """Pick the first mask (server order = confidence) whose median depth is within max_distance_m.
+
+    depth is float metres (Gazebo) or uint16 millimetres (real camera). max_distance_m <= 0 disables
+    the gate and returns masks[0]. Returns (index or None, [median depth in m or None per mask]).
+    """
+    if depth.dtype == np.float32 or depth.dtype == np.float64:
+        depth_m = np.nan_to_num(depth, nan=0.0, posinf=0.0, neginf=0.0)
+    else:
+        depth_m = depth.astype(np.float32) / 1000.0
+
+    medians = []
+    for mask in masks:
+        valid = depth_m[mask & (depth_m > 0)]
+        medians.append(float(np.median(valid)) if valid.size else None)
+
+    if max_distance_m <= 0:
+        return 0, medians
+    for i, median in enumerate(medians):
+        if median is not None and median <= max_distance_m:
+            return i, medians
+    return None, medians
+
+
 class RemoteSegmentationNode(Node):
     """Remote segmentation node using LangSAM service."""
 
@@ -56,6 +80,8 @@ class RemoteSegmentationNode(Node):
         # /segmentation_status. Empty for arm camera, "/front" for the front camera
         # instance. Lets two nodes coexist without topic collisions.
         self.declare_parameter('topic_prefix', '')
+        # Ignore masks whose median depth is farther than this (m); 0 disables the gate.
+        self.declare_parameter('max_distance_m', 0.0)
 
         # Get parameters
         self.server_url = self.get_parameter('server_url').value
@@ -441,11 +467,31 @@ class RemoteSegmentationNode(Node):
                 mask = np.array(mask_data, dtype=bool)
                 masks.append(mask.astype(bool))
 
-            # Use the first (highest confidence) mask
-            mask = masks[0]
-            self.get_logger().info(f'Found {len(masks)} object(s), using highest confidence')
-            if result.get('labels'):
-                self.get_logger().info(f'Detected phrase: "{result["labels"][0]}"')
+            # Highest-confidence mask within max_distance_m (server order = confidence)
+            max_distance_m = self.get_parameter('max_distance_m').value
+            if max_distance_m > 0 and current_depth is None:
+                self.get_logger().error('Distance gate on but no depth image available')
+                self.publish_status('ERROR: No depth')
+                return
+            depth_for_gate = current_depth if current_depth is not None else np.zeros(masks[0].shape)
+            chosen, medians = select_mask(masks, depth_for_gate, max_distance_m)
+            depths = ', '.join('none' if m is None else f'{m:.2f} m' for m in medians)
+            if chosen is None:
+                if all(m is None for m in medians):
+                    self.get_logger().warn(f'Found {len(masks)} object(s), none with valid depth')
+                    self.publish_status('ERROR: No depth on objects')
+                    return
+                self.get_logger().warn(
+                    f'Found {len(masks)} object(s) for "{text_prompt}", none within '
+                    f'{max_distance_m:.2f} m (median depths: {depths})')
+                self.publish_status('NO_OBJECTS_IN_RANGE')
+                return
+            mask = masks[chosen]
+            self.get_logger().info(
+                f'Found {len(masks)} object(s), using #{chosen} (median depths: {depths}, '
+                f'max_distance_m: {max_distance_m:.2f})')
+            if result.get('labels') and chosen < len(result['labels']):
+                self.get_logger().info(f'Detected phrase: "{result["labels"][chosen]}"')
 
             # Publish mask (pass the locally captured snapshot to avoid TOCTOU races)
             self.publish_mask(mask, current_rgb, current_depth, current_frame_id)

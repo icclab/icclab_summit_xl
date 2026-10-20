@@ -16,12 +16,14 @@ Parameters:
 - camera_info_topic: Camera info topic (default: /arm_camera/color/camera_info)
 - voxel_size: Voxel downsampling size in meters (default: 0.002)
 - remove_outliers: Enable statistical outlier removal (default: True)
+- max_distance_m: Ignore masks farther than this in metres, 0 = off (default: 0.0)
 """
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
+from launch_ros.parameter_descriptions import ParameterValue
 
 
 def generate_launch_description():
@@ -92,6 +94,12 @@ def generate_launch_description():
         description='Enable statistical outlier removal'
     )
 
+    max_distance_arg = DeclareLaunchArgument(
+        'max_distance_m',
+        default_value='0.0',
+        description='Ignore masks whose median depth is farther than this (m); 0 disables the gate'
+    )
+
     node_name_arg = DeclareLaunchArgument(
         'node_name',
         default_value='remote_segmentation_node',
@@ -123,6 +131,7 @@ def generate_launch_description():
             'voxel_size': LaunchConfiguration('voxel_size'),
             'remove_outliers': LaunchConfiguration('remove_outliers'),
             'topic_prefix': LaunchConfiguration('topic_prefix'),
+            'max_distance_m': ParameterValue(LaunchConfiguration('max_distance_m'), value_type=float),
         }],
         emulate_tty=True
     )
@@ -142,6 +151,7 @@ def generate_launch_description():
     ld.add_action(camera_info_topic_arg)
     ld.add_action(voxel_size_arg)
     ld.add_action(remove_outliers_arg)
+    ld.add_action(max_distance_arg)
     ld.add_action(node_name_arg)
     ld.add_action(topic_prefix_arg)
 
