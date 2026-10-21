@@ -268,7 +268,7 @@ class GripperAttachNode(Node):
         # Keeps 60 s of TF: clouds carry the image's capture time, which can be a slow SAM3 request old
         self._tf_buffer   = tf2_ros.Buffer(cache_time=rclpy.duration.Duration(seconds=60))
         # Own thread, so TF keeps arriving while a callback waits in lookup_transform
-        self._tf_listener = tf2_ros.TransformListener(self._tf_buffer, self, spin_thread=True)
+        self._tf_listener = tf2_ros.TransformListener(self._tf_buffer, None, spin_thread=True)
 
         # Gz attach/detach publishers (bridged to Gazebo DetachableJoint)
         self._gz_attach_pub = self.create_publisher(String, '/gripper/attach', 5)
