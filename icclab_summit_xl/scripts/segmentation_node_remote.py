@@ -78,6 +78,7 @@ class RemoteSegmentationNode(Node):
         self.current_rgb = None
         self.current_depth = None
         self.current_rgb_frame_id = None
+        self.current_stamp = None
         self.intrinsic_matrix = None
         self._sync_count = 0
 
@@ -294,7 +295,7 @@ class RemoteSegmentationNode(Node):
 
         return pcd
 
-    def o3d_to_ros_pointcloud2(self, pcd, frame_id=None):
+    def o3d_to_ros_pointcloud2(self, pcd, frame_id=None, stamp=None):
         """Convert Open3D point cloud to ROS PointCloud2 message."""
         points = np.asarray(pcd.points)       # (N, 3) float64
         colors = np.asarray(pcd.colors)       # (N, 3) float64  or empty
@@ -327,7 +328,8 @@ class RemoteSegmentationNode(Node):
 
         # Create header
         header = Header()
-        header.stamp = self.get_clock().now().to_msg()
+        # Capture time of the image, so TF is looked up for the pose the cloud was taken at
+        header.stamp = stamp if stamp is not None else self.get_clock().now().to_msg()
         header.frame_id = frame_id if frame_id is not None else 'camera_color_optical_frame'
 
         # Define fields with proper alignment (rgb at offset 16 like arm_camera/points)
@@ -362,6 +364,7 @@ class RemoteSegmentationNode(Node):
                 self.current_rgb = new_rgb
                 self.current_depth = new_depth
                 self.current_rgb_frame_id = frame_id
+                self.current_stamp = rgb_msg.header.stamp
                 self._sync_count += 1
                 count = self._sync_count
 
@@ -382,6 +385,7 @@ class RemoteSegmentationNode(Node):
             current_rgb = self.current_rgb
             current_depth = self.current_depth
             current_frame_id = self.current_rgb_frame_id
+            current_stamp = self.current_stamp
 
         if current_rgb is None:
             self.get_logger().error('No RGB image available')
@@ -448,7 +452,7 @@ class RemoteSegmentationNode(Node):
                 self.get_logger().info(f'Detected phrase: "{result["labels"][0]}"')
 
             # Publish mask (pass the locally captured snapshot to avoid TOCTOU races)
-            self.publish_mask(mask, current_rgb, current_depth, current_frame_id)
+            self.publish_mask(mask, current_rgb, current_depth, current_frame_id, current_stamp)
             self.publish_status('SUCCESS')
 
         except requests.exceptions.Timeout:
@@ -463,14 +467,14 @@ class RemoteSegmentationNode(Node):
             traceback.print_exc()
             self.publish_status(f'ERROR: {str(e)}')
 
-    def publish_mask(self, mask, current_rgb, current_depth, current_frame_id):
+    def publish_mask(self, mask, current_rgb, current_depth, current_frame_id, current_stamp):
         """Publish segmentation mask and segmented point cloud."""
         # Convert boolean mask to uint8 (0 or 255)
         mask_uint8 = (mask * 255).astype(np.uint8)
 
         # Convert to ROS Image message
         mask_msg = self.bridge.cv2_to_imgmsg(mask_uint8, encoding='mono8')
-        mask_msg.header.stamp = self.get_clock().now().to_msg()
+        mask_msg.header.stamp = current_stamp
         mask_msg.header.frame_id = current_frame_id if current_frame_id else 'camera_color_optical_frame'
 
         self.mask_pub.publish(mask_msg)
@@ -495,7 +499,7 @@ class RemoteSegmentationNode(Node):
 
                 # Step 4: Convert to ROS message and publish
                 if len(pcd.points) > 0:
-                    pc2_msg = self.o3d_to_ros_pointcloud2(pcd, frame_id=current_frame_id)
+                    pc2_msg = self.o3d_to_ros_pointcloud2(pcd, frame_id=current_frame_id, stamp=current_stamp)
                     self.pointcloud_pub.publish(pc2_msg)
                     self.get_logger().info(f'Published segmented point cloud with {len(pcd.points)} points in frame {current_frame_id}')
                 else:
