@@ -265,8 +265,10 @@ class GripperAttachNode(Node):
         self._acm_thread_lock               = threading.Lock()  # one ACM op at a time
 
         # TF
-        self._tf_buffer   = tf2_ros.Buffer()
-        self._tf_listener = tf2_ros.TransformListener(self._tf_buffer, self)
+        # Keeps 60 s of TF: clouds carry the image's capture time, which can be a slow SAM3 request old
+        self._tf_buffer   = tf2_ros.Buffer(cache_time=rclpy.duration.Duration(seconds=60))
+        # Own thread, so TF keeps arriving while a callback waits in lookup_transform
+        self._tf_listener = tf2_ros.TransformListener(self._tf_buffer, None, spin_thread=True)
 
         # Gz attach/detach publishers (bridged to Gazebo DetachableJoint)
         self._gz_attach_pub = self.create_publisher(String, '/gripper/attach', 5)
@@ -411,10 +413,18 @@ class GripperAttachNode(Node):
             stamp = rclpy.time.Time(seconds=stamp.sec, nanoseconds=stamp.nanosec)
 
         try:
-            t: TransformStamped = self._tf_buffer.lookup_transform(
-                self._planning_frame, msg.header.frame_id, stamp,
-                timeout=rclpy.duration.Duration(seconds=2.0)
-            )
+            try:
+                t: TransformStamped = self._tf_buffer.lookup_transform(
+                    self._planning_frame, msg.header.frame_id, stamp,
+                    timeout=rclpy.duration.Duration(seconds=2.0)
+                )
+            except tf2_ros.ExtrapolationException:
+                # Cloud older than the TF buffer (e.g. latched, received late): fall back to the latest TF
+                self.get_logger().warn('Cloud older than the TF buffer, using the latest TF',
+                                       throttle_duration_sec=5.0)
+                t = self._tf_buffer.lookup_transform(
+                    self._planning_frame, msg.header.frame_id, rclpy.time.Time(),
+                    timeout=rclpy.duration.Duration(seconds=2.0))
             tx = t.transform.translation
             q  = t.transform.rotation
             R  = _quat_to_rot(q.x, q.y, q.z, q.w)
