@@ -396,14 +396,15 @@ class RemoteSegmentationNode(Node):
         self.publish_status('SEGMENTING')
 
         try:
-            # Encode image as PNG
-            success, image_encoded = cv2.imencode('.png', cv2.cvtColor(current_rgb, cv2.COLOR_RGB2BGR))
+            # Encode image as JPEG
+            success, image_encoded = cv2.imencode('.jpg', cv2.cvtColor(current_rgb, cv2.COLOR_RGB2BGR),
+                                                  [cv2.IMWRITE_JPEG_QUALITY, 90])
             if not success:
                 raise ValueError("Failed to encode image")
 
             # Prepare multipart form data
             files = {
-                'image': ('image.png', BytesIO(image_encoded.tobytes()), 'image/png'),
+                'image': ('image.jpg', BytesIO(image_encoded.tobytes()), 'image/jpeg'),
             }
             data = {
                 'sam_type': self.sam_type,
