@@ -82,9 +82,10 @@ class RemoteSegmentationNode(Node):
         self.intrinsic_matrix = None
         self._sync_count = 0
 
-        # QoS for camera topics
+        # Reliable: a large image (1280x720 bgr8 ≈ 2.8 MB) is many DDS fragments, and best effort
+        # drops the whole image when one is lost, so the synchronizer would keep a stale pair.
         qos_profile = QoSProfile(
-            reliability=ReliabilityPolicy.BEST_EFFORT,
+            reliability=ReliabilityPolicy.RELIABLE,
             history=HistoryPolicy.KEEP_LAST,
             depth=10
         )
