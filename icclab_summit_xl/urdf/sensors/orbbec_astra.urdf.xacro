@@ -25,18 +25,18 @@
         <xacro:solid_cuboid_inertia m="0.3" w="0.04" h="0.165" d="0.03" />
       </inertial>
     </link>
-    <joint name="${prefix}_rgb_joint" type="fixed">
+    <joint name="${prefix}_color_joint" type="fixed">
       <origin xyz="0.0 0.0125 0.0150" rpy="0.0 0.0 0.0"/>
       <parent link="${prefix}_link"/>
-      <child link="${prefix}_rgb_frame" />
+      <child link="${prefix}_color_frame" />
     </joint>
-    <link name="${prefix}_rgb_frame"/>
-    <joint name="${prefix}_rgb_optical_joint" type="fixed">
+    <link name="${prefix}_color_frame"/>
+    <joint name="${prefix}_color_optical_joint" type="fixed">
       <origin xyz="0.0 0.0 0.0" rpy="${-M_PI/2} 0 ${-M_PI/2}" />
-      <parent link="${prefix}_rgb_frame" />
-      <child link="${prefix}_rgb_optical_frame" />
+      <parent link="${prefix}_color_frame" />
+      <child link="${prefix}_color_optical_frame" />
     </joint>
-    <link name="${prefix}_rgb_optical_frame"/>
+    <link name="${prefix}_color_optical_frame"/>
     <joint name="${prefix}_depth_joint" type="fixed">
       <origin xyz="0.0 0.0375 0.0150" rpy="0 0 0" />
       <parent link="${prefix}_link" />
@@ -49,7 +49,7 @@
       <child link="${prefix}_depth_optical_frame" />
     </joint>
     <link name="${prefix}_depth_optical_frame"/>
-    <xacro:sensor_orbbec_astra_gazebo_icclab ns="${ns}" prefix="${prefix}" frame="${prefix}_rgb_optical_frame"/>
+    <xacro:sensor_orbbec_astra_gazebo_icclab ns="${ns}" prefix="${prefix}" frame="${prefix}_color_optical_frame"/>
   </xacro:macro>
   <xacro:macro name="sensor_orbbec_astra_gazebo_icclab" params="ns prefix frame">
     <xacro:property name="deg_to_rad" value="0.01745329251994329577"/>
@@ -60,7 +60,7 @@
         <always_on>true</always_on>
         <update_rate>10</update_rate>
         <camera name="${prefix}">
-          <optical_frame_id>${prefix}_rgb_optical_frame</optical_frame_id>
+          <optical_frame_id>${prefix}_color_optical_frame</optical_frame_id>
           <horizontal_fov>1.04719755</horizontal_fov>
           <vertical_fov>0.86393798</vertical_fov>
           <image>
