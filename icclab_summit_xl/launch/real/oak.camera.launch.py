@@ -66,7 +66,6 @@ def launch_setup(context, *args, **kwargs):
     rs_compat = LaunchConfiguration("rs_compat", default="false")
     pointcloud_enable = LaunchConfiguration("pointcloud.enable", default="false")
     rectify_rgb = LaunchConfiguration("rectify_rgb", default="true")
-    namespace = LaunchConfiguration("namespace", default="").perform(context)
     name = LaunchConfiguration("name").perform(context)
 
     # If RealSense compatibility is enabled, we need to override some parameters, topics and node names
@@ -133,8 +132,6 @@ def launch_setup(context, *args, **kwargs):
         if name == "oak":
             name = "camera"
         points_topic_name = f"{name}/depth/color/points"
-        if namespace == "":
-            namespace = "camera"
         if parent_frame == "oak-d-base-frame":
             parent_frame = f"{name}_link"
         parameter_overrides = {
@@ -173,6 +170,18 @@ def launch_setup(context, *args, **kwargs):
             "i_publish_left_rect": True,
             "i_publish_right_rect": True,
         }
+
+    # Optional other name for the depth image, e.g. image_raw as in the simulation
+    depth_remappings = []
+    depth_image_name = LaunchConfiguration("depth_image_name").perform(context)
+    if depth_image_name:
+        node_path = f"/{name}"
+        depth_remappings = [
+            (f"{node_path}/{stereo_sens_name}/{depth_topic_suffix}{transport}",
+             f"{node_path}/{stereo_sens_name}/{depth_image_name}{transport}")
+            for transport in ("", "/compressed", "/compressedDepth", "/theora", "/zstd")
+        ]
+        depth_topic_suffix = depth_image_name
 
     tf_params = {}
     if publish_tf_from_calibration.perform(context) == "true":
@@ -230,7 +239,7 @@ def launch_setup(context, *args, **kwargs):
         # ),
         ComposableNodeContainer(
             name=f"{name}_container",
-            namespace=namespace,
+            namespace="",
             package="rclcpp_components",
             executable="component_container",
             composable_node_descriptions=[
@@ -238,12 +247,13 @@ def launch_setup(context, *args, **kwargs):
                     package="depthai_ros_driver",
                     plugin="depthai_ros_driver::Camera",
                     name=name,
-                    namespace=namespace,
+                    namespace="",
                     parameters=[
                         params_file,
                         tf_params,
                         parameter_overrides,
                     ],
+                    remappings=depth_remappings,
                 )
             ],
             arguments=["--ros-args", "--log-level", log_level],
@@ -252,13 +262,13 @@ def launch_setup(context, *args, **kwargs):
         ),
         LoadComposableNodes(
             condition=IfCondition(rectify_rgb),
-            target_container=f"{namespace}/{name}_container",
+            target_container=f"/{name}_container",
             composable_node_descriptions=[
                 ComposableNode(
                     package="image_proc",
                     plugin="image_proc::RectifyNode",
                     name="rectify_color_node",
-                    namespace=namespace,
+                    namespace="",
                     remappings=[
                         ("image", f"{name}/{color_sens_name}/image_raw"),
                         ("camera_info", f"{name}/{color_sens_name}/camera_info"),
@@ -281,13 +291,13 @@ def launch_setup(context, *args, **kwargs):
         ),
         LoadComposableNodes(
             condition=IfCondition(pointcloud_enable),
-            target_container=f"{namespace}/{name}_container",
+            target_container=f"/{name}_container",
             composable_node_descriptions=[
                 ComposableNode(
                     package="depth_image_proc",
                     plugin="depth_image_proc::PointCloudXyzrgbNode",
                     name="point_cloud_xyzrgb_node",
-                    namespace=namespace,
+                    namespace="",
                     remappings=[
                         (
                             "depth_registered/image_rect",
@@ -311,7 +321,6 @@ def generate_launch_description():
 
     declared_arguments = [
         DeclareLaunchArgument("name", default_value="oak"),
-        DeclareLaunchArgument("namespace", default_value="summit"),
         DeclareLaunchArgument("parent_frame", default_value="oak-d-base-frame"),
         DeclareLaunchArgument("camera_model", default_value="OAK-D-PRO"),
         DeclareLaunchArgument("cam_pos_x", default_value="0.0"),
@@ -355,6 +364,11 @@ def generate_launch_description():
         ),
         DeclareLaunchArgument("rectify_rgb", default_value="true"),
         DeclareLaunchArgument("pointcloud.enable", default_value="false"),
+        DeclareLaunchArgument(
+            "depth_image_name",
+            default_value="",
+            description="Depth image topic name instead of the driver's (image_raw, image_rect_raw with rs_compat).",
+        ),
         DeclareLaunchArgument("enable_color", default_value="true"),
         DeclareLaunchArgument("enable_depth", default_value="true"),
         DeclareLaunchArgument("enable_infra1", default_value="false"),
